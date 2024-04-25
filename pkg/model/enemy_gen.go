@@ -653,27 +653,6 @@ var EnemyMap = map[int]*MonsterData{
 			HpDrop:       []*MonsterHPDrop{},
 		},
 	},
-	29100103: {
-		Id:              29100103,
-		Key:             "theknave",
-		NameTextHashMap: 4146578024,
-		BaseStats: &MonsterStatsData{
-			BaseHp:  366.768,
-			HpCurve: MonsterCurveType_GROW_CURVE_HP_2,
-			Resist: &MonsterResistData{
-				FireResist:     0.7,
-				GrassResist:    0.1,
-				WaterResist:    0.1,
-				ElectricResist: 0.1,
-				WindResist:     0.1,
-				IceResist:      0.1,
-				RockResist:     0.1,
-				PhysicalResist: 0.1,
-			},
-			FreezeResist: 1,
-			HpDrop:       []*MonsterHPDrop{},
-		},
-	},
 	20020101: {
 		Id:              20020101,
 		Key:             "eyeofthestorm",
