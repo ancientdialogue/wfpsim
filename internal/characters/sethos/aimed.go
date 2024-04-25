@@ -101,9 +101,7 @@ func (c *char) Aimed(p map[string]int) (action.Info, error) {
 			0,
 			travel,
 		)
-		if hold == attacks.AimParamLv1 {
-			c.Energy -= energy * 0.5
-		}
+		c.a1Consume(energy, hold)
 	}, aimedHitmarks[hold]-skip)
 
 	return action.Info{
@@ -177,7 +175,7 @@ func (c *char) ShadowPierce(p map[string]int) (action.Info, error) {
 			travel,
 			c.makeA4cb(),
 		)
-		c.Energy -= energy
+		c.a1Consume(energy, attacks.AimParamLv2)
 	}, aimedHitmarks[2]-skip)
 
 	return action.Info{

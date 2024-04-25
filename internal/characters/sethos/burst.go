@@ -22,6 +22,7 @@ func init() {
 func (c *char) Burst(p map[string]int) (action.Info, error) {
 	c.QueueCharTask(func() {
 		c.AddStatus(burstBuffKey, 8*60, true)
+		c.c2AddStack()
 	}, burstStart)
 
 	c.SetCDWithDelay(action.ActionBurst, 15*60, 29)

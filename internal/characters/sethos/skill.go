@@ -75,5 +75,6 @@ func (c *char) makeEnergyRegenCB() combat.AttackCBFunc {
 
 		done = true
 		c.AddEnergy("sethos-skill", skillEnergyRegen[c.TalentLvlSkill()])
+		c.c2AddStack()
 	}
 }

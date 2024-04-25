@@ -8,6 +8,9 @@ import (
 	"github.com/genshinsim/gcsim/pkg/modifier"
 )
 
+const c2Key = "sethos-c2"
+const c2Dur = 10 * 60
+
 func (c *char) c1() {
 	if c.Base.Cons < 1 {
 		return
@@ -26,4 +29,36 @@ func (c *char) c1() {
 			return m, true
 		},
 	})
+}
+
+func (c *char) c2() {
+	if c.Base.Cons < 2 {
+		return
+	}
+	mElectro := make([]float64, attributes.EndStatType)
+	c.AddStatMod(character.StatMod{
+		Base: modifier.NewBase(c2Key, -1),
+		Amount: func() ([]float64, bool) {
+			stackCount := min(c.c2Stacks, 2.0)
+			if stackCount == 0 {
+				return nil, false
+			}
+			mElectro[attributes.ElectroP] = 0.15 * float64(stackCount)
+			return mElectro, true
+		},
+	})
+}
+
+func (c *char) c2AddStack() {
+	if c.Base.Cons < 2 {
+		return
+	}
+	c.c2Stacks += 1
+	c.SetTag(c2Key, min(c.c2Stacks, 2))
+	c.QueueCharTask(func() {
+		// tags currently aren't visible in the results UI
+		// the user can still access it using .char.tags.xianyun-a1
+		c.c2Stacks -= 1
+		c.SetTag(c2Key, min(c.c2Stacks, 2))
+	}, c2Dur)
 }

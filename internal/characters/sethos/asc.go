@@ -1,6 +1,7 @@
 package sethos
 
 import (
+	"github.com/genshinsim/gcsim/pkg/core/attacks"
 	"github.com/genshinsim/gcsim/pkg/core/combat"
 	"github.com/genshinsim/gcsim/pkg/core/targets"
 )
@@ -13,6 +14,18 @@ func (c *char) a1Calc() (int, float64) {
 	energy := min(c.Energy, 20)
 	// floor or round the skip?
 	return int(0.285 * energy * 60), energy
+}
+
+func (c *char) a1Consume(energy float64, holdLevel int) {
+	switch holdLevel {
+	default:
+		return
+	case attacks.AimParamLv1:
+		c.Energy -= energy * 0.5
+	case attacks.AimParamLv2:
+		c.Energy -= energy
+	}
+	c.c2AddStack()
 }
 
 const a4Key = "sethos-a4"
