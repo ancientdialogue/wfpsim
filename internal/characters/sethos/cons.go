@@ -15,6 +15,10 @@ const c2Dur = 10 * 60
 const c4Key = "sethos-c4"
 const c4Dur = 10 * 60
 
+const c6Key = "sethos-c6"
+const c6IcdKey = "sethos-c6-icd"
+const c6IcdDur = 15 * 60
+
 func (c *char) c1() {
 	if c.Base.Cons < 1 {
 		return
@@ -100,5 +104,30 @@ func (c *char) makeC4cb() combat.AttackCBFunc {
 				})
 			}
 		}
+	}
+}
+
+func (c *char) makeC6cb(energy float64) combat.AttackCBFunc {
+	if c.Base.Cons < 6 {
+		return nil
+	}
+	if c.Base.Ascension < 1 {
+		return nil
+	}
+
+	done := false
+	return func(a combat.AttackCB) {
+		if a.Target.Type() != targets.TargettableEnemy {
+			return
+		}
+		if done {
+			return
+		}
+		if c.StatusIsActive(c6IcdKey) {
+			return
+		}
+		done = true
+		c.AddStatus(c6IcdKey, c6IcdDur, true)
+		c.AddEnergy(c6Key, energy)
 	}
 }

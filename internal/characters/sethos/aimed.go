@@ -167,7 +167,7 @@ func (c *char) ShadowPierce(p map[string]int) (action.Info, error) {
 			0.1,
 			15+dist,
 		)
-
+		c.a1Consume(energy, attacks.AimParamLv2)
 		c.Core.QueueAttack(
 			ai,
 			ap,
@@ -175,8 +175,8 @@ func (c *char) ShadowPierce(p map[string]int) (action.Info, error) {
 			travel,
 			c.makeA4cb(),
 			c.makeC4cb(),
+			c.makeC6cb(energy),
 		)
-		c.a1Consume(energy, attacks.AimParamLv2)
 	}, aimedHitmarks[2]-skip)
 
 	return action.Info{
