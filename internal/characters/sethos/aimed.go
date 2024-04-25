@@ -9,6 +9,7 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/attributes"
 	"github.com/genshinsim/gcsim/pkg/core/combat"
 	"github.com/genshinsim/gcsim/pkg/core/geometry"
+	"github.com/genshinsim/gcsim/pkg/core/glog"
 )
 
 var aimedFrames [][]int
@@ -128,6 +129,7 @@ func (c *char) ShadowPierce(p map[string]int) (action.Info, error) {
 	}
 
 	c.QueueCharTask(func() {
+		em := c.Stat(attributes.EM)
 		ai := combat.AttackInfo{
 			ActorIndex:           c.Index,
 			Abil:                 "Shadow Piercing Arrow",
@@ -143,7 +145,15 @@ func (c *char) ShadowPierce(p map[string]int) (action.Info, error) {
 			HitlagFactor:         0.01,
 			HitlagOnHeadshotOnly: true,
 			IsDeployable:         true,
-			FlatDmg:              shadowpierceEM[c.TalentLvlAttack()] * c.Stat(attributes.EM),
+			FlatDmg:              shadowpierceEM[c.TalentLvlAttack()] * em,
+		}
+
+		if c.StatusIsActive(a4Key) {
+			ai.FlatDmg += 6 * em
+			c.Core.Log.NewEvent("Sethos A4 proc dmg add", glog.LogPreDamageMod, c.Index).
+				Write("em", em).
+				Write("ratio", 6.0).
+				Write("addition", 6*em)
 		}
 
 		deltaPos := c.Core.Combat.Player().Pos().Sub(c.Core.Combat.PrimaryTarget().Pos())
@@ -163,6 +173,7 @@ func (c *char) ShadowPierce(p map[string]int) (action.Info, error) {
 			ap,
 			0,
 			travel,
+			c.makeA4cb(),
 		)
 		c.Energy -= energy
 	}, aimedHitmarks[2]-skip)

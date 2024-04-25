@@ -15,6 +15,7 @@ func init() {
 
 type char struct {
 	*tmpl.Character
+	a4Count int
 }
 
 func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) error {
@@ -32,6 +33,7 @@ func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) er
 }
 
 func (c *char) Init() error {
+	c.a4()
 	return nil
 }
 func (c *char) AnimationStartDelay(k model.AnimationDelayKey) int {
