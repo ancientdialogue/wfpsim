@@ -51,32 +51,33 @@ func (c *char) Attack(p map[string]int) (action.Info, error) {
 		1,
 	)
 
-	if c.StatusIsActive(burstBuffKey) {
-		ai.AttackTag = attacks.AttackTagExtra
-		ai.Element = attributes.Electro
-		ai.FlatDmg += burstEM[c.TalentLvlBurst()] * c.Stat(attributes.EM)
-
-		deltaPos := c.Core.Combat.Player().Pos().Sub(c.Core.Combat.PrimaryTarget().Pos())
-		dist := deltaPos.Magnitude()
-
-		// simulate piercing. Extends from player to 15 units behind primary target
-		ap = combat.NewBoxHit(
-			c.Core.Combat.Player(),
-			c.Core.Combat.PrimaryTarget(),
-			geometry.Point{Y: -dist},
-			0.1,
-			15+dist,
-		)
-	}
-
 	for i, mult := range attack[c.NormalCounter] {
-		ai.Mult = mult[c.TalentLvlAttack()]
-		c.Core.QueueAttack(
-			ai,
-			ap,
-			attackHitmarks[c.NormalCounter][i],
-			attackHitmarks[c.NormalCounter][i]+travel,
-		)
+		c.QueueCharTask(func() {
+			if c.StatusIsActive(burstBuffKey) {
+				ai.AttackTag = attacks.AttackTagExtra
+				ai.Element = attributes.Electro
+				ai.FlatDmg += burstEM[c.TalentLvlBurst()] * c.Stat(attributes.EM)
+
+				deltaPos := c.Core.Combat.Player().Pos().Sub(c.Core.Combat.PrimaryTarget().Pos())
+				dist := deltaPos.Magnitude()
+
+				// simulate piercing. Extends from player to 15 units behind primary target
+				ap = combat.NewBoxHit(
+					c.Core.Combat.Player(),
+					c.Core.Combat.PrimaryTarget(),
+					geometry.Point{Y: -dist},
+					0.1,
+					15+dist,
+				)
+			}
+			ai.Mult = mult[c.TalentLvlAttack()]
+			c.Core.QueueAttack(
+				ai,
+				ap,
+				0,
+				travel,
+			)
+		}, attackHitmarks[c.NormalCounter][i])
 	}
 
 	defer c.AdvanceNormalIndex()

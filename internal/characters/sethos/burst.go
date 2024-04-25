@@ -19,7 +19,6 @@ func init() {
 	burstFrames[action.ActionSwap] = 66    // Q -> Swap
 }
 
-// Sets Xiao's burst damage state
 func (c *char) Burst(p map[string]int) (action.Info, error) {
 	c.QueueCharTask(func() {
 		c.AddStatus(burstBuffKey, 8*60, true)
