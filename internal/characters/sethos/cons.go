@@ -65,7 +65,7 @@ func (c *char) c2AddStack() {
 	c.SetTag(c2Key, min(c.c2Stacks, 2))
 	c.QueueCharTask(func() {
 		// tags currently aren't visible in the results UI
-		// the user can still access it using .char.tags.xianyun-a1
+		// the user can still access it using .char.tags.sethos-c2
 		c.c2Stacks -= 1
 		c.SetTag(c2Key, min(c.c2Stacks, 2))
 	}, c2Dur)
