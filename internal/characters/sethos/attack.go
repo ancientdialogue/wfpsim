@@ -53,6 +53,7 @@ func (c *char) Attack(p map[string]int) (action.Info, error) {
 
 	for i, mult := range attack[c.NormalCounter] {
 		c.QueueCharTask(func() {
+			var c4cb combat.AttackCBFunc
 			if c.StatusIsActive(burstBuffKey) {
 				ai.AttackTag = attacks.AttackTagExtra
 				ai.Element = attributes.Electro
@@ -69,6 +70,7 @@ func (c *char) Attack(p map[string]int) (action.Info, error) {
 					0.1,
 					15+dist,
 				)
+				c4cb = c.makeC4cb()
 			}
 			ai.Mult = mult[c.TalentLvlAttack()]
 			c.Core.QueueAttack(
@@ -76,6 +78,7 @@ func (c *char) Attack(p map[string]int) (action.Info, error) {
 				ap,
 				0,
 				travel,
+				c4cb,
 			)
 		}, attackHitmarks[c.NormalCounter][i])
 	}

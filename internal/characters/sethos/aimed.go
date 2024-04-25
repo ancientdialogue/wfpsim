@@ -174,6 +174,7 @@ func (c *char) ShadowPierce(p map[string]int) (action.Info, error) {
 			0,
 			travel,
 			c.makeA4cb(),
+			c.makeC4cb(),
 		)
 		c.a1Consume(energy, attacks.AimParamLv2)
 	}, aimedHitmarks[2]-skip)
