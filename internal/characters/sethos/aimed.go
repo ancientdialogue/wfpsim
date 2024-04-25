@@ -18,6 +18,8 @@ var aimedA1Frames []int
 var aimedHitmarks = []int{15, 86, 375}
 var startCharge = aimedHitmarks[0]
 
+const shadowPierceShotAil = "Shadow Piercing Shot"
+
 func init() {
 	// outside of E status
 	aimedFrames = make([][]int, 3)
@@ -132,7 +134,7 @@ func (c *char) ShadowPierce(p map[string]int) (action.Info, error) {
 		em := c.Stat(attributes.EM)
 		ai := combat.AttackInfo{
 			ActorIndex:           c.Index,
-			Abil:                 "Shadow Piercing Arrow",
+			Abil:                 shadowPierceShotAil,
 			AttackTag:            attacks.AttackTagExtra,
 			ICDTag:               attacks.ICDTagNone,
 			ICDGroup:             attacks.ICDGroupDefault,

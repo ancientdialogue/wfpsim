@@ -34,6 +34,7 @@ func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) er
 
 func (c *char) Init() error {
 	c.a4()
+	c.c1()
 	return nil
 }
 func (c *char) AnimationStartDelay(k model.AnimationDelayKey) int {
