@@ -13,12 +13,11 @@ import (
 )
 
 var aimedFrames [][]int
-var aimedA1Frames []int
 
 var aimedHitmarks = []int{15, 86, 375}
 var startCharge = aimedHitmarks[0]
 
-const shadowPierceShotAil = "Shadow Piercing Shot"
+const shadowPierceShotAil = "Shadowpiercing Shot"
 
 func init() {
 	// outside of E status
@@ -34,10 +33,10 @@ func init() {
 	aimedFrames[1][action.ActionDash] = aimedHitmarks[1]
 	aimedFrames[1][action.ActionJump] = aimedHitmarks[1]
 
-	// Fully-Charged Aimed Shot (Crowfeather)
-	aimedA1Frames = frames.InitAbilSlice(383)
-	aimedA1Frames[action.ActionDash] = aimedHitmarks[2]
-	aimedA1Frames[action.ActionJump] = aimedHitmarks[2]
+	// Shadowpiercing Shot
+	aimedFrames[2] = frames.InitAbilSlice(383)
+	aimedFrames[2][action.ActionDash] = aimedHitmarks[2]
+	aimedFrames[2][action.ActionJump] = aimedHitmarks[2]
 }
 
 func (c *char) Aimed(p map[string]int) (action.Info, error) {
