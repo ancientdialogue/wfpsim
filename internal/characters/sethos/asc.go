@@ -6,6 +6,8 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/targets"
 )
 
+const a1Key = "sethos-a1"
+
 // returns the amount of time to save, and the amount of energy considered
 func (c *char) a1Calc() (int, float64) {
 	if c.Base.Ascension < 1 {
@@ -21,9 +23,9 @@ func (c *char) a1Consume(energy float64, holdLevel int) {
 	default:
 		return
 	case attacks.AimParamLv1:
-		c.Energy -= energy * 0.5
+		c.AddEnergy(a1Key, -energy*0.5)
 	case attacks.AimParamLv2:
-		c.Energy -= energy
+		c.AddEnergy(a1Key, -energy)
 	}
 	c.c2AddStack()
 }
