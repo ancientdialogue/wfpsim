@@ -216,8 +216,8 @@ var (
 		1.620612,
 		1.70982,
 	}
-	// attack: highPlune = [14]
-	highPlune = []float64{
+	// attack: highPlunge = [14]
+	highPlunge = []float64{
 		1.596762,
 		1.726731,
 		1.8567,
@@ -305,6 +305,24 @@ var (
 		0.35,
 		0.35,
 		0.35,
+	}
+	// skill: skillCD = [12]
+	skillCD = []float64{
+		16,
+		16,
+		16,
+		16,
+		16,
+		16,
+		16,
+		16,
+		16,
+		16,
+		16,
+		16,
+		16,
+		16,
+		16,
 	}
 	// skill: skillEnhancedNA = [1]
 	skillEnhancedNA = []float64{
@@ -431,6 +449,24 @@ var (
 		0.641072,
 		0.678416,
 		0.71576,
+	}
+	// skill: skillStateDuration = [11]
+	skillStateDuration = []float64{
+		9,
+		9,
+		9,
+		9,
+		9,
+		9,
+		9,
+		9,
+		9,
+		9,
+		9,
+		9,
+		9,
+		9,
+		9,
 	}
 	// burst: burstBOL = [1]
 	burstBOL = []float64{
