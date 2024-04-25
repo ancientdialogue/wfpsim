@@ -77,6 +77,7 @@ func (c *char) c4() {
 	if c.Base.Cons < 4 {
 		return
 	}
+	c4Buff = make([]float64, attributes.EndStatType)
 	c4Buff[attributes.EM] = 80
 }
 
