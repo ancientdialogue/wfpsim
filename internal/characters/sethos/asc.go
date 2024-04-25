@@ -56,19 +56,18 @@ func (c *char) makeA4cb() combat.AttackCBFunc {
 		if done {
 			return
 		}
-		if c.StatusIsActive(a4IcdKey) {
+		if !c.StatusIsActive(a4Key) {
 			return
 		}
 		done = true
 		if c.a4Count == 0 {
 			// overwrite the expiry of the a4 buff to be 5s after
 			c.AddStatus(a4Key, 5*60, true)
-			c.QueueCharTask(c.startA4Icd, 5*60)
+			c.startA4Icd()
 		}
 		c.a4Count += 1
 		if c.a4Count >= 4 {
 			c.DeleteStatus(a4Key)
-			c.startA4Icd()
 		}
 	}
 }
@@ -79,5 +78,4 @@ func (c *char) startA4Icd() {
 	}
 	c.AddStatus(a4IcdKey, a4Icd, true)
 	c.QueueCharTask(c.a4, a4Icd)
-	c.a4Count = 0
 }
