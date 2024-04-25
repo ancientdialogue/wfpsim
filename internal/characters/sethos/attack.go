@@ -56,6 +56,7 @@ func (c *char) Attack(p map[string]int) (action.Info, error) {
 			var c4cb combat.AttackCBFunc
 			if c.StatusIsActive(burstBuffKey) {
 				ai.AttackTag = attacks.AttackTagExtra
+				ai.ICDTag = attacks.ICDTagExtraAttack
 				ai.Element = attributes.Electro
 				ai.FlatDmg += burstEM[c.TalentLvlBurst()] * c.Stat(attributes.EM)
 
