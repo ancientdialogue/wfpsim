@@ -13,7 +13,6 @@ var skillFrames []int
 
 func init() {
 	skillFrames = frames.InitAbilSlice(28)
-	skillFrames[action.ActionSwap] = 27
 }
 
 func (c *char) Skill(p map[string]int) (action.Info, error) {
@@ -32,7 +31,7 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 	snap := c.Snapshot(&ai)
 	ap := combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 4.5)
 
-	c.Core.QueueAttackWithSnap(ai, snap, ap, 13, c.makeParticleCB(), c.makeEnergyRegenCB())
+	c.Core.QueueAttackWithSnap(ai, snap, ap, 14, c.makeParticleCB(), c.makeEnergyRegenCB())
 
 	c.SetCDWithDelay(action.ActionSkill, 8*60, 10)
 

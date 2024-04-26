@@ -14,7 +14,7 @@ import (
 
 var aimedFrames [][]int
 
-var aimedHitmarks = []int{15, 86, 375}
+var aimedHitmarks = []int{12, 83, 372}
 var startCharge = aimedHitmarks[0]
 
 const shadowPierceShotAil = "Shadowpiercing Shot"
@@ -29,12 +29,12 @@ func init() {
 	aimedFrames[0][action.ActionJump] = aimedHitmarks[0]
 
 	// Fully-Charged Aimed Shot
-	aimedFrames[1] = frames.InitAbilSlice(94)
+	aimedFrames[1] = frames.InitAbilSlice(91)
 	aimedFrames[1][action.ActionDash] = aimedHitmarks[1]
 	aimedFrames[1][action.ActionJump] = aimedHitmarks[1]
 
 	// Shadowpiercing Shot
-	aimedFrames[2] = frames.InitAbilSlice(383)
+	aimedFrames[2] = frames.InitAbilSlice(380)
 	aimedFrames[2][action.ActionDash] = aimedHitmarks[2]
 	aimedFrames[2][action.ActionJump] = aimedHitmarks[2]
 }
