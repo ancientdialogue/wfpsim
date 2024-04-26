@@ -10,6 +10,7 @@ import (
 )
 
 const burstHitmarks = 114
+const nourishingCindersAbil = "Nourishing Cinders"
 
 var (
 	burstFrames []int
@@ -55,9 +56,9 @@ func (c *char) nourishingCinders() {
 	c.Character.Heal(&info.HealInfo{
 		Caller:  c.Index,
 		Target:  c.Index,
-		Message: "Nourishing Cinders",
+		Message: nourishingCindersAbil,
 		Src:     amt,
-		Bonus:   c.Stat(attributes.Heal) + healMod, // cancel out the negative heal bonus we applied to her
+		Bonus:   c.Stat(attributes.Heal),
 	})
 	c.ResetActionCooldown(action.ActionSkill)
 }

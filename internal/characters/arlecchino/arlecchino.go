@@ -5,6 +5,8 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core"
 	"github.com/genshinsim/gcsim/pkg/core/action"
 	"github.com/genshinsim/gcsim/pkg/core/attributes"
+	"github.com/genshinsim/gcsim/pkg/core/event"
+	"github.com/genshinsim/gcsim/pkg/core/glog"
 	"github.com/genshinsim/gcsim/pkg/core/info"
 	"github.com/genshinsim/gcsim/pkg/core/keys"
 	"github.com/genshinsim/gcsim/pkg/core/player/character"
@@ -68,6 +70,58 @@ func (c *char) getTotalAtk() float64 {
 }
 
 func (c *char) Heal(hi *info.HealInfo) (float64, float64) {
-	// block healing
-	return 0, 0
+	hp, bonus := c.CalcHealAmount(hi)
+
+	// save previous hp related values for logging
+	prevHPRatio := c.CurrentHPRatio()
+	prevHP := c.CurrentHP()
+	prevHPDebt := c.CurrentHPDebt()
+
+	// calc original heal amount
+	healAmt := hp * bonus
+
+	// calc actual heal amount considering hp debt
+	// TODO: assumes that healing can occur in the same heal as debt being cleared, could also be that it can only occur starting from next heal
+	// example: hp debt is 10, heal is 11, so char will get healed by 11 - 10 = 1 instead of receiving no healing at all
+	heal := healAmt - c.CurrentHPDebt()
+	if heal < 0 {
+		heal = 0
+	}
+
+	// calc overheal
+	overheal := prevHP + heal - c.MaxHP()
+	if overheal < 0 {
+		overheal = 0
+	}
+
+	// blocks healing besides arle Q
+	// check the caller first for better performance
+	if hi.Caller == c.Index && hi.Message == nourishingCindersAbil {
+		// update hp debt based on original heal amount
+		c.ModifyHPDebtByAmount(-healAmt)
+		// perform heal based on actual heal amount
+		c.ModifyHPByAmount(heal)
+	} else {
+		// overheal is always 0 when the healing is blocked
+		overheal = 0
+	}
+
+	// still emit event for clam, sodp, rightful reward, etc
+	c.Core.Log.NewEvent(hi.Message, glog.LogHealEvent, c.Index).
+		Write("previous_hp_ratio", prevHPRatio).
+		Write("previous_hp", prevHP).
+		Write("previous_hp_debt", prevHPDebt).
+		Write("base amount", hp).
+		Write("bonus", bonus).
+		Write("final amount before hp debt", healAmt).
+		Write("final amount after hp debt", heal).
+		Write("overheal", overheal).
+		Write("current_hp_ratio", c.CurrentHPRatio()).
+		Write("current_hp", c.CurrentHP()).
+		Write("current_hp_debt", c.CurrentHPDebt()).
+		Write("max_hp", c.MaxHP())
+
+	c.Core.Events.Emit(event.OnHeal, hi, c.Index, heal, overheal, healAmt)
+
+	return heal, healAmt
 }

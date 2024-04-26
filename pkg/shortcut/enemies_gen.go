@@ -23,6 +23,7 @@ var MonsterNameToID = map[string]int{
 	"shoukinokamitheprodigal":              29070104,
 	"guardianofapepsoasis":                 29080102,
 	"alldevouringnarwhal":                  29090101,
+	"theknave":                             29100103,
 	"eyeofthestorm":                        20020101,
 	"electrohypostasis":                    20040101,
 	"anemohypostasis":                      20040201,

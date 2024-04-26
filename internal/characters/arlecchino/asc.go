@@ -10,8 +10,6 @@ import (
 	"github.com/genshinsim/gcsim/pkg/modifier"
 )
 
-const healMod = 10000
-
 var a1Directive = []float64{0.0, 0.65, 1.3}
 
 func (c *char) passive() {
