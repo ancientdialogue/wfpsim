@@ -10,15 +10,15 @@ import (
 )
 
 const (
-	c1_icd              int     = 1 * 60
-	c1_atkP             float64 = 0.3
-	c1_icdKey                   = "clorinde-C1-IcdKey"
-	c2_a1FlatDmg        float64 = 2700
-	c2_a1PercentBuff    float64 = 0.3
-	c6_icdKey                   = "clorinde-c6-icd"
-	c6_mitigate                 = 0.8
-	c6_glimbrightIcdKey         = "glimbrightIcdKey"
-	c6_glimbrightAtkP           = 2
+	c1Icd              int     = 1 * 60
+	c1AtkP             float64 = 0.3
+	c1IcdKey                   = "clorinde-c1-IcdKey"
+	c2A1FlatDmg        float64 = 2700
+	c2A1PercentBuff    float64 = 0.3
+	c6IcdKey                   = "clorinde-c6-icd"
+	c6Mitigate                 = 0.8
+	c6GlimbrightIcdKey         = "glimbrightIcdKey"
+	c6GlimbrightAtkP           = 2
 )
 
 var c1_hitMarks = []int{1, 1} // TODO hitmark for each c1 hit
@@ -36,10 +36,10 @@ func (c *char) c1() {
 		if !c.StatusIsActive(skillStateKey) {
 			return false
 		}
-		if c.StatusIsActive(c1_icdKey) {
+		if c.StatusIsActive(c1IcdKey) {
 			return false
 		}
-		c.AddStatus(c1_icdKey, c1_icd, false)
+		c.AddStatus(c1IcdKey, c1Icd, false)
 		c1_ai := combat.AttackInfo{
 			ActorIndex: c.Index,
 			Abil:       "Nightwatch Shade (C1)",
@@ -49,7 +49,7 @@ func (c *char) c1() {
 			StrikeType: attacks.StrikeTypeDefault,
 			Element:    attributes.Electro,
 			Durability: 25,
-			Mult:       c1_atkP,
+			Mult:       c1AtkP,
 		}
 		target := args[0].(combat.Target)
 		atk := args[1].(*combat.AttackEvent)
@@ -94,10 +94,10 @@ func (c *char) c6skill() {
 	if !c.StatusIsActive(skillStateKey) {
 		return
 	}
-	if c.StatusIsActive(c6_icdKey) {
+	if c.StatusIsActive(c6IcdKey) {
 		return
 	}
-	c.AddStatus(c6_icdKey, 12*60, true)
+	c.AddStatus(c6IcdKey, 12*60, true)
 
 	m := make([]float64, attributes.EndStatType)
 	m[attributes.CR] = 0.1
@@ -132,11 +132,11 @@ func (c *char) c6skill() {
 // 6 Shades can be summoned per single Night Watch duration.
 
 func (c *char) c6() {
-	if c.StatusIsActive(c6_glimbrightIcdKey) {
+	if c.StatusIsActive(c6GlimbrightIcdKey) {
 		return
 	}
 
-	c.AddStatus(c6_glimbrightIcdKey, 1*60, false)
+	c.AddStatus(c6GlimbrightIcdKey, 1*60, false)
 	c6_ai := combat.AttackInfo{
 		ActorIndex: c.Index,
 		Abil:       "Glimbright Shade (C6)",
@@ -146,7 +146,7 @@ func (c *char) c6() {
 		StrikeType: attacks.StrikeTypeDefault,
 		Element:    attributes.Electro,
 		Durability: 25,
-		Mult:       c6_glimbrightAtkP,
+		Mult:       c6GlimbrightAtkP,
 	}
 	c.Core.QueueAttack(
 		c6_ai,
