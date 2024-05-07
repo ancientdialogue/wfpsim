@@ -4,6 +4,7 @@ import "github.com/genshinsim/gcsim/pkg/core/keys"
 
 var WeaponNameToKey = map[string]keys.Weapon{
 	"akuoumaru":                       keys.Akuoumaru,
+	"absolution":                      keys.Absolution,
 	"alleyhunter":                     keys.AlleyHunter,
 	"ak":                              keys.AmenomaKageuchi,
 	"amenomakageuchi":                 keys.AmenomaKageuchi,

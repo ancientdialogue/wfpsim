@@ -4,17 +4,17 @@ import {
   Intent,
   Position,
   Toaster,
-} from "@blueprintjs/core";
-import { Executor, ExecutorSupplier } from "@gcsim/executors";
-import { SimResults } from "@gcsim/types";
-import { ResultSource } from "@gcsim/ui/src/Pages";
-import LoadingToast from "@gcsim/ui/src/Pages/Viewer/Components/LoadingToast";
-import Warnings from "@gcsim/ui/src/Pages/Viewer/Components/Warnings";
-import Results from "@gcsim/ui/src/Pages/Viewer/Tabs/Results";
-import classNames from "classnames";
-import React, { useCallback, useMemo } from "react";
-import { useRunningState } from "../../App";
-import { Share } from "./Share";
+} from '@blueprintjs/core';
+import {Executor, ExecutorSupplier} from '@gcsim/executors';
+import {SimResults} from '@gcsim/types';
+import {ResultSource} from '@gcsim/ui/src/Pages';
+import LoadingToast from '@gcsim/ui/src/Pages/Viewer/Components/LoadingToast';
+import Warnings from '@gcsim/ui/src/Pages/Viewer/Components/Warnings';
+import Results from '@gcsim/ui/src/Pages/Viewer/Tabs/Results';
+import classNames from 'classnames';
+import React, {useCallback, useMemo} from 'react';
+import {useRunningState} from '../../UI';
+import {Share} from './Share';
 
 type ViewerProps = {
   data: SimResults;
@@ -22,23 +22,23 @@ type ViewerProps = {
   exec: ExecutorSupplier<Executor>;
 };
 
-export function WebViewer({ data }: { data: SimResults }) {
+export function WebViewer({data}: {data: SimResults}) {
   const names = useMemo(
     () => data?.character_details?.map((c) => c.name),
-    [data?.character_details]
+    [data?.character_details],
   );
   const copyToast = React.useRef<Toaster>(null);
   const copy = () => {
-    navigator.clipboard.writeText(data.config_file ?? "").then(() => {
+    navigator.clipboard.writeText(data.config_file ?? '').then(() => {
       copyToast.current?.show({
-        message: "Link copied to clipboard!",
+        message: 'Link copied to clipboard!',
         intent: Intent.SUCCESS,
         timeout: 2000,
       });
     });
   };
   const home = () => {
-    window.location.replace("/");
+    window.location.replace('/');
   };
   return (
     <div className="flex flex-col flex-grow w-full pb-6">
@@ -61,11 +61,11 @@ export function WebViewer({ data }: { data: SimResults }) {
   );
 }
 
-export function Viewer({ data, hash = "", exec }: ViewerProps) {
+export function Viewer({data, hash = '', exec}: ViewerProps) {
   const running = useRunningState(exec);
   const names = useMemo(
     () => data?.character_details?.map((c) => c.name),
-    [data?.character_details]
+    [data?.character_details],
   );
   const cancel = useCallback(() => exec().cancel(), [exec]);
   return (
@@ -94,9 +94,9 @@ type NavProps = {
   running: boolean;
 };
 
-const btnClass = classNames("hidden ml-[7px] sm:flex");
+const btnClass = classNames('hidden ml-[7px] sm:flex');
 
-function ViewerNav({ data, running }: NavProps) {
+function ViewerNav({data, running}: NavProps) {
   const copyToast = React.useRef<Toaster>(null);
   const shareState = React.useState<string | null>(null);
 
