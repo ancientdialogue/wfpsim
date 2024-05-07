@@ -137,7 +137,7 @@ func (c *char) ShadowPierce(p map[string]int) (action.Info, error) {
 			ICDGroup:             attacks.ICDGroupDefault,
 			StrikeType:           attacks.StrikeTypePierce,
 			Element:              attributes.Electro,
-			Durability:           25,
+			Durability:           50,
 			Mult:                 shadowpierceAtk[c.TalentLvlAttack()],
 			HitWeakPoint:         weakspot == 1,
 			HitlagHaltFrames:     hitHaltFrames,
