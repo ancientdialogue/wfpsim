@@ -35,6 +35,7 @@ func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) er
 }
 
 func (c *char) Init() error {
+	c.skillRefundHook()
 	c.a4()
 	c.c1()
 	c.c2()
