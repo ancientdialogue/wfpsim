@@ -62,16 +62,17 @@ func (c *char) makeEnergyRegenCB() combat.AttackCBFunc {
 		if a.Target.Type() != targets.TargettableEnemy {
 			return
 		}
+
 		if done {
 			return
 		}
 
 		// assuming that the skill can only do electro reactions, since the skill applies electro
 		// therefore we aren't checking for the list of electro reactions
-		if !a.AttackEvent.Reacted {
+		// Aggravate/Spread don't set the Reacted flag
+		if !a.AttackEvent.Reacted && !a.AttackEvent.Info.Catalyzed {
 			return
 		}
-
 		done = true
 		c.AddEnergy("sethos-skill", skillEnergyRegen[c.TalentLvlSkill()])
 		c.c2AddStack()
