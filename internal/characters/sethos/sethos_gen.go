@@ -18,7 +18,7 @@ var pbData []byte
 var base *model.AvatarData
 var paramKeysValidation = map[action.Action][]string{
 	3: {"travel"},
-	7: {"hold", "travel", "weakspot"},
+	7: {"rr_cancel", "hold", "travel", "weakspot"},
 }
 
 func init() {

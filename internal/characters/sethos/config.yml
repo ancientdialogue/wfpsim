@@ -5,6 +5,7 @@ action_param_keys:
   attack:
     - param: "travel"
   aim:
+    - param: "rr_cancel"
     - param: "hold"
     - param: "travel"
     - param: "weakspot"
