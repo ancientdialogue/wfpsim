@@ -40,6 +40,10 @@ func init() {
 }
 
 func (c *char) Aimed(p map[string]int) (action.Info, error) {
+	if c.StatusIsActive(burstBuffKey) {
+		return action.Info{}, fmt.Errorf("%v: Cannot aim while in burst", c.CharWrapper.Base.Key)
+	}
+
 	rrCancel, ok := p["rr_cancel"]
 	if ok && rrCancel > 0 {
 		return action.Info{
