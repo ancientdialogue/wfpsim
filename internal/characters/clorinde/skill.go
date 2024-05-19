@@ -53,7 +53,7 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 	}
 	c6Stacks = 6
 	c.QueueCharTask(c.c6skill, 0)
-	c.AddStatus(skillStateKey, 60*int(skillStateDuration[0]), true)
+	c.AddStatus(skillStateKey, int(60*skillStateDuration[0]), true)
 
 	c.SetCD(action.ActionSkill, skillCD)
 
