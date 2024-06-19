@@ -16,55 +16,55 @@ func init() {
 	core.RegisterWeaponFunc(keys.Absolution, NewWeapon)
 }
 
-const buffKey = "absolution-buff"
+const (
+	cdKey       = "absolution-crit-dmg"
+	dmgBonusKey = "absolution-dmg-bonus"
+)
 
 type Weapon struct {
-	Index int
-	c     *core.Core
-	char  *character.CharWrapper
+	Index  int
+	stacks int
 }
 
 func (w *Weapon) SetIndex(idx int) { w.Index = idx }
 func (w *Weapon) Init() error      { return nil }
 func NewWeapon(c *core.Core, char *character.CharWrapper, p info.WeaponProfile) (info.Weapon, error) {
-	w := &Weapon{
-		c:    c,
-		char: char,
-	}
-	buffs := make([]float64, attributes.EndStatType)
-	buffs[attributes.CD] = 0.15 + 0.05*float64(p.Refine)
-	dmgP := 0.16 + 0.04*float64(p.Refine-1)
-	stacks := 0
+	var w Weapon
+	refine := p.Refine
 
-	// Increasing the value of a Bond of Life increases the DMG the equipping character deals by 12% for 6s. Max 3 stacks.
+	perm := make([]float64, attributes.EndStatType)
+	perm[attributes.CD] = 0.15 + 0.05*float64(refine)
+	char.AddStatMod(character.StatMod{
+		Base:         modifier.NewBase(cdKey, -1),
+		AffectedStat: attributes.CD,
+		Amount: func() ([]float64, bool) {
+			return perm, true
+		},
+	})
+
+	bonus := make([]float64, attributes.EndStatType)
 	c.Events.Subscribe(event.OnHPDebt, func(args ...interface{}) bool {
 		index := args[0].(int)
-		if index != char.Index {
+		amount := args[1].(float64)
+		if char.Index != index || amount <= 0 {
 			return false
 		}
-		amt := args[1].(float64)
-		if amt <= 0 {
-			return false
+		if !char.StatModIsActive(dmgBonusKey) {
+			w.stacks = 0
 		}
-		// reset stacks if nothing active
-		if !char.StatModIsActive(buffKey) {
-			stacks = 0
+		if w.stacks < 3 {
+			w.stacks++
 		}
-		stacks++
-		if stacks > 3 {
-			stacks = 3
-		}
+		bonus[attributes.DmgP] = (0.12 + 0.04*float64(refine)) * float64(w.stacks)
 		char.AddStatMod(character.StatMod{
-			Base:         modifier.NewBase(buffKey, 360), // 6 sec?
-			AffectedStat: attributes.DmgP,
+			Base: modifier.NewBaseWithHitlag(dmgBonusKey, 6*60),
 			Amount: func() ([]float64, bool) {
-				buffs[attributes.DmgP] = float64(stacks) * dmgP
-				return buffs, true
+				return bonus, true
 			},
 		})
 
 		return false
 	}, fmt.Sprintf("absolution-%v", char.Base.Key))
 
-	return w, nil
+	return &w, nil
 }
