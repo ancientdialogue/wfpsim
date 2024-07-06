@@ -18,7 +18,7 @@ func (c *char) a1() {
 	c.Core.Events.Subscribe(event.OnEmilieA1, func(args ...interface{}) bool {
 		ai := combat.AttackInfo{
 			ActorIndex: c.Index,
-			Abil:       "Emilie Passive A1",
+			Abil:       "Cleardew Cologne",
 			AttackTag:  attacks.AttackTagNone,
 			ICDTag:     attacks.ICDTagNone,
 			ICDGroup:   attacks.ICDGroupDefault,
@@ -49,5 +49,3 @@ func (c *char) a4() {
 		},
 	})
 }
-
-// A4 is not implemented:
