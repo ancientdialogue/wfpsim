@@ -44,7 +44,7 @@ func NewWeapon(c *core.Core, char *character.CharWrapper, p info.WeaponProfile) 
 	perm[attributes.ATKP] = 0.11 + 0.04*float64(w.refine)
 	char.AddStatMod(character.StatMod{
 		Base:         modifier.NewBase(atkBuffKey, -1),
-		AffectedStat: attributes.CD,
+		AffectedStat: attributes.ATKP,
 		Amount: func() ([]float64, bool) {
 			return perm, true
 		},
@@ -104,7 +104,7 @@ func (w *Weapon) bonusCB() {
 	w.char.AddStatMod(character.StatMod{
 		Base: modifier.NewBaseWithHitlag(bonusBuffKey, 8*60),
 		Amount: func() ([]float64, bool) {
-			w.buff[attributes.DmgP] = 0.05*float64(w.stacks) + 0.13
+			w.buff[attributes.DmgP] = (0.05*float64(w.refine) + 0.13) * float64(w.stacks)
 			return w.buff, true
 		},
 	})
