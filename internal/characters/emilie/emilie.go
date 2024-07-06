@@ -32,12 +32,16 @@ func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) er
 	c.BurstCon = 3
 	c.HasArkhe = true
 
+	c.lumidouceSrc = -1
+
 	w.Character = &c
 
 	return nil
 }
 
 func (c *char) Init() error {
+	c.a1()
+	c.a4()
 	return nil
 }
 func (c *char) AnimationStartDelay(k model.AnimationDelayKey) int {
