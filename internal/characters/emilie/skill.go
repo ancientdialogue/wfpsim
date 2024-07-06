@@ -59,12 +59,12 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 		skillLumiHitmark,
 	)
 
-	if c.lumidouceSrc != -1 {
-		c.QueueCharTask(c.genScents, 30)
-	}
-
-	c.lumidouceLvl = 1
+	c.lumidouceLvl = 0
 	c.lumidouceSrc = c.Core.F
+
+	if c.lumidouceSrc != -1 {
+		c.genScents()
+	}
 
 	c.Core.Tasks.Add(c.lumiTick(c.Core.F), skillLumiFirstTick)
 	c.Core.Tasks.Add(c.removeLumi(c.Core.F), 22*60)
@@ -135,9 +135,6 @@ func (c *char) genScents() {
 	if c.lumidouceSrc == -1 {
 		return
 	}
-	if c.StatusIsActive(scentICDKey) {
-		return
-	}
 
 	isBurning := false
 
@@ -153,11 +150,12 @@ func (c *char) genScents() {
 		}
 	}
 
-	if isBurning {
+	if isBurning && !c.StatusIsActive(scentICDKey) {
 		c.AddStatus(scentICDKey, 2*60, false)
 		if c.lumidouceLvl < 4 {
 			c.lumidouceLvl++
-		} else if c.lumidouceLvl == 4 {
+		}
+		if c.lumidouceLvl == 4 {
 			c.lumidouceLvl = 2
 			c.Core.Events.Emit(event.OnEmilieA1)
 		}

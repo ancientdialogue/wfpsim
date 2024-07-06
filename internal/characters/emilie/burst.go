@@ -48,8 +48,9 @@ func (c *char) Burst(_ map[string]int) (action.Info, error) {
 		burstArea := combat.NewCircleHitOnTarget(c.lumidoucePos, nil, 12.5)
 
 		if c.lumidouceSrc != -1 {
-			c.removeLumi(c.lumidouceSrc)
+			c.removeLumi(c.lumidouceSrc)()
 		}
+
 		for i := 21; i <= burstDuration; i += burstInterval {
 			enemy := c.Core.Combat.RandomEnemyWithinArea(
 				burstArea,
@@ -83,6 +84,8 @@ func (c *char) Burst(_ map[string]int) (action.Info, error) {
 		}
 
 		c.lumidouceSrc = c.Core.F
+
+		c.genScents()
 
 		c.Core.Tasks.Add(c.lumiTick(c.Core.F), skillLumiFirstTick)
 		c.Core.Tasks.Add(c.removeLumi(c.Core.F), 22*60)
