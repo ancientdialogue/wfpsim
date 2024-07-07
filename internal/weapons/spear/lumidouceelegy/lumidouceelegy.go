@@ -68,16 +68,15 @@ func NewWeapon(c *core.Core, char *character.CharWrapper, p info.WeaponProfile) 
 	c.Events.Subscribe(event.OnEnemyDamage, func(args ...interface{}) bool {
 		t, ok := args[0].(*enemy.Enemy)
 		atk := args[1].(*combat.AttackEvent)
-		if !t.IsBurning() {
+		if !ok {
 			return false
 		}
-		if !ok {
+		if !t.IsBurning() {
 			return false
 		}
 		if atk.Info.Element != attributes.Dendro {
 			return false
 		}
-
 		if atk.Info.ActorIndex != w.char.Index {
 			return false
 		}
