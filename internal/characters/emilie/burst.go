@@ -14,10 +14,11 @@ var (
 )
 
 const (
-	burstHitmark  = 104
-	burstDuration = 168
-	burstInterval = 18
-	burstMarkKey  = "emilie-burst-mark"
+	burstHitmark   = 104
+	burstDuration  = 168
+	burstInterval  = 18
+	burstTargetICD = 42
+	burstMarkKey   = "emilie-burst-mark"
 )
 
 func init() {
@@ -51,7 +52,7 @@ func (c *char) Burst(_ map[string]int) (action.Info, error) {
 			c.removeLumi(c.lumidouceSrc)()
 		}
 
-		for i := 21; i <= burstDuration; i += burstInterval {
+		for i := 21; i <= burstDuration+c.c4Dur(); i += burstInterval {
 			enemy := c.Core.Combat.RandomEnemyWithinArea(
 				burstArea,
 				func(e combat.Enemy) bool {
@@ -61,7 +62,7 @@ func (c *char) Burst(_ map[string]int) (action.Info, error) {
 			var pos geometry.Point
 			if enemy != nil {
 				pos = enemy.Pos()
-				enemy.AddStatus(burstMarkKey, 0.7*60, false)
+				enemy.AddStatus(burstMarkKey, burstTargetICD+c.c4Interval(), false)
 			} else {
 				pos = geometry.CalcRandomPointFromCenter(burstArea.Shape.Pos(), 0.5, 12.5, c.Core.Rand)
 			}
@@ -74,7 +75,7 @@ func (c *char) Burst(_ map[string]int) (action.Info, error) {
 				0,
 			)
 		}
-	}, 21)
+	}, 17)
 
 	c.QueueCharTask(func() {
 		c.lumidouceLvl = oldLvl
@@ -85,7 +86,7 @@ func (c *char) Burst(_ map[string]int) (action.Info, error) {
 
 		c.Core.Tasks.Add(c.lumiTick(c.Core.F), skillLumiFirstTick)
 		c.Core.Tasks.Add(c.removeLumi(c.Core.F), 22*60)
-	}, burstDuration)
+	}, burstDuration+c.c4Dur())
 
 	c.ConsumeEnergy(12)
 	c.SetCD(action.ActionBurst, 13.5*60)

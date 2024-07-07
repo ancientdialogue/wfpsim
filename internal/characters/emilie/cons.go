@@ -46,7 +46,8 @@ func (c *char) c1() {
 		c.AddStatus(c1ICDKey, c1ICDDur, false)
 		if c.lumidouceLvl < 4 {
 			c.lumidouceLvl++
-		} else if c.lumidouceLvl == 4 {
+		}
+		if c.lumidouceLvl == 4 {
 			c.lumidouceLvl = 2
 			c.Core.Events.Emit(event.OnEmilieA1)
 		}
@@ -71,7 +72,8 @@ func (c *char) c1() {
 		c.AddStatus(c1ICDKey, c1ICDDur, false)
 		if c.lumidouceLvl < 4 {
 			c.lumidouceLvl++
-		} else if c.lumidouceLvl == 4 {
+		}
+		if c.lumidouceLvl == 4 {
 			c.lumidouceLvl = 2
 			c.Core.Events.Emit(event.OnEmilieA1)
 		}
@@ -101,4 +103,20 @@ func (c *char) c2() {
 
 		return false
 	}, "emilie-c2")
+}
+
+func (c *char) c4Dur() int {
+	if c.Base.Cons < 4 {
+		return 0
+	}
+
+	return 120
+}
+
+func (c *char) c4Interval() int {
+	if c.Base.Cons < 4 {
+		return 0
+	}
+
+	return -0.3 * 60
 }
