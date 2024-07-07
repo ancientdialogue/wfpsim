@@ -77,11 +77,7 @@ func (c *char) Burst(_ map[string]int) (action.Info, error) {
 	}, 21)
 
 	c.QueueCharTask(func() {
-		if oldLvl >= 2 {
-			c.lumidouceLvl = 2
-		} else {
-			c.lumidouceLvl = 0
-		}
+		c.lumidouceLvl = oldLvl
 
 		c.lumidouceSrc = c.Core.F
 
