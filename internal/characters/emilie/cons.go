@@ -110,7 +110,7 @@ func (c *char) c4Dur() int {
 		return 0
 	}
 
-	return 120
+	return 2 * 60
 }
 
 func (c *char) c4Interval() int {

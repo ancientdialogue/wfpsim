@@ -43,23 +43,25 @@ func (c *char) Burst(_ map[string]int) (action.Info, error) {
 		Mult:       burstDMG[c.TalentLvlBurst()],
 	}
 
+	burstArea := combat.NewCircleHitOnTarget(c.lumidoucePos, nil, 12.5)
+
 	oldLvl := c.lumidouceLvl
 
-	c.QueueCharTask(func() {
-		burstArea := combat.NewCircleHitOnTarget(c.lumidoucePos, nil, 12.5)
+	if c.lumidouceSrc != -1 {
+		c.removeLumi(c.lumidouceSrc)()
+	}
 
-		if c.lumidouceSrc != -1 {
-			c.removeLumi(c.lumidouceSrc)()
-		}
+	for i := 0; i <= burstDuration+c.c4Dur(); i += burstInterval {
+		c.QueueCharTask(func() {
+			var pos geometry.Point
 
-		for i := 21; i <= burstDuration+c.c4Dur(); i += burstInterval {
 			enemy := c.Core.Combat.RandomEnemyWithinArea(
 				burstArea,
 				func(e combat.Enemy) bool {
 					return !e.StatusIsActive(burstMarkKey)
 				},
 			)
-			var pos geometry.Point
+
 			if enemy != nil {
 				pos = enemy.Pos()
 				enemy.AddStatus(burstMarkKey, burstTargetICD+c.c4Interval(), false)
@@ -74,8 +76,8 @@ func (c *char) Burst(_ map[string]int) (action.Info, error) {
 				0,
 				0,
 			)
-		}
-	}, 17)
+		}, i)
+	}
 
 	c.QueueCharTask(func() {
 		c.lumidouceLvl = oldLvl
