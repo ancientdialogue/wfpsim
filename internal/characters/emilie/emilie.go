@@ -17,9 +17,10 @@ func init() {
 
 type char struct {
 	*tmpl.Character
-	lumidouceSrc int
-	lumidoucePos geometry.Point
-	lumidouceLvl int
+	lumidouceSrc   int
+	lumidoucePos   geometry.Point
+	lumidouceLvl   int
+	lumidouceCheck bool
 }
 
 func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) error {
@@ -40,7 +41,6 @@ func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) er
 }
 
 func (c *char) Init() error {
-	c.a1()
 	c.a4()
 
 	c.c1()

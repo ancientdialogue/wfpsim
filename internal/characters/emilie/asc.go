@@ -4,7 +4,6 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/attacks"
 	"github.com/genshinsim/gcsim/pkg/core/attributes"
 	"github.com/genshinsim/gcsim/pkg/core/combat"
-	"github.com/genshinsim/gcsim/pkg/core/event"
 	"github.com/genshinsim/gcsim/pkg/core/geometry"
 	"github.com/genshinsim/gcsim/pkg/core/player/character"
 	"github.com/genshinsim/gcsim/pkg/enemy"
@@ -15,22 +14,19 @@ func (c *char) a1() {
 	if c.Base.Ascension < 1 {
 		return
 	}
-	c.Core.Events.Subscribe(event.OnEmilieA1, func(args ...interface{}) bool {
-		ai := combat.AttackInfo{
-			ActorIndex: c.Index,
-			Abil:       "Cleardew Cologne",
-			AttackTag:  attacks.AttackTagNone,
-			ICDTag:     attacks.ICDTagNone,
-			ICDGroup:   attacks.ICDGroupDefault,
-			StrikeType: attacks.StrikeTypeDefault,
-			Element:    attributes.Dendro,
-			Durability: 25,
-			Mult:       6.0,
-		}
-		ap := combat.NewCircleHitOnTarget(c.Core.Combat.PrimaryTarget(), geometry.Point{Y: 4.5}, 3)
-		c.Core.QueueAttack(ai, ap, 0, 30)
-		return false
-	}, "emilie-a1")
+	ai := combat.AttackInfo{
+		ActorIndex: c.Index,
+		Abil:       "Cleardew Cologne",
+		AttackTag:  attacks.AttackTagNone,
+		ICDTag:     attacks.ICDTagNone,
+		ICDGroup:   attacks.ICDGroupDefault,
+		StrikeType: attacks.StrikeTypeDefault,
+		Element:    attributes.Dendro,
+		Durability: 25,
+		Mult:       6.0,
+	}
+	ap := combat.NewCircleHitOnTarget(c.Core.Combat.PrimaryTarget(), geometry.Point{Y: 4.5}, 3)
+	c.Core.QueueAttack(ai, ap, 0, 30)
 }
 
 func (c *char) a4() {

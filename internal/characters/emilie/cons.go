@@ -44,13 +44,7 @@ func (c *char) c1() {
 			return false
 		}
 		c.AddStatus(c1ICDKey, c1ICDDur, false)
-		if c.lumidouceLvl < 4 {
-			c.lumidouceLvl++
-		}
-		if c.lumidouceLvl == 4 {
-			c.lumidouceLvl = 2
-			c.Core.Events.Emit(event.OnEmilieA1)
-		}
+		c.genScents()
 		return false
 	}, "emilie-c1-burning")
 
@@ -70,13 +64,7 @@ func (c *char) c1() {
 			return false
 		}
 		c.AddStatus(c1ICDKey, c1ICDDur, false)
-		if c.lumidouceLvl < 4 {
-			c.lumidouceLvl++
-		}
-		if c.lumidouceLvl == 4 {
-			c.lumidouceLvl = 2
-			c.Core.Events.Emit(event.OnEmilieA1)
-		}
+		c.genScents()
 		return false
 	}, "emilie-c1-on-damge")
 }

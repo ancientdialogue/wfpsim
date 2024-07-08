@@ -6,7 +6,6 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/attacks"
 	"github.com/genshinsim/gcsim/pkg/core/attributes"
 	"github.com/genshinsim/gcsim/pkg/core/combat"
-	"github.com/genshinsim/gcsim/pkg/core/event"
 	"github.com/genshinsim/gcsim/pkg/core/geometry"
 	"github.com/genshinsim/gcsim/pkg/core/targets"
 	"github.com/genshinsim/gcsim/pkg/enemy"
@@ -59,11 +58,14 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 		skillLumiHitmark,
 	)
 
+	player := c.Core.Combat.Player()
 	c.lumidouceLvl = 0
 	c.lumidouceSrc = c.Core.F
+	c.lumidoucePos = geometry.CalcOffsetPoint(player.Pos(), geometry.Point{Y: 1.5}, player.Direction())
 
-	if c.lumidouceSrc != -1 {
-		c.genScents()
+	if !c.lumidouceCheck {
+		c.lumidouceCheck = true
+		c.checkScents()
 	}
 
 	c.Core.Tasks.Add(c.lumiTick(c.Core.F), skillLumiFirstTick)
@@ -131,13 +133,11 @@ func (c *char) lumiTick(src int) func() {
 	}
 }
 
-func (c *char) genScents() {
+func (c *char) checkScents() {
 	if c.lumidouceSrc == -1 {
 		return
 	}
-
 	isBurning := false
-
 	enemies := c.Core.Combat.EnemiesWithinArea(combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 20), nil)
 	for _, v := range enemies {
 		e, ok := v.(*enemy.Enemy)
@@ -149,19 +149,21 @@ func (c *char) genScents() {
 			break
 		}
 	}
-
-	if isBurning && !c.StatusIsActive(scentICDKey) {
+	if isBurning && !c.StatModIsActive(scentICDKey) {
 		c.AddStatus(scentICDKey, 2*60, false)
-		if c.lumidouceLvl < 4 {
-			c.lumidouceLvl++
-		}
-		if c.lumidouceLvl == 4 {
-			c.lumidouceLvl = 2
-			c.Core.Events.Emit(event.OnEmilieA1)
-		}
+		c.genScents()
 	}
+	c.QueueCharTask(c.checkScents, 30)
+}
 
-	c.QueueCharTask(c.genScents, 30)
+func (c *char) genScents() {
+	if c.lumidouceLvl < 4 {
+		c.lumidouceLvl++
+	}
+	if c.lumidouceLvl == 4 {
+		c.lumidouceLvl = 2
+		c.a1()
+	}
 }
 
 func (c *char) removeLumi(src int) func() {
@@ -169,6 +171,7 @@ func (c *char) removeLumi(src int) func() {
 		if c.lumidouceSrc != src {
 			return
 		}
+		c.lumidouceCheck = false
 		c.lumidouceSrc = -1
 		c.lumidouceLvl = 0
 	}

@@ -43,7 +43,7 @@ func (c *char) Burst(_ map[string]int) (action.Info, error) {
 		Mult:       burstDMG[c.TalentLvlBurst()],
 	}
 
-	burstArea := combat.NewCircleHitOnTarget(c.lumidoucePos, nil, 12.5)
+	burstArea := combat.NewCircleHitOnTarget(c.Core.Combat.Player().Pos(), nil, 12.5)
 
 	oldLvl := c.lumidouceLvl
 
@@ -81,10 +81,11 @@ func (c *char) Burst(_ map[string]int) (action.Info, error) {
 
 	c.QueueCharTask(func() {
 		c.lumidouceLvl = oldLvl
-
 		c.lumidouceSrc = c.Core.F
+		player := c.Core.Combat.Player()
+		c.lumidoucePos = geometry.CalcOffsetPoint(player.Pos(), geometry.Point{Y: 1.5}, player.Direction())
 
-		c.genScents()
+		c.checkScents()
 
 		c.Core.Tasks.Add(c.lumiTick(c.Core.F), skillLumiFirstTick)
 		c.Core.Tasks.Add(c.removeLumi(c.Core.F), 22*60)
