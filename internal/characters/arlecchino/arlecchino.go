@@ -1,10 +1,11 @@
 package arlecchino
 
 import (
+	"fmt"
+
 	tmpl "github.com/genshinsim/gcsim/internal/template/character"
 	"github.com/genshinsim/gcsim/pkg/core"
 	"github.com/genshinsim/gcsim/pkg/core/action"
-	"github.com/genshinsim/gcsim/pkg/core/attributes"
 	"github.com/genshinsim/gcsim/pkg/core/event"
 	"github.com/genshinsim/gcsim/pkg/core/glog"
 	"github.com/genshinsim/gcsim/pkg/core/info"
@@ -41,15 +42,29 @@ func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) er
 func (c *char) Init() error {
 	c.naBuff()
 	c.passive()
+
 	c.a1OnKill()
 	c.a4()
 
 	c.c2()
-	c.c6()
 	return nil
 }
 
 func (c *char) NextQueueItemIsValid(k keys.Char, a action.Action, p map[string]int) error {
+	lastAction := c.Character.Core.Player.LastAction
+	if k != c.Base.Key && a != action.ActionSwap {
+		return fmt.Errorf("%v: Tried to execute %v when not on field", c.Base.Key, a)
+	}
+
+	if lastAction.Type == action.ActionCharge && lastAction.Param["early_cancel"] > 0 {
+		// can only early cancel charged attack with Dash or Jump
+		switch a {
+		case action.ActionDash, action.ActionJump: // skips the error in default block
+		default:
+			return fmt.Errorf("%v: Cannot early cancel Charged Attack with %v", c.Base.Key, a)
+		}
+	}
+
 	// can use charge without attack beforehand unlike most of the other polearm users
 	if a == action.ActionCharge {
 		return nil
@@ -58,15 +73,14 @@ func (c *char) NextQueueItemIsValid(k keys.Char, a action.Action, p map[string]i
 }
 
 func (c *char) AnimationStartDelay(k model.AnimationDelayKey) int {
-	if k == model.AnimationXingqiuN0StartDelay {
+	switch k {
+	case model.AnimationXingqiuN0StartDelay:
+		return 15
+	case model.AnimationYelanN0StartDelay:
 		return 7
+	default:
+		return c.Character.AnimationStartDelay(k)
 	}
-	return c.Character.AnimationStartDelay(k)
-}
-
-func (c *char) getTotalAtk() float64 {
-	stats, _ := c.Stats()
-	return c.Base.Atk*(1+stats[attributes.ATKP]) + stats[attributes.ATK]
 }
 
 func (c *char) Heal(hi *info.HealInfo) (float64, float64) {
@@ -81,30 +95,13 @@ func (c *char) Heal(hi *info.HealInfo) (float64, float64) {
 	healAmt := hp * bonus
 
 	// calc actual heal amount considering hp debt
-	// TODO: assumes that healing can occur in the same heal as debt being cleared, could also be that it can only occur starting from next heal
-	// example: hp debt is 10, heal is 11, so char will get healed by 11 - 10 = 1 instead of receiving no healing at all
 	heal := healAmt - c.CurrentHPDebt()
 	if heal < 0 {
 		heal = 0
 	}
 
-	// calc overheal
-	overheal := prevHP + heal - c.MaxHP()
-	if overheal < 0 {
-		overheal = 0
-	}
-
-	// blocks healing besides arle Q
-	// check the caller first for better performance
-	if hi.Caller == c.Index && hi.Message == nourishingCindersAbil {
-		// update hp debt based on original heal amount
-		c.ModifyHPDebtByAmount(-healAmt)
-		// perform heal based on actual heal amount
-		c.ModifyHPByAmount(heal)
-	} else {
-		// overheal is always 0 when the healing is blocked
-		overheal = 0
-	}
+	// overheal is always 0 when the healing is blocked
+	overheal := 0.0
 
 	// still emit event for clam, sodp, rightful reward, etc
 	c.Core.Log.NewEvent(hi.Message, glog.LogHealEvent, c.Index).

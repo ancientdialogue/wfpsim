@@ -6,22 +6,48 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/attacks"
 	"github.com/genshinsim/gcsim/pkg/core/attributes"
 	"github.com/genshinsim/gcsim/pkg/core/combat"
+	"github.com/genshinsim/gcsim/pkg/core/geometry"
 )
 
 var chargeFrames []int
 
-const chargeHitmark = 34
+const chargeHitmark = 37
 
 func init() {
-	chargeFrames = frames.InitAbilSlice(59)
+	chargeFrames = frames.InitAbilSlice(60)
+	chargeFrames[action.ActionAttack] = 42
+	chargeFrames[action.ActionCharge] = 53
+	chargeFrames[action.ActionSkill] = 42
+	chargeFrames[action.ActionBurst] = 42
 	chargeFrames[action.ActionDash] = chargeHitmark
 	chargeFrames[action.ActionJump] = chargeHitmark
+	chargeFrames[action.ActionSwap] = 58
 }
 
 func (c *char) ChargeAttack(p map[string]int) (action.Info, error) {
+	windup := 0
+	if c.Core.Player.CurrentState() == action.NormalAttackState {
+		windup = 12
+	}
+
+	early, ok := p["early_cancel"]
+	if !ok {
+		early = 0
+	}
+
+	c.QueueCharTask(c.absorbDirectives, 12-windup)
+
+	if early > 0 {
+		// TODO: error if the user waits until after hitmark to do the dash/jump
+		return action.Info{
+			Frames:          func(next action.Action) int { return 13 - windup },
+			AnimationLength: chargeHitmark - 1,
+			CanQueueAfter:   13 - windup,
+			State:           action.ChargeAttackState,
+		}, nil
+	}
+
 	c.QueueCharTask(func() {
-		// occurs before attack lands
-		c.absorbDirectives()
 		ai := combat.AttackInfo{
 			ActorIndex:         c.Index,
 			Abil:               "Charge",
@@ -47,45 +73,17 @@ func (c *char) ChargeAttack(p map[string]int) (action.Info, error) {
 			combat.NewCircleHit(
 				c.Core.Combat.Player(),
 				c.Core.Combat.PrimaryTarget(),
-				nil,
-				0.8,
+				geometry.Point{Y: 0.9},
+				4,
 			),
 			0,
 			0,
 		)
-	}, chargeHitmark)
+	}, chargeHitmark-windup)
 	return action.Info{
-		Frames:          frames.NewAbilFunc(chargeFrames),
-		AnimationLength: chargeFrames[action.InvalidAction],
-		CanQueueAfter:   chargeHitmark,
+		Frames:          func(next action.Action) int { return chargeFrames[next] - windup },
+		AnimationLength: chargeFrames[action.InvalidAction] - windup,
+		CanQueueAfter:   chargeHitmark - windup,
 		State:           action.ChargeAttackState,
 	}, nil
-}
-
-func (c *char) absorbDirectives() {
-	for _, e := range c.Core.Combat.EnemiesWithinArea(combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 5), nil) {
-		if !e.StatusIsActive(directiveKey) {
-			continue
-		}
-
-		level := e.GetTag(directiveKey)
-
-		newDebt := a1Directive[level] * c.MaxHP()
-		if c.StatusIsActive(directiveLimitKey) {
-			newDebt = min(c.skillDebtMax-c.skillDebt, newDebt)
-		}
-
-		if newDebt > 0 {
-			c.skillDebt += newDebt
-			c.ModifyHPDebtByAmount(newDebt)
-		}
-		e.RemoveTag(directiveKey)
-		e.RemoveTag(directiveSrcKey)
-		e.DeleteStatus(directiveKey)
-
-		c.c4OnAbsorb()
-		if level >= 2 {
-			c.c2OnAbsorbDue()
-		}
-	}
 }

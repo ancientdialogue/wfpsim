@@ -16,7 +16,7 @@ import (
 
 var (
 	attackFrames          [][]int
-	attackHitmarks        = [][]int{{10}, {13}, {16}, {23, 34}, {13}, {39}}
+	attackHitmarks        = [][]int{{11}, {16}, {17}, {24, 35}, {21}, {44}}
 	attackHitlagHaltFrame = [][]float64{{0.02}, {0.02}, {0.02}, {0, 0}, {0}, {0.02}}
 	attackDefHalt         = [][]bool{{true}, {true}, {true}, {true, false}, {false}, {true}}
 	attackStrikeTypes     = [][]attacks.StrikeType{
@@ -34,15 +34,15 @@ var (
 			{{1.9, 4}},     // box
 			{{2.8}, {2.8}}, // circle, circle
 			{{2.5}},        // circle
-			{{2.5}},        //TODO: circle?
+			{{3}},          // circle
 		},
 		{
-			{{1.9, 3}},     // box
-			{{2.6}},        // fan
-			{{1.9, 4}},     // box
-			{{2.8}, {2.8}}, // circle, circle
-			{{2.5}},        // circle
-			{{2.5}},        //TODO: circle?
+			{{1.9, 4.2}},   // box
+			{{3.1}},        // fan
+			{{3.4, 5.6}},   // box
+			{{3.3}, {3.3}}, // circle, circle
+			{{2.8}},        // circle
+			{{3.7}},        // circle
 		},
 	}
 	attackOffsets = [][][]float64{
@@ -53,34 +53,40 @@ var (
 		{{0, 2.4}},
 		{{0, 2.5}},
 	}
+
 	attackFanAngles = [][]float64{{360}, {300}, {360}, {360, 360}, {360}, {360}}
 )
 
 const naBuffKey = "masque-of-the-red-death"
-const bloodDebtConsumeICDKey = "blooddebt-consume-icd"
+const bondConsumeICDKey = "bond-consume-icd"
 const normalHitNum = 6
 
 func init() {
 	attackFrames = make([][]int, normalHitNum)
 
-	attackFrames[0] = frames.InitNormalCancelSlice(attackHitmarks[0][0], 23)
-	attackFrames[0][action.ActionAttack] = 23
+	attackFrames[0] = frames.InitNormalCancelSlice(attackHitmarks[0][0], 24)
+	attackFrames[0][action.ActionAttack] = 11
+	attackFrames[0][action.ActionCharge] = 17
 
-	attackFrames[1] = frames.InitNormalCancelSlice(attackHitmarks[1][0], 20)
-	attackFrames[1][action.ActionAttack] = 20
+	attackFrames[1] = frames.InitNormalCancelSlice(attackHitmarks[1][0], 31)
+	attackFrames[1][action.ActionAttack] = 21
+	attackFrames[1][action.ActionCharge] = 26
 
-	attackFrames[2] = frames.InitNormalCancelSlice(attackHitmarks[2][0], 32)
-	attackFrames[2][action.ActionAttack] = 32
+	attackFrames[2] = frames.InitNormalCancelSlice(attackHitmarks[2][0], 39)
+	attackFrames[2][action.ActionAttack] = 31
+	attackFrames[2][action.ActionCharge] = 33
 
-	attackFrames[3] = frames.InitNormalCancelSlice(attackHitmarks[3][1], 47)
-	attackFrames[3][action.ActionAttack] = 47
+	attackFrames[3] = frames.InitNormalCancelSlice(attackHitmarks[3][1], 55)
+	attackFrames[3][action.ActionAttack] = 49
+	attackFrames[3][action.ActionCharge] = 49
 
-	attackFrames[4] = frames.InitNormalCancelSlice(attackHitmarks[4][0], 30)
-	attackFrames[4][action.ActionAttack] = 24
-	attackFrames[4][action.ActionDash] = 28
+	attackFrames[4] = frames.InitNormalCancelSlice(attackHitmarks[4][0], 43)
+	attackFrames[4][action.ActionAttack] = 30
+	attackFrames[4][action.ActionCharge] = 33
 
-	attackFrames[5] = frames.InitNormalCancelSlice(attackHitmarks[5][0], 79)
-	attackFrames[5][action.ActionCharge] = 500 //TODO: this action is illegal; need better way to handle it
+	attackFrames[5] = frames.InitNormalCancelSlice(attackHitmarks[5][0], 59)
+	attackFrames[5][action.ActionAttack] = 58
+	attackFrames[5][action.ActionCharge] = 55
 }
 
 func (c *char) naBuff() {
@@ -89,12 +95,13 @@ func (c *char) naBuff() {
 		if target != c.Index {
 			return false
 		}
+		// TODO: Remove when BoL changes get logged for all characters
 		c.Core.Log.NewEvent("Bond of Life changed", glog.LogCharacterEvent, c.Index).
 			Write("arle_hp_debt", c.CurrentHPDebt()).
 			Write("arle_hp_debt%", c.CurrentHPDebt()/c.MaxHP())
 		if c.CurrentHPDebt() >= c.MaxHP()*0.3 {
-			// can't use negative duration or else `if .arlecchino.status.in-praise-of-shadows` won't work
-			c.AddStatus(naBuffKey, 999999, false)
+			// Due to negative duration, configs need do to `.arle.bolratio >= 0.3` instead of `.arle.status.masque-of-the-red-death`
+			c.AddStatus(naBuffKey, -1, false)
 		} else {
 			c.DeleteStatus(naBuffKey)
 		}
@@ -131,7 +138,7 @@ func (c *char) Attack(p map[string]int) (action.Info, error) {
 				naIndex = 1
 				ai.Element = attributes.Pyro
 				ai.IgnoreInfusion = true
-				ai.FlatDmg += c.blooddebtBonus()
+				ai.FlatDmg += c.bondBonus()
 			}
 
 			var ap combat.AttackPattern
@@ -151,7 +158,7 @@ func (c *char) Attack(p map[string]int) (action.Info, error) {
 				)
 			}
 
-			c.Core.QueueAttack(ai, ap, 0, 0, c.bloodDebtConsumeCB)
+			c.Core.QueueAttack(ai, ap, 0, 0, c.bondConsumeCB)
 		}, attackHitmarks[counter][i])
 	}
 
@@ -165,16 +172,16 @@ func (c *char) Attack(p map[string]int) (action.Info, error) {
 	}, nil
 }
 
-func (c *char) blooddebtBonus() float64 {
+func (c *char) bondBonus() float64 {
 	c1Bonus := 0.0
 	if c.Base.Cons >= 1 {
 		c1Bonus = 1.0
 	}
-	amt := (blooddebt[c.TalentLvlAttack()] + c1Bonus) * c.CurrentHPDebt() / c.MaxHP() * c.getTotalAtk()
+	amt := (masque[c.TalentLvlAttack()] + c1Bonus) * c.CurrentHPDebt() / c.MaxHP() * c.TotalAtk()
 	return amt
 }
 
-func (c *char) bloodDebtConsumeCB(a combat.AttackCB) {
+func (c *char) bondConsumeCB(a combat.AttackCB) {
 	if a.Target.Type() != targets.TargettableEnemy {
 		return
 	}
@@ -182,12 +189,12 @@ func (c *char) bloodDebtConsumeCB(a combat.AttackCB) {
 		return
 	}
 
-	if c.StatusIsActive(bloodDebtConsumeICDKey) {
+	if c.StatusIsActive(bondConsumeICDKey) {
 		return
 	}
 
 	// 0.03*60 = 1.8 rounded to 2 frames
-	c.AddStatus(bloodDebtConsumeICDKey, 2, true)
+	c.AddStatus(bondConsumeICDKey, 2, true)
 
 	amt := -0.075 * c.CurrentHPDebt()
 

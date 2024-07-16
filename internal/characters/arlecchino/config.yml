@@ -1,6 +1,9 @@
 package_name: arlecchino
 genshin_id: 10000096
 key: arlecchino
+action_param_keys:
+  charge:
+    - param: "early_cancel"
 icd_groups:
   - group_name: ICDGroupArlecchinoElementalArt
     reset_timer: 600
@@ -10,35 +13,35 @@ icd_groups:
 skill_data_mapping:
   attack:
     attack_1:
-      - 0 # 1-Hit DMG|{param0:F1P}
+      - 0 # 1-Hit DMG
     attack_2:
-      - 1 # 2-Hit DMG|{param1:F1P}
+      - 1 # 2-Hit DMG
     attack_3:
-      - 2 # 3-Hit DMG|{param2:F1P}
+      - 2 # 3-Hit DMG
     attack_4:
-      - 3 # 4-Hit DMG|{param3:F1P}+{param3:F1P}
-      - 3 # 4-Hit DMG|{param3:F1P}+{param3:F1P}
+      - 3 # 4-Hit DMG
+      - 3 # 4-Hit DMG
     attack_5:
-      - 4 # 5-Hit DMG|{param6:F1P}
+      - 4 # 5-Hit DMG
     attack_6:
-      - 5 # 6-Hit DMG|{param5:F1P}
+      - 5 # 6-Hit DMG
     charge:
-      - 6 # Charged Attack DMG|{param6:F1P}
+      - 6 # Charged Attack DMG
     collision:
-      - 8 # Plunge DMG|{param6:F1P}
+      - 8 # Plunge DMG
     lowPlunge:
-      - 9 # Low/High Plunge DMG|{param7:P}/{param8:P}
+      - 9 # Low/High Plunge DMG
     highPlunge:
-      - 10 # Low/High Plunge DMG|{param7:P}/{param8:P}
-    blooddebt:
-      - 11 # Blood Debt DMG Increase|{param11:F2P}
+      - 10 # Low/High Plunge DMG
+    masque:
+      - 11 # Masque of the Red Death Increase
   skill:
     skillSpike:
-      - 0 # Spike Skill DMG|{param0:F1P}
+      - 0 # Spike DMG
     skillFinal:
-      - 1 # Final Skill DMG|{param1:F1P}
+      - 1 # Cleave DMG
     skillSigil:
-      - 2 # Blood-Debt Sigil DMG|{param2:F1P}
+      - 2 # Blood-Debt Directive DMG
   burst:
     burst:
-      - 0 # Burst DMG|{param0:F1P}
+      - 0 # Skill DMG

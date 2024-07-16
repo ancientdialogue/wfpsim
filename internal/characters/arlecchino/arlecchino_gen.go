@@ -4,13 +4,21 @@ package arlecchino
 import (
 	_ "embed"
 
+	"fmt"
+	"github.com/genshinsim/gcsim/pkg/core/action"
+	"github.com/genshinsim/gcsim/pkg/core/keys"
+	"github.com/genshinsim/gcsim/pkg/gcs/validation"
 	"github.com/genshinsim/gcsim/pkg/model"
 	"google.golang.org/protobuf/encoding/prototext"
+	"slices"
 )
 
 //go:embed data_gen.textproto
 var pbData []byte
 var base *model.AvatarData
+var paramKeysValidation = map[action.Action][]string{
+	4: {"early_cancel"},
+}
 
 func init() {
 	base = &model.AvatarData{}
@@ -18,6 +26,20 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
+	validation.RegisterCharParamValidationFunc(keys.Arlecchino, ValidateParamKeys)
+}
+
+func ValidateParamKeys(a action.Action, keys []string) error {
+	valid, ok := paramKeysValidation[a]
+	if !ok {
+		return nil
+	}
+	for _, v := range keys {
+		if !slices.Contains(valid, v) {
+			return fmt.Errorf("key %v is invalid for action %v", v, a.String())
+		}
+	}
+	return nil
 }
 
 func (x *char) Data() *model.AvatarData {
@@ -163,24 +185,6 @@ var (
 		2.164239,
 		2.283371,
 	}
-	// attack: blooddebt = [11]
-	blooddebt = []float64{
-		1.204,
-		1.302,
-		1.4,
-		1.54,
-		1.638,
-		1.75,
-		1.904,
-		2.058,
-		2.212,
-		2.38,
-		2.548,
-		2.716,
-		2.884,
-		3.052,
-		3.22,
-	}
 	// attack: charge = [6]
 	charge = []float64{
 		0.90816,
@@ -252,6 +256,24 @@ var (
 		3.062159,
 		3.240537,
 		3.418915,
+	}
+	// attack: masque = [11]
+	masque = []float64{
+		1.204,
+		1.302,
+		1.4,
+		1.54,
+		1.638,
+		1.75,
+		1.904,
+		2.058,
+		2.212,
+		2.38,
+		2.548,
+		2.716,
+		2.884,
+		3.052,
+		3.22,
 	}
 	// skill: skillFinal = [1]
 	skillFinal = []float64{
