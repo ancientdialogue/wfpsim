@@ -3,7 +3,6 @@ package emilie
 import (
 	tmpl "github.com/genshinsim/gcsim/internal/template/character"
 	"github.com/genshinsim/gcsim/pkg/core"
-	"github.com/genshinsim/gcsim/pkg/core/attributes"
 	"github.com/genshinsim/gcsim/pkg/core/geometry"
 	"github.com/genshinsim/gcsim/pkg/core/info"
 	"github.com/genshinsim/gcsim/pkg/core/keys"
@@ -41,6 +40,7 @@ func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) er
 }
 
 func (c *char) Init() error {
+	c.a4()
 	return nil
 }
 func (c *char) AnimationStartDelay(k model.AnimationDelayKey) int {
@@ -48,9 +48,4 @@ func (c *char) AnimationStartDelay(k model.AnimationDelayKey) int {
 		return 13
 	}
 	return c.Character.AnimationStartDelay(k)
-}
-
-func (c *char) getTotalAtk() float64 {
-	stats, _ := c.Stats()
-	return c.Base.Atk*(1+stats[attributes.ATKP]) + stats[attributes.ATK]
 }
