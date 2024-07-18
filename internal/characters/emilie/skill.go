@@ -1,8 +1,6 @@
 package emilie
 
 import (
-	"fmt"
-
 	"github.com/genshinsim/gcsim/internal/frames"
 	"github.com/genshinsim/gcsim/pkg/core/action"
 	"github.com/genshinsim/gcsim/pkg/core/attacks"
@@ -11,6 +9,7 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/geometry"
 	"github.com/genshinsim/gcsim/pkg/core/glog"
 	"github.com/genshinsim/gcsim/pkg/core/targets"
+	"github.com/genshinsim/gcsim/pkg/enemy"
 )
 
 var (
@@ -22,9 +21,12 @@ const (
 	skillLumiSpawn     = 18 // same as CD start
 	skillLumiHitmark   = 38
 	skillLumiFirstTick = 64
-	tickInterval       = 120 // assume consistent 59f tick rate
+	tickInterval       = 120 // assume consistent 120f tick rate
+	skillDuration      = 22 * 60
 	particleICDKey     = "emilie-particle-icd"
 	skillKey           = "emilie-skill"
+	scentICD           = 115
+	scentICDKey        = "scent-generation-icd"
 )
 
 func init() {
@@ -47,15 +49,14 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 		Abil:       "Lumidouce Case (Summon)",
 		AttackTag:  attacks.AttackTagElementalArt,
 		ICDTag:     attacks.ICDTagNone,
-		ICDGroup:   attacks.ICDGroupEmilieLumidouce,
+		ICDGroup:   attacks.ICDGroupDefault,
 		StrikeType: attacks.StrikeTypePierce,
-		Element:    attributes.Electro,
+		Element:    attributes.Dendro,
 		Durability: 25,
 		Mult:       skillDMG[c.TalentLvlSkill()],
 	}
 
-	radius := 2.0
-	// hitmark is 5 frames after oz spawns
+	radius := 4.5
 	c.Core.QueueAttack(
 		ai,
 		combat.NewCircleHitOnTarget(c.Core.Combat.PrimaryTarget(), geometry.Point{Y: 1.5}, radius),
@@ -67,8 +68,7 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 	// so we add 18 to the duration instead. this probably mess up CDR stuff
 	c.SetCD(action.ActionSkill, 14*60+skillLumiSpawn)
 
-	// set on field oz to be this one
-	c.queueLumi(skillLumiSpawn, skillLumiFirstTick)
+	c.queueLumiSpawn(skillLumiSpawn, skillLumiFirstTick, 1)
 
 	return action.Info{
 		Frames:          frames.NewAbilFunc(skillFrames),
@@ -85,34 +85,33 @@ func (c *char) particleCB(a combat.AttackCB) {
 	if c.StatusIsActive(particleICDKey) {
 		return
 	}
-	c.AddStatus(particleICDKey, 0.1*60, true)
-	if c.Core.Rand.Float64() < .67 {
-		// TODO: this delay used to be 120
-		c.Core.QueueParticle(c.Base.Key.String(), 1, attributes.Electro, c.ParticleDelay)
-	}
+	c.AddStatus(particleICDKey, 2.5*60, true)
+	c.Core.QueueParticle(c.Base.Key.String(), 1, attributes.Dendro, c.ParticleDelay)
 }
 
-func (c *char) queueLumi(lumiSpawn, firstTick int) {
-	// calculate oz duration
-	dur := 22 * 60
-	spawnFn := func() {
-		// setup variables for tracking oz
-		c.lumidouceSrc = c.Core.F
-		// queue up oz removal at the end of the duration for gcsl conditional
-		c.Core.Tasks.Add(c.removeLumi(c.Core.F), dur)
-
-		player := c.Core.Combat.Player()
-		c.lumidoucePos = geometry.CalcOffsetPoint(player.Pos(), geometry.Point{Y: 1.5}, player.Direction())
-
-		c.Core.Tasks.Add(c.lumiTick(c.Core.F), firstTick)
-		c.Core.Log.NewEvent("Oz activated", glog.LogCharacterEvent, c.Index).
-			Write("next expected tick", c.Core.F+tickInterval)
-	}
-	if lumiSpawn > 0 {
-		c.Core.Tasks.Add(spawnFn, lumiSpawn)
+func (c *char) queueLumiSpawn(lumiSpawn, firstTick, lumidouceLvl int) {
+	// calculate duration
+	if lumidouceLvl < 1 || lumidouceLvl > 2 {
 		return
 	}
-	spawnFn()
+	if c.lumidouceLvl > 2 {
+		return
+	}
+	c.Core.Tasks.Add(func() {
+		c.lumidouceScents = 0
+		c.lumidouceSrc = c.Core.F
+		c.lumidouceScentLast = c.Core.F
+		c.lumidouceLvl = lumidouceLvl
+		c.Core.Tasks.Add(c.removeLumi(c.Core.F), skillDuration)
+		player := c.Core.Combat.Player()
+		c.lumidoucePos = geometry.CalcOffsetPoint(player.Pos(), geometry.Point{Y: 1.5}, player.Direction())
+		c.AddStatus(skillKey, skillDuration, false)
+		c.QueueCharTask(c.lumiTick(c.Core.F), firstTick)
+		c.QueueCharTask(c.scentCheck(c.Core.F), 0)
+		c.QueueCharTask(c.scentCollect(c.Core.F), 0)
+		c.Core.Log.NewEvent("Lumidouce case activated", glog.LogCharacterEvent, c.Index).
+			Write("next expected tick", c.Core.F+tickInterval)
+	}, lumiSpawn)
 }
 
 func (c *char) lumiTick(src int) func() {
@@ -128,29 +127,50 @@ func (c *char) lumiTick(src int) func() {
 			Write("next expected tick", c.Core.F+tickInterval).
 			Write("src", src)
 		// trigger damage
-		ai := combat.AttackInfo{
-			ActorIndex: c.Index,
-			Abil:       fmt.Sprintf("Lumidouce Case (%v)", src),
-			AttackTag:  attacks.AttackTagElementalArt,
-			ICDTag:     attacks.ICDTagElementalArt,
-			ICDGroup:   attacks.ICDGroupFischl,
-			StrikeType: attacks.StrikeTypePierce,
-			Element:    attributes.Electro,
-			Durability: 25,
-			Mult:       skillLumidouce[0][c.TalentLvlSkill()],
+		switch c.lumidouceLvl {
+		case 1:
+			ai := combat.AttackInfo{
+				ActorIndex: c.Index,
+				Abil:       "Lumidouce Case (Level 1)",
+				AttackTag:  attacks.AttackTagElementalArt,
+				ICDTag:     attacks.ICDTagElementalArt,
+				ICDGroup:   attacks.ICDGroupEmilieLumidouce,
+				StrikeType: attacks.StrikeTypePierce,
+				Element:    attributes.Dendro,
+				Durability: 25,
+				Mult:       skillLumidouce[0][c.TalentLvlSkill()],
+			}
+			ap := combat.NewCircleHit(
+				c.lumidoucePos,
+				c.Core.Combat.PrimaryTarget(),
+				nil,
+				1,
+			)
+			c.Core.QueueAttack(ai, ap, 0, 0, c.particleCB)
+		case 2:
+			ai := combat.AttackInfo{
+				ActorIndex: c.Index,
+				Abil:       "Lumidouce Case (Level 2)",
+				AttackTag:  attacks.AttackTagElementalArt,
+				ICDTag:     attacks.ICDTagElementalArt,
+				ICDGroup:   attacks.ICDGroupEmilieLumidouce,
+				StrikeType: attacks.StrikeTypePierce,
+				Element:    attributes.Dendro,
+				Durability: 25,
+				Mult:       skillLumidouce[1][c.TalentLvlSkill()],
+			}
+			ap := combat.NewCircleHit(
+				c.lumidoucePos,
+				c.Core.Combat.PrimaryTarget(),
+				nil,
+				1,
+			)
+			c.Core.QueueAttack(ai, ap, 0, 0, c.particleCB)
+			c.Core.QueueAttack(ai, ap, 5, 5, c.particleCB)
 		}
-		ap := combat.NewBoxHit(
-			c.lumidoucePos,
-			c.Core.Combat.PrimaryTarget(),
-			geometry.Point{Y: -0.5},
-			0.1,
-			1,
-		)
-		c.Core.QueueAttack(ai, ap, 0, 0)
 
-		// queue up next hit only if next hit oz is still active
+		// queue up next hit
 		c.Core.Tasks.Add(c.lumiTick(src), tickInterval)
-
 	}
 }
 
@@ -162,7 +182,78 @@ func (c *char) removeLumi(src int) func() {
 				Write("src", src)
 			return
 		}
+		c.lumidouceLvl = -1
+		c.lumidouceScentLast = -1
+		c.lumidouceScents = -1
+		c.lumidouceSrc = -1
+		c.DeleteStatus(skillKey)
 		c.Core.Log.NewEvent("Lumidouce Case removed", glog.LogCharacterEvent, c.Index).
 			Write("src", src)
+	}
+}
+
+func (c *char) scentCheck(src int) func() {
+	return func() {
+		if c.lumidouceSrc != src {
+			return
+		}
+
+		c.QueueCharTask(c.scentCheck(src), 30)
+
+		if c.StatusIsActive(scentICDKey) {
+			return
+		}
+
+		enemies := c.Core.Combat.EnemiesWithinArea(combat.NewCircleHitOnTarget(c.lumidoucePos, nil, 8), nil)
+		for _, v := range enemies {
+			e, ok := v.(*enemy.Enemy)
+			if !ok {
+				continue
+			}
+			if e.IsBurning() {
+				c.scentGen()
+				c.QueueCharTask(c.scentCheck(src), 120)
+				break
+			}
+		}
+	}
+}
+
+func (c *char) scentGen() {
+	// it's a gadget doing the scent collection so not hitlag affected?
+	c.AddStatus(scentICDKey, scentICD, false)
+
+	// TODO: Do scents expire??
+	// Does this need to become a gadget?
+	// TODO: What is the scent collection delay?
+	c.Core.Tasks.Add(func() {
+		c.scentCount++
+	}, 20)
+}
+
+func (c *char) scentCollect(src int) func() {
+	return func() {
+		if c.lumidouceSrc != src {
+			return
+		}
+
+		c.QueueCharTask(c.scentCollect(src), 30)
+
+		if c.scentCount > 0 {
+			c.scentCount--
+			c.lumidouceScents++
+			c.lumidouceScentLast = c.Core.F
+			if c.lumidouceLvl == 2 {
+				c.a1()
+			}
+
+			if c.lumidouceScents > 2 {
+				c.lumidouceLvl = 2
+			}
+			return
+		}
+		if c.Core.F-c.lumidouceScentLast >= 8*60 {
+			c.lumidouceLvl = 1
+		}
 	}
 }

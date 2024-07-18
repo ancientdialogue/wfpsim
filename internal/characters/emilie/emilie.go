@@ -17,16 +17,19 @@ func init() {
 
 type char struct {
 	*tmpl.Character
-	lumidouceSrc int
-	lumidoucePos geometry.Point
-	lumidouceLvl int
+	scentCount         int
+	lumidouceSrc       int
+	lumidoucePos       geometry.Point
+	lumidouceLvl       int
+	lumidouceScents    int
+	lumidouceScentLast int
 }
 
 func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) error {
 	c := char{}
 	c.Character = tmpl.NewWithWrapper(s, w)
 
-	c.EnergyMax = 60
+	c.EnergyMax = 50
 	c.NormalHitNum = normalHitNum
 	c.SkillCon = 5
 	c.BurstCon = 3
