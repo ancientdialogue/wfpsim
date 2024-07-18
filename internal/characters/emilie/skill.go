@@ -228,6 +228,8 @@ func (c *char) scentGen() {
 	// TODO: What is the scent collection delay?
 	c.Core.Tasks.Add(func() {
 		c.scentCount++
+		c.Core.Log.NewEvent("Scent generated", glog.LogCharacterEvent, c.Index).
+			Write("total scents", c.scentCount)
 	}, 20)
 }
 
@@ -243,12 +245,16 @@ func (c *char) scentCollect(src int) func() {
 			c.scentCount--
 			c.lumidouceScents++
 			c.lumidouceScentLast = c.Core.F
+			c.Core.Log.NewEvent("Scent Collected", glog.LogCharacterEvent, c.Index).
+				Write("total scents left", c.scentCount).
+				Write("total scents collected", c.lumidouceScents)
 			if c.lumidouceLvl == 2 {
 				c.a1()
 			}
 
 			if c.lumidouceScents > 2 {
 				c.lumidouceLvl = 2
+				c.Core.Log.NewEvent("Lumidouce upgraded", glog.LogCharacterEvent, c.Index)
 			}
 			return
 		}
