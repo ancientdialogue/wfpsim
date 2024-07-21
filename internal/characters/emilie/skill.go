@@ -27,6 +27,8 @@ const (
 	skillKey           = "emilie-skill"
 	scentICD           = 115
 	scentICDKey        = "scent-generation-icd"
+	skillAlignedICD    = 10 * 60
+	skillAlignedICDKey = "emilie-aligned-icd"
 )
 
 func init() {
@@ -63,6 +65,33 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 		skillLumiSpawn,
 		skillLumiHitmark,
 	)
+	aiThorn := combat.AttackInfo{
+		// TODO: Apply Pneuma
+		ActorIndex:         c.Index,
+		Abil:               "Spiritbreath Thorn (" + c.Base.Key.Pretty() + ")",
+		AttackTag:          attacks.AttackTagElementalArt,
+		ICDTag:             attacks.ICDTagNone,
+		ICDGroup:           attacks.ICDGroupDefault,
+		StrikeType:         attacks.StrikeTypeSpear,
+		Element:            attributes.Dendro,
+		Durability:         0,
+		Mult:               skillArke[c.TalentLvlSkill()],
+		HitlagFactor:       0.01,
+		CanBeDefenseHalted: true,
+	}
+	c.QueueCharTask(func() {
+		if c.StatusIsActive(skillAlignedICDKey) {
+			return
+		}
+		c.AddStatus(skillAlignedICDKey, skillAlignedICD, true)
+
+		c.Core.QueueAttack(
+			aiThorn,
+			combat.NewCircleHitOnTarget(c.Core.Combat.PrimaryTarget(), geometry.Point{Y: 1.5}, radius),
+			5, // TODO: snapshot delay?
+			5,
+		)
+	}, skillLumiHitmark)
 
 	// CD Delay is 18 frames, but things break if Delay > CanQueueAfter
 	// so we add 18 to the duration instead. this probably mess up CDR stuff
