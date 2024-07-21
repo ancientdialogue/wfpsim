@@ -22,7 +22,6 @@ var (
 	attackStrikeType      = []attacks.StrikeType{attacks.StrikeTypeSpear, attacks.StrikeTypeSlash, attacks.StrikeTypeSlash, attacks.StrikeTypeSlash}
 )
 
-const c6Key = "emilie-c6"
 const normalHitNum = 4
 
 func init() {
