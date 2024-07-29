@@ -20,8 +20,8 @@ var (
 const (
 	skillLumiSpawn     = 18 // same as CD start
 	skillLumiHitmark   = 38
-	skillLumiFirstTick = 64
-	tickInterval       = 120 // assume consistent 120f tick rate
+	skillLumiFirstTick = 90
+	tickInterval       = 90 // assume consistent 90f tick rate
 	skillDuration      = 22 * 60
 	particleICDKey     = "emilie-particle-icd"
 	skillKey           = "emilie-skill"
