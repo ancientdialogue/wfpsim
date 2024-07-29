@@ -1,6 +1,8 @@
 package lumidouceelegy
 
 import (
+	"fmt"
+
 	"github.com/genshinsim/gcsim/pkg/core"
 	"github.com/genshinsim/gcsim/pkg/core/attributes"
 	"github.com/genshinsim/gcsim/pkg/core/combat"
@@ -63,7 +65,7 @@ func NewWeapon(c *core.Core, char *character.CharWrapper, p info.WeaponProfile) 
 		}
 		w.bonusCB()
 		return false
-	}, "lumidouceelegy-on-burning")
+	}, fmt.Sprintf("lumidouceelegy-on-burning-%v", char.Base.Key.String()))
 
 	c.Events.Subscribe(event.OnEnemyDamage, func(args ...interface{}) bool {
 		t, ok := args[0].(*enemy.Enemy)
@@ -82,7 +84,7 @@ func NewWeapon(c *core.Core, char *character.CharWrapper, p info.WeaponProfile) 
 		}
 		w.bonusCB()
 		return false
-	}, "lumidouceelegy-on-damge")
+	}, fmt.Sprintf("lumidouceelegy-on-damage-%v", char.Base.Key.String()))
 
 	return &w, nil
 }
