@@ -78,7 +78,7 @@ func (c *char) burstTick() {
 		StrikeType: attacks.StrikeTypePierce,
 		Element:    attributes.Dendro,
 		Durability: 25,
-		Mult:       skillLumidouce[1][c.TalentLvlSkill()],
+		Mult:       burstDMG[c.TalentLvlSkill()],
 	}
 
 	// deal dmg after a certain delay
