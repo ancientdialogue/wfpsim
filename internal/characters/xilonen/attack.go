@@ -81,14 +81,6 @@ func (c *char) Attack(p map[string]int) (action.Info, error) {
 			geometry.Point{Y: attackOffsets[c.NormalCounter][i]},
 			attackHitboxes[c.NormalCounter][i][0],
 		)
-		if c.NormalCounter == 3 || (c.NormalCounter == 4 && i == 0) {
-			ap = combat.NewBoxHitOnTarget(
-				c.Core.Combat.Player(),
-				geometry.Point{Y: attackOffsets[c.NormalCounter][i]},
-				attackHitboxes[c.NormalCounter][i][0],
-				attackHitboxes[c.NormalCounter][i][1],
-			)
-		}
 		c.QueueCharTask(func() {
 			c.Core.QueueAttack(ax, ap, 0, 0)
 		}, attackHitmarks[c.NormalCounter][i])
@@ -129,14 +121,6 @@ func (c *char) nightsoulAttack() action.Info {
 			geometry.Point{Y: rollerOffsets[c.NormalCounter][i]},
 			rollerHitboxes[c.NormalCounter][i][0],
 		)
-		if c.NormalCounter == 3 || (c.NormalCounter == 4 && i == 0) {
-			ap = combat.NewBoxHitOnTarget(
-				c.Core.Combat.Player(),
-				geometry.Point{Y: rollerOffsets[c.NormalCounter][i]},
-				rollerHitboxes[c.NormalCounter][i][0],
-				rollerHitboxes[c.NormalCounter][i][1],
-			)
-		}
 		c.QueueCharTask(func() {
 			c.Core.QueueAttack(ax, ap, 0, 0, c.a1cb)
 		}, rollerHitmarks[c.NormalCounter][i])
