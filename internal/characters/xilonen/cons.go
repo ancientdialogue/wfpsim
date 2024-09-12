@@ -3,6 +3,7 @@ package xilonen
 import (
 	"fmt"
 
+	"github.com/genshinsim/gcsim/pkg/core/action"
 	"github.com/genshinsim/gcsim/pkg/core/attacks"
 	"github.com/genshinsim/gcsim/pkg/core/attributes"
 	"github.com/genshinsim/gcsim/pkg/core/combat"
@@ -113,6 +114,18 @@ func (c *char) c2() {
 	}
 	c.c2GeoSampler()()
 	c.c2buff()
+}
+
+func (c *char) c2electro() {
+	if c.Base.Cons < 2 {
+		return
+	}
+	for _, ch := range c.Core.Player.Chars() {
+		if ch.Base.Element == attributes.Electro {
+			ch.AddEnergy(c2key, 20)
+			ch.ReduceActionCooldown(action.ActionBurst, 5*60)
+		}
+	}
 }
 
 func (c *char) c4() {
