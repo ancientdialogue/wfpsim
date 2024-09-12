@@ -52,6 +52,11 @@ func (c *char) enterNightsoul() {
 		}
 		c.exitNightsoul()
 	}, duration)
+
+	// Don't queue the task if C2 or higher
+	if c.Base.Cons < 2 {
+		c.activeGeoSampler(src)
+	}
 }
 
 func (c *char) exitNightsoul() {
@@ -94,16 +99,16 @@ func (c *char) applySamplerShred(ele attributes.Element, enemies []combat.Enemy)
 	}
 }
 
-func (c *char) activeGeoSampler() func() {
+func (c *char) activeGeoSampler(src int) func() {
 	return func() {
-		if !c.nightsoulState.HasBlessing() {
+		if c.nightsoulSrc != src {
 			return
 		}
 		enemies := c.Core.Combat.EnemiesWithinArea(combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 10), nil)
 		c.applySamplerShred(attributes.Geo, enemies)
 
 		// TODO: how often does this apply?
-		c.QueueCharTask(c.activeGeoSampler(), 18)
+		c.QueueCharTask(c.activeGeoSampler(src), 18)
 	}
 }
 
@@ -165,10 +170,9 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 
 	c.QueueCharTask(func() {
 		c.enterNightsoul()
-
-		c.activeGeoSampler()
 	}, skillStart)
 
+	c.c4()
 	return action.Info{
 		Frames:          frames.NewAbilFunc(skillFrames),
 		AnimationLength: skillFrames[action.InvalidAction],

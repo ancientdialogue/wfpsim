@@ -24,7 +24,6 @@ type char struct {
 
 	nightsoulState    *nightsoul.State
 	nightsoulSrc      int
-	samplers          []attributes.Element
 	sampleSrc         int
 	samplersConverted int
 	shredElements     []attributes.Element
@@ -82,6 +81,10 @@ func (c *char) Init() error {
 
 	c.a1()
 	c.a4()
+
+	c.c2()
+	c.c4Init()
+
 	return nil
 }
 
