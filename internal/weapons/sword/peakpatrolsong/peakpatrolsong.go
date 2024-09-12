@@ -56,6 +56,9 @@ func NewWeapon(c *core.Core, char *character.CharWrapper, p info.WeaponProfile) 
 
 		if w.stacks < 2 {
 			w.stacks++
+			if w.stacks > 2 {
+				w.stacks = 2
+			}
 		}
 		m[attributes.DEFP] = def * float64(w.stacks)
 
@@ -73,7 +76,10 @@ func NewWeapon(c *core.Core, char *character.CharWrapper, p info.WeaponProfile) 
 					Base:         modifier.NewBaseWithHitlag(buffKey, 15*60),
 					AffectedStat: attributes.DmgP,
 					Amount: func() ([]float64, bool) {
-						bonus := max(maxEleDmgBonus, eleDmgBonus*(char.TotalDef()/1000))
+						bonus := eleDmgBonus * (char.TotalDef() / 1000)
+						if bonus > maxEleDmgBonus {
+							bonus = maxEleDmgBonus
+						}
 						m[attributes.DmgP] = bonus
 						return m, true
 					},
