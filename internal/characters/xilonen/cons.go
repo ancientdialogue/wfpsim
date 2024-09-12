@@ -52,7 +52,7 @@ func (c *char) c2buff() {
 	for _, ch := range c.Core.Player.Chars() {
 		switch ch.Base.Element {
 		case attributes.Geo:
-			c.AddStatMod(character.StatMod{
+			ch.AddStatMod(character.StatMod{
 				Base:         modifier.NewBaseWithHitlag(c2key, -1),
 				AffectedStat: attributes.DmgP,
 				Amount: func() ([]float64, bool) {
@@ -61,7 +61,7 @@ func (c *char) c2buff() {
 				},
 			})
 		case attributes.Pyro:
-			c.AddStatMod(character.StatMod{
+			ch.AddStatMod(character.StatMod{
 				Base:         modifier.NewBaseWithHitlag(c2key, -1),
 				AffectedStat: attributes.ATKP,
 				Amount: func() ([]float64, bool) {
@@ -72,7 +72,7 @@ func (c *char) c2buff() {
 				},
 			})
 		case attributes.Hydro:
-			c.AddStatMod(character.StatMod{
+			ch.AddStatMod(character.StatMod{
 				Base:         modifier.NewBaseWithHitlag(c2key, -1),
 				AffectedStat: attributes.HPP,
 				Amount: func() ([]float64, bool) {
@@ -83,7 +83,7 @@ func (c *char) c2buff() {
 				},
 			})
 		case attributes.Cryo:
-			c.AddStatMod(character.StatMod{
+			ch.AddStatMod(character.StatMod{
 				Base:         modifier.NewBaseWithHitlag(c2key, -1),
 				AffectedStat: attributes.CD,
 				Amount: func() ([]float64, bool) {
