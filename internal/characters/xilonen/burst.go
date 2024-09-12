@@ -11,13 +11,13 @@ import (
 
 var burstFrames []int
 
-const burstStart = 85
+const burstStart = 96
 
 func init() {
-	burstFrames = frames.InitAbilSlice(90) // Q -> D/J
-	burstFrames[action.ActionAttack] = 88  // Q -> N1
-	burstFrames[action.ActionSkill] = 89   // Q -> E
-	burstFrames[action.ActionSwap] = 88    // Q -> Swap
+	burstFrames = frames.InitAbilSlice(93) // Q -> D/J
+	// burstFrames[action.ActionAttack] = 88  // Q -> N1
+	// burstFrames[action.ActionSkill] = 89   // Q -> E
+	// burstFrames[action.ActionSwap] = 88    // Q -> Swap
 }
 
 func (c *char) Burst(p map[string]int) (action.Info, error) {
@@ -38,7 +38,7 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 	c.Core.QueueAttack(ai, combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 7), burstStart, burstStart)
 
 	if c.samplersConverted >= 2 {
-		for i := 1; i <= 8; i++ {
+		for i := 0; i < 8; i++ {
 			hpplus := c.HealBonus()
 			heal := burstHealBase[c.TalentLvlBurst()] + c.TotalDef()*burstHealPer[c.TalentLvlBurst()]
 			c.Core.Tasks.Add(func() {
@@ -49,7 +49,7 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 					Src:     heal,
 					Bonus:   hpplus,
 				})
-			}, burstStart+i*90)
+			}, burstStart+i*90+8)
 		}
 	} else {
 		ai.Abil = "Ocelotlicue Point Ardent Rhythm"

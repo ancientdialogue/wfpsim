@@ -15,19 +15,19 @@ import (
 
 var skillFrames []int
 
-const skillStart = 13
-const skillHitmarks = 17
+const skillStart = 2
+const skillHitmarks = 13
 const particleICDKey = "xilonen-particle-icd"
 const samplerShredKey = "xilonen-e-shred"
 const activeSamplerKey = "xilonen-samplers-activated"
 const maxNightsoulPoints = 90
 
 func init() {
-	skillFrames = frames.InitAbilSlice(52)
-	skillFrames[action.ActionAttack] = 29
-	skillFrames[action.ActionBurst] = 28
-	skillFrames[action.ActionDash] = 37
-	skillFrames[action.ActionJump] = 37
+	skillFrames = frames.InitAbilSlice(22)
+	// skillFrames[action.ActionAttack] = 29
+	// skillFrames[action.ActionBurst] = 28
+	// skillFrames[action.ActionDash] = 37
+	// skillFrames[action.ActionJump] = 37
 }
 
 func (c *char) reduceNightsoulPoints(val float64) {

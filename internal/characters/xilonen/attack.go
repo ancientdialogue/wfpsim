@@ -13,13 +13,13 @@ import (
 
 var (
 	attackFrames           [][]int
-	attackHitmarks         = [][]int{{10}, {9, 19}, {13}}
+	attackHitmarks         = [][]int{{18}, {10, 14}, {19}}
 	attackHitlagHaltFrames = []float64{0.03, 0.03, 0.06}
 	attackHitboxes         = [][][]float64{{{1.5}}, {{1.5}, {1.5}}, {{1.5}}}
 	attackOffsets          = [][]float64{{0.8}, {0.6, 0.6}, {0.8}}
 
 	rollerFrames           [][]int
-	rollerHitmarks         = [][]int{{10}, {9}, {13}, {13}}
+	rollerHitmarks         = [][]int{{16}, {13}, {22}, {32}}
 	rollerHitlagHaltFrames = []float64{0.03, 0.03, 0.06, 0.06}
 	rollerHitboxes         = [][][]float64{{{1.5}}, {{1.5}}, {{1.5}}, {{1.5}}}
 	rollerOffsets          = [][]float64{{0.8}, {0.6}, {0.8}, {0.8}}
@@ -32,10 +32,10 @@ func init() {
 	attackFrames = make([][]int, normalHitNum)
 
 	attackFrames[0] = frames.InitNormalCancelSlice(attackHitmarks[0][0], 35)
-	attackFrames[0][action.ActionAttack] = 18
+	attackFrames[0][action.ActionAttack] = 21
 
 	attackFrames[1] = frames.InitNormalCancelSlice(attackHitmarks[1][1], 29)
-	attackFrames[1][action.ActionAttack] = 24
+	attackFrames[1][action.ActionAttack] = 43
 
 	attackFrames[2] = frames.InitNormalCancelSlice(attackHitmarks[2][0], 35)
 	attackFrames[2][action.ActionCharge] = 500 //TODO: this action is illegal; need better way to handle it
@@ -43,13 +43,13 @@ func init() {
 	rollerFrames = make([][]int, rollerHitNum)
 
 	rollerFrames[0] = frames.InitNormalCancelSlice(rollerHitmarks[0][0], 35)
-	rollerFrames[0][action.ActionAttack] = 18
+	rollerFrames[0][action.ActionAttack] = 22
 
 	rollerFrames[1] = frames.InitNormalCancelSlice(rollerHitmarks[1][0], 29)
-	rollerFrames[1][action.ActionAttack] = 24
+	rollerFrames[1][action.ActionAttack] = 27
 
 	rollerFrames[2] = frames.InitNormalCancelSlice(rollerHitmarks[2][0], 35)
-	attackFrames[2][action.ActionAttack] = 29
+	attackFrames[2][action.ActionAttack] = 66
 
 	rollerFrames[3] = frames.InitNormalCancelSlice(rollerHitmarks[3][0], 35)
 }
