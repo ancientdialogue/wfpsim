@@ -150,13 +150,11 @@ func (c *char) c4Init() {
 			amt := 0.65 * c.TotalDef()
 			char.Tags[c4key]--
 
-			if c.Core.Flags.LogDebug {
-				c.Core.Log.NewEvent("Xilonen c4 proc dmg add", glog.LogPreDamageMod, atk.Info.ActorIndex).
-					Write("before", atk.Info.FlatDmg).
-					Write("addition", amt).
-					Write("effect_ends_at", c.StatusExpiry(c4key)).
-					Write("c4_left", c.Tags[c4key])
-			}
+			c.Core.Log.NewEvent("Xilonen c4 proc dmg add", glog.LogPreDamageMod, atk.Info.ActorIndex).
+				Write("before", atk.Info.FlatDmg).
+				Write("addition", amt).
+				Write("effect_ends_at", c.StatusExpiry(c4key)).
+				Write("c4_left", c.Tags[c4key])
 
 			atk.Info.FlatDmg += amt
 		}
