@@ -63,6 +63,7 @@ func (c *char) a1Converted(t combat.Target, ae *combat.AttackEvent) {
 		c.AddStatus(activeSamplerKey, 15*60, true)
 		c.sampleSrc = c.Core.F
 		c.activeSamplers(c.sampleSrc)()
+		c.c2electro()
 	}
 }
 
