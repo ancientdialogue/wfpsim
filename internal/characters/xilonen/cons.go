@@ -2,6 +2,7 @@ package xilonen
 
 import (
 	"fmt"
+	"slices"
 
 	"github.com/genshinsim/gcsim/pkg/core/action"
 	"github.com/genshinsim/gcsim/pkg/core/attacks"
@@ -112,7 +113,9 @@ func (c *char) c2() {
 	if c.Base.Cons < 2 {
 		return
 	}
-	c.c2GeoSampler()()
+	if slices.Contains(c.shredElements, attributes.Geo) {
+		c.c2GeoSampler()()
+	}
 	c.c2buff()
 }
 
