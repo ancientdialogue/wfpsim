@@ -56,6 +56,7 @@ var weaponNames = []string{
 	"bloodtaintedgreatsword",
 	"calamityqueller",
 	"cashflowsupervision",
+	"chainbreaker",
 	"cinnabarspindle",
 	"cloudforged",
 	"compoundbow",
@@ -89,6 +90,7 @@ var weaponNames = []string{
 	"filletblade",
 	"finaleofthedeep",
 	"fleuvecendreferryman",
+	"fluteofezpitzal",
 	"flowingpurity",
 	"footprintoftherainbow",
 	"forestregalia",
@@ -250,6 +252,7 @@ const (
 	BloodtaintedGreatsword
 	CalamityQueller
 	CashflowSupervision
+	ChainBreaker
 	CinnabarSpindle
 	Cloudforged
 	CompoundBow
@@ -283,6 +286,7 @@ const (
 	FilletBlade
 	FinaleOfTheDeep
 	FleuveCendreFerryman
+	FluteOfEzpitzal
 	FlowingPurity
 	FootprintOfTheRainbow
 	ForestRegalia

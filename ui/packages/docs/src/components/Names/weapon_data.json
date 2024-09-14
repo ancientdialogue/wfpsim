@@ -55,6 +55,7 @@
   "cashflowsupervision": [
     "cashflow"
   ],
+  "chainbreaker": [],
   "cinnabarspindle": [
     "cinnabar"
   ],
@@ -130,6 +131,9 @@
   "fleuvecendreferryman": [
     "fleuve",
     "pipe"
+  ],
+  "fluteofezpitzal": [
+    "ezpital"
   ],
   "forestregalia": [
     "regalia"
