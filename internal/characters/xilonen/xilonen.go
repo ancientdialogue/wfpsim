@@ -7,6 +7,7 @@ import (
 	"github.com/genshinsim/gcsim/internal/template/nightsoul"
 	"github.com/genshinsim/gcsim/pkg/core"
 	"github.com/genshinsim/gcsim/pkg/core/attributes"
+	"github.com/genshinsim/gcsim/pkg/core/event"
 	"github.com/genshinsim/gcsim/pkg/core/glog"
 	"github.com/genshinsim/gcsim/pkg/core/info"
 	"github.com/genshinsim/gcsim/pkg/core/keys"
@@ -85,7 +86,23 @@ func (c *char) Init() error {
 	c.c2()
 	c.c4Init()
 
+	c.onExitField()
 	return nil
+}
+
+func (c *char) onExitField() {
+	c.Core.Events.Subscribe(event.OnCharacterSwap, func(args ...interface{}) bool {
+		prev := args[0].(int)
+		if prev != c.Index {
+			return false
+		}
+
+		if !c.nightsoulState.HasBlessing() {
+			return false
+		}
+		c.exitNightsoul()
+		return false
+	}, "xilonen-exit")
 }
 
 func (c *char) Condition(fields []string) (any, error) {

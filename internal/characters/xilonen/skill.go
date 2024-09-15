@@ -61,6 +61,9 @@ func (c *char) enterNightsoul() {
 }
 
 func (c *char) exitNightsoul() {
+	if !c.nightsoulState.HasBlessing() {
+		return
+	}
 	c.nightsoulState.ExitBlessing()
 	c.nightsoulSrc = -1
 	c.NormalHitNum = normalHitNum
