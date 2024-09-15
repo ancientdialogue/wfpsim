@@ -38,16 +38,16 @@ var c2BuffCryo []float64
 
 func c2buffsInit() {
 	c2BuffGeo = make([]float64, attributes.EndStatType)
-	c2BuffGeo[attributes.DmgP] = 0.4
+	c2BuffGeo[attributes.DmgP] = 0.50
 
 	c2BuffPyro = make([]float64, attributes.EndStatType)
-	c2BuffPyro[attributes.ATKP] = 0.4
+	c2BuffPyro[attributes.ATKP] = 0.45
 
 	c2BuffHydro = make([]float64, attributes.EndStatType)
-	c2BuffHydro[attributes.HPP] = 0.4
+	c2BuffHydro[attributes.HPP] = 0.45
 
 	c2BuffCryo = make([]float64, attributes.EndStatType)
-	c2BuffCryo[attributes.CD] = 0.5
+	c2BuffCryo[attributes.CD] = 0.60
 }
 
 func (c *char) c2buff() {
