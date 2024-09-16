@@ -97,6 +97,7 @@ func (c *char) Attack(p map[string]int) (action.Info, error) {
 }
 
 func (c *char) nightsoulAttack() action.Info {
+	c.c6()
 	ai := combat.AttackInfo{
 		ActorIndex:         c.Index,
 		AttackTag:          attacks.AttackTagNormal,
@@ -115,7 +116,7 @@ func (c *char) nightsoulAttack() action.Info {
 	for i, mult := range attackE[c.NormalCounter] {
 		ax := ai
 		ax.Abil = fmt.Sprintf("Blade Roller %v", c.NormalCounter)
-		ax.Mult = mult[c.TalentLvlAttack()]
+		ax.Mult = mult[c.TalentLvlAttack()] + c.c6DmgMult()
 		ap := combat.NewCircleHitOnTarget(
 			c.Core.Combat.Player(),
 			geometry.Point{Y: rollerOffsets[c.NormalCounter][i]},

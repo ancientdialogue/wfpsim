@@ -48,6 +48,9 @@ func init() {
 // Use the "collision" optional argument if you want to do a falling hit on the way down
 // Default = 0
 func (c *char) LowPlungeAttack(p map[string]int) (action.Info, error) {
+	if c.nightsoulState.HasBlessing() {
+		c.c6()
+	}
 	defer c.Core.Player.SetAirborne(player.Grounded)
 	switch c.Core.Player.Airborne() {
 	case player.AirborneXianyun:
@@ -83,6 +86,7 @@ func (c *char) lowPlungeXY(p map[string]int) action.Info {
 	if c.nightsoulState.HasBlessing() {
 		ai.Element = attributes.Geo
 		ai.IgnoreInfusion = true
+		ai.Mult += c.c6DmgMult()
 	}
 	c.Core.QueueAttack(
 		ai,
@@ -104,6 +108,9 @@ func (c *char) lowPlungeXY(p map[string]int) action.Info {
 // Use the "collision" optional argument if you want to do a falling hit on the way down
 // Default = 0
 func (c *char) HighPlungeAttack(p map[string]int) (action.Info, error) {
+	if c.nightsoulState.HasBlessing() {
+		c.c6()
+	}
 	defer c.Core.Player.SetAirborne(player.Grounded)
 	switch c.Core.Player.Airborne() {
 	case player.AirborneXianyun:
@@ -139,6 +146,7 @@ func (c *char) highPlungeXY(p map[string]int) action.Info {
 	if c.nightsoulState.HasBlessing() {
 		ai.Element = attributes.Geo
 		ai.IgnoreInfusion = true
+		ai.Mult += c.c6DmgMult()
 	}
 	c.Core.QueueAttack(
 		ai,
@@ -174,6 +182,7 @@ func (c *char) plungeCollision(delay int) {
 	if c.nightsoulState.HasBlessing() {
 		ai.Element = attributes.Geo
 		ai.IgnoreInfusion = true
+		ai.Mult += c.c6DmgMult()
 	}
 	c.Core.QueueAttack(ai, combat.NewCircleHitOnTarget(c.Core.Combat.Player(), geometry.Point{Y: 1}, 1), delay, delay)
 }

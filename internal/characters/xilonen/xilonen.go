@@ -28,6 +28,7 @@ type char struct {
 	sampleSrc         int
 	samplersConverted int
 	shredElements     []attributes.Element
+	c6activated       bool
 }
 
 func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) error {
@@ -86,6 +87,8 @@ func (c *char) Init() error {
 	c.c2()
 	c.c4Init()
 
+	c.c6Stam()
+
 	c.onExitField()
 	return nil
 }
@@ -100,7 +103,9 @@ func (c *char) onExitField() {
 		if !c.nightsoulState.HasBlessing() {
 			return false
 		}
+
 		c.exitNightsoul()
+		c.DeleteStatus(c6key)
 		return false
 	}, "xilonen-exit")
 }

@@ -10,12 +10,16 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/combat"
 	"github.com/genshinsim/gcsim/pkg/core/event"
 	"github.com/genshinsim/gcsim/pkg/core/glog"
+	"github.com/genshinsim/gcsim/pkg/core/info"
 	"github.com/genshinsim/gcsim/pkg/core/player/character"
 	"github.com/genshinsim/gcsim/pkg/modifier"
 )
 
 const c2key = "xilonen-c2"
 const c4key = "xilonen-c4"
+const c6key = "xilonen-c6"
+const c6IcdKey = "xilonen-c6-icd"
+const c6StamKey = "xilonen-c6-stam"
 
 func (c *char) c1DurMod() float64 {
 	if c.Base.Cons < 1 {
@@ -177,4 +181,78 @@ func (c *char) c4Init() {
 
 		return false
 	}, fmt.Sprintf("%s-hook", c4key))
+}
+
+func (c *char) c6() {
+	if c.Base.Cons < 6 {
+		return
+	}
+
+	if c.StatusIsActive(c6IcdKey) {
+		return
+	}
+
+	if !c.nightsoulState.HasBlessing() {
+		return
+	}
+
+	c.AddStatus(c6key, 5*60, true)
+	c.AddStatus(c6IcdKey, 15*60, true)
+	c.c6activated = true
+
+	src := c.nightsoulSrc
+	cancelTime := c.StatusDuration(skillMaxDurKey) + 5*60
+	c.QueueCharTask(func() {
+		if c.nightsoulSrc != src {
+			return
+		}
+		c.exitNightsoul()
+	}, cancelTime)
+	c.AddStatus(skillMaxDurKey, cancelTime, true)
+
+	c.QueueCharTask(func() {
+		if !c.nightsoulState.HasBlessing() {
+			return
+		}
+		if c.nightsoulState.Points() < maxNightsoulPoints {
+			return
+		}
+		c.a1MaxPoints()
+	}, 5*60)
+
+	for i := 0; i < 4; i++ {
+		hpplus := c.HealBonus()
+		heal := c.TotalDef() * 1.2
+		c.Core.Tasks.Add(func() {
+			c.Core.Player.Heal(info.HealInfo{
+				Caller:  c.Index,
+				Target:  -1,
+				Message: "Xilonen C6 Healing",
+				Src:     heal,
+				Bonus:   hpplus,
+			})
+		}, i*90)
+	}
+}
+
+func (c *char) c6Stam() {
+	if c.Base.Cons < 6 {
+		return
+	}
+	c.Core.Player.AddStamPercentMod(c6StamKey, -1, func(a action.Action) (float64, bool) {
+		if c.StatusIsActive(c6key) {
+			return -1, false
+		}
+		return 0, false
+	})
+}
+
+func (c *char) c6DmgMult() float64 {
+	if c.Base.Cons < 6 {
+		return 0.0
+	}
+	if !c.StatusIsActive(c6key) {
+		return 0.0
+	}
+	return 3.0
 }
