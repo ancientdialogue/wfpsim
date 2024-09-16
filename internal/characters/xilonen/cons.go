@@ -125,8 +125,8 @@ func (c *char) c2electro() {
 	}
 	for _, ch := range c.Core.Player.Chars() {
 		if ch.Base.Element == attributes.Electro {
-			ch.AddEnergy(c2key, 20)
-			ch.ReduceActionCooldown(action.ActionBurst, 5*60)
+			ch.AddEnergy(c2key, 25)
+			ch.ReduceActionCooldown(action.ActionBurst, 6*60)
 		}
 	}
 }
