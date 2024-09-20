@@ -30,9 +30,10 @@ func NewWeapon(c *core.Core, char *character.CharWrapper, p info.WeaponProfile) 
 	w := &Weapon{}
 	r := p.Refine
 
-	def := 0.045 + float64(r)*0.015
-	eleDmgBonus := 0.09 + float64(r)*0.03
-	maxEleDmgBonus := 0.27 + float64(r)*0.09
+	def := 0.06 + float64(r)*0.02
+	dmgP := 0.075 + float64(r)*0.025
+	eleDmgBonus := 0.06 + float64(r)*0.02
+	maxEleDmgBonus := 0.192 + float64(r)*0.064
 
 	const stackKey = "peakpatrolsong-stack"
 	const buffKey = "peakpatrolsong-buff"
@@ -58,10 +59,11 @@ func NewWeapon(c *core.Core, char *character.CharWrapper, p info.WeaponProfile) 
 
 		d := make([]float64, attributes.EndStatType)
 		d[attributes.DEFP] = def * float64(w.stacks)
+		d[attributes.DmgP] = dmgP * float64(w.stacks)
 
 		char.AddStatMod(character.StatMod{
 			Base:         modifier.NewBaseWithHitlag(stackKey, 6*60),
-			AffectedStat: attributes.DEFP,
+			AffectedStat: attributes.NoStat,
 			Amount: func() ([]float64, bool) {
 				return d, true
 			},
