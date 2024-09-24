@@ -29,6 +29,7 @@ type char struct {
 	samplersConverted int
 	shredElements     []attributes.Element
 	c6activated       bool
+	samplersActivated bool
 }
 
 func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) error {

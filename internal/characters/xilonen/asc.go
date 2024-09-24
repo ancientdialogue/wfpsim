@@ -46,34 +46,38 @@ func (c *char) a1cb(cb combat.AttackCB) {
 	if c.samplersConverted < 2 {
 		return
 	}
-	c.a1Converted(cb.Target, cb.AttackEvent)
-}
-func (c *char) a1Converted(t combat.Target, ae *combat.AttackEvent) {
+
+	if c.samplersActivated {
+		return
+	}
+
 	if c.StatusIsActive(a1IcdKey) {
 		return
 	}
+
 	c.AddStatus(a1IcdKey, 0.1*60, true)
 	c.nightsoulState.GeneratePoints(35)
 	if c.nightsoulState.Points() < maxNightsoulPoints {
 		return
 	}
 
-	c.a4MaxPoints(t, ae)
+	c.a4MaxPoints(cb.Target, cb.AttackEvent)
 
-	if c.StatusIsActive(c6key) {
-		return
-	}
 	c.a1MaxPoints()
 }
 
 func (c *char) a1MaxPoints() {
 	c.nightsoulState.ConsumePoints(c.nightsoulState.Points())
-	c.exitNightsoul()
 
 	c.AddStatus(activeSamplerKey, 15*60, true)
 	c.sampleSrc = c.Core.F
 	c.activeSamplers(c.sampleSrc)()
 	c.c2electro()
+	c.samplersActivated = true
+	if c.StatusIsActive(c6key) {
+		return
+	}
+	c.exitNightsoul()
 }
 
 func (c *char) a4() {
