@@ -217,8 +217,9 @@ func (c *char) c6() {
 		if c.nightsoulState.Points() < maxNightsoulPoints {
 			return
 		}
-		c.a1MaxPoints()
 	}, 5*60)
+
+	c.QueueCharTask(c.nightsoulPointReduceFunc(c.nightsoulSrc), 5*60)
 
 	for i := 0; i < 4; i++ {
 		hpplus := c.HealBonus()

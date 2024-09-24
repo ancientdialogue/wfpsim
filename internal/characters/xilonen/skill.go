@@ -47,6 +47,7 @@ func (c *char) enterNightsoul() {
 	c.NormalHitNum = rollerHitNum
 
 	c.c6activated = false
+	c.samplersActivated = false
 	src := c.nightsoulSrc
 	duration := int(9 * 60 * c.c1DurMod())
 	c.QueueCharTask(func() {
@@ -80,6 +81,10 @@ func (c *char) exitNightsoul() {
 func (c *char) nightsoulPointReduceFunc(src int) func() {
 	return func() {
 		if c.nightsoulSrc != src {
+			return
+		}
+
+		if c.StatusIsActive(c6key) {
 			return
 		}
 
