@@ -39,7 +39,7 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 
 	if c.samplersConverted >= 2 {
 		for i := 0; i < 8; i++ {
-			hpplus := c.HealBonus()
+			hpplus := c.Stat(attributes.Heal)
 			heal := burstHealBase[c.TalentLvlBurst()] + c.TotalDef()*burstHealPer[c.TalentLvlBurst()]
 			c.Core.Tasks.Add(func() {
 				c.Core.Player.Heal(info.HealInfo{
