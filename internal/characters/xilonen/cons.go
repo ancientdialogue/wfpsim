@@ -222,7 +222,7 @@ func (c *char) c6() {
 	c.QueueCharTask(c.nightsoulPointReduceFunc(c.nightsoulSrc), 5*60)
 
 	for i := 0; i < 4; i++ {
-		hpplus := c.HealBonus()
+		hpplus := c.Stat(attributes.Heal)
 		heal := c.TotalDef() * 1.2
 		c.Core.Tasks.Add(func() {
 			c.Core.Player.Heal(info.HealInfo{
