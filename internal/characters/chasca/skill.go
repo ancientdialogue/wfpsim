@@ -50,7 +50,7 @@ func (c *char) nightsoulPointReduceFunc(src int) func() {
 		c.reduceNightsoulPoints(1)
 
 		// reduce 1 point per 6f
-		c.QueueCharTask(c.nightsoulPointReduceFunc(src), 6)
+		c.QueueCharTask(c.nightsoulPointReduceFunc(src), 8)
 	}
 }
 
@@ -89,7 +89,7 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 		c.nightsoulState.EnterBlessing(80)
 		c.DeleteStatus(particleICDKey)
 		c.nightsoulSrc = c.Core.F
-		c.QueueCharTask(c.nightsoulPointReduceFunc(c.nightsoulSrc), 6)
+		c.QueueCharTask(c.nightsoulPointReduceFunc(c.nightsoulSrc), 8)
 	}, 0)
 
 	return action.Info{
