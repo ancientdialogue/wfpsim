@@ -65,3 +65,5 @@ tasks:
       vars: [ID]
     cmds:
       - go run scripts/extract-talents/main.go --excels=$GENSHIN_DATA_REPO --avatar={{.ID}}
+  diff-from-upstream:
+    cmd: git diff upstream/main..develop -- ':(exclude)ui/*' &> diff.patch
