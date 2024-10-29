@@ -87,7 +87,6 @@ import (
 	_ "github.com/genshinsim/gcsim/internal/characters/xiangling"
 	_ "github.com/genshinsim/gcsim/internal/characters/xianyun"
 	_ "github.com/genshinsim/gcsim/internal/characters/xiao"
-	_ "github.com/genshinsim/gcsim/internal/characters/xilonen"
 	_ "github.com/genshinsim/gcsim/internal/characters/xingqiu"
 	_ "github.com/genshinsim/gcsim/internal/characters/xinyan"
 	_ "github.com/genshinsim/gcsim/internal/characters/yaemiko"

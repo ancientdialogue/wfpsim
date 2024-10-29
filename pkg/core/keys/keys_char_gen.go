@@ -82,7 +82,6 @@ const (
 	Xiangling
 	Xianyun
 	Xiao
-	Xilonen
 	Xingqiu
 	Xinyan
 	YaeMiko
@@ -395,10 +394,6 @@ func init() {
 	charNames[Xiao] = "xiao"
 	charPrettyName[Xiao] = "Xiao"
 	CharKeyToEle[Xiao] = attributes.Anemo
-
-	charNames[Xilonen] = "xilonen"
-	charPrettyName[Xilonen] = "Xilonen"
-	CharKeyToEle[Xilonen] = attributes.Geo
 
 	charNames[Xingqiu] = "xingqiu"
 	charPrettyName[Xingqiu] = "Xingqiu"
