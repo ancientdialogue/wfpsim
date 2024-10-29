@@ -57,7 +57,6 @@ const (
 	Lyney
 	Mika
 	Mona
-	Mualani
 	Nahida
 	Navia
 	Neuvillette
@@ -70,7 +69,6 @@ const (
 	Rosaria
 	Sara
 	Sayu
-	Sethos
 	Shenhe
 	Sucrose
 	Tartaglia
@@ -296,10 +294,6 @@ func init() {
 	charPrettyName[Mona] = "Mona"
 	CharKeyToEle[Mona] = attributes.Hydro
 
-	charNames[Mualani] = "mualani"
-	charPrettyName[Mualani] = "Mualani"
-	CharKeyToEle[Mualani] = attributes.Hydro
-
 	charNames[Nahida] = "nahida"
 	charPrettyName[Nahida] = "Nahida"
 	CharKeyToEle[Nahida] = attributes.Dendro
@@ -347,10 +341,6 @@ func init() {
 	charNames[Sayu] = "sayu"
 	charPrettyName[Sayu] = "Sayu"
 	CharKeyToEle[Sayu] = attributes.Anemo
-
-	charNames[Sethos] = "sethos"
-	charPrettyName[Sethos] = "Sethos"
-	CharKeyToEle[Sethos] = attributes.Electro
 
 	charNames[Shenhe] = "shenhe"
 	charPrettyName[Shenhe] = "Shenhe"

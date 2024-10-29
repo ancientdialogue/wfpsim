@@ -7,9 +7,9 @@ element: Rock
 weapon_class: WEAPON_SWORD_ONE_HAND
 icon_name: "UI_AvatarIcon_Xilonen"
 stats: {
-   base_hp: 965.713134765625
-   base_atk: 21.4130001068115
-   base_def: 72.3943023681641
+   base_hp: 965.71313
+   base_atk: 21.413
+   base_def: 72.3943
    hp_curve: GROW_CURVE_HP_S5
    atk_curve: GROW_CURVE_ATTACK_S5
    def_cruve: GROW_CURVE_HP_S5
@@ -32,15 +32,15 @@ stats: {
       max_level: 40
       add_props: {
          prop_type: FIGHT_PROP_BASE_HP
-         value: 828.01171875
+         value: 828.0117
       }
       add_props: {
          prop_type: FIGHT_PROP_BASE_DEFENSE
-         value: 62.0730018615723
+         value: 62.073
       }
       add_props: {
          prop_type: FIGHT_PROP_BASE_ATTACK
-         value: 18.3583698272705
+         value: 18.35837
       }
       add_props: {
          prop_type: FIGHT_PROP_DEFENSE_PERCENT
@@ -50,15 +50,15 @@ stats: {
       max_level: 50
       add_props: {
          prop_type: FIGHT_PROP_BASE_HP
-         value: 1416.33581542969,
+         value: 1416.3358
       }
       add_props: {
          prop_type: FIGHT_PROP_BASE_DEFENSE
-         value: 106.17749786377,
+         value: 106.1775
       }
       add_props: {
          prop_type: FIGHT_PROP_BASE_ATTACK
-         value: 31.4024753570557
+         value: 31.402475
       }
       add_props: {
          prop_type: FIGHT_PROP_DEFENSE_PERCENT
@@ -69,15 +69,15 @@ stats: {
       max_level: 60
       add_props: {
          prop_type: FIGHT_PROP_BASE_HP
-         value: 2200.76806640625
+         value: 2200.768
       }
       add_props: {
          prop_type: FIGHT_PROP_BASE_DEFENSE
-         value: 164.983505249023
+         value: 164.9835
       }
       add_props: {
          prop_type: FIGHT_PROP_BASE_ATTACK
-         value: 48.7946166992188
+         value: 48.794617
       }
       add_props: {
          prop_type: FIGHT_PROP_DEFENSE_PERCENT
@@ -88,15 +88,15 @@ stats: {
       max_level: 70
       add_props: {
          prop_type: FIGHT_PROP_BASE_HP
-         value: 2789.09204101563
+         value: 2789.092
       }
       add_props: {
          prop_type: FIGHT_PROP_BASE_DEFENSE
-         value: 209.087997436523
+         value: 209.088
       }
       add_props: {
          prop_type: FIGHT_PROP_BASE_ATTACK
-         value: 61.8387184143066
+         value: 61.83872
       }
       add_props: {
          prop_type: FIGHT_PROP_DEFENSE_PERCENT
@@ -107,15 +107,15 @@ stats: {
       max_level: 80
       add_props: {
          prop_type: FIGHT_PROP_BASE_HP
-         value: 3377.41625976563
+         value: 3377.4163
       }
       add_props: {
          prop_type: FIGHT_PROP_BASE_DEFENSE
-         value: 253.192504882813
+         value: 253.1925
       }
       add_props: {
          prop_type: FIGHT_PROP_BASE_ATTACK
-         value: 74.8828277587891
+         value: 74.88283
       }
       add_props: {
          prop_type: FIGHT_PROP_DEFENSE_PERCENT
@@ -126,15 +126,15 @@ stats: {
       max_level: 90
       add_props: {
          prop_type: FIGHT_PROP_BASE_HP
-         value: 3965.740234375
+         value: 3965.7402
       }
       add_props: {
          prop_type: FIGHT_PROP_BASE_DEFENSE
-         value: 297.296997070313
+         value: 297.297
       }
       add_props: {
          prop_type: FIGHT_PROP_BASE_ATTACK
-         value: 87.9269332885742
+         value: 87.92693
       }
       add_props: {
          prop_type: FIGHT_PROP_DEFENSE_PERCENT
@@ -143,9 +143,9 @@ stats: {
    }
 }
 skill_details: {
-   skill: 10382
-   burst: 10385
-   attack: 10381
+   skill: 11032
+   burst: 11035
+   attack: 11031
    burst_energy_cost: 60
 }
-name_text_hash_map: 4197635682
+name_text_hash_map: 2515292882
