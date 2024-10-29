@@ -147,6 +147,7 @@
     "fs"
   ],
   "frostbearer": [],
+  "fruitfulhook": [],
   "fruitoffulfillment": [
     "fruit",
     "fof"
@@ -241,7 +242,9 @@
   "otherworldlystory": [
     "otherworldly"
   ],
-  "peakpatrolsong": [],
+  "peakpatrolsong": [
+    "pps"
+  ],
   "pocketgrimoire": [
     "pocket"
   ],

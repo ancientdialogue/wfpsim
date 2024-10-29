@@ -1030,6 +1030,23 @@
       },
       "name_text_hash_map ": "1113306282"
     },
+    "mualani": {
+      "id": 10000102,
+      "key": "mualani",
+      "rarity": "QUALITY_ORANGE",
+      "body": "BODY_GIRL",
+      "region": "ASSOC_TYPE_NATLAN",
+      "element": "Water",
+      "weapon_class": "WEAPON_CATALYST",
+      "icon_name": "UI_AvatarIcon_Mualani",
+      "skill_details": {
+        "skill": 30002,
+        "burst": 30007,
+        "attack": 30000,
+        "burst_energy_cost": 60
+      },
+      "name_text_hash_map ": "3949670506"
+    },
     "nahida": {
       "id": 10000073,
       "key": "nahida",
@@ -1233,6 +1250,23 @@
         "burst_energy_cost": 80
       },
       "name_text_hash_map ": "2388785242"
+    },
+    "sethos": {
+      "id": 10000097,
+      "key": "sethos",
+      "rarity": "QUALITY_PURPLE",
+      "body": "BODY_BOY",
+      "region": "ASSOC_TYPE_SUMERU",
+      "element": "Electric",
+      "weapon_class": "WEAPON_BOW",
+      "icon_name": "UI_AvatarIcon_Sethos",
+      "skill_details": {
+        "skill": 10972,
+        "burst": 10975,
+        "attack": 10971,
+        "burst_energy_cost": 60
+      },
+      "name_text_hash_map ": "1431322346"
     },
     "shenhe": {
       "id": 10000063,
