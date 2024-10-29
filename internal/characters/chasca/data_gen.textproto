@@ -7,9 +7,9 @@ element: Wind
 weapon_class: WEAPON_BOW
 icon_name: "UI_AvatarIcon_Chasca"
 stats: {
-   base_hp: 902.6731
-   base_atk: 14.51352
-   base_def: 45.78
+   base_hp: 763
+   base_atk: 27.0
+   base_def: 47.86
    hp_curve: GROW_CURVE_HP_S4
    atk_curve: GROW_CURVE_ATTACK_S4
    def_cruve: GROW_CURVE_HP_S4
@@ -25,7 +25,7 @@ stats: {
          prop_type: FIGHT_PROP_BASE_ATTACK
       }
       add_props: {
-         prop_type: FIGHT_PROP_ATTACK_PERCENT
+         prop_type: FIGHT_PROP_CRITICAL
       }
    }
    promo_data: {
@@ -43,7 +43,7 @@ stats: {
          value: 10.842597
       }
       add_props: {
-         prop_type: FIGHT_PROP_ATTACK_PERCENT
+         prop_type: FIGHT_PROP_CRITICAL
       }
    }
    promo_data: {
@@ -61,8 +61,8 @@ stats: {
          value: 18.546547
       }
       add_props: {
-         prop_type: FIGHT_PROP_ATTACK_PERCENT
-         value: 0.06
+         prop_type: FIGHT_PROP_CRITICAL
+         value: 0.048
       }
    }
    promo_data: {
@@ -80,8 +80,8 @@ stats: {
          value: 28.818481
       }
       add_props: {
-         prop_type: FIGHT_PROP_ATTACK_PERCENT
-         value: 0.12
+         prop_type: FIGHT_PROP_CRITICAL
+         value: 0.096
       }
    }
    promo_data: {
@@ -99,8 +99,8 @@ stats: {
          value: 36.52243
       }
       add_props: {
-         prop_type: FIGHT_PROP_ATTACK_PERCENT
-         value: 0.12
+         prop_type: FIGHT_PROP_CRITICAL
+         value: 0.096
       }
    }
    promo_data: {
@@ -118,8 +118,8 @@ stats: {
          value: 44.226383
       }
       add_props: {
-         prop_type: FIGHT_PROP_ATTACK_PERCENT
-         value: 0.18
+         prop_type: FIGHT_PROP_CRITICAL
+         value: 0.144
       }
    }
    promo_data: {
@@ -137,8 +137,8 @@ stats: {
          value: 51.930332
       }
       add_props: {
-         prop_type: FIGHT_PROP_ATTACK_PERCENT
-         value: 0.24
+         prop_type: FIGHT_PROP_CRITICAL
+         value: 0.192
       }
    }
 }
@@ -146,6 +146,6 @@ skill_details: {
    skill: 10882
    burst: 10885
    attack: 10881
-   burst_energy_cost: 80
+   burst_energy_cost: 60
 }
 name_text_hash_map: 3831162130
