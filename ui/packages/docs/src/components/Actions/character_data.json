@@ -2371,6 +2371,40 @@
       "legal": true
     }
   ],
+  "sigewinne": [
+    {
+      "ability": "attack",
+      "legal": true
+    },
+    {
+      "ability": "aim",
+      "legal": true
+    },
+    {
+      "ability": "skill",
+      "legal": true
+    },
+    {
+      "ability": "burst",
+      "legal": true
+    },
+    {
+      "ability": "dash",
+      "legal": true
+    },
+    {
+      "ability": "jump",
+      "legal": true
+    },
+    {
+      "ability": "walk",
+      "legal": true
+    },
+    {
+      "ability": "swap",
+      "legal": true
+    }
+  ],
   "heizou": [
     {
       "ability": "attack",
@@ -2973,6 +3007,48 @@
     {
       "ability": "swap",
       "legal": true
+    }
+  ],
+  "xilonen": [
+    {
+      "ability": "attack",
+      "legal": true
+    },
+    {
+      "ability": "charge",
+      "notes": "Need to use attack right before charge. Cannot charge in nightsoul blessing"
+    },
+    {
+      "ability": "skill",
+      "legal": true
+    },
+    {
+      "ability": "burst",
+      "legal": true
+    },
+    {
+      "ability": "dash",
+      "legal": true
+    },
+    {
+      "ability": "jump",
+      "legal": true
+    },
+    {
+      "ability": "walk",
+      "legal": true
+    },
+    {
+      "ability": "swap",
+      "legal": true
+    },
+    {
+      "ability": "low_plunge",
+      "notes": "Previous action must be a jump buffed via Xianyun's burst for example. Cannot low plunge in nightsoul blessing."
+    },
+    {
+      "ability": "high_plunge",
+      "notes": "Previous action must be a jump buffed via Xianyun's burst for example."
     }
   ],
   "xingqiu": [

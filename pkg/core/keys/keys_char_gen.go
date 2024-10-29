@@ -72,6 +72,7 @@ const (
 	Sayu
 	Sethos
 	Shenhe
+	Sigewinne
 	Sucrose
 	Tartaglia
 	Thoma
@@ -82,6 +83,7 @@ const (
 	Xiangling
 	Xianyun
 	Xiao
+	Xilonen
 	Xingqiu
 	Xinyan
 	YaeMiko
@@ -355,6 +357,10 @@ func init() {
 	charPrettyName[Shenhe] = "Shenhe"
 	CharKeyToEle[Shenhe] = attributes.Cryo
 
+	charNames[Sigewinne] = "sigewinne"
+	charPrettyName[Sigewinne] = "Sigewinne"
+	CharKeyToEle[Sigewinne] = attributes.Hydro
+
 	charNames[Sucrose] = "sucrose"
 	charPrettyName[Sucrose] = "Sucrose"
 	CharKeyToEle[Sucrose] = attributes.Anemo
@@ -394,6 +400,10 @@ func init() {
 	charNames[Xiao] = "xiao"
 	charPrettyName[Xiao] = "Xiao"
 	CharKeyToEle[Xiao] = attributes.Anemo
+
+	charNames[Xilonen] = "xilonen"
+	charPrettyName[Xilonen] = "Xilonen"
+	CharKeyToEle[Xilonen] = attributes.Geo
 
 	charNames[Xingqiu] = "xingqiu"
 	charPrettyName[Xingqiu] = "Xingqiu"
