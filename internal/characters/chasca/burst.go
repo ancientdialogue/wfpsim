@@ -48,7 +48,6 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 	c.SetCD(action.ActionBurst, burstCD)
 	c.ConsumeEnergy(1)
 
-	// Calculate the number of shells to convert
 	numConversions := len(c.conversionElements) * 2
 
 	for i := 0; i < 6; i++ {
@@ -69,7 +68,11 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 			Durability: 25,
 			Mult:       burstSoulseeker[c.TalentLvlBurst()],
 		}
+		if element != attributes.Anemo {
+			ai.Abil = "Radiant Soulseeker Shell"
+			ai.Mult = burstRadiantSoulseeker[c.TalentLvlBurst()]
 
+		}
 		ap := combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 3)
 		c.Core.QueueAttack(ai, ap, i*5, i*5+5)
 	}
