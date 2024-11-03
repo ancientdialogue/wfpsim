@@ -49,7 +49,7 @@ func (c *char) a1Amount() float64 {
 	if c.Base.Ascension < 1 {
 		return a1Boost
 	}
-	uniqueCount := len(c.uniqueConversionElements)
+	uniqueCount := len(c.uniqueConversionElements) + c.c2stacks()
 	switch uniqueCount {
 	case 1:
 		a1Boost = 0.15

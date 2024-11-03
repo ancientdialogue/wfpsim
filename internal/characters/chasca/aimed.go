@@ -125,7 +125,7 @@ func (c *char) MultitargetFireHold(p map[string]int) (action.Info, error) {
 		ai := combat.AttackInfo{
 			ActorIndex: c.Index,
 			Abil:       "Shining Shadowhunt Shell",
-			AttackTag:  attacks.AttackTagNormal,
+			AttackTag:  attacks.AttackTagExtra,
 			ICDTag:     attacks.ICDTagChascaShot,
 			ICDGroup:   attacks.ICDGroupDefault,
 			StrikeType: attacks.StrikeTypeDefault,
@@ -133,15 +133,34 @@ func (c *char) MultitargetFireHold(p map[string]int) (action.Info, error) {
 			Durability: 25,
 			Mult:       skillShiningShadowhunt[c.TalentLvlSkill()],
 		}
+		if element != attributes.Anemo && !c.StatusIsActive(c2icd) {
+			c2ai := combat.AttackInfo{
+				ActorIndex: c.Index,
+				Abil:       "Shining Shadowhunt Shell",
+				AttackTag:  attacks.AttackTagExtra,
+				ICDTag:     attacks.ICDTagChascaShot,
+				ICDGroup:   attacks.ICDGroupDefault,
+				StrikeType: attacks.StrikeTypeDefault,
+				Element:    element,
+				Durability: 25,
+				Mult:       skillShiningShadowhunt[c.TalentLvlSkill()],
+			}
+			ap := combat.NewBoxHitOnTarget(c.Core.Combat.PrimaryTarget(), nil, 5, 5)
+			c.Core.QueueAttack(c2ai, ap, 0, 2)
+
+			c.AddStatus(c2icd, -1, false)
+		}
 		if element == attributes.Anemo {
 			ai.Abil = "Shadowhunt Shell"
 			ai.Element = attributes.Anemo
 			ai.Mult = skillShadowhunt[c.TalentLvlSkill()]
 		}
 
-		ap := combat.NewBoxHitOnTarget(c.Core.Combat.PrimaryTarget(), nil, 5, 5)
+		ap := combat.NewBoxHitOnTarget(c.Core.Combat.PrimaryTarget(), nil, 1, 1)
 		c.Core.QueueAttack(ai, ap, 0, 2, c.particleCB)
 	}
+
+	c.DeleteStatus(c2icd)
 
 	return action.Info{
 		Frames:          frames.NewAbilFunc(multitargetFrames[hold-1]),
