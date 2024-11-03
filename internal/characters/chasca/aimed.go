@@ -156,7 +156,7 @@ func (c *char) MultitargetFireHold(p map[string]int) (action.Info, error) {
 		}
 		if element == attributes.Anemo {
 			ai.Abil = "Shadowhunt Shell"
-			ai.Element = attributes.Anemo
+			// ai.Element = attributes.Anemo
 			ai.Mult = skillShadowhunt[c.TalentLvlSkill()]
 		}
 
