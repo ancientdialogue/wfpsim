@@ -30,7 +30,7 @@ func init() {
 	burstSkillStateFrames[action.ActionSwap] = 127
 }
 func (c *char) Burst(p map[string]int) (action.Info, error) {
-
+	c.DeleteStatus(c4energy)
 	ai := combat.AttackInfo{
 		ActorIndex: c.Index,
 		Abil:       "Galesplitting Soulseeker Shell",
@@ -69,13 +69,16 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 			Mult:       burstSoulseeker[c.TalentLvlBurst()],
 		}
 		if element != attributes.Anemo {
+			c.c4energy()
+			c.AddStatus(c4energy, -1, false)
 			ai.Abil = "Radiant Soulseeker Shell"
 			ai.Mult = burstRadiantSoulseeker[c.TalentLvlBurst()]
-
 		}
+
 		ap := combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 3)
 		c.Core.QueueAttack(ai, ap, i*5, i*5+5)
 	}
+
 	return action.Info{
 		Frames:          frames.NewAbilFunc(burstFrames),
 		AnimationLength: burstFrames[action.InvalidAction],
