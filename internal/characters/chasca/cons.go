@@ -2,6 +2,7 @@ package chasca
 
 var c2icd = "chasca-c2-icd"
 var c4energy = "chasca-c4-energy"
+var c4icd = "chasca-c4-icd"
 
 func (c *char) c2stacks() int {
 	if c.Base.Cons > 2 {

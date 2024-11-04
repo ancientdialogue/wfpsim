@@ -31,6 +31,7 @@ func init() {
 }
 func (c *char) Burst(p map[string]int) (action.Info, error) {
 	c.DeleteStatus(c4energy)
+	c.DeleteStatus(c4icd)
 	ai := combat.AttackInfo{
 		ActorIndex: c.Index,
 		Abil:       "Galesplitting Soulseeker Shell",
@@ -69,13 +70,31 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 			Mult:       burstSoulseeker[c.TalentLvlBurst()],
 		}
 		if element != attributes.Anemo {
+			if !c.StatusIsActive(c4icd) {
+				c4ai := combat.AttackInfo{
+					ActorIndex: c.Index,
+					Abil:       "C4 Radiant Soulseeker Shells",
+					AttackTag:  attacks.AttackTagElementalBurst,
+					ICDTag:     attacks.ICDTagNone,
+					ICDGroup:   attacks.ICDGroupDefault,
+					StrikeType: attacks.StrikeTypeDefault,
+					Element:    element,
+					Durability: 25,
+					Mult:       400 / 100,
+				}
+
+				ap := combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 3)
+				c.Core.QueueAttack(c4ai, ap, 5, 5)
+
+				c.AddStatus(c4icd, -1, false)
+			}
 			c.c4energy()
 			c.AddStatus(c4energy, -1, false)
 			ai.Abil = "Radiant Soulseeker Shell"
 			ai.Mult = burstRadiantSoulseeker[c.TalentLvlBurst()]
 		}
 
-		ap := combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 3)
+		ap := combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 1)
 		c.Core.QueueAttack(ai, ap, i*5, i*5+5)
 	}
 
