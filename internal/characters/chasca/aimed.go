@@ -19,6 +19,10 @@ var aimedHitmarks = []int{15, 86}
 
 var multitargetHitmarks = []int{3, 6, 9, 12, 15, 18}
 
+var firstBulletLoad = 30
+
+var additionalBulletLoad = 20
+
 func init() {
 	aimedFrames = make([][]int, 2)
 
@@ -33,17 +37,17 @@ func init() {
 	aimedFrames[1][action.ActionJump] = aimedHitmarks[1]
 
 	multitargetFrames = make([][]int, 6)
-	multitargetFrames[0] = frames.InitAbilSlice(15)
+	multitargetFrames[0] = frames.InitAbilSlice(firstBulletLoad)
 	multitargetFrames[0][action.ActionDash] = multitargetHitmarks[0]
-	multitargetFrames[1] = frames.InitAbilSlice(30)
+	multitargetFrames[1] = frames.InitAbilSlice(additionalBulletLoad + firstBulletLoad)
 	multitargetFrames[1][action.ActionAim] = multitargetHitmarks[1]
-	multitargetFrames[2] = frames.InitAbilSlice(45)
+	multitargetFrames[2] = frames.InitAbilSlice(additionalBulletLoad*2 + firstBulletLoad)
 	multitargetFrames[2][action.ActionAim] = multitargetHitmarks[2]
-	multitargetFrames[3] = frames.InitAbilSlice(60)
+	multitargetFrames[3] = frames.InitAbilSlice(additionalBulletLoad*3 + firstBulletLoad)
 	multitargetFrames[3][action.ActionAim] = multitargetHitmarks[3]
-	multitargetFrames[4] = frames.InitAbilSlice(75)
+	multitargetFrames[4] = frames.InitAbilSlice(additionalBulletLoad*4 + firstBulletLoad)
 	multitargetFrames[4][action.ActionAim] = multitargetHitmarks[4]
-	multitargetFrames[5] = frames.InitAbilSlice(90)
+	multitargetFrames[5] = frames.InitAbilSlice(additionalBulletLoad*5 + firstBulletLoad)
 	multitargetFrames[5][action.ActionAim] = multitargetHitmarks[5]
 
 }
@@ -121,7 +125,7 @@ func (c *char) MultitargetFireHold(p map[string]int) (action.Info, error) {
 	}
 	c.loadShadowhuntShells(hold)
 
-	for _, element := range c.shadowhuntShells {
+	for i, element := range c.shadowhuntShells {
 		ai := combat.AttackInfo{
 			ActorIndex: c.Index,
 			Abil:       "Shining Shadowhunt Shell",
@@ -152,12 +156,12 @@ func (c *char) MultitargetFireHold(p map[string]int) (action.Info, error) {
 		}
 		if element == attributes.Anemo {
 			ai.Abil = "Shadowhunt Shell"
-			// ai.Element = attributes.Anemo
+			ai.Element = attributes.Anemo
 			ai.Mult = skillShadowhunt[c.TalentLvlSkill()]
 		}
 
 		ap := combat.NewBoxHitOnTarget(c.Core.Combat.PrimaryTarget(), nil, 1, 1)
-		c.Core.QueueAttack(ai, ap, 0, 2, c.particleCB)
+		c.Core.QueueAttack(ai, ap, 0, 2*i, c.particleCB)
 	}
 
 	c.DeleteStatus(c2icd)
