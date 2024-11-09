@@ -62,6 +62,13 @@ func (c *char) makeC1cb() func(combat.AttackCB) {
 	}
 }
 
+func (c *char) c2Init() {
+	if c.Base.Cons < 2 {
+		return
+	}
+	c.c2Bonus = make([]float64, attributes.EndStatType)
+}
+
 func (c *char) c2OnBurst() {
 	if c.Base.Cons < 2 {
 		return
@@ -76,6 +83,17 @@ func (c *char) c2OnBurst() {
 			return c.c2Bonus, true
 		},
 	})
+}
+
+func (c *char) c6Init() {
+	if c.Base.Cons < 6 {
+		return
+	}
+	c.c6bonus = make([]float64, attributes.EndStatType)
+	c.c6stacks = make([]*stackTracker, len(c.Core.Player.Chars()))
+	for i := range c.c6stacks {
+		c.c6stacks[i] = newStackTracker(3, c.QueueCharTask, &c.Core.F)
+	}
 }
 
 func (c *char) makeC2cb() func(combat.AttackCB) {
@@ -107,26 +125,24 @@ func (c *char) c6OnBurst() {
 	c.hypersense(3.2)
 }
 
-func (c *char) makeC6cb() func(combat.AttackCB) {
+func (c *char) c6onHypersense() {
 	if c.Base.Cons < 6 {
-		return nil
+		return
 	}
 	if c.Base.Ascension < 1 {
-		return nil
+		return
 	}
-	return func(a combat.AttackCB) {
-		if a.Target.Type() != targets.TargettableEnemy {
-			return
-		}
-		c.c6stacks.Add(9 * 60)
-		c.AddStatMod(character.StatMod{
-			Base:   modifier.NewBaseWithHitlag(c6Key, 9*60),
-			Amount: c.c6Amount,
-		})
-	}
+	c.c6stacks[c.Core.Player.Active()].Add(9 * 60)
+
+	c.Core.Player.ActiveChar().AddStatMod(character.StatMod{
+		Base:   modifier.NewBaseWithHitlag(c6Key, 9*60),
+		Amount: c.c6Amount(c.Core.Player.Active()),
+	})
 }
 
-func (c *char) c6Amount() ([]float64, bool) {
-	c.c6bonus[attributes.ATKP] = float64(c.c6stacks.Count()) * 0.1
-	return c.c6bonus, true
+func (c *char) c6Amount(ind int) func() ([]float64, bool) {
+	return func() ([]float64, bool) {
+		c.c6bonus[attributes.ATKP] = float64(c.c6stacks[ind].Count()) * 0.1
+		return c.c6bonus, true
+	}
 }

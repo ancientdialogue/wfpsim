@@ -137,9 +137,10 @@ func (c *char) hypersense(mult float64) {
 			snap,
 			combat.NewSingleTargetHit(e),
 			3,
-			c.makeC6cb(),
 		)
 	}
+
+	c.c6onHypersense()
 }
 
 func (c *char) a1EnterBlessing() {
