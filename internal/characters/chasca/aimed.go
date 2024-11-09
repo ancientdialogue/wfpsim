@@ -15,13 +15,23 @@ var aimedFrames [][]int
 
 var multitargetFrames [][]int
 
+var c6MultitargetFrames [][]int
+
+var c6FatalRoundsFrames [][]int
+
 var aimedHitmarks = []int{15, 86}
 
 var multitargetHitmarks = []int{3, 6, 9, 12, 15, 18}
 
-var firstBulletLoad = 30
+var firstBulletLoadFrames = 30
 
-var additionalBulletLoad = 20
+var additionalBulletLoadFrames = 20
+
+var c6firstBulletLoadFrames = 20
+
+var c6AdditionalBulletLoadFrames = 14
+
+var fatalBulletLoadFrames = 2
 
 func init() {
 	aimedFrames = make([][]int, 2)
@@ -37,19 +47,46 @@ func init() {
 	aimedFrames[1][action.ActionJump] = aimedHitmarks[1]
 
 	multitargetFrames = make([][]int, 6)
-	multitargetFrames[0] = frames.InitAbilSlice(firstBulletLoad)
-	multitargetFrames[0][action.ActionDash] = multitargetHitmarks[0]
-	multitargetFrames[1] = frames.InitAbilSlice(additionalBulletLoad + firstBulletLoad)
+	multitargetFrames[0] = frames.InitAbilSlice(firstBulletLoadFrames)
+	multitargetFrames[0][action.ActionAim] = multitargetHitmarks[0]
+	multitargetFrames[1] = frames.InitAbilSlice(additionalBulletLoadFrames + firstBulletLoadFrames)
 	multitargetFrames[1][action.ActionAim] = multitargetHitmarks[1]
-	multitargetFrames[2] = frames.InitAbilSlice(additionalBulletLoad*2 + firstBulletLoad)
+	multitargetFrames[2] = frames.InitAbilSlice(additionalBulletLoadFrames*2 + firstBulletLoadFrames)
 	multitargetFrames[2][action.ActionAim] = multitargetHitmarks[2]
-	multitargetFrames[3] = frames.InitAbilSlice(additionalBulletLoad*3 + firstBulletLoad)
+	multitargetFrames[3] = frames.InitAbilSlice(additionalBulletLoadFrames*3 + firstBulletLoadFrames)
 	multitargetFrames[3][action.ActionAim] = multitargetHitmarks[3]
-	multitargetFrames[4] = frames.InitAbilSlice(additionalBulletLoad*4 + firstBulletLoad)
+	multitargetFrames[4] = frames.InitAbilSlice(additionalBulletLoadFrames*4 + firstBulletLoadFrames)
 	multitargetFrames[4][action.ActionAim] = multitargetHitmarks[4]
-	multitargetFrames[5] = frames.InitAbilSlice(additionalBulletLoad*5 + firstBulletLoad)
+	multitargetFrames[5] = frames.InitAbilSlice(additionalBulletLoadFrames*5 + firstBulletLoadFrames)
 	multitargetFrames[5][action.ActionAim] = multitargetHitmarks[5]
 
+	c6MultitargetFrames = make([][]int, 6)
+	c6MultitargetFrames[0] = frames.InitAbilSlice(c6firstBulletLoadFrames)
+	c6MultitargetFrames[0][action.ActionAim] = multitargetHitmarks[0]
+	c6MultitargetFrames[1] = frames.InitAbilSlice(c6AdditionalBulletLoadFrames + c6firstBulletLoadFrames)
+	c6MultitargetFrames[1][action.ActionAim] = multitargetHitmarks[1]
+	c6MultitargetFrames[2] = frames.InitAbilSlice(c6AdditionalBulletLoadFrames*2 + c6firstBulletLoadFrames)
+	c6MultitargetFrames[2][action.ActionAim] = multitargetHitmarks[2]
+	c6MultitargetFrames[3] = frames.InitAbilSlice(c6AdditionalBulletLoadFrames*3 + c6firstBulletLoadFrames)
+	c6MultitargetFrames[3][action.ActionAim] = multitargetHitmarks[3]
+	c6MultitargetFrames[4] = frames.InitAbilSlice(c6AdditionalBulletLoadFrames*4 + c6firstBulletLoadFrames)
+	c6MultitargetFrames[4][action.ActionAim] = multitargetHitmarks[4]
+	c6MultitargetFrames[5] = frames.InitAbilSlice(c6AdditionalBulletLoadFrames*5 + c6firstBulletLoadFrames)
+	c6MultitargetFrames[5][action.ActionAim] = multitargetHitmarks[5]
+
+	c6FatalRoundsFrames = make([][]int, 6)
+	c6FatalRoundsFrames[0] = frames.InitAbilSlice(fatalBulletLoadFrames * 1)
+	c6FatalRoundsFrames[0][action.ActionAim] = multitargetHitmarks[0]
+	c6FatalRoundsFrames[1] = frames.InitAbilSlice(fatalBulletLoadFrames * 2)
+	c6FatalRoundsFrames[1][action.ActionAim] = multitargetHitmarks[1]
+	c6FatalRoundsFrames[2] = frames.InitAbilSlice(fatalBulletLoadFrames * 3)
+	c6FatalRoundsFrames[2][action.ActionAim] = multitargetHitmarks[2]
+	c6FatalRoundsFrames[3] = frames.InitAbilSlice(fatalBulletLoadFrames * 4)
+	c6FatalRoundsFrames[3][action.ActionAim] = multitargetHitmarks[3]
+	c6FatalRoundsFrames[4] = frames.InitAbilSlice(fatalBulletLoadFrames * 5)
+	c6FatalRoundsFrames[4][action.ActionAim] = multitargetHitmarks[4]
+	c6FatalRoundsFrames[5] = frames.InitAbilSlice(fatalBulletLoadFrames * 6)
+	c6FatalRoundsFrames[5][action.ActionAim] = multitargetHitmarks[5]
 }
 
 func (c *char) Aimed(p map[string]int) (action.Info, error) {
@@ -162,14 +199,23 @@ func (c *char) MultitargetFireHold(p map[string]int) (action.Info, error) {
 
 		ap := combat.NewBoxHitOnTarget(c.Core.Combat.PrimaryTarget(), nil, 1, 1)
 		c.Core.QueueAttack(ai, ap, 0, 2*i, c.particleCB)
+		c.c6()
 	}
 
 	c.DeleteStatus(c2icd)
-
-	return action.Info{
-		Frames:          frames.NewAbilFunc(multitargetFrames[hold-1]),
-		AnimationLength: multitargetFrames[hold-1][action.InvalidAction],
-		CanQueueAfter:   multitargetFrames[hold-1][action.ActionBurst],
-		State:           action.NormalAttackState,
-	}, nil
+	if c.Base.Cons < 6 {
+		return action.Info{
+			Frames:          frames.NewAbilFunc(multitargetFrames[hold-1]),
+			AnimationLength: multitargetFrames[hold-1][action.InvalidAction],
+			CanQueueAfter:   multitargetFrames[hold-1][action.ActionBurst],
+			State:           action.NormalAttackState,
+		}, nil
+	} else {
+		return action.Info{
+			Frames:          frames.NewAbilFunc(c6MultitargetFrames[hold-1]),
+			AnimationLength: c6MultitargetFrames[hold-1][action.InvalidAction],
+			CanQueueAfter:   c6MultitargetFrames[hold-1][action.ActionBurst],
+			State:           action.NormalAttackState,
+		}, nil
+	}
 }

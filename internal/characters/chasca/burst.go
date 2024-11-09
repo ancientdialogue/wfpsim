@@ -30,7 +30,6 @@ func init() {
 	burstSkillStateFrames[action.ActionSwap] = 127
 }
 func (c *char) Burst(p map[string]int) (action.Info, error) {
-	c.DeleteStatus(c4energy)
 	c.DeleteStatus(c4icd)
 	ai := combat.AttackInfo{
 		ActorIndex: c.Index,
@@ -48,9 +47,17 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 	c.Core.QueueAttack(ai, ap, 0, 1)
 	c.SetCD(action.ActionBurst, burstCD)
 	c.ConsumeEnergy(1)
+	c.BurstConversion()
+	return action.Info{
+		Frames:          frames.NewAbilFunc(burstFrames),
+		AnimationLength: burstFrames[action.InvalidAction],
+		CanQueueAfter:   burstFrames[action.ActionSwap], // earliest cancel
+		State:           action.BurstState,
+	}, nil
+}
 
+func (c *char) BurstConversion() (action.Info, error) {
 	numConversions := len(c.conversionElements) * 2
-
 	for i := 0; i < 6; i++ {
 		element := attributes.Anemo
 		if i < numConversions && len(c.conversionElements) > 0 {
@@ -62,7 +69,7 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 			ActorIndex: c.Index,
 			Abil:       "Soulseeker Shell",
 			AttackTag:  attacks.AttackTagElementalBurst,
-			ICDTag:     attacks.ICDTagNone,
+			ICDTag:     attacks.ICDTagChascaBurst,
 			ICDGroup:   attacks.ICDGroupDefault,
 			StrikeType: attacks.StrikeTypeDefault,
 			Element:    element,
@@ -70,38 +77,34 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 			Mult:       burstSoulseeker[c.TalentLvlBurst()],
 		}
 		if element != attributes.Anemo {
-			if !c.StatusIsActive(c4icd) {
+			if c.Base.Cons > 4 && !c.StatusIsActive(c4icd) {
 				c4ai := combat.AttackInfo{
 					ActorIndex: c.Index,
 					Abil:       "C4 Radiant Soulseeker Shells",
 					AttackTag:  attacks.AttackTagElementalBurst,
-					ICDTag:     attacks.ICDTagNone,
+					ICDTag:     attacks.ICDTagChascaBurst,
 					ICDGroup:   attacks.ICDGroupDefault,
 					StrikeType: attacks.StrikeTypeDefault,
 					Element:    element,
 					Durability: 25,
 					Mult:       400 / 100,
 				}
-
-				ap := combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 3)
+				ap := combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 5)
 				c.Core.QueueAttack(c4ai, ap, 5, 5)
-
 				c.AddStatus(c4icd, -1, false)
 			}
 			c.c4energy()
-			c.AddStatus(c4energy, -1, false)
 			ai.Abil = "Radiant Soulseeker Shell"
 			ai.Mult = burstRadiantSoulseeker[c.TalentLvlBurst()]
 		}
 
-		ap := combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 1)
+		ap := combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 5)
 		c.Core.QueueAttack(ai, ap, i*5, i*5+5)
 	}
-
 	return action.Info{
-		Frames:          frames.NewAbilFunc(burstFrames),
-		AnimationLength: burstFrames[action.InvalidAction],
-		CanQueueAfter:   burstFrames[action.ActionSwap], // earliest cancel
+		Frames:          frames.NewAbilFunc(burstSkillStateFrames),
+		AnimationLength: burstSkillStateFrames[action.InvalidAction],
+		CanQueueAfter:   burstSkillStateFrames[action.ActionSwap], // earliest cancel
 		State:           action.BurstState,
 	}, nil
 }
