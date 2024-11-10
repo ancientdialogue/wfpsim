@@ -210,12 +210,12 @@ func (c *char) MultitargetFireHold(p map[string]int) (action.Info, error) {
 			CanQueueAfter:   multitargetFrames[hold-1][action.ActionBurst],
 			State:           action.NormalAttackState,
 		}, nil
-	} else {
-		return action.Info{
-			Frames:          frames.NewAbilFunc(c6MultitargetFrames[hold-1]),
-			AnimationLength: c6MultitargetFrames[hold-1][action.InvalidAction],
-			CanQueueAfter:   c6MultitargetFrames[hold-1][action.ActionBurst],
-			State:           action.NormalAttackState,
-		}, nil
 	}
+	return action.Info{
+		Frames:          frames.NewAbilFunc(c6MultitargetFrames[hold-1]),
+		AnimationLength: c6MultitargetFrames[hold-1][action.InvalidAction],
+		CanQueueAfter:   c6MultitargetFrames[hold-1][action.ActionBurst],
+		State:           action.NormalAttackState,
+	}, nil
+
 }

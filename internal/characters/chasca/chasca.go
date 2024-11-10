@@ -23,7 +23,6 @@ type char struct {
 	maxshadowhuntShell       int
 	conversionElements       []attributes.Element
 	uniqueConversionElements map[attributes.Element]bool
-	a1Bonus                  []float64
 	a4Dmg                    float64
 }
 

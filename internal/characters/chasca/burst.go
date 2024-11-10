@@ -11,7 +11,6 @@ import (
 var (
 	burstFrames           []int
 	burstSkillStateFrames []int
-	burstHitmarks         = []int{97, 103, 109, 115, 121}
 )
 
 const (

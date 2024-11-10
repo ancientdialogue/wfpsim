@@ -18,7 +18,6 @@ var c4icd = "chasca-c4-icd"
 
 const fatalRoundsKey = "chasca-fatal-rounds"
 const fatalRoundsIcd = 60 * 3
-const fatalRoundsDuration = 60 * 3
 const fatalRoundsCDBuff = 1.2
 const fatalBulletLoad = 6
 
@@ -38,7 +37,7 @@ func (c *char) c4energy() {
 
 func (c *char) c6() (action.Info, error) {
 	if c.Base.Cons < 6 {
-		return action.Info{}, fmt.Errorf("No C6")
+		return action.Info{}, fmt.Errorf("no C6")
 	}
 	if !c.StatusIsActive(fatalRoundsKey) {
 		c.loadShadowhuntShells(fatalBulletLoad) //assuming it always load 6 bullets for now

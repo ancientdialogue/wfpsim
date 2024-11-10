@@ -14,12 +14,13 @@ func (c *char) a1() {
 	if c.Base.Ascension < 1 {
 		return
 	}
+	chance := 0.0
+	if c.Base.Cons > 1 {
+		chance = 0.333
+	}
 	if len(c.shadowhuntShells) >= 3 {
 		uniqueCount := len(c.uniqueConversionElements)
-		chance := 0.0
-		if c.Base.Cons > 1 {
-			chance = 0.333
-		}
+
 		switch uniqueCount {
 		case 1:
 			chance += 0.333
@@ -28,18 +29,17 @@ func (c *char) a1() {
 		default:
 			chance += 1.0
 		}
-
-		if c.Core.Rand.Float64() < chance {
-			if len(c.conversionElements) > 0 {
-				randomIndex := c.Core.Rand.Intn(len(c.conversionElements))
-				c.shadowhuntShells[2] = c.conversionElements[randomIndex]
-				if c.Base.Cons > 1 {
-					c1RandomIndex := c.Core.Rand.Intn(len(c.conversionElements))
-					c.shadowhuntShells[1] = c.conversionElements[c1RandomIndex]
-				}
-			} else {
-				c.Core.Log.NewEvent("chasca a1: conversionElements is empty", glog.LogWarnings, -1)
+	}
+	if c.Core.Rand.Float64() < chance {
+		if len(c.conversionElements) > 0 {
+			randomIndex := c.Core.Rand.Intn(len(c.conversionElements))
+			c.shadowhuntShells[2] = c.conversionElements[randomIndex]
+			if c.Base.Cons > 1 {
+				c1RandomIndex := c.Core.Rand.Intn(len(c.conversionElements))
+				c.shadowhuntShells[1] = c.conversionElements[c1RandomIndex]
 			}
+		} else {
+			c.Core.Log.NewEvent("chasca a1: conversionElements is empty", glog.LogWarnings, -1)
 		}
 	}
 }
@@ -82,7 +82,6 @@ func (c *char) a4() {
 			switch char.Base.Element {
 			case attributes.Pyro, attributes.Hydro, attributes.Cryo, attributes.Electro:
 				element = char.Base.Element
-				break
 			}
 		}
 		if element == attributes.Anemo {
