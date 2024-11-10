@@ -111,7 +111,7 @@ func (c *char) loadShadowhuntShells(shellNum int) {
 		if len(c.conversionElements) > 0 {
 			randomIndex := c.Core.Rand.Intn(len(cloneElement))
 			c.shadowhuntShells[i] = cloneElement[randomIndex]
-			cloneElement = append(cloneElement[:randomIndex], cloneElement[randomIndex+1:]...)
+			// cloneElement = append(cloneElement[:randomIndex], cloneElement[randomIndex+1:]...)
 		}
 	}
 	c.a1()

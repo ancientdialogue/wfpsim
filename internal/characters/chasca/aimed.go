@@ -217,5 +217,4 @@ func (c *char) MultitargetFireHold(p map[string]int) (action.Info, error) {
 		CanQueueAfter:   c6MultitargetFrames[hold-1][action.ActionBurst],
 		State:           action.NormalAttackState,
 	}, nil
-
 }
