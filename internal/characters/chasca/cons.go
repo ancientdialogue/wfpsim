@@ -40,7 +40,7 @@ func (c *char) c6() (action.Info, error) {
 		return action.Info{}, fmt.Errorf("no C6")
 	}
 	if !c.StatusIsActive(fatalRoundsKey) {
-		c.loadShadowhuntShells(fatalBulletLoad) //assuming it always load 6 bullets for now
+		c.loadShadowhuntShells(fatalBulletLoad) // assuming it always load 6 bullets for now
 		for _, element := range c.shadowhuntShells {
 			c6ai := combat.AttackInfo{
 				ActorIndex: c.Index,

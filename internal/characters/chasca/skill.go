@@ -21,7 +21,6 @@ const (
 
 func init() {
 	skillFrames = frames.InitAbilSlice(22)
-
 }
 func (c *char) reduceNightsoulPoints(val float64) {
 	c.nightsoulState.ConsumePoints(val)
