@@ -2,7 +2,7 @@ id: 10000104
 key: "chasca"
 rarity: QUALITY_ORANGE
 body: BODY_GIRL
-region: ASSOC_TYPE_MONDSTADT
+region: ASSOC_TYPE_NATLAN
 element: Wind
 weapon_class: WEAPON_BOW
 icon_name: "UI_AvatarIcon_Chasca"
