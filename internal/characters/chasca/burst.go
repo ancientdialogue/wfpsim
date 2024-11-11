@@ -76,7 +76,7 @@ func (c *char) BurstConversion() (action.Info, error) {
 			Mult:       burstSoulseeker[c.TalentLvlBurst()],
 		}
 		if element != attributes.Anemo {
-			if c.Base.Cons > 4 && !c.StatusIsActive(c4icd) {
+			if c.Base.Cons >= 4 && !c.StatusIsActive(c4icd) {
 				c4ai := combat.AttackInfo{
 					ActorIndex: c.Index,
 					Abil:       "C4 Radiant Soulseeker Shells",

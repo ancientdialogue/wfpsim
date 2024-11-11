@@ -22,7 +22,7 @@ const fatalRoundsCDBuff = 1.2
 const fatalBulletLoad = 6
 
 func (c *char) c2stacks() int {
-	if c.Base.Cons > 2 {
+	if c.Base.Cons >= 2 {
 		return 1
 	}
 	return 0
