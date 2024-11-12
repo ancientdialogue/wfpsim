@@ -54,19 +54,16 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 		Mult:       burstSonic[c.TalentLvlBurst()],
 	}
 
-	var snap combat.Snapshot
-	c.Core.Tasks.Add(func() {
-		snap = c.Snapshot(&ai)
-	}, burstHitmark-1)
-
 	firstTick := 111 // first tick at 111
 	for i := 0; i <= 9*60; i += 60 {
 		progress := i + firstTick
-		c.Core.Tasks.Add(func() {
-			c.Core.QueueAttackWithSnap(
+		// queue attack in char task to account for rotating
+		// how to simulate rotation speed?
+		c.QueueCharTask(func() {
+			c.Core.QueueAttack(
 				ai,
-				snap,
 				combat.NewCircleHitFanAngle(c.Core.Combat.Player(), c.Core.Combat.PrimaryTarget(), nil, 10, 30),
+				0,
 				0,
 				c.makeC2cb(),
 			)
