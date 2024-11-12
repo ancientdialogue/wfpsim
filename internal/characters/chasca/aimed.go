@@ -23,7 +23,7 @@ var aimedHitmarks = []int{15, 86}
 
 var multitargetHitmarks = []int{3, 6, 9, 12, 15, 18}
 
-var firstBulletLoadFrames = 45
+var firstBulletLoadFrames = 33
 
 var additionalBulletLoadFrames = 20
 
@@ -199,7 +199,6 @@ func (c *char) MultitargetFireHold(p map[string]int) (action.Info, error) {
 
 		c.Core.QueueAttack(ai, ap, 0, firstBulletLoadFrames+additionalBulletLoadFrames*(hold-1), c.particleCB)
 		c.c6()
-
 	}
 
 	c.DeleteStatus(c2icd)
