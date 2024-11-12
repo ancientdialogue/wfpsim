@@ -20,7 +20,7 @@ const (
 )
 
 func init() {
-	skillFrames = frames.InitAbilSlice(22)
+	skillFrames = frames.InitAbilSlice(30)
 }
 func (c *char) reduceNightsoulPoints(val float64) {
 	c.nightsoulState.ConsumePoints(val)
@@ -32,7 +32,7 @@ func (c *char) reduceNightsoulPoints(val float64) {
 func (c *char) cancelNightsoul() {
 	c.nightsoulState.ExitBlessing()
 	c.SetCDWithDelay(action.ActionSkill, 6.5*60, 0)
-	c.ResetActionCooldown(action.ActionAttack)
+	c.ResetActionCooldown(action.ActionAim)
 	c.nightsoulSrc = -1
 }
 
@@ -46,10 +46,10 @@ func (c *char) nightsoulPointReduceFunc(src int) func() {
 			return
 		}
 
-		c.reduceNightsoulPoints(1)
+		c.reduceNightsoulPoints(8)
 
-		// reduce 1 point per 6f
-		c.QueueCharTask(c.nightsoulPointReduceFunc(src), 8)
+		// reduce 8 point per 60f
+		c.QueueCharTask(c.nightsoulPointReduceFunc(src), 60)
 	}
 }
 

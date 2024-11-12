@@ -23,7 +23,7 @@ var aimedHitmarks = []int{15, 86}
 
 var multitargetHitmarks = []int{3, 6, 9, 12, 15, 18}
 
-var firstBulletLoadFrames = 30
+var firstBulletLoadFrames = 45
 
 var additionalBulletLoadFrames = 20
 
@@ -161,8 +161,7 @@ func (c *char) MultitargetFireHold(p map[string]int) (action.Info, error) {
 		return action.Info{}, fmt.Errorf("invalid hold param supplied, got %v", hold)
 	}
 	c.loadShadowhuntShells(hold)
-
-	for i, element := range c.shadowhuntShells {
+	for _, element := range c.shadowhuntShells {
 		ai := combat.AttackInfo{
 			ActorIndex: c.Index,
 			Abil:       "Shining Shadowhunt Shell",
@@ -177,7 +176,7 @@ func (c *char) MultitargetFireHold(p map[string]int) (action.Info, error) {
 		if element != attributes.Anemo && c.Base.Cons >= 2 && !c.StatusIsActive(c2icd) {
 			c2ai := combat.AttackInfo{
 				ActorIndex: c.Index,
-				Abil:       "Shining Shadowhunt Shell",
+				Abil:       "C2 Shining Shadowhunt Shell",
 				AttackTag:  attacks.AttackTagExtra,
 				ICDTag:     attacks.ICDTagChascaShot,
 				ICDGroup:   attacks.ICDGroupDefault,
@@ -197,8 +196,10 @@ func (c *char) MultitargetFireHold(p map[string]int) (action.Info, error) {
 			ai.Mult = skillShadowhunt[c.TalentLvlSkill()]
 		}
 		ap := combat.NewBoxHitOnTarget(c.Core.Combat.PrimaryTarget(), nil, 1, 1)
-		c.Core.QueueAttack(ai, ap, 0, 2*i, c.particleCB)
+
+		c.Core.QueueAttack(ai, ap, 0, firstBulletLoadFrames+additionalBulletLoadFrames*(hold-1), c.particleCB)
 		c.c6()
+
 	}
 
 	c.DeleteStatus(c2icd)
@@ -206,14 +207,14 @@ func (c *char) MultitargetFireHold(p map[string]int) (action.Info, error) {
 		return action.Info{
 			Frames:          frames.NewAbilFunc(multitargetFrames[hold-1]),
 			AnimationLength: multitargetFrames[hold-1][action.InvalidAction],
-			CanQueueAfter:   multitargetFrames[hold-1][action.ActionBurst],
-			State:           action.NormalAttackState,
+			CanQueueAfter:   multitargetFrames[hold-1][action.ActionSkill],
+			State:           action.ChargeAttackState,
 		}, nil
 	}
 	return action.Info{
 		Frames:          frames.NewAbilFunc(c6MultitargetFrames[hold-1]),
 		AnimationLength: c6MultitargetFrames[hold-1][action.InvalidAction],
 		CanQueueAfter:   c6MultitargetFrames[hold-1][action.ActionBurst],
-		State:           action.NormalAttackState,
+		State:           action.ChargeAttackState,
 	}, nil
 }
