@@ -161,7 +161,8 @@ func (c *char) MultitargetFireHold(p map[string]int) (action.Info, error) {
 		return action.Info{}, fmt.Errorf("invalid hold param supplied, got %v", hold)
 	}
 	c.loadShadowhuntShells(hold)
-	for _, element := range c.shadowhuntShells {
+	for i := len(c.shadowhuntShells) - 1; i >= 0; i-- {
+		element := c.shadowhuntShells[i]
 		ai := combat.AttackInfo{
 			ActorIndex: c.Index,
 			Abil:       "Shining Shadowhunt Shell",
@@ -197,7 +198,7 @@ func (c *char) MultitargetFireHold(p map[string]int) (action.Info, error) {
 		}
 		ap := combat.NewBoxHitOnTarget(c.Core.Combat.PrimaryTarget(), nil, 1, 1)
 
-		c.Core.QueueAttack(ai, ap, 0, firstBulletLoadFrames+additionalBulletLoadFrames*(hold-1), c.particleCB)
+		c.Core.QueueAttack(ai, ap, 0, firstBulletLoadFrames+additionalBulletLoadFrames*(hold-1)+i*4, c.particleCB)
 		c.c6()
 	}
 
