@@ -12,11 +12,11 @@ icd_tags:
   - ICDTagChascaShot
   - ICDTagChascaBurst
 icd_groups:
-  - group_name: ICDTagChascaShot
+  - group_name: ICDGroupChascaShot
     reset_timer: 90
     ele_app_sequence: [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
     damage_sequence: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-  - group_name: ICDTagChascaBurst
+  - group_name: ICDGroupChascaBurst
     ele_app_sequence: [1, 0, 1, 0, 1, 0]
     damage_sequence: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 skill_data_mapping:
