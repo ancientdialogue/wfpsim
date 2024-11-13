@@ -197,8 +197,7 @@ func (c *char) MultitargetFireHold(p map[string]int) (action.Info, error) {
 			ai.Mult = skillShadowhunt[c.TalentLvlSkill()]
 		}
 		ap := combat.NewBoxHitOnTarget(c.Core.Combat.PrimaryTarget(), nil, 1, 1)
-
-		c.Core.QueueAttack(ai, ap, 0, firstBulletLoadFrames+additionalBulletLoadFrames*(hold-1)+i*4, c.particleCB)
+		c.Core.QueueAttack(ai, ap, 0, firstBulletLoadFrames+additionalBulletLoadFrames*(hold-1)+(-i*4), c.particleCB) // -i since start from the end of the list
 		c.c6()
 	}
 

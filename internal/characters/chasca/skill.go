@@ -1,6 +1,8 @@
 package chasca
 
 import (
+	"math/rand"
+
 	"github.com/genshinsim/gcsim/internal/frames"
 	"github.com/genshinsim/gcsim/pkg/core/action"
 	"github.com/genshinsim/gcsim/pkg/core/attacks"
@@ -105,13 +107,15 @@ func (c *char) loadShadowhuntShells(shellNum int) {
 	for i := range c.shadowhuntShells {
 		c.shadowhuntShells[i] = attributes.Anemo
 	}
-	for i := shellNum - shadowhuntShellConversion; i < shellNum; i++ {
-		cloneElement := make([]attributes.Element, len(c.conversionElements))
-		copy(cloneElement, c.conversionElements)
-		if len(c.conversionElements) > 0 {
-			randomIndex := c.Core.Rand.Intn(len(cloneElement))
-			c.shadowhuntShells[i] = cloneElement[randomIndex]
-			// cloneElement = append(cloneElement[:randomIndex], cloneElement[randomIndex+1:]...)
+	rand.Shuffle(len(c.conversionElements), func(i, j int) {
+		c.conversionElements[i], c.conversionElements[j] = c.conversionElements[j], c.conversionElements[i]
+	})
+
+	for i := 0; i < shellNum; i++ {
+		if i < len(c.conversionElements) {
+			c.shadowhuntShells[shellNum-1-i] = c.conversionElements[i]
+		} else {
+			c.shadowhuntShells[shellNum-1-i] = attributes.Anemo
 		}
 	}
 	c.a1()
