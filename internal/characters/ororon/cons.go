@@ -108,6 +108,13 @@ func (c *char) makeC2cb() func(combat.AttackCB) {
 	}
 }
 
+func (c *char) c4BurstInterval() float64 {
+	if c.Base.Cons < 4 {
+		return 1.0
+	}
+	return 0.8
+}
+
 func (c *char) c4EnergyRestore() {
 	if c.Base.Cons < 4 {
 		return

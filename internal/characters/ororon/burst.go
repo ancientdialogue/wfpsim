@@ -55,10 +55,9 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 	}
 
 	firstTick := 111 // first tick at 111
-	for i := 0; i <= 9*60; i += 60 {
+	burstInterval := int(45 * c.c4BurstInterval())
+	for i := 0; i <= 9*60; i += burstInterval {
 		progress := i + firstTick
-		// queue attack in char task to account for rotating
-		// how to simulate rotation speed?
 		c.QueueCharTask(func() {
 			c.Core.QueueAttack(
 				ai,
