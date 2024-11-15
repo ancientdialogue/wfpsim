@@ -12,7 +12,6 @@ import (
 )
 
 var skillFrames []int
-var shadowhuntShellConversion int
 
 const (
 	skillStateKey       = "skill-state-icd"
@@ -102,7 +101,6 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 }
 
 func (c *char) loadShadowhuntShells(shellNum int) {
-	shadowhuntShellConversion = len(c.conversionElements)
 	shellNum = max(c.maxshadowhuntShell, shellNum) // max 6 shell
 	for i := range c.shadowhuntShells {
 		c.shadowhuntShells[i] = attributes.Anemo
