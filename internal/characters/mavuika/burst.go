@@ -15,7 +15,7 @@ const (
 	burstKey       = "mavuika-burst"
 	energyNAICDKey = "mavuika-fighting-spirit-na-icd"
 	burstDuration  = 7 * 60
-	burstHitmark   = 110
+	burstHitmark   = 118
 )
 
 var (
@@ -30,10 +30,7 @@ func (c *char) nightsoulConsumptionMul() float64 {
 }
 
 func init() {
-	burstFrames = frames.InitAbilSlice(120) // Q -> N1
-	burstFrames[action.ActionSkill] = 120
-	burstFrames[action.ActionDash] = 120
-	burstFrames[action.ActionJump] = 120
+	burstFrames = frames.InitAbilSlice(123) // Q -> N1
 	burstFrames[action.ActionSwap] = burstHitmark
 }
 
