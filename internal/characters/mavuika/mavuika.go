@@ -81,10 +81,12 @@ func (c *char) ActionStam(a action.Action, p map[string]int) float64 {
 }
 
 func (c *char) ActionReady(a action.Action, p map[string]int) (bool, action.Failure) {
-	// check if it is possible to use next skill
 	if a == action.ActionBurst {
 		if c.fightingSpirit < 100 {
 			return false, action.InsufficientEnergy
+		}
+		if c.AvailableCDCharge[a] <= 0 {
+			return false, action.BurstCD
 		}
 		return true, action.NoFailure
 	}
