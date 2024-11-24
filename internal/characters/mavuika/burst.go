@@ -8,12 +8,14 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/combat"
 	"github.com/genshinsim/gcsim/pkg/core/event"
 	"github.com/genshinsim/gcsim/pkg/core/geometry"
+	"github.com/genshinsim/gcsim/pkg/enemy"
 )
 
 const (
-	burstKey      = "mavuika-burst"
-	burstDuration = 7 * 60
-	burstHitmark  = 110
+	burstKey       = "mavuika-burst"
+	energyNAICDKey = "mavuika-fighting-spirit-na-icd"
+	burstDuration  = 7 * 60
+	burstHitmark   = 110
 )
 
 var (
@@ -115,5 +117,22 @@ func (c *char) burstInit() {
 		}
 		c.gainFightingSpirit(amount)
 		return false
-	}, "mavuika-fighting-spirit")
+	}, "mavuika-fighting-spirit-ns")
+
+	c.Core.Events.Subscribe(event.OnEnemyDamage, func(args ...interface{}) bool {
+		ae := args[1].(*combat.AttackEvent)
+		_, ok := args[0].(*enemy.Enemy)
+		if !ok {
+			return false
+		}
+		if ae.Info.AttackTag != attacks.AttackTagNormal {
+			return false
+		}
+		if c.StatusIsActive(energyNAICDKey) {
+			return false
+		}
+		c.AddStatus(energyNAICDKey, 0.1*60, true)
+		c.gainFightingSpirit(1.5)
+		return false
+	}, "mavuika-fighting-spirit-na")
 }
