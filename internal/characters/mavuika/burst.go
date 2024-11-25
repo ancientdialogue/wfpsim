@@ -60,7 +60,7 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 			Element:        attributes.Pyro,
 			Durability:     25,
 			Mult:           burst[c.TalentLvlBurst()],
-			FlatDmg:        c.burstBuffSunfell(),
+			FlatDmg:        c.burstBuffSunfell() + c.c2BikeQ(),
 		}
 		ap := combat.NewCircleHitOnTarget(
 			c.Core.Combat.Player(),

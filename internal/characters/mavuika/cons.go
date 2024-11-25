@@ -100,7 +100,7 @@ func (c *char) c2BikeNA() float64 {
 	if c.armamentState != bike {
 		return 0.0
 	}
-	return 1.0 * c.TotalAtk()
+	return 0.8 * c.TotalAtk()
 }
 func (c *char) c2BikeCA() float64 {
 	if c.Base.Cons < 2 {
@@ -109,7 +109,17 @@ func (c *char) c2BikeCA() float64 {
 	if c.armamentState != bike {
 		return 0.0
 	}
-	return 1.5 * c.TotalAtk()
+	return 1.3 * c.TotalAtk()
+}
+
+func (c *char) c2BikeQ() float64 {
+	if c.Base.Cons < 2 {
+		return 0.0
+	}
+	if c.armamentState != bike {
+		return 0.0
+	}
+	return 1.8 * c.TotalAtk()
 }
 
 func (c *char) c4DecayRate() float64 {
