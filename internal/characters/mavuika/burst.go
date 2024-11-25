@@ -14,7 +14,7 @@ import (
 const (
 	burstKey       = "mavuika-burst"
 	energyNAICDKey = "mavuika-fighting-spirit-na-icd"
-	burstDuration  = 7 * 60
+	burstDuration  = 7.0 * 60
 	burstHitmark   = 118
 )
 
@@ -37,11 +37,15 @@ func init() {
 func (c *char) Burst(p map[string]int) (action.Info, error) {
 	c.burstStacks = c.fightingSpirit
 	c.fightingSpirit = 0
-	c.armamentState = bike
+	c.armamentState = ring
+	c.ringSrc = -1
 	c.enterNightsoulOrRegenerate(10)
+	c.QueueCharTask(func() {
+		c.armamentState = bike
+		c.AddStatus(burstKey, burstDuration, true)
+	}, 90)
 
 	c.QueueCharTask(func() {
-		c.AddStatus(burstKey, burstDuration, true)
 		c.a4()
 
 		ai := combat.AttackInfo{
