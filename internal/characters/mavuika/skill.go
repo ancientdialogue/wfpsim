@@ -84,12 +84,14 @@ func (c *char) exitNightsoul() {
 	c.nightsoulSrc = -1
 	c.NormalHitNum = normalHitNum
 	c.NormalCounter = 0
+	c.c2OnNightsoulExit()
 }
 func (c *char) enterNightsoulOrRegenerate(points float64) {
 	if !c.nightsoulState.HasBlessing() {
 		c.nightsoulState.EnterBlessing(points)
 		c.nightsoulSrc = c.Core.F
 		c.Core.Tasks.Add(c.nightsoulPointReduceFunc(c.nightsoulSrc), 12)
+		c.c2OnNightsoulEnter()
 		return
 	}
 	c.nightsoulState.GeneratePoints(points)

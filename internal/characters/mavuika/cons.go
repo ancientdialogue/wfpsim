@@ -44,6 +44,7 @@ func (c *char) c2Init() {
 	if c.Base.Cons < 2 {
 		return
 	}
+	// this part doesn't actually work right now. So we also modify c.Base.Atk when entering or exiting Nightousl
 	m := make([]float64, attributes.EndStatType)
 	m[attributes.BaseATK] = 300
 	c.AddStatMod(character.StatMod{
@@ -55,6 +56,20 @@ func (c *char) c2Init() {
 			return nil, false
 		},
 	})
+}
+
+func (c *char) c2OnNightsoulEnter() {
+	if c.Base.Cons < 2 {
+		return
+	}
+	c.Base.Atk += 300
+}
+
+func (c *char) c2OnNightsoulExit() {
+	if c.Base.Cons < 2 {
+		return
+	}
+	c.Base.Atk -= 300
 }
 
 func (c *char) c2Ring() {
