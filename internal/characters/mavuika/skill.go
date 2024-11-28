@@ -9,6 +9,7 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/attributes"
 	"github.com/genshinsim/gcsim/pkg/core/combat"
 	"github.com/genshinsim/gcsim/pkg/core/geometry"
+	"github.com/genshinsim/gcsim/pkg/core/glog"
 	"github.com/genshinsim/gcsim/pkg/core/targets"
 )
 
@@ -126,6 +127,7 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 		switch c.armamentState {
 		case ring:
 			c.enterBike()
+
 		default:
 			c.exitBike()
 		}
@@ -145,12 +147,14 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 }
 
 func (c *char) enterBike() {
+	c.Core.Log.NewEvent("switching to bike state", glog.LogCharacterEvent, c.Index)
 	c.armamentState = bike
 	c.NormalHitNum = bikeHitNum
 	c.c6Bike()
 }
 
 func (c *char) exitBike() {
+	c.Core.Log.NewEvent("switching to ring state", glog.LogCharacterEvent, c.Index)
 	c.armamentState = ring
 	c.NormalHitNum = normalHitNum
 	c.ringSrc = c.Core.F
