@@ -3756,6 +3756,44 @@ var EnemyMap = map[int]*MonsterData{
 			},
 		},
 	},
+	24030401: {
+		Id:              24030401,
+		Key:             "battlehardenedruindrakeearthguard",
+		NameTextHashMap: 1613278480,
+		BaseStats: &MonsterStatsData{
+			BaseHp:  652.032,
+			HpCurve: MonsterCurveType_GROW_CURVE_HP_2,
+			Resist: &MonsterResistData{
+				FireResist:     0.1,
+				GrassResist:    0.1,
+				WaterResist:    0.1,
+				ElectricResist: 0.1,
+				WindResist:     0.1,
+				IceResist:      0.1,
+				RockResist:     0.1,
+				PhysicalResist: 0.5,
+			},
+			FreezeResist: 0,
+			HpDrop: []*MonsterHPDrop{
+				{
+					DropId:    22010010,
+					HpPercent: 0.75,
+				},
+				{
+					DropId:    22010010,
+					HpPercent: 0.5,
+				},
+				{
+					DropId:    22010010,
+					HpPercent: 0.25,
+				},
+				{
+					DropId:    22010050,
+					HpPercent: 0,
+				},
+			},
+		},
+	},
 	24040101: {
 		Id:              24040101,
 		Key:             "primalconstructrepulsor",
@@ -7865,6 +7903,44 @@ var EnemyMap = map[int]*MonsterData{
 				{
 					DropId:    22010016,
 					HpPercent: 0.33,
+				},
+				{
+					DropId:    22010026,
+					HpPercent: 0,
+				},
+			},
+		},
+	},
+	25520101: {
+		Id:              25520101,
+		Key:             "waywardhermeticspiritspeaker",
+		NameTextHashMap: 2593603208,
+		BaseStats: &MonsterStatsData{
+			BaseHp:  230.928,
+			HpCurve: MonsterCurveType_GROW_CURVE_HP_2,
+			Resist: &MonsterResistData{
+				FireResist:     0.1,
+				GrassResist:    0.1,
+				WaterResist:    0.1,
+				ElectricResist: 0.1,
+				WindResist:     0.1,
+				IceResist:      0.7,
+				RockResist:     0.1,
+				PhysicalResist: 0.1,
+			},
+			FreezeResist: 1,
+			HpDrop: []*MonsterHPDrop{
+				{
+					DropId:    22010036,
+					HpPercent: 0.75,
+				},
+				{
+					DropId:    22010036,
+					HpPercent: 0.5,
+				},
+				{
+					DropId:    22010036,
+					HpPercent: 0.25,
 				},
 				{
 					DropId:    22010026,

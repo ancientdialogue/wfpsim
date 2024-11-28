@@ -8,6 +8,7 @@ const (
 	ICDTagChascaShot
 	ICDTagChascaBurst
 	ICDTagChioriSkill
+	ICDTagCitlaliSpiritVessel
 	ICDTagClorindeCons
 	ICDTagColleiSprout
 	ICDTagCynoBolt
