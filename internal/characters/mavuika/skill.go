@@ -44,15 +44,15 @@ func (c *char) nightsoulPointReduceFunc(src int) func() {
 		if c.nightsoulSrc != src {
 			return
 		}
-		val := 1.0
+		val := 0.5
 		if c.armamentState == bike {
-			val += 0.8
+			val += 0.4
 			if c.Core.Player.CurrentState() == action.ChargeAttackState {
-				val += 0.4
+				val += 0.2
 			}
 		}
 		c.reduceNightsoulPoints(val)
-		c.Core.Tasks.Add(c.nightsoulPointReduceFunc(src), 12)
+		c.Core.Tasks.Add(c.nightsoulPointReduceFunc(src), 6)
 	}
 }
 
@@ -91,7 +91,7 @@ func (c *char) enterNightsoulOrRegenerate(points float64) {
 	if !c.nightsoulState.HasBlessing() {
 		c.nightsoulState.EnterBlessing(points)
 		c.nightsoulSrc = c.Core.F
-		c.Core.Tasks.Add(c.nightsoulPointReduceFunc(c.nightsoulSrc), 12)
+		c.Core.Tasks.Add(c.nightsoulPointReduceFunc(c.nightsoulSrc), 6)
 		c.c2OnNightsoulEnter()
 		return
 	}
