@@ -37,13 +37,12 @@ func init() {
 func (c *char) Burst(p map[string]int) (action.Info, error) {
 	c.burstStacks = c.fightingSpirit
 	c.fightingSpirit = 0
-	c.armamentState = ring
-	c.ringSrc = -1
-	c.enterNightsoulOrRegenerate(10)
+
 	c.QueueCharTask(func() {
 		c.armamentState = bike
+		c.enterNightsoulOrRegenerate(10)
 		c.AddStatus(burstKey, burstDuration, true)
-	}, 90)
+	}, 95)
 
 	c.QueueCharTask(func() {
 		c.a4()
