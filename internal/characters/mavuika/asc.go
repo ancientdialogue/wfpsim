@@ -17,7 +17,7 @@ func (c *char) a1() {
 		return
 	}
 	m := make([]float64, attributes.EndStatType)
-	m[attributes.ATKP] = 0.35
+	m[attributes.ATKP] = 0.3
 	c.Core.Events.Subscribe(event.OnNightsoulBurst, func(args ...interface{}) bool {
 		c.AddStatMod(character.StatMod{
 			Base: modifier.NewBaseWithHitlag(a1Key, 10*60),
@@ -50,7 +50,7 @@ func (c *char) a4() {
 				if c.Core.Player.Active() != this.Index {
 					return nil, false
 				}
-				dmg := c.burstStacks * 0.0025
+				dmg := c.burstStacks*0.002 + c.c4BonusVal()
 				dmg *= 1.0 - float64(c.Core.F-started)*c.c4DecayRate()
 				c.a4buff[attributes.DmgP] = dmg
 				return c.a4buff, true

@@ -122,6 +122,13 @@ func (c *char) c2BikeQ() float64 {
 	return 1.8 * c.TotalAtk()
 }
 
+func (c *char) c4BonusVal() float64 {
+	if c.Base.Cons < 4 {
+		return 0.0
+	}
+	return 0.1
+}
+
 func (c *char) c4DecayRate() float64 {
 	if c.Base.Cons < 4 {
 		return 1.0 / (20 * 60)
