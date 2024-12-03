@@ -81,7 +81,8 @@ func (c *char) ActionStam(a action.Action, p map[string]int) float64 {
 }
 
 func (c *char) ActionReady(a action.Action, p map[string]int) (bool, action.Failure) {
-	if a == action.ActionBurst {
+	switch a {
+	case action.ActionBurst:
 		if c.fightingSpirit < 100 {
 			return false, action.InsufficientEnergy
 		}
@@ -89,6 +90,11 @@ func (c *char) ActionReady(a action.Action, p map[string]int) (bool, action.Fail
 			return false, action.BurstCD
 		}
 		return true, action.NoFailure
+	case action.ActionSkill:
+		if p["recast"] != 0 {
+			return !c.StatusIsActive(skillRecastCDKey), action.SkillCD
+		}
+		return c.Character.ActionReady(a, p)
 	}
 	return c.Character.ActionReady(a, p)
 }

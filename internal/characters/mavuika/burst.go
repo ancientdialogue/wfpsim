@@ -15,7 +15,7 @@ const (
 	burstKey       = "mavuika-burst"
 	energyNAICDKey = "mavuika-fighting-spirit-na-icd"
 	burstDuration  = 7.0 * 60
-	burstHitmark   = 118
+	burstHitmark   = 106
 )
 
 var (
@@ -30,20 +30,19 @@ func (c *char) nightsoulConsumptionMul() float64 {
 }
 
 func init() {
-	burstFrames = frames.InitAbilSlice(123) // Q -> N1
-	burstFrames[action.ActionSwap] = burstHitmark
+	burstFrames = frames.InitAbilSlice(116) // Q -> Swap
 }
 
 func (c *char) Burst(p map[string]int) (action.Info, error) {
 	c.burstStacks = c.fightingSpirit
 	c.fightingSpirit = 0
-
+	c.armamentState = bike
 	c.QueueCharTask(func() {
-		c.armamentState = bike
 		c.enterNightsoulOrRegenerate(10)
+	}, 87)
+	c.QueueCharTask(func() {
 		c.AddStatus(burstKey, burstDuration, true)
-	}, 95)
-
+	}, burstHitmark-1)
 	c.QueueCharTask(func() {
 		c.a4()
 

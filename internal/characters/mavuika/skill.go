@@ -19,24 +19,16 @@ var (
 )
 
 const (
-	skillHitmark   = 20
-	particleICDKey = "mavuika-particle-icd"
+	skillHitmark     = 16
+	particleICDKey   = "mavuika-particle-icd"
+	skillRecastCD    = 60
+	skillRecastCDKey = "mavuika-skill-recast-cd"
 )
 
 func init() {
-	skillFrames = frames.InitAbilSlice(39) // E -> N1
-	skillFrames[action.ActionSkill] = 30
-	skillFrames[action.ActionBurst] = 29
-	skillFrames[action.ActionDash] = 26
-	skillFrames[action.ActionJump] = 28
-	skillFrames[action.ActionSwap] = 25
+	skillFrames = frames.InitAbilSlice(16) // E -> N1
 
-	skillRecastFrames = frames.InitAbilSlice(74) // E -> N1
-	skillRecastFrames[action.ActionSkill] = 45
-	skillRecastFrames[action.ActionBurst] = 45
-	skillRecastFrames[action.ActionDash] = 45
-	skillRecastFrames[action.ActionJump] = 49
-	skillRecastFrames[action.ActionSwap] = 44
+	skillRecastFrames = frames.InitAbilSlice(19) // E -> N1
 }
 
 func (c *char) nightsoulPointReduceFunc(src int) func() {
@@ -99,46 +91,17 @@ func (c *char) enterNightsoulOrRegenerate(points float64) {
 }
 func (c *char) Skill(p map[string]int) (action.Info, error) {
 	h := p["hold"]
-
-	if c.nightsoulState.HasBlessing() {
+	recast := p["recast"]
+	if recast != 0 {
 		if h > 0 {
-			return action.Info{}, errors.New("cannot hold E while in Nightsoul Blessing")
+			return action.Info{}, errors.New("cannot hold E while recasting")
 		}
-		ai := combat.AttackInfo{
-			ActorIndex:     c.Index,
-			Abil:           "The Named Moment",
-			AttackTag:      attacks.AttackTagElementalArt,
-			ICDTag:         attacks.ICDTagNone,
-			AdditionalTags: []attacks.AdditionalTag{attacks.AdditionalTagNightsoul},
-			ICDGroup:       attacks.ICDGroupDefault,
-			StrikeType:     attacks.StrikeTypePierce,
-			Element:        attributes.Pyro,
-			Durability:     25,
-			Mult:           skill[c.TalentLvlSkill()],
+		if !c.nightsoulState.HasBlessing() {
+			return action.Info{}, errors.New("cannot recast E while not in nightsoul blessing")
 		}
-		ap := combat.NewCircleHitOnTarget(
-			c.Core.Combat.Player(),
-			geometry.Point{Y: 1.0},
-			6,
-		)
-		c.Core.QueueAttack(ai, ap, skillHitmark, skillHitmark, c.particleCB)
-		c.enterNightsoulOrRegenerate(c.nightsoulState.MaxPoints)
-
-		switch c.armamentState {
-		case ring:
-			c.enterBike()
-
-		default:
-			c.exitBike()
-		}
-		c.SetCDWithDelay(action.ActionSkill, 15*60, 18)
-		return action.Info{
-			Frames:          frames.NewAbilFunc(skillFrames),
-			AnimationLength: skillFrames[action.InvalidAction],
-			CanQueueAfter:   skillFrames[action.ActionSwap],
-			State:           action.SkillState,
-		}, nil
+		c.skillRecast()
 	}
+
 	c.enterNightsoulOrRegenerate(c.nightsoulState.MaxPoints)
 	if h > 0 {
 		return c.skillHold(), nil
@@ -161,6 +124,23 @@ func (c *char) exitBike() {
 
 	c.QueueCharTask(c.skillRing(c.ringSrc), 120)
 	c.c2Ring()
+}
+
+func (c *char) skillRecast() action.Info {
+	switch c.armamentState {
+	case ring:
+		c.enterBike()
+
+	default:
+		c.exitBike()
+	}
+	c.AddStatus(skillRecastCDKey, skillRecastCD, false)
+	return action.Info{
+		Frames:          frames.NewAbilFunc(skillRecastFrames),
+		AnimationLength: skillRecastFrames[action.InvalidAction],
+		CanQueueAfter:   skillRecastFrames[action.ActionSwap],
+		State:           action.SkillState,
+	}
 }
 
 func (c *char) skillHold() action.Info {

@@ -6,6 +6,7 @@ icd_tags:
 action_param_keys:
     skill:
         - param: "hold"
+        - param: "recast"
     low_plunge:
         - param: "collision"
     high_plunge:

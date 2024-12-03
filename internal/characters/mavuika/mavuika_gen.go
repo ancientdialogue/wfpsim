@@ -17,7 +17,7 @@ import (
 var pbData []byte
 var base *model.AvatarData
 var paramKeysValidation = map[action.Action][]string{
-	1: {"hold"},
+	1: {"hold", "recast"},
 	5: {"collision"},
 	6: {"collision"},
 }
