@@ -10,7 +10,7 @@ import (
 
 const (
 	itzpapaInterval           = 60 // looking at footage, seems like both attack and NS consumption intervals are the same
-	obsidianTzitzimitlHitmark = 23
+	obsidianTzitzimitlHitmark = 22
 
 	itzpapaKey    = "itzpapa-key"
 	frostFallAbil = "Frostfall Storm DMG"
@@ -21,7 +21,7 @@ var (
 )
 
 func init() {
-	skillFrames = frames.InitAbilSlice(49) // E -> Q
+	skillFrames = frames.InitAbilSlice(40) // E -> Swap
 }
 
 func (c *char) Skill(p map[string]int) (action.Info, error) {

@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	iceStormHitmark          = 118
+	iceStormHitmark          = 117
 	spiritVesselSkullHitmark = 223
 
 	iceStormAbil = "Ice Storm DMG"
@@ -20,7 +20,7 @@ var (
 )
 
 func init() {
-	burstFrames = frames.InitAbilSlice(133) // Q -> Swap
+	burstFrames = frames.InitAbilSlice(117) // Q -> Swap
 }
 
 func (c *char) Burst(p map[string]int) (action.Info, error) {
