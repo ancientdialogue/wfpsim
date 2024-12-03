@@ -75,12 +75,12 @@ func (c *char) c4Skull() {
 		Abil:           "Spiritvessel Skull DMG (C4)",
 		AttackTag:      attacks.AttackTagNone,
 		AdditionalTags: []attacks.AdditionalTag{attacks.AdditionalTagNightsoul},
-		ICDTag:         attacks.ICDTagElementalBurst, // TODO: check this
+		ICDTag:         attacks.ICDTagNone,
 		ICDGroup:       attacks.ICDGroupDefault,
 		StrikeType:     attacks.StrikeTypeDefault,
 		Element:        attributes.Cryo,
 		Durability:     25,
-		FlatDmg:        12 * c.Stat(attributes.EM),
+		FlatDmg:        18 * c.Stat(attributes.EM),
 	}
 	// TODO: the actual hitmark
 	c.Core.QueueAttack(aiSpiritVesselSkull, combat.NewSingleTargetHit(c.Core.Combat.PrimaryTarget().Key()),

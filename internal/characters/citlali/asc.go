@@ -81,5 +81,5 @@ func (c *char) a4DmgBurst() float64 {
 		return 0
 	}
 	em := c.Stat(attributes.EM)
-	return 24 * em
+	return 12 * em
 }
