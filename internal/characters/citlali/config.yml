@@ -8,6 +8,9 @@ icd_groups:
     reset_timer: 120
     ele_app_sequence: [1, 0]
     damage_sequence: [1, 1]
+action_param_keys:
+  attack:
+    - param: "travel"
 skill_data_mapping:
   attack: # Normal Attack: Shadow-Stealing Spirit Vessel
     attack_1:
