@@ -10021,7 +10021,7 @@ var EnemyMap = map[int]*MonsterData{
 	},
 	26240101: {
 		Id:              26240101,
-		Key:             "iktomisauruswhelp",
+		Key:             "iktomisauruschick",
 		NameTextHashMap: 2166596280,
 		BaseStats: &MonsterStatsData{
 			BaseHp:  13.584,
