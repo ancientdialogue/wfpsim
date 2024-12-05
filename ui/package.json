@@ -30,6 +30,7 @@
     "build:db": "yarn workspace @gcsim/db build",
     "build:docs": "yarn workspace @gcsim/docs build",
     "build:taghelper": "yarn workspace @gcsim/taghelper build",
+    "build:wfpsim": "yarn workspace @gcsim/wfpsim build",
     "deploy:workers": "yarn workspace @gcsim/workers deploy",
     "start:workers": "yarn workspace @gcsim/workers start",
     "storybook": "yarn workspace @gcsim/storybook storybook",

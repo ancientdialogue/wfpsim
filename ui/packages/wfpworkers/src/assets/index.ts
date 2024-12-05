@@ -15,27 +15,20 @@ export async function handleAssets(
       `Response for request url: ${request.url} not present in cache. Fetching and caching request.`
     );
 
-    ///api/assets/avatar/cyno.png
-    const key = new URL(request.url).pathname.replace("/api/assets/", "");
-    console.log(`getting ${key}`);
-
-    const object = await ASSETS_R2.get(key);
-
-    if (object === null) {
-      console.log(`${key} not found in r2`);
-      return new Response(`Not Found`, { status: 404 });
-    }
-
-    const headers = new Headers();
-    object.writeHttpMetadata(headers);
-    headers.set("etag", object.httpEtag);
-    headers.set("Cache-Control", "max-age=5184000");
-
-    response = new Response(object.body, {
-      headers,
+    const resp = await fetch(new Request(ASSETS_ENDPOINT + cacheUrl.pathname), {
+      cf: {
+        cacheTtl: 60 * 24 * 60 * 60,
+        cacheEverything: true,
+      },
     });
 
-    event.waitUntil(cache.put(cacheKey, response.clone()));
+    response = new Response(resp.body, resp);
+    response.headers.set('Cache-Control', 'max-age=5184000');
+
+    // only cache if response = 200
+    if (resp.status === 200) {
+      event.waitUntil(cache.put(cacheKey, response.clone()));
+    }
   }
 
   return response;

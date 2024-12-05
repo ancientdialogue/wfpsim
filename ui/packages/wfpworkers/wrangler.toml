@@ -3,10 +3,6 @@ main = "src/index.ts"
 compatibility_date = "2022-11-06"
 
 [[r2_buckets]]
-  binding = 'ASSETS_R2'
-  bucket_name = 'gcsim'
-
-[[r2_buckets]]
   binding = 'WASM_R2'
   bucket_name = 'wfpsim'
 
