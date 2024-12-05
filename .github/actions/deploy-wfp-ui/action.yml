@@ -30,11 +30,10 @@ runs:
     run: ls -lh
   
   - name: Publish to Cloudflare Pages
-    uses: cloudflare/pages-action@1
+    uses: cloudflare/wrangler-action@v3
     with:
       apiToken: ${{ inputs.apiToken }}
       accountId: ${{ inputs.accountId }}
       gitHubToken: ${{ inputs.gitHubToken }}
-      projectName: wfpsim
-      branch: ${{ inputs.branch }}
-      directory: ./ui/packages/wfpsim/dist
+      workingDirectory: ./ui/packages/wfpsim
+      command: pages deploy ./dist --project-name="wfpsim" --branch="main"
