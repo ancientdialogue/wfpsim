@@ -42,8 +42,7 @@ jobs:
       - name: deploy-wfp-wasm
         uses: ./.github/actions/deploy-wfp-wasm
         with:
-          rcloneConfig: ${{ secrets.CF_RCLONE }}
-          branch: ${{ steps.branch-name.outputs.base_ref_branch }}
+          rcloneConfig: ${{ secrets.WFP_RCLONE }}
           shareKey: "" # no secret key for us 
 
       - name: deploy-wfp-ui
