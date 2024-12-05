@@ -46,6 +46,8 @@ export function Simulator({
         <ul className="list-disc pl-4">
           <li>Ororon</li>
           <li>Chasca</li>
+          <li>Mavuika</li>
+          <li>Citlali</li>
         </ul>
         <p className=" font-bold">
           See{' '}
