@@ -44,11 +44,10 @@ func (c *char) c2Init() {
 	if c.Base.Cons < 2 {
 		return
 	}
-	// this part doesn't actually work right now. So we also modify c.Base.Atk when entering or exiting Nightousl
 	m := make([]float64, attributes.EndStatType)
 	m[attributes.BaseATK] = 200
 	c.AddStatMod(character.StatMod{
-		Base: modifier.NewBaseWithHitlag("mavuika-c2-base-atk", 10*60),
+		Base: modifier.NewBase("mavuika-c2-base-atk", -1),
 		Amount: func() ([]float64, bool) {
 			if c.nightsoulState.HasBlessing() {
 				return m, true
@@ -56,20 +55,6 @@ func (c *char) c2Init() {
 			return nil, false
 		},
 	})
-}
-
-func (c *char) c2OnNightsoulEnter() {
-	if c.Base.Cons < 2 {
-		return
-	}
-	c.Base.Atk += 200
-}
-
-func (c *char) c2OnNightsoulExit() {
-	if c.Base.Cons < 2 {
-		return
-	}
-	c.Base.Atk -= 200
 }
 
 func (c *char) c2Ring() {
