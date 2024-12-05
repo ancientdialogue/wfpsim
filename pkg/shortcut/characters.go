@@ -51,6 +51,7 @@ var CharNameToKey = map[string]keys.Char{
 	"chasca":          keys.Chasca,
 	"chongyun":        keys.Chongyun,
 	"chong":           keys.Chongyun,
+	"citlali":         keys.Citlali,
 	"cyno":            keys.Cyno,
 	"diluc":           keys.Diluc,
 	"diona":           keys.Diona,
