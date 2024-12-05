@@ -111,6 +111,7 @@ func (c *char) enterBike() {
 	c.Core.Log.NewEvent("switching to bike state", glog.LogCharacterEvent, c.Index)
 	c.armamentState = bike
 	c.NormalHitNum = bikeHitNum
+	c.NormalCounter = 0
 	c.c6Bike()
 }
 
