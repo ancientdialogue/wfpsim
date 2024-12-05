@@ -35,5 +35,5 @@ runs:
       apiToken: ${{ inputs.apiToken }}
       accountId: ${{ inputs.accountId }}
       gitHubToken: ${{ inputs.gitHubToken }}
-      workingDirectory: ./ui/packages/wfpsim
+      workingDirectory: ./ui/packages/wfp
       command: pages deploy ./dist --project-name="wfpsim" --branch="main"
