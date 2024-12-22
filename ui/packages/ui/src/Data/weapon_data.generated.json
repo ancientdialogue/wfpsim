@@ -1,5 +1,13 @@
 {
   "data": {
+    "AThousandBlazingSuns": {
+      "id": 12514,
+      "key": "AThousandBlazingSuns",
+      "rarity": 5,
+      "weapon_class": "WEAPON_CLAYMORE",
+      "image_name": "UI_EquipIcon_Claymore_RadianceSword",
+      "name_text_hash_map ": "1876377995"
+    },
     "absolution": {
       "id": 11515,
       "key": "absolution",
