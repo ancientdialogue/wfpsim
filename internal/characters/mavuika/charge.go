@@ -11,8 +11,8 @@ import (
 
 var chargeFrames []int
 var bikeChargeFrames []int
-var bikeChargeHitmarks = []int{51, 92, 133, 174, 215, 256, 297, 338, 379}
-var bikeChargeFinalHitmark = 420
+var bikeChargeHitmarks = []int{36, 78, 119, 165, 208, 252, 297, 341}
+var bikeChargeFinalHitmark = 421
 
 const chargeHitmark = 40
 
