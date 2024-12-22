@@ -16,13 +16,13 @@ const c4SkullIcd = "c4-skull-icd"
 // Charged Attack in mid-air, her Phlogiston consumption is decreased by 45%.
 // NOT IMPLEMENTED
 func (c *char) c1() {
-	c.Core.Events.Subscribe(event.OnEnemyDamage, func(args ...interface{}) bool {
+	c.Core.Events.Subscribe(event.OnEnemyHit, func(args ...interface{}) bool {
 		atk := args[1].(*combat.AttackEvent)
 		if c.Index == atk.Info.ActorIndex {
 			return false
 		}
 		if c.numStellarBlades > 0 {
-			em := c.NonExtraStat(attributes.EM)
+			em := c.Stat(attributes.EM)
 			amt := em * 2
 			if c.Core.Flags.LogDebug {
 				c.Core.Log.NewEvent("Citlali C1 proc dmg add", glog.LogPreDamageMod, atk.Info.ActorIndex).
