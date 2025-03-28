@@ -56,7 +56,7 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 		// TODO: Apply Ousia
 		ActorIndex:         c.Index,
 		Abil:               "Surging Blade (" + c.Base.Key.Pretty() + ")",
-		AttackTag:          attacks.AttackTagElementalArt,
+		AttackTag:          attacks.AttackTagNone,
 		ICDTag:             attacks.ICDTagNone,
 		ICDGroup:           attacks.ICDGroupDefault,
 		StrikeType:         attacks.StrikeTypeSpear,

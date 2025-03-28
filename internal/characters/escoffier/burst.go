@@ -29,7 +29,7 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 		ICDGroup:   attacks.ICDGroupDefault,
 		StrikeType: attacks.StrikeTypeDefault,
 		Element:    attributes.Cryo,
-		Durability: 25,
+		Durability: 50,
 		Mult:       burst[c.TalentLvlBurst()],
 	}
 	c.Core.QueueAttack(ai, combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 6), hitmark, hitmark, c.makeA4CB())
