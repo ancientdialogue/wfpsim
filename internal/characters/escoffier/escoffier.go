@@ -28,8 +28,8 @@ type char struct {
 func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) error {
 	c := char{}
 	c.Character = tmpl.NewWithWrapper(s, w)
-	c.BurstCon = 3
-	c.SkillCon = 5
+	c.SkillCon = 3
+	c.BurstCon = 5
 
 	c.EnergyMax = burstEnergy[c.TalentLvlBurst()]
 	c.NormalHitNum = normalHitNum
