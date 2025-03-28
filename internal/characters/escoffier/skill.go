@@ -18,7 +18,7 @@ const (
 
 	skillInterval      = 60
 	skillAlignedICDKey = "escoffier-aligned-icd"
-	ringKey            = "escoffier-skill"
+	skillKey           = "escoffier-skill"
 	particleICDKey     = "escoffier-particle-icd"
 )
 
@@ -47,6 +47,7 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 		// E duration and ticks are not affected by hitlag
 		c.skillSrc = c.Core.F
 		c.Core.Tasks.Add(c.skillTick(c.skillSrc, skillTicks), skillInterval) // Assuming this executes every 60 frames
+		c.AddStatus(skillKey, skillTicks*skillInterval, false)
 	}, skillInitHitmark)
 
 	// TODO: if target is out of range then pos should be player pos + Y: 8 offset
@@ -85,6 +86,7 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 
 	c.c1()
 	c.c2()
+	c.c6()
 	return action.Info{
 		Frames:          frames.NewAbilFunc(skillFrames),
 		AnimationLength: skillFrames[action.InvalidAction],
@@ -128,7 +130,7 @@ func (c *char) skillTick(src, count int) func() {
 		}
 		// trigger damage
 		//TODO: travel time
-		c.Core.QueueAttack(ai, combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 2), 10, 10, c.makeA4CB())
+		c.Core.QueueAttack(ai, combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 2), 0, 10, c.makeA4CB())
 
 		c.Core.Tasks.Add(c.skillTick(src, count-1), 60)
 	}

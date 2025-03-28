@@ -22,6 +22,7 @@ type char struct {
 	c1Buff           []float64
 	c2Count          int
 	c4Count          int
+	c6Count          int
 }
 
 func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) error {
@@ -42,6 +43,7 @@ func (c *char) Init() error {
 	c.a4Init()
 	c.c1Init()
 	c.c2Init()
+	c.c6Init()
 	return nil
 }
 
