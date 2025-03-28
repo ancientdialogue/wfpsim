@@ -20,6 +20,7 @@ type char struct {
 	a4HydroCryoCount int
 	c1Active         bool
 	c1Buff           []float64
+	c2Count          int
 }
 
 func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) error {
@@ -39,6 +40,7 @@ func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) er
 func (c *char) Init() error {
 	c.a4Init()
 	c.c1Init()
+	c.c2Init()
 	return nil
 }
 
