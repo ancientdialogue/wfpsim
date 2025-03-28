@@ -18,6 +18,8 @@ type char struct {
 	skillSrc         int
 	a1Src            int
 	a4HydroCryoCount int
+	c1Active         bool
+	c1Buff           []float64
 }
 
 func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) error {
@@ -36,7 +38,7 @@ func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) er
 
 func (c *char) Init() error {
 	c.a4Init()
-
+	c.c1Init()
 	return nil
 }
 

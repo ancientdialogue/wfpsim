@@ -51,6 +51,7 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 	c.SetCD(action.ActionBurst, int(burstCD[c.TalentLvlBurst()])*60)
 	c.ConsumeEnergy(6)
 
+	c.c1()
 	return action.Info{
 		Frames:          frames.NewAbilFunc(burstFrames),
 		AnimationLength: burstFrames[action.InvalidAction],
