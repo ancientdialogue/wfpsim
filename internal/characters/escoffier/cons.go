@@ -20,9 +20,11 @@ const c4ExtraScaling = 1
 const c4Limit = 7
 const c4Key = "escoffier-c4"
 const c4Regen = 2.0
-const c6Key = "escoffier-c2"
+const c6Key = "escoffier-c6"
 const c6Limit = 6
 const c6Scaling = 3.5
+const c6ICD = 0.5 * 60
+const c6ICDKey = "escoffier-c6-icd"
 
 func (c *char) c1Init() {
 	if c.Base.Cons < 1 {
@@ -159,6 +161,11 @@ func (c *char) c6Init() {
 		if c.c6Count <= 0 {
 			return false
 		}
+		if c.StatusIsActive(c6ICDKey) {
+			return false
+		}
+
+		c.AddStatus(c6ICDKey, c6ICD, true)
 		ai := combat.AttackInfo{
 			ActorIndex: c.Index,
 			Abil:       "Special-Grade Frozen Parfait (C6)",
