@@ -13,7 +13,7 @@ import (
 var skillFrames []int
 
 const (
-	skillInitHitmark    = 11 // Initial Hit
+	skillInitHitmark    = 23 // Initial Hit
 	skillAlignedHitmark = 60
 
 	skillInterval      = 60
@@ -25,11 +25,7 @@ const (
 var skillAlignedICD = int(arkheCD[0]) * 60
 
 func init() {
-	skillFrames = frames.InitAbilSlice(52) // E -> Q
-	skillFrames[action.ActionAttack] = 50  // E -> N1
-	skillFrames[action.ActionDash] = 12    // E -> D
-	skillFrames[action.ActionJump] = 11    // E -> J
-	skillFrames[action.ActionSwap] = 50    // E -> Swap
+	skillFrames = frames.InitAbilSlice(38) // E -> Q
 }
 
 func (c *char) Skill(p map[string]int) (action.Info, error) {
@@ -85,7 +81,7 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 		)
 	}, skillInitHitmark)
 
-	c.SetCDWithDelay(action.ActionSkill, int(skillCD[c.TalentLvlSkill()])*60, 7)
+	c.SetCDWithDelay(action.ActionSkill, int(skillCD[c.TalentLvlSkill()])*60, 22)
 
 	return action.Info{
 		Frames:          frames.NewAbilFunc(skillFrames),

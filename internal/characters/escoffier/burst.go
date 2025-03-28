@@ -12,15 +12,12 @@ import (
 var burstFrames []int
 
 const (
-	initialHeal = 91 // depends on ping
-	hitmark     = 91
+	initialHeal = 94 // depends on ping
+	hitmark     = 94
 )
 
 func init() {
-	burstFrames = frames.InitAbilSlice(61) // Q -> N1/Dash/Walk
-	burstFrames[action.ActionSkill] = 60
-	burstFrames[action.ActionJump] = 60
-	burstFrames[action.ActionSwap] = 59
+	burstFrames = frames.InitAbilSlice(109)
 }
 
 func (c *char) Burst(p map[string]int) (action.Info, error) {
