@@ -11,6 +11,7 @@ import (
 
 const a1Scaling = 1.3824
 const a1key = "escoffier-a1"
+const a1Count = 9
 const a1Interval = 60
 const a4Dur = 12 * 60
 
@@ -21,9 +22,10 @@ func (c *char) a1() {
 		return
 	}
 	c.a1Src = c.Core.F
-	c.QueueCharTask(c.a1Tick(c.a1Src, 9), a1Interval)
+	ticks := a1Count + c.c4ExtraCount()
+	c.QueueCharTask(c.a1Tick(c.a1Src, ticks), a1Interval)
 	// this status is purely cosmetic and doesn't do anything right now
-	c.AddStatus(a1key, 9*a1Interval, true)
+	c.AddStatus(a1key, ticks*a1Interval, true)
 }
 
 func (c *char) a1Tick(src, count int) func() {
@@ -34,8 +36,8 @@ func (c *char) a1Tick(src, count int) func() {
 		if count <= 0 {
 			return
 		}
-
-		heal := a1Scaling * c.TotalAtk()
+		scale := a1Scaling + c.c4ExtraHeal()
+		heal := scale * c.TotalAtk()
 		c.Core.Player.Heal(info.HealInfo{
 			Caller:  c.Index,
 			Target:  -1,
@@ -53,7 +55,7 @@ func (c *char) a4Init() {
 	for _, char := range c.Core.Player.Chars() {
 		switch char.Base.Element {
 		case attributes.Hydro, attributes.Cryo:
-			c.a4HydroCryoCount += 1
+			c.a4HydroCryoCount++
 		default:
 		}
 	}

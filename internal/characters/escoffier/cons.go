@@ -14,6 +14,11 @@ const c1Key = "escoffier-c1"
 const c2Key = "escoffier-c2"
 const c2Per = 2.4
 const c2Dur = 15 * 60
+const c4Extra = 6
+const c4ExtraScaling = 1
+const c4Limit = 7
+const c4Key = "escoffier-c4"
+const c4Regen = 2.0
 
 func (c *char) c1Init() {
 	if c.Base.Cons < 1 {
@@ -96,4 +101,35 @@ func (c *char) c2() {
 	}
 	c.AddStatus(c2Key, c2Dur, true)
 	c.c2Count = 5
+}
+
+func (c *char) c4ExtraCount() int {
+	if c.Base.Cons < 4 {
+		return 0
+	}
+	if c.Base.Ascension < 1 {
+		return 0
+	}
+	c.c4Count = c4Limit
+	return c4Extra
+}
+
+func (c *char) c4ExtraHeal() float64 {
+	if c.Base.Cons < 4 {
+		return 0
+	}
+	if c.Base.Ascension < 1 {
+		return 0
+	}
+	if c.c4Count <= 0 {
+		return 0
+	}
+
+	if c.Core.Rand.Float64() > c.Stat(attributes.CR) {
+		return 0
+	}
+	c.AddEnergy(c4Key, c4Regen)
+	c.c4Count--
+
+	return c4ExtraScaling
 }

@@ -21,6 +21,7 @@ type char struct {
 	c1Active         bool
 	c1Buff           []float64
 	c2Count          int
+	c4Count          int
 }
 
 func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) error {
