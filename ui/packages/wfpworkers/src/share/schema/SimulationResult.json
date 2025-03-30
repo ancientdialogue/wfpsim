@@ -1,0 +1,702 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$ref": "#/definitions/SimulationResult",
+    "definitions": {
+        "SimulationResult": {
+            "properties": {
+                "schema_version": {
+                    "$ref": "#/definitions/model.Version",
+                    "additionalProperties": true,
+                    "description": "required fields (should always be here regardless of schema version)"
+                },
+                "sim_version": {
+                    "type": "string"
+                },
+                "modified": {
+                    "type": "boolean"
+                },
+                "build_date": {
+                    "type": "string"
+                },
+                "sample_seed": {
+                    "type": "string"
+                },
+                "config": {
+                    "type": "string"
+                },
+                "simulator_settings": {
+                    "$ref": "#/definitions/model.SimulatorSettings",
+                    "additionalProperties": true
+                },
+                "energy_settings": {
+                    "$ref": "#/definitions/model.EnergySettings",
+                    "additionalProperties": true
+                },
+                "initial_character": {
+                    "type": "string"
+                },
+                "character_details": {
+                    "items": {
+                        "$ref": "#/definitions/model.Character"
+                    },
+                    "type": "array"
+                },
+                "target_details": {
+                    "items": {
+                        "$ref": "#/definitions/model.Enemy"
+                    },
+                    "type": "array"
+                },
+                "player_position": {
+                    "$ref": "#/definitions/model.Coord",
+                    "additionalProperties": true
+                },
+                "incomplete_characters": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "statistics": {
+                    "$ref": "#/definitions/model.SimulationStatistics",
+                    "additionalProperties": true,
+                    "description": "All data that changes per iteration goes here"
+                },
+                "mode": {
+                    "enum": [
+                        "INVALID_SIM_MODE",
+                        0,
+                        "DURATION_MODE",
+                        1,
+                        "TTK_MODE",
+                        2
+                    ],
+                    "oneOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "integer"
+                        }
+                    ],
+                    "title": "Sim Mode"
+                },
+                "key_type": {
+                    "type": "string"
+                },
+                "created_date": {
+                    "type": "string",
+                    "description": "if set to -1 then should result in perm"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Simulation Result"
+        },
+        "model.BucketStats": {
+            "properties": {
+                "bucket_size": {
+                    "type": "integer"
+                },
+                "buckets": {
+                    "items": {
+                        "$ref": "#/definitions/model.DescriptiveStats"
+                    },
+                    "type": "array"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Bucket Stats"
+        },
+        "model.Character": {
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "element": {
+                    "type": "string"
+                },
+                "level": {
+                    "type": "integer"
+                },
+                "max_level": {
+                    "type": "integer"
+                },
+                "cons": {
+                    "type": "integer"
+                },
+                "weapon": {
+                    "$ref": "#/definitions/model.Weapon",
+                    "additionalProperties": true
+                },
+                "talents": {
+                    "$ref": "#/definitions/model.CharacterTalents",
+                    "additionalProperties": true
+                },
+                "sets": {
+                    "additionalProperties": {
+                        "type": "integer"
+                    },
+                    "type": "object"
+                },
+                "stats": {
+                    "items": {
+                        "type": "number"
+                    },
+                    "type": "array"
+                },
+                "snapshot_stats": {
+                    "items": {
+                        "type": "number"
+                    },
+                    "type": "array"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Character"
+        },
+        "model.CharacterBucketStats": {
+            "properties": {
+                "bucket_size": {
+                    "type": "integer"
+                },
+                "characters": {
+                    "items": {
+                        "$ref": "#/definitions/model.CharacterBuckets"
+                    },
+                    "type": "array"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Character Bucket Stats"
+        },
+        "model.CharacterBuckets": {
+            "properties": {
+                "buckets": {
+                    "items": {
+                        "$ref": "#/definitions/model.DescriptiveStats"
+                    },
+                    "type": "array"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Character Buckets"
+        },
+        "model.CharacterTalents": {
+            "properties": {
+                "attack": {
+                    "type": "integer"
+                },
+                "skill": {
+                    "type": "integer"
+                },
+                "burst": {
+                    "type": "integer"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Character Talents"
+        },
+        "model.Coord": {
+            "properties": {
+                "x": {
+                    "type": "number"
+                },
+                "y": {
+                    "type": "number"
+                },
+                "r": {
+                    "type": "number"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Coord"
+        },
+        "model.Delays": {
+            "properties": {
+                "skill": {
+                    "type": "integer"
+                },
+                "burst": {
+                    "type": "integer"
+                },
+                "attack": {
+                    "type": "integer"
+                },
+                "charge": {
+                    "type": "integer"
+                },
+                "aim": {
+                    "type": "integer"
+                },
+                "dash": {
+                    "type": "integer"
+                },
+                "jump": {
+                    "type": "integer"
+                },
+                "swap": {
+                    "type": "integer"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Delays"
+        },
+        "model.DescriptiveStats": {
+            "properties": {
+                "min": {
+                    "type": "number"
+                },
+                "max": {
+                    "type": "number"
+                },
+                "mean": {
+                    "type": "number"
+                },
+                "SD": {
+                    "type": "number"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Descriptive Stats"
+        },
+        "model.ElementStats": {
+            "properties": {
+                "elements": {
+                    "additionalProperties": {
+                        "$ref": "#/definitions/model.DescriptiveStats",
+                        "additionalProperties": true
+                    },
+                    "type": "object"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Element Stats"
+        },
+        "model.Enemy": {
+            "properties": {
+                "level": {
+                    "type": "integer"
+                },
+                "HP": {
+                    "type": "number"
+                },
+                "resist": {
+                    "additionalProperties": {
+                        "type": "number"
+                    },
+                    "type": "object"
+                },
+                "pos": {
+                    "$ref": "#/definitions/model.Coord",
+                    "additionalProperties": true
+                },
+                "particle_drop_threshold": {
+                    "type": "number"
+                },
+                "particle_drop_count": {
+                    "type": "number"
+                },
+                "particle_element": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Enemy"
+        },
+        "model.EnergySettings": {
+            "properties": {
+                "active": {
+                    "type": "boolean"
+                },
+                "once": {
+                    "type": "boolean"
+                },
+                "start": {
+                    "type": "integer"
+                },
+                "end": {
+                    "type": "integer"
+                },
+                "amount": {
+                    "type": "integer"
+                },
+                "last_energy_drop": {
+                    "type": "integer"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Energy Settings"
+        },
+        "model.FailedActions": {
+            "properties": {
+                "insufficient_energy": {
+                    "$ref": "#/definitions/model.DescriptiveStats",
+                    "additionalProperties": true
+                },
+                "insufficient_stamina": {
+                    "$ref": "#/definitions/model.DescriptiveStats",
+                    "additionalProperties": true
+                },
+                "swap_cd": {
+                    "$ref": "#/definitions/model.DescriptiveStats",
+                    "additionalProperties": true
+                },
+                "skill_cd": {
+                    "$ref": "#/definitions/model.DescriptiveStats",
+                    "additionalProperties": true
+                },
+                "dash_cd": {
+                    "$ref": "#/definitions/model.DescriptiveStats",
+                    "additionalProperties": true
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Failed Actions"
+        },
+        "model.OverviewStats": {
+            "properties": {
+                "min": {
+                    "type": "number"
+                },
+                "max": {
+                    "type": "number"
+                },
+                "mean": {
+                    "type": "number"
+                },
+                "SD": {
+                    "type": "number"
+                },
+                "Q1": {
+                    "type": "number"
+                },
+                "Q2": {
+                    "type": "number"
+                },
+                "Q3": {
+                    "type": "number"
+                },
+                "hist": {
+                    "items": {
+                        "type": "integer"
+                    },
+                    "type": "array"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Overview Stats"
+        },
+        "model.ShieldInfo": {
+            "properties": {
+                "hp": {
+                    "additionalProperties": {
+                        "$ref": "#/definitions/model.DescriptiveStats",
+                        "additionalProperties": true
+                    },
+                    "type": "object"
+                },
+                "uptime": {
+                    "$ref": "#/definitions/model.DescriptiveStats",
+                    "additionalProperties": true
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Shield Info"
+        },
+        "model.SimulationStatistics": {
+            "properties": {
+                "min_seed": {
+                    "type": "string",
+                    "description": "metadata"
+                },
+                "max_seed": {
+                    "type": "string"
+                },
+                "p25_seed": {
+                    "type": "string"
+                },
+                "p50_seed": {
+                    "type": "string"
+                },
+                "p75_seed": {
+                    "type": "string"
+                },
+                "iterations": {
+                    "type": "integer"
+                },
+                "duration": {
+                    "$ref": "#/definitions/model.OverviewStats",
+                    "additionalProperties": true,
+                    "description": "global overview (global/no group by)"
+                },
+                "DPS": {
+                    "$ref": "#/definitions/model.OverviewStats",
+                    "additionalProperties": true
+                },
+                "RPS": {
+                    "$ref": "#/definitions/model.OverviewStats",
+                    "additionalProperties": true
+                },
+                "EPS": {
+                    "$ref": "#/definitions/model.OverviewStats",
+                    "additionalProperties": true
+                },
+                "HPS": {
+                    "$ref": "#/definitions/model.OverviewStats",
+                    "additionalProperties": true
+                },
+                "SHP": {
+                    "$ref": "#/definitions/model.OverviewStats",
+                    "additionalProperties": true
+                },
+                "total_damage": {
+                    "$ref": "#/definitions/model.DescriptiveStats",
+                    "additionalProperties": true
+                },
+                "warnings": {
+                    "$ref": "#/definitions/model.Warnings",
+                    "additionalProperties": true
+                },
+                "failed_actions": {
+                    "items": {
+                        "$ref": "#/definitions/model.FailedActions"
+                    },
+                    "type": "array"
+                },
+                "element_dps": {
+                    "additionalProperties": {
+                        "$ref": "#/definitions/model.DescriptiveStats",
+                        "additionalProperties": true
+                    },
+                    "type": "object",
+                    "description": "damage"
+                },
+                "target_dps": {
+                    "additionalProperties": {
+                        "$ref": "#/definitions/model.DescriptiveStats",
+                        "additionalProperties": true
+                    },
+                    "type": "object"
+                },
+                "character_dps": {
+                    "items": {
+                        "$ref": "#/definitions/model.DescriptiveStats"
+                    },
+                    "type": "array"
+                },
+                "breakdown_by_element_dps": {
+                    "items": {
+                        "$ref": "#/definitions/model.ElementStats"
+                    },
+                    "type": "array"
+                },
+                "breakdown_by_target_dps": {
+                    "items": {
+                        "$ref": "#/definitions/model.TargetStats"
+                    },
+                    "type": "array"
+                },
+                "source_dps": {
+                    "items": {
+                        "$ref": "#/definitions/model.SourceStats"
+                    },
+                    "type": "array"
+                },
+                "source_damage_instances": {
+                    "items": {
+                        "$ref": "#/definitions/model.SourceStats"
+                    },
+                    "type": "array"
+                },
+                "damage_buckets": {
+                    "$ref": "#/definitions/model.BucketStats",
+                    "additionalProperties": true
+                },
+                "cumulative_damage_contribution": {
+                    "$ref": "#/definitions/model.CharacterBucketStats",
+                    "additionalProperties": true
+                },
+                "shields": {
+                    "additionalProperties": {
+                        "$ref": "#/definitions/model.ShieldInfo",
+                        "additionalProperties": true
+                    },
+                    "type": "object",
+                    "description": "shield"
+                },
+                "field_time": {
+                    "items": {
+                        "$ref": "#/definitions/model.DescriptiveStats"
+                    },
+                    "type": "array",
+                    "description": "field time"
+                },
+                "total_source_energy": {
+                    "items": {
+                        "$ref": "#/definitions/model.SourceStats"
+                    },
+                    "type": "array",
+                    "description": "total source energy"
+                },
+                "source_reactions": {
+                    "items": {
+                        "$ref": "#/definitions/model.SourceStats"
+                    },
+                    "type": "array",
+                    "description": "source reactions"
+                },
+                "character_actions": {
+                    "items": {
+                        "$ref": "#/definitions/model.SourceStats"
+                    },
+                    "type": "array",
+                    "description": "character actions"
+                },
+                "target_aura_uptime": {
+                    "items": {
+                        "$ref": "#/definitions/model.SourceStats"
+                    },
+                    "type": "array",
+                    "description": "target aura uptime"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Simulation Statistics"
+        },
+        "model.SimulatorSettings": {
+            "properties": {
+                "duration": {
+                    "type": "number"
+                },
+                "damage_mode": {
+                    "type": "boolean"
+                },
+                "enable_hitlag": {
+                    "type": "boolean"
+                },
+                "def_halt": {
+                    "type": "boolean"
+                },
+                "number_of_workers": {
+                    "type": "integer"
+                },
+                "iterations": {
+                    "type": "integer"
+                },
+                "delays": {
+                    "$ref": "#/definitions/model.Delays",
+                    "additionalProperties": true
+                },
+                "ignore_burst_energy": {
+                    "type": "boolean"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Simulator Settings"
+        },
+        "model.SourceStats": {
+            "properties": {
+                "sources": {
+                    "additionalProperties": {
+                        "$ref": "#/definitions/model.DescriptiveStats",
+                        "additionalProperties": true
+                    },
+                    "type": "object"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Source Stats"
+        },
+        "model.TargetStats": {
+            "properties": {
+                "targets": {
+                    "additionalProperties": {
+                        "$ref": "#/definitions/model.DescriptiveStats",
+                        "additionalProperties": true
+                    },
+                    "type": "object"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Target Stats"
+        },
+        "model.Version": {
+            "properties": {
+                "major": {
+                    "type": "string"
+                },
+                "minor": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "IMPORTANT NOTE:\n By default all proto3 fields have \"no presence\". If the value is equal to the default value\n then that field will be removed from the output. This is done to minimize data size, but may have\n undesirable behaviors when reading from json. IE: for a numeric field, a 0 value will never\n be emitted. In JS, this makes the null/undefined case equivalent to 0 (so stats with 0 values\n get treated as a \"data not found\" case).\n\n This behavior can be removed by adding \"optional\" to the field, forcing \"explicit presence\". With\n optional added, the field will only ever be omitted when it is unset (the value is null). This\n should be used sparingly, as it increases the size of the generated code and overall data size.\n\n RECOMMENDATION: Only use \"optional\" when not emitting the default value is undesirable. This is\n best limited to only boolean, numeric, and string/byte fields (map \u0026 list possible but unlikely).\n Table of the default value for each type:\n  ╔═══════╤════════════════════════════╗\n  ║ JSON  │ Protobuf field             ║\n  ╠═══════╪════════════════════════════╣\n  ║ false │ proto3 boolean fields      ║\n  ║ 0     │ proto3 numeric fields      ║\n  ║ \"\"    │ proto3 string/bytes fields ║\n  ║ null  │ message fields             ║\n  ║ []    │ list fields                ║\n  ║ {}    │ map fields                 ║\n  ╚═══════╧════════════════════════════╝\n\n see: https://protobuf.dev/programming-guides/field_presence/\n see: https://protobuf.dev/programming-guides/proto3/#json\n see: https://pkg.go.dev/google.golang.org/protobuf/encoding/protojson#MarshalOptions",
+            "description": "IMPORTANT NOTE: By default all proto3 fields have \"no presence\". If the value is equal to the default value then that field will be removed from the output. This is done to minimize data size, but may have undesirable behaviors when reading from json. IE: for a numeric field, a 0 value will never be emitted. In JS, this makes the null/undefined case equivalent to 0 (so stats with 0 values get treated as a \"data not found\" case). This behavior can be removed by adding \"optional\" to the field, forcing \"explicit presence\". With optional added, the field will only ever be omitted when it is unset (the value is null). This should be used sparingly, as it increases the size of the generated code and overall data size. RECOMMENDATION: Only use \"optional\" when not emitting the default value is undesirable. This is best limited to only boolean, numeric, and string/byte fields (map \u0026 list possible but unlikely). Table of the default value for each type:  ╔═══════╤════════════════════════════╗  ║ JSON  │ Protobuf field             ║  ╠═══════╪════════════════════════════╣  ║ false │ proto3 boolean fields      ║  ║ 0     │ proto3 numeric fields      ║  ║ \"\"    │ proto3 string/bytes fields ║  ║ null  │ message fields             ║  ║ []    │ list fields                ║  ║ {}    │ map fields                 ║  ╚═══════╧════════════════════════════╝ see: https://protobuf.dev/programming-guides/field_presence/ see: https://protobuf.dev/programming-guides/proto3/#json see: https://pkg.go.dev/google.golang.org/protobuf/encoding/protojson#MarshalOptions"
+        },
+        "model.Warnings": {
+            "properties": {
+                "target_overlap": {
+                    "type": "boolean",
+                    "description": "optional unnecessary, missing == false in ui"
+                },
+                "insufficient_energy": {
+                    "type": "boolean"
+                },
+                "insufficient_stamina": {
+                    "type": "boolean"
+                },
+                "swap_cd": {
+                    "type": "boolean"
+                },
+                "skill_cd": {
+                    "type": "boolean"
+                },
+                "dash_cd": {
+                    "type": "boolean"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Warnings"
+        },
+        "model.Weapon": {
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "refine": {
+                    "type": "integer"
+                },
+                "level": {
+                    "type": "integer"
+                },
+                "max_level": {
+                    "type": "integer"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Weapon"
+        }
+    }
+}

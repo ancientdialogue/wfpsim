@@ -1,0 +1,20 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$ref": "#/definitions/Version",
+    "definitions": {
+        "Version": {
+            "properties": {
+                "major": {
+                    "type": "string"
+                },
+                "minor": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "IMPORTANT NOTE:\n By default all proto3 fields have \"no presence\". If the value is equal to the default value\n then that field will be removed from the output. This is done to minimize data size, but may have\n undesirable behaviors when reading from json. IE: for a numeric field, a 0 value will never\n be emitted. In JS, this makes the null/undefined case equivalent to 0 (so stats with 0 values\n get treated as a \"data not found\" case).\n\n This behavior can be removed by adding \"optional\" to the field, forcing \"explicit presence\". With\n optional added, the field will only ever be omitted when it is unset (the value is null). This\n should be used sparingly, as it increases the size of the generated code and overall data size.\n\n RECOMMENDATION: Only use \"optional\" when not emitting the default value is undesirable. This is\n best limited to only boolean, numeric, and string/byte fields (map \u0026 list possible but unlikely).\n Table of the default value for each type:\n  ╔═══════╤════════════════════════════╗\n  ║ JSON  │ Protobuf field             ║\n  ╠═══════╪════════════════════════════╣\n  ║ false │ proto3 boolean fields      ║\n  ║ 0     │ proto3 numeric fields      ║\n  ║ \"\"    │ proto3 string/bytes fields ║\n  ║ null  │ message fields             ║\n  ║ []    │ list fields                ║\n  ║ {}    │ map fields                 ║\n  ╚═══════╧════════════════════════════╝\n\n see: https://protobuf.dev/programming-guides/field_presence/\n see: https://protobuf.dev/programming-guides/proto3/#json\n see: https://pkg.go.dev/google.golang.org/protobuf/encoding/protojson#MarshalOptions",
+            "description": "IMPORTANT NOTE: By default all proto3 fields have \"no presence\". If the value is equal to the default value then that field will be removed from the output. This is done to minimize data size, but may have undesirable behaviors when reading from json. IE: for a numeric field, a 0 value will never be emitted. In JS, this makes the null/undefined case equivalent to 0 (so stats with 0 values get treated as a \"data not found\" case). This behavior can be removed by adding \"optional\" to the field, forcing \"explicit presence\". With optional added, the field will only ever be omitted when it is unset (the value is null). This should be used sparingly, as it increases the size of the generated code and overall data size. RECOMMENDATION: Only use \"optional\" when not emitting the default value is undesirable. This is best limited to only boolean, numeric, and string/byte fields (map \u0026 list possible but unlikely). Table of the default value for each type:  ╔═══════╤════════════════════════════╗  ║ JSON  │ Protobuf field             ║  ╠═══════╪════════════════════════════╣  ║ false │ proto3 boolean fields      ║  ║ 0     │ proto3 numeric fields      ║  ║ \"\"    │ proto3 string/bytes fields ║  ║ null  │ message fields             ║  ║ []    │ list fields                ║  ║ {}    │ map fields                 ║  ╚═══════╧════════════════════════════╝ see: https://protobuf.dev/programming-guides/field_presence/ see: https://protobuf.dev/programming-guides/proto3/#json see: https://pkg.go.dev/google.golang.org/protobuf/encoding/protojson#MarshalOptions"
+        }
+    }
+}

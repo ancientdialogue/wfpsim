@@ -1,0 +1,1 @@
+protoc --plugin=protoc-gen-jsonschema --jsonschema_out=. --proto_path=../protos/model

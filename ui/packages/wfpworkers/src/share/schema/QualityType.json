@@ -1,0 +1,22 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "enum": [
+        "INVALID_QUALITY_TYPE",
+        0,
+        "QUALITY_ORANGE_SP",
+        6,
+        "QUALITY_ORANGE",
+        5,
+        "QUALITY_PURPLE",
+        4
+    ],
+    "oneOf": [
+        {
+            "type": "string"
+        },
+        {
+            "type": "integer"
+        }
+    ],
+    "title": "Quality Type"
+}

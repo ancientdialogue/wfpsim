@@ -1,0 +1,26 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "enum": [
+        "INVALID_WEAPON_CLASS",
+        0,
+        "WEAPON_SWORD_ONE_HAND",
+        1,
+        "WEAPON_CLAYMORE",
+        2,
+        "WEAPON_POLE",
+        3,
+        "WEAPON_BOW",
+        4,
+        "WEAPON_CATALYST",
+        5
+    ],
+    "oneOf": [
+        {
+            "type": "string"
+        },
+        {
+            "type": "integer"
+        }
+    ],
+    "title": "Weapon Class"
+}

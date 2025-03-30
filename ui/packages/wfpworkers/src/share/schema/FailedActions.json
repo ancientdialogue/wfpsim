@@ -1,0 +1,52 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$ref": "#/definitions/FailedActions",
+    "definitions": {
+        "FailedActions": {
+            "properties": {
+                "insufficient_energy": {
+                    "$ref": "#/definitions/model.DescriptiveStats",
+                    "additionalProperties": true
+                },
+                "insufficient_stamina": {
+                    "$ref": "#/definitions/model.DescriptiveStats",
+                    "additionalProperties": true
+                },
+                "swap_cd": {
+                    "$ref": "#/definitions/model.DescriptiveStats",
+                    "additionalProperties": true
+                },
+                "skill_cd": {
+                    "$ref": "#/definitions/model.DescriptiveStats",
+                    "additionalProperties": true
+                },
+                "dash_cd": {
+                    "$ref": "#/definitions/model.DescriptiveStats",
+                    "additionalProperties": true
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Failed Actions"
+        },
+        "model.DescriptiveStats": {
+            "properties": {
+                "min": {
+                    "type": "number"
+                },
+                "max": {
+                    "type": "number"
+                },
+                "mean": {
+                    "type": "number"
+                },
+                "SD": {
+                    "type": "number"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Descriptive Stats"
+        }
+    }
+}

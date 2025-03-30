@@ -1,0 +1,69 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$ref": "#/definitions/SimulatorSettings",
+    "definitions": {
+        "SimulatorSettings": {
+            "properties": {
+                "duration": {
+                    "type": "number"
+                },
+                "damage_mode": {
+                    "type": "boolean"
+                },
+                "enable_hitlag": {
+                    "type": "boolean"
+                },
+                "def_halt": {
+                    "type": "boolean"
+                },
+                "number_of_workers": {
+                    "type": "integer"
+                },
+                "iterations": {
+                    "type": "integer"
+                },
+                "delays": {
+                    "$ref": "#/definitions/model.Delays",
+                    "additionalProperties": true
+                },
+                "ignore_burst_energy": {
+                    "type": "boolean"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Simulator Settings"
+        },
+        "model.Delays": {
+            "properties": {
+                "skill": {
+                    "type": "integer"
+                },
+                "burst": {
+                    "type": "integer"
+                },
+                "attack": {
+                    "type": "integer"
+                },
+                "charge": {
+                    "type": "integer"
+                },
+                "aim": {
+                    "type": "integer"
+                },
+                "dash": {
+                    "type": "integer"
+                },
+                "jump": {
+                    "type": "integer"
+                },
+                "swap": {
+                    "type": "integer"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Delays"
+        }
+    }
+}

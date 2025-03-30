@@ -1,0 +1,24 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "enum": [
+        "INVALID_AVATAR_CURVE",
+        0,
+        "GROW_CURVE_HP_S4",
+        1,
+        "GROW_CURVE_ATTACK_S4",
+        2,
+        "GROW_CURVE_HP_S5",
+        3,
+        "GROW_CURVE_ATTACK_S5",
+        4
+    ],
+    "oneOf": [
+        {
+            "type": "string"
+        },
+        {
+            "type": "integer"
+        }
+    ],
+    "title": "Avatar Curve Type"
+}

@@ -1,0 +1,25 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$ref": "#/definitions/Weapon",
+    "definitions": {
+        "Weapon": {
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "refine": {
+                    "type": "integer"
+                },
+                "level": {
+                    "type": "integer"
+                },
+                "max_level": {
+                    "type": "integer"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Weapon"
+        }
+    }
+}

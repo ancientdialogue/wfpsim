@@ -1,0 +1,52 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "enum": [
+        "INVALID_WEAPON_CURVE",
+        0,
+        "GROW_CURVE_ATTACK_101",
+        1,
+        "GROW_CURVE_ATTACK_102",
+        2,
+        "GROW_CURVE_ATTACK_103",
+        3,
+        "GROW_CURVE_ATTACK_104",
+        4,
+        "GROW_CURVE_ATTACK_105",
+        5,
+        "GROW_CURVE_CRITICAL_101",
+        6,
+        "GROW_CURVE_ATTACK_201",
+        7,
+        "GROW_CURVE_ATTACK_202",
+        8,
+        "GROW_CURVE_ATTACK_203",
+        9,
+        "GROW_CURVE_ATTACK_204",
+        10,
+        "GROW_CURVE_ATTACK_205",
+        11,
+        "GROW_CURVE_CRITICAL_201",
+        12,
+        "GROW_CURVE_ATTACK_301",
+        13,
+        "GROW_CURVE_ATTACK_302",
+        14,
+        "GROW_CURVE_ATTACK_303",
+        15,
+        "GROW_CURVE_ATTACK_304",
+        16,
+        "GROW_CURVE_ATTACK_305",
+        17,
+        "GROW_CURVE_CRITICAL_301",
+        18
+    ],
+    "oneOf": [
+        {
+            "type": "string"
+        },
+        {
+            "type": "integer"
+        }
+    ],
+    "title": "Weapon Curve Type"
+}

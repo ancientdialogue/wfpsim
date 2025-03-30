@@ -1,0 +1,55 @@
+name: deployment build
+on:
+  workflow_dispatch:
+  push:
+    tags:
+    - "wfpsim-v[0-9]+.[0-9]+.[0-9]+"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get branch names
+        id: branch-name
+        uses: tj-actions/branch-names@v7
+
+      # grab latest sha
+      - name: Setup Environment (PR)  
+        if: ${{ github.event_name == 'pull_request' }}  
+        shell: bash  
+        run: |  
+          echo "LAST_COMMIT_SHA=${{ github.event.pull_request.head.sha }}" >> ${GITHUB_ENV}  
+      - name: Setup Environment (Push)  
+        if: ${{ github.event_name == 'push' }}  
+        shell: bash  
+        run: |  
+          echo "LAST_COMMIT_SHA=${GITHUB_SHA}" >> ${GITHUB_ENV}
+
+      # setup + test go and yarn
+      - uses: actions/checkout@v3
+      - name: go-setup-and-test
+        uses: ./.github/actions/go-setup-and-test
+      - name: yarn-setup-and-test
+        uses: ./.github/actions/yarn-setup-and-test
+
+      # deploy
+      - name: deploy-wfp-workers
+        uses: ./.github/actions/deploy-wfp-workers
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+
+      # wasm first because it takes the longest
+      - name: deploy-wfp-wasm
+        uses: ./.github/actions/deploy-wfp-wasm
+        with:
+          rcloneConfig: ${{ secrets.WFP_RCLONE }}
+          shareKey: "" # no secret key for us 
+
+      - name: deploy-wfp-ui
+        uses: ./.github/actions/deploy-wfp-ui
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          # name needs to be "main" if on mainline
+          branch: main  # always main...

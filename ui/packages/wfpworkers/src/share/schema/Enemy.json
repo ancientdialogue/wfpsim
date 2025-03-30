@@ -1,0 +1,54 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$ref": "#/definitions/Enemy",
+    "definitions": {
+        "Enemy": {
+            "properties": {
+                "level": {
+                    "type": "integer"
+                },
+                "HP": {
+                    "type": "number"
+                },
+                "resist": {
+                    "additionalProperties": {
+                        "type": "number"
+                    },
+                    "type": "object"
+                },
+                "pos": {
+                    "$ref": "#/definitions/model.Coord",
+                    "additionalProperties": true
+                },
+                "particle_drop_threshold": {
+                    "type": "number"
+                },
+                "particle_drop_count": {
+                    "type": "number"
+                },
+                "particle_element": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Enemy"
+        },
+        "model.Coord": {
+            "properties": {
+                "x": {
+                    "type": "number"
+                },
+                "y": {
+                    "type": "number"
+                },
+                "r": {
+                    "type": "number"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Coord"
+        }
+    }
+}

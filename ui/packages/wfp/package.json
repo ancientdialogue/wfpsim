@@ -1,0 +1,27 @@
+{
+  "name": "@gcsim/wfpsim",
+  "packageManager": "yarn@3.2.4",
+  "private": true,
+  "scripts": {
+    "dev": "vite --host",
+    "build": "vite build",
+    "preview": "yarn run build && vite preview --host",
+    "build:wasm:web": "cd ../../../cmd/wasm && GCSIM_SHARE_KEY=\"\" && ./build.sh -trimpath -o ../../ui/packages/wfp/public/main.wasm && echo \"compiled wasm successfully!\"",
+    "watch:web": "watch \"yarn run build:wasm:web\" ../../../pkg ../../../internal ../../../cmd/wasm"
+  },
+  "dependencies": {
+    "@blueprintjs/core": "^4.11.4",
+    "@gcsim/executors": "workspace:^",
+    "@gcsim/ui": "workspace:^",
+    "@gcsim/utils": "workspace:^",
+    "axios": "^1.6.7"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^3.1.0",
+    "git-rev-sync": "^3.0.2",
+    "rollup-plugin-visualizer": "^5.8.3",
+    "vite": "^4.1.1",
+    "vite-tsconfig-paths": "^4.0.5",
+    "wrangler": "^3.48.0"
+  }
+}

@@ -1,0 +1,89 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$ref": "#/definitions/Character",
+    "definitions": {
+        "Character": {
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "element": {
+                    "type": "string"
+                },
+                "level": {
+                    "type": "integer"
+                },
+                "max_level": {
+                    "type": "integer"
+                },
+                "cons": {
+                    "type": "integer"
+                },
+                "weapon": {
+                    "$ref": "#/definitions/model.Weapon",
+                    "additionalProperties": true
+                },
+                "talents": {
+                    "$ref": "#/definitions/model.CharacterTalents",
+                    "additionalProperties": true
+                },
+                "sets": {
+                    "additionalProperties": {
+                        "type": "integer"
+                    },
+                    "type": "object"
+                },
+                "stats": {
+                    "items": {
+                        "type": "number"
+                    },
+                    "type": "array"
+                },
+                "snapshot_stats": {
+                    "items": {
+                        "type": "number"
+                    },
+                    "type": "array"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Character"
+        },
+        "model.CharacterTalents": {
+            "properties": {
+                "attack": {
+                    "type": "integer"
+                },
+                "skill": {
+                    "type": "integer"
+                },
+                "burst": {
+                    "type": "integer"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Character Talents"
+        },
+        "model.Weapon": {
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "refine": {
+                    "type": "integer"
+                },
+                "level": {
+                    "type": "integer"
+                },
+                "max_level": {
+                    "type": "integer"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Weapon"
+        }
+    }
+}

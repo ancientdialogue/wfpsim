@@ -1,0 +1,43 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$ref": "#/definitions/ShieldInfo",
+    "definitions": {
+        "ShieldInfo": {
+            "properties": {
+                "hp": {
+                    "additionalProperties": {
+                        "$ref": "#/definitions/model.DescriptiveStats",
+                        "additionalProperties": true
+                    },
+                    "type": "object"
+                },
+                "uptime": {
+                    "$ref": "#/definitions/model.DescriptiveStats",
+                    "additionalProperties": true
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Shield Info"
+        },
+        "model.DescriptiveStats": {
+            "properties": {
+                "min": {
+                    "type": "number"
+                },
+                "max": {
+                    "type": "number"
+                },
+                "mean": {
+                    "type": "number"
+                },
+                "SD": {
+                    "type": "number"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Descriptive Stats"
+        }
+    }
+}
