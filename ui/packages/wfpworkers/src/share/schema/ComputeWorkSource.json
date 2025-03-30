@@ -1,0 +1,20 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "enum": [
+        "InvalidWork",
+        0,
+        "DBWork",
+        1,
+        "SubmissionWork",
+        2
+    ],
+    "oneOf": [
+        {
+            "type": "string"
+        },
+        {
+            "type": "integer"
+        }
+    ],
+    "title": "Compute Work Source"
+}

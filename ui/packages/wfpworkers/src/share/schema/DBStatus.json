@@ -1,0 +1,19 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$ref": "#/definitions/DBStatus",
+    "definitions": {
+        "DBStatus": {
+            "properties": {
+                "db_total_count": {
+                    "type": "integer"
+                },
+                "compute_count": {
+                    "type": "integer"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "DB Status"
+        }
+    }
+}

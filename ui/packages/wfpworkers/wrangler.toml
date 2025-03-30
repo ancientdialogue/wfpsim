@@ -1,0 +1,11 @@
+name = "wfpsim"
+main = "src/index.ts"
+compatibility_date = "2022-11-06"
+
+[[r2_buckets]]
+  binding = 'WASM_R2'
+  bucket_name = 'wfpsim'
+
+[[kv_namespaces]]
+  binding = 'WFPSIM_KV'
+  id= 'b9692c3d92c942b5a2cd05c312261b0f'

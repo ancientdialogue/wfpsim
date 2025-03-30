@@ -1,0 +1,305 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$ref": "#/definitions/WeaponDataMap",
+    "definitions": {
+        "WeaponDataMap": {
+            "properties": {
+                "data": {
+                    "additionalProperties": {
+                        "$ref": "#/definitions/model.WeaponData",
+                        "additionalProperties": true
+                    },
+                    "type": "object"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Weapon Data Map"
+        },
+        "model.PromotionAddProp": {
+            "properties": {
+                "prop_type": {
+                    "enum": [
+                        "INVALID_STAT_TYPE",
+                        0,
+                        "FIGHT_PROP_DEFENSE_PERCENT",
+                        1,
+                        "FIGHT_PROP_DEFENSE",
+                        2,
+                        "FIGHT_PROP_HP",
+                        3,
+                        "FIGHT_PROP_HP_PERCENT",
+                        4,
+                        "FIGHT_PROP_ATTACK",
+                        5,
+                        "FIGHT_PROP_ATTACK_PERCENT",
+                        6,
+                        "FIGHT_PROP_CHARGE_EFFICIENCY",
+                        7,
+                        "FIGHT_PROP_ELEMENT_MASTERY",
+                        8,
+                        "FIGHT_PROP_CRITICAL",
+                        9,
+                        "FIGHT_PROP_CRITICAL_HURT",
+                        10,
+                        "FIGHT_PROP_HEAL",
+                        11,
+                        "FIGHT_PROP_FIRE_ADD_HURT",
+                        12,
+                        "FIGHT_PROP_WATER_ADD_HURT",
+                        13,
+                        "FIGHT_PROP_GRASS_ADD_HURT",
+                        14,
+                        "FIGHT_PROP_ELEC_ADD_HURT",
+                        15,
+                        "FIGHT_PROP_WIND_ADD_HURT",
+                        16,
+                        "FIGHT_PROP_ICE_ADD_HURT",
+                        17,
+                        "FIGHT_PROP_ROCK_ADD_HURT",
+                        18,
+                        "FIGHT_PROP_PHYSICAL_ADD_HURT",
+                        19,
+                        "FIGHT_PROP_SHIELD_COST_MINUS_RATIO_ADD_HURT",
+                        20,
+                        "FIGHT_PROP_HEALED_ADD",
+                        21,
+                        "FIGHT_PROP_BASE_HP",
+                        22,
+                        "FIGHT_PROP_BASE_ATTACK",
+                        23,
+                        "FIGHT_PROP_BASE_DEFENSE",
+                        24,
+                        "FIGHT_PROP_MAX_HP",
+                        25
+                    ],
+                    "oneOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "integer"
+                        }
+                    ],
+                    "title": "Stat Type"
+                },
+                "value": {
+                    "type": "number"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Promotion Add Prop"
+        },
+        "model.PromotionData": {
+            "properties": {
+                "max_level": {
+                    "type": "integer"
+                },
+                "add_props": {
+                    "items": {
+                        "$ref": "#/definitions/model.PromotionAddProp"
+                    },
+                    "type": "array"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Promotion Data"
+        },
+        "model.WeaponData": {
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "key": {
+                    "type": "string"
+                },
+                "rarity": {
+                    "type": "integer",
+                    "description": "for whatever reason weapon rarity is a number"
+                },
+                "weapon_class": {
+                    "enum": [
+                        "INVALID_WEAPON_CLASS",
+                        0,
+                        "WEAPON_SWORD_ONE_HAND",
+                        1,
+                        "WEAPON_CLAYMORE",
+                        2,
+                        "WEAPON_POLE",
+                        3,
+                        "WEAPON_BOW",
+                        4,
+                        "WEAPON_CATALYST",
+                        5
+                    ],
+                    "oneOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "integer"
+                        }
+                    ],
+                    "title": "Weapon Class"
+                },
+                "image_name": {
+                    "type": "string"
+                },
+                "base_stats": {
+                    "$ref": "#/definitions/model.WeaponStatsData",
+                    "additionalProperties": true
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Weapon Data"
+        },
+        "model.WeaponProp": {
+            "properties": {
+                "prop_type": {
+                    "enum": [
+                        "INVALID_STAT_TYPE",
+                        0,
+                        "FIGHT_PROP_DEFENSE_PERCENT",
+                        1,
+                        "FIGHT_PROP_DEFENSE",
+                        2,
+                        "FIGHT_PROP_HP",
+                        3,
+                        "FIGHT_PROP_HP_PERCENT",
+                        4,
+                        "FIGHT_PROP_ATTACK",
+                        5,
+                        "FIGHT_PROP_ATTACK_PERCENT",
+                        6,
+                        "FIGHT_PROP_CHARGE_EFFICIENCY",
+                        7,
+                        "FIGHT_PROP_ELEMENT_MASTERY",
+                        8,
+                        "FIGHT_PROP_CRITICAL",
+                        9,
+                        "FIGHT_PROP_CRITICAL_HURT",
+                        10,
+                        "FIGHT_PROP_HEAL",
+                        11,
+                        "FIGHT_PROP_FIRE_ADD_HURT",
+                        12,
+                        "FIGHT_PROP_WATER_ADD_HURT",
+                        13,
+                        "FIGHT_PROP_GRASS_ADD_HURT",
+                        14,
+                        "FIGHT_PROP_ELEC_ADD_HURT",
+                        15,
+                        "FIGHT_PROP_WIND_ADD_HURT",
+                        16,
+                        "FIGHT_PROP_ICE_ADD_HURT",
+                        17,
+                        "FIGHT_PROP_ROCK_ADD_HURT",
+                        18,
+                        "FIGHT_PROP_PHYSICAL_ADD_HURT",
+                        19,
+                        "FIGHT_PROP_SHIELD_COST_MINUS_RATIO_ADD_HURT",
+                        20,
+                        "FIGHT_PROP_HEALED_ADD",
+                        21,
+                        "FIGHT_PROP_BASE_HP",
+                        22,
+                        "FIGHT_PROP_BASE_ATTACK",
+                        23,
+                        "FIGHT_PROP_BASE_DEFENSE",
+                        24,
+                        "FIGHT_PROP_MAX_HP",
+                        25
+                    ],
+                    "oneOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "integer"
+                        }
+                    ],
+                    "title": "Stat Type"
+                },
+                "initial_value": {
+                    "type": "number"
+                },
+                "curve": {
+                    "enum": [
+                        "INVALID_WEAPON_CURVE",
+                        0,
+                        "GROW_CURVE_ATTACK_101",
+                        1,
+                        "GROW_CURVE_ATTACK_102",
+                        2,
+                        "GROW_CURVE_ATTACK_103",
+                        3,
+                        "GROW_CURVE_ATTACK_104",
+                        4,
+                        "GROW_CURVE_ATTACK_105",
+                        5,
+                        "GROW_CURVE_CRITICAL_101",
+                        6,
+                        "GROW_CURVE_ATTACK_201",
+                        7,
+                        "GROW_CURVE_ATTACK_202",
+                        8,
+                        "GROW_CURVE_ATTACK_203",
+                        9,
+                        "GROW_CURVE_ATTACK_204",
+                        10,
+                        "GROW_CURVE_ATTACK_205",
+                        11,
+                        "GROW_CURVE_CRITICAL_201",
+                        12,
+                        "GROW_CURVE_ATTACK_301",
+                        13,
+                        "GROW_CURVE_ATTACK_302",
+                        14,
+                        "GROW_CURVE_ATTACK_303",
+                        15,
+                        "GROW_CURVE_ATTACK_304",
+                        16,
+                        "GROW_CURVE_ATTACK_305",
+                        17,
+                        "GROW_CURVE_CRITICAL_301",
+                        18
+                    ],
+                    "oneOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "integer"
+                        }
+                    ],
+                    "title": "Weapon Curve Type"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Weapon Prop"
+        },
+        "model.WeaponStatsData": {
+            "properties": {
+                "base_props": {
+                    "items": {
+                        "$ref": "#/definitions/model.WeaponProp"
+                    },
+                    "type": "array"
+                },
+                "promo_data": {
+                    "items": {
+                        "$ref": "#/definitions/model.PromotionData"
+                    },
+                    "type": "array"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Weapon Stats Data"
+        }
+    }
+}

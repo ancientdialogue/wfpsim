@@ -1,0 +1,37 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$ref": "#/definitions/Delays",
+    "definitions": {
+        "Delays": {
+            "properties": {
+                "skill": {
+                    "type": "integer"
+                },
+                "burst": {
+                    "type": "integer"
+                },
+                "attack": {
+                    "type": "integer"
+                },
+                "charge": {
+                    "type": "integer"
+                },
+                "aim": {
+                    "type": "integer"
+                },
+                "dash": {
+                    "type": "integer"
+                },
+                "jump": {
+                    "type": "integer"
+                },
+                "swap": {
+                    "type": "integer"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Delays"
+        }
+    }
+}

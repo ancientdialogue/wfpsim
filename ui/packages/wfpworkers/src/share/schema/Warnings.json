@@ -1,0 +1,32 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$ref": "#/definitions/Warnings",
+    "definitions": {
+        "Warnings": {
+            "properties": {
+                "target_overlap": {
+                    "type": "boolean",
+                    "description": "optional unnecessary, missing == false in ui"
+                },
+                "insufficient_energy": {
+                    "type": "boolean"
+                },
+                "insufficient_stamina": {
+                    "type": "boolean"
+                },
+                "swap_cd": {
+                    "type": "boolean"
+                },
+                "skill_cd": {
+                    "type": "boolean"
+                },
+                "dash_cd": {
+                    "type": "boolean"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Warnings"
+        }
+    }
+}

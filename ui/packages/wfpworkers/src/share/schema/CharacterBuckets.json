@@ -1,0 +1,38 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$ref": "#/definitions/CharacterBuckets",
+    "definitions": {
+        "CharacterBuckets": {
+            "properties": {
+                "buckets": {
+                    "items": {
+                        "$ref": "#/definitions/model.DescriptiveStats"
+                    },
+                    "type": "array"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Character Buckets"
+        },
+        "model.DescriptiveStats": {
+            "properties": {
+                "min": {
+                    "type": "number"
+                },
+                "max": {
+                    "type": "number"
+                },
+                "mean": {
+                    "type": "number"
+                },
+                "SD": {
+                    "type": "number"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Descriptive Stats"
+        }
+    }
+}
