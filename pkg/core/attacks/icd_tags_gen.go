@@ -10,6 +10,7 @@ const (
 	ICDTagChascaShining
 	ICDTagChascaBurst
 	ICDTagChioriSkill
+	ICDTagCitlaliSpiritVessel
 	ICDTagClorindeCons
 	ICDTagColleiSprout
 	ICDTagCynoBolt
