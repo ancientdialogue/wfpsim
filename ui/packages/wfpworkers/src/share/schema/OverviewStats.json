@@ -1,0 +1,40 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$ref": "#/definitions/OverviewStats",
+    "definitions": {
+        "OverviewStats": {
+            "properties": {
+                "min": {
+                    "type": "number"
+                },
+                "max": {
+                    "type": "number"
+                },
+                "mean": {
+                    "type": "number"
+                },
+                "SD": {
+                    "type": "number"
+                },
+                "Q1": {
+                    "type": "number"
+                },
+                "Q2": {
+                    "type": "number"
+                },
+                "Q3": {
+                    "type": "number"
+                },
+                "hist": {
+                    "items": {
+                        "type": "integer"
+                    },
+                    "type": "array"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Overview Stats"
+        }
+    }
+}

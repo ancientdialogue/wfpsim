@@ -1,0 +1,22 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$ref": "#/definitions/CharacterTalents",
+    "definitions": {
+        "CharacterTalents": {
+            "properties": {
+                "attack": {
+                    "type": "integer"
+                },
+                "skill": {
+                    "type": "integer"
+                },
+                "burst": {
+                    "type": "integer"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Character Talents"
+        }
+    }
+}

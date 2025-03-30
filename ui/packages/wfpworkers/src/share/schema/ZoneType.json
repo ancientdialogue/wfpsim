@@ -1,0 +1,32 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "enum": [
+        "INVALID_ZONE_TYPE",
+        0,
+        "ASSOC_TYPE_UNKNOWN",
+        1,
+        "ASSOC_TYPE_MONDSTADT",
+        2,
+        "ASSOC_TYPE_LIYUE",
+        3,
+        "ASSOC_TYPE_INAZUMA",
+        4,
+        "ASSOC_TYPE_SUMERU",
+        5,
+        "ASSOC_TYPE_FATUI",
+        6,
+        "ASSOC_TYPE_RANGER",
+        7,
+        "ASSOC_TYPE_MAINACTOR",
+        8
+    ],
+    "oneOf": [
+        {
+            "type": "string"
+        },
+        {
+            "type": "integer"
+        }
+    ],
+    "title": "Zone Type"
+}

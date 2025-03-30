@@ -1,0 +1,392 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$ref": "#/definitions/SignedSimulationStatistics",
+    "definitions": {
+        "SignedSimulationStatistics": {
+            "properties": {
+                "stats": {
+                    "$ref": "#/definitions/model.SimulationStatistics",
+                    "additionalProperties": true
+                },
+                "hash": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Signed Simulation Statistics"
+        },
+        "model.BucketStats": {
+            "properties": {
+                "bucket_size": {
+                    "type": "integer"
+                },
+                "buckets": {
+                    "items": {
+                        "$ref": "#/definitions/model.DescriptiveStats"
+                    },
+                    "type": "array"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Bucket Stats"
+        },
+        "model.CharacterBucketStats": {
+            "properties": {
+                "bucket_size": {
+                    "type": "integer"
+                },
+                "characters": {
+                    "items": {
+                        "$ref": "#/definitions/model.CharacterBuckets"
+                    },
+                    "type": "array"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Character Bucket Stats"
+        },
+        "model.CharacterBuckets": {
+            "properties": {
+                "buckets": {
+                    "items": {
+                        "$ref": "#/definitions/model.DescriptiveStats"
+                    },
+                    "type": "array"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Character Buckets"
+        },
+        "model.DescriptiveStats": {
+            "properties": {
+                "min": {
+                    "type": "number"
+                },
+                "max": {
+                    "type": "number"
+                },
+                "mean": {
+                    "type": "number"
+                },
+                "SD": {
+                    "type": "number"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Descriptive Stats"
+        },
+        "model.ElementStats": {
+            "properties": {
+                "elements": {
+                    "additionalProperties": {
+                        "$ref": "#/definitions/model.DescriptiveStats",
+                        "additionalProperties": true
+                    },
+                    "type": "object"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Element Stats"
+        },
+        "model.FailedActions": {
+            "properties": {
+                "insufficient_energy": {
+                    "$ref": "#/definitions/model.DescriptiveStats",
+                    "additionalProperties": true
+                },
+                "insufficient_stamina": {
+                    "$ref": "#/definitions/model.DescriptiveStats",
+                    "additionalProperties": true
+                },
+                "swap_cd": {
+                    "$ref": "#/definitions/model.DescriptiveStats",
+                    "additionalProperties": true
+                },
+                "skill_cd": {
+                    "$ref": "#/definitions/model.DescriptiveStats",
+                    "additionalProperties": true
+                },
+                "dash_cd": {
+                    "$ref": "#/definitions/model.DescriptiveStats",
+                    "additionalProperties": true
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Failed Actions"
+        },
+        "model.OverviewStats": {
+            "properties": {
+                "min": {
+                    "type": "number"
+                },
+                "max": {
+                    "type": "number"
+                },
+                "mean": {
+                    "type": "number"
+                },
+                "SD": {
+                    "type": "number"
+                },
+                "Q1": {
+                    "type": "number"
+                },
+                "Q2": {
+                    "type": "number"
+                },
+                "Q3": {
+                    "type": "number"
+                },
+                "hist": {
+                    "items": {
+                        "type": "integer"
+                    },
+                    "type": "array"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Overview Stats"
+        },
+        "model.ShieldInfo": {
+            "properties": {
+                "hp": {
+                    "additionalProperties": {
+                        "$ref": "#/definitions/model.DescriptiveStats",
+                        "additionalProperties": true
+                    },
+                    "type": "object"
+                },
+                "uptime": {
+                    "$ref": "#/definitions/model.DescriptiveStats",
+                    "additionalProperties": true
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Shield Info"
+        },
+        "model.SimulationStatistics": {
+            "properties": {
+                "min_seed": {
+                    "type": "string",
+                    "description": "metadata"
+                },
+                "max_seed": {
+                    "type": "string"
+                },
+                "p25_seed": {
+                    "type": "string"
+                },
+                "p50_seed": {
+                    "type": "string"
+                },
+                "p75_seed": {
+                    "type": "string"
+                },
+                "iterations": {
+                    "type": "integer"
+                },
+                "duration": {
+                    "$ref": "#/definitions/model.OverviewStats",
+                    "additionalProperties": true,
+                    "description": "global overview (global/no group by)"
+                },
+                "DPS": {
+                    "$ref": "#/definitions/model.OverviewStats",
+                    "additionalProperties": true
+                },
+                "RPS": {
+                    "$ref": "#/definitions/model.OverviewStats",
+                    "additionalProperties": true
+                },
+                "EPS": {
+                    "$ref": "#/definitions/model.OverviewStats",
+                    "additionalProperties": true
+                },
+                "HPS": {
+                    "$ref": "#/definitions/model.OverviewStats",
+                    "additionalProperties": true
+                },
+                "SHP": {
+                    "$ref": "#/definitions/model.OverviewStats",
+                    "additionalProperties": true
+                },
+                "total_damage": {
+                    "$ref": "#/definitions/model.DescriptiveStats",
+                    "additionalProperties": true
+                },
+                "warnings": {
+                    "$ref": "#/definitions/model.Warnings",
+                    "additionalProperties": true
+                },
+                "failed_actions": {
+                    "items": {
+                        "$ref": "#/definitions/model.FailedActions"
+                    },
+                    "type": "array"
+                },
+                "element_dps": {
+                    "additionalProperties": {
+                        "$ref": "#/definitions/model.DescriptiveStats",
+                        "additionalProperties": true
+                    },
+                    "type": "object",
+                    "description": "damage"
+                },
+                "target_dps": {
+                    "additionalProperties": {
+                        "$ref": "#/definitions/model.DescriptiveStats",
+                        "additionalProperties": true
+                    },
+                    "type": "object"
+                },
+                "character_dps": {
+                    "items": {
+                        "$ref": "#/definitions/model.DescriptiveStats"
+                    },
+                    "type": "array"
+                },
+                "breakdown_by_element_dps": {
+                    "items": {
+                        "$ref": "#/definitions/model.ElementStats"
+                    },
+                    "type": "array"
+                },
+                "breakdown_by_target_dps": {
+                    "items": {
+                        "$ref": "#/definitions/model.TargetStats"
+                    },
+                    "type": "array"
+                },
+                "source_dps": {
+                    "items": {
+                        "$ref": "#/definitions/model.SourceStats"
+                    },
+                    "type": "array"
+                },
+                "source_damage_instances": {
+                    "items": {
+                        "$ref": "#/definitions/model.SourceStats"
+                    },
+                    "type": "array"
+                },
+                "damage_buckets": {
+                    "$ref": "#/definitions/model.BucketStats",
+                    "additionalProperties": true
+                },
+                "cumulative_damage_contribution": {
+                    "$ref": "#/definitions/model.CharacterBucketStats",
+                    "additionalProperties": true
+                },
+                "shields": {
+                    "additionalProperties": {
+                        "$ref": "#/definitions/model.ShieldInfo",
+                        "additionalProperties": true
+                    },
+                    "type": "object",
+                    "description": "shield"
+                },
+                "field_time": {
+                    "items": {
+                        "$ref": "#/definitions/model.DescriptiveStats"
+                    },
+                    "type": "array",
+                    "description": "field time"
+                },
+                "total_source_energy": {
+                    "items": {
+                        "$ref": "#/definitions/model.SourceStats"
+                    },
+                    "type": "array",
+                    "description": "total source energy"
+                },
+                "source_reactions": {
+                    "items": {
+                        "$ref": "#/definitions/model.SourceStats"
+                    },
+                    "type": "array",
+                    "description": "source reactions"
+                },
+                "character_actions": {
+                    "items": {
+                        "$ref": "#/definitions/model.SourceStats"
+                    },
+                    "type": "array",
+                    "description": "character actions"
+                },
+                "target_aura_uptime": {
+                    "items": {
+                        "$ref": "#/definitions/model.SourceStats"
+                    },
+                    "type": "array",
+                    "description": "target aura uptime"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Simulation Statistics"
+        },
+        "model.SourceStats": {
+            "properties": {
+                "sources": {
+                    "additionalProperties": {
+                        "$ref": "#/definitions/model.DescriptiveStats",
+                        "additionalProperties": true
+                    },
+                    "type": "object"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Source Stats"
+        },
+        "model.TargetStats": {
+            "properties": {
+                "targets": {
+                    "additionalProperties": {
+                        "$ref": "#/definitions/model.DescriptiveStats",
+                        "additionalProperties": true
+                    },
+                    "type": "object"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Target Stats"
+        },
+        "model.Warnings": {
+            "properties": {
+                "target_overlap": {
+                    "type": "boolean",
+                    "description": "optional unnecessary, missing == false in ui"
+                },
+                "insufficient_energy": {
+                    "type": "boolean"
+                },
+                "insufficient_stamina": {
+                    "type": "boolean"
+                },
+                "swap_cd": {
+                    "type": "boolean"
+                },
+                "skill_cd": {
+                    "type": "boolean"
+                },
+                "dash_cd": {
+                    "type": "boolean"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Warnings"
+        }
+    }
+}

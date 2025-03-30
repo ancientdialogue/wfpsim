@@ -1,0 +1,41 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$ref": "#/definitions/BucketStats",
+    "definitions": {
+        "BucketStats": {
+            "properties": {
+                "bucket_size": {
+                    "type": "integer"
+                },
+                "buckets": {
+                    "items": {
+                        "$ref": "#/definitions/model.DescriptiveStats"
+                    },
+                    "type": "array"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Bucket Stats"
+        },
+        "model.DescriptiveStats": {
+            "properties": {
+                "min": {
+                    "type": "number"
+                },
+                "max": {
+                    "type": "number"
+                },
+                "mean": {
+                    "type": "number"
+                },
+                "SD": {
+                    "type": "number"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Descriptive Stats"
+        }
+    }
+}

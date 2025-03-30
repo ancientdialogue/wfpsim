@@ -1,0 +1,31 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$ref": "#/definitions/EnergySettings",
+    "definitions": {
+        "EnergySettings": {
+            "properties": {
+                "active": {
+                    "type": "boolean"
+                },
+                "once": {
+                    "type": "boolean"
+                },
+                "start": {
+                    "type": "integer"
+                },
+                "end": {
+                    "type": "integer"
+                },
+                "amount": {
+                    "type": "integer"
+                },
+                "last_energy_drop": {
+                    "type": "integer"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Energy Settings"
+        }
+    }
+}

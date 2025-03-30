@@ -1,0 +1,20 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "enum": [
+        "INVALID_SIM_MODE",
+        0,
+        "DURATION_MODE",
+        1,
+        "TTK_MODE",
+        2
+    ],
+    "oneOf": [
+        {
+            "type": "string"
+        },
+        {
+            "type": "integer"
+        }
+    ],
+    "title": "Sim Mode"
+}
