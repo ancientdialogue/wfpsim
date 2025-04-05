@@ -40,7 +40,7 @@ func (c *char) a1Tick(src, count int) func() {
 		heal := scale * c.TotalAtk()
 		c.Core.Player.Heal(info.HealInfo{
 			Caller:  c.Index,
-			Target:  -1,
+			Target:  c.Core.Player.Active(),
 			Message: "Rehab Diet",
 			Src:     heal,
 			Bonus:   c.Stat(attributes.Heal),
