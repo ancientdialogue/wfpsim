@@ -12,7 +12,7 @@ import (
 var burstFrames []int
 
 const (
-	initialHeal = 94 // depends on ping
+	initialHeal = 92 // depends on ping
 	hitmark     = 94
 )
 
