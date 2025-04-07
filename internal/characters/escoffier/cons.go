@@ -22,7 +22,7 @@ const c4Key = "escoffier-c4"
 const c4Regen = 2.0
 const c6Key = "escoffier-c6"
 const c6Limit = 6
-const c6Scaling = 3.5
+const c6Scaling = 5
 const c6ICD = 0.5 * 60
 const c6ICDKey = "escoffier-c6-icd"
 
