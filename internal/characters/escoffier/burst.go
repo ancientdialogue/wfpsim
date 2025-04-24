@@ -32,7 +32,9 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 		Durability: 50,
 		Mult:       burst[c.TalentLvlBurst()],
 	}
-	c.Core.QueueAttack(ai, combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 6), hitmark, hitmark, c.makeA4CB())
+	c.QueueCharTask(func() {
+		c.Core.QueueAttack(ai, combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 6), 0, 0, c.makeA4CB())
+	}, hitmark)
 
 	// initial heal
 	c.QueueCharTask(func() {
