@@ -95,7 +95,7 @@ func (c *char) BurstInit() {
 				return nil, false
 			}
 
-			mDmg[attributes.DmgP] = burstDMG[0][c.TalentLvlBurst()]
+			mDmg[attributes.DmgP] = burstDMG[c.burstVoids][c.TalentLvlBurst()]
 			return mDmg, true
 		},
 	})
