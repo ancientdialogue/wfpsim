@@ -29,10 +29,10 @@ func (c *char) a1Init() {
 
 		return false
 	}
-	c.Core.Events.Subscribe(event.OnFrozen, a1Hook, a1IcdKey+"frozen")
-	c.Core.Events.Subscribe(event.OnSuperconduct, a1Hook, a1IcdKey+"superconduct")
-	c.Core.Events.Subscribe(event.OnSwirlCryo, a1Hook, a1IcdKey+"cryo-swirl")
-	c.Core.Events.Subscribe(event.OnCrystallizeCryo, a1Hook, a1IcdKey+"cryo-crystallize")
+	c.Core.Events.Subscribe(event.OnFrozen, a1Hook, a1Key+"frozen")
+	c.Core.Events.Subscribe(event.OnSuperconduct, a1Hook, a1Key+"superconduct")
+	c.Core.Events.Subscribe(event.OnSwirlCryo, a1Hook, a1Key+"cryo-swirl")
+	c.Core.Events.Subscribe(event.OnCrystallizeCryo, a1Hook, a1Key+"cryo-crystallize")
 }
 
 func (c *char) absorbVoidRiftCB(a combat.AttackCB) {

@@ -31,11 +31,10 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 	if h > 0 {
 		return c.skillHold(p)
 	}
-	return c.skillTap(p)
+	return c.skillTap()
 }
 
-func (c *char) skillTap(p map[string]int) (action.Info, error) {
-
+func (c *char) skillTap() (action.Info, error) {
 	if c.StatusIsActive(skillKey) {
 		c.exitSkillState(c.skillSrc)
 	} else {
