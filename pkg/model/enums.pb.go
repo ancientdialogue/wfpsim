@@ -410,6 +410,7 @@ const (
 	ZoneType_ASSOC_TYPE_MAINACTOR ZoneType = 8 // traveler is cool
 	ZoneType_ASSOC_TYPE_FONTAINE  ZoneType = 9
 	ZoneType_ASSOC_TYPE_NATLAN    ZoneType = 10
+	ZoneType_ASSOC_TYPE_OMNI_SCOURGE    ZoneType = 11
 )
 
 // Enum value maps for ZoneType.
@@ -426,6 +427,7 @@ var (
 		8:  "ASSOC_TYPE_MAINACTOR",
 		9:  "ASSOC_TYPE_FONTAINE",
 		10: "ASSOC_TYPE_NATLAN",
+		11: "ASSOC_TYPE_OMNI_SCOURGE",
 	}
 	ZoneType_value = map[string]int32{
 		"INVALID_ZONE_TYPE":    0,
@@ -439,6 +441,7 @@ var (
 		"ASSOC_TYPE_MAINACTOR": 8,
 		"ASSOC_TYPE_FONTAINE":  9,
 		"ASSOC_TYPE_NATLAN":    10,
+		"ASSOC_TYPE_OMNI_SCOURGE": 11,
 	}
 )
 
