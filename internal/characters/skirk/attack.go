@@ -54,14 +54,15 @@ func init() {
 	attackSkillFrames[0][action.ActionAttack] = 14                                     // N1 -> N2
 
 	attackSkillFrames[1] = frames.InitNormalCancelSlice(attackSkillHitmarks[1][0], 22) // N2 -> CA
-	attackSkillFrames[1][action.ActionAttack] = 21                                     // N2 -> N3
+	attackSkillFrames[1][action.ActionAttack] = 22                                     // N2 -> N3
 
-	attackSkillFrames[2] = frames.InitNormalCancelSlice(attackSkillHitmarks[2][1], 38) // N3 -> N4/CA
+	attackSkillFrames[2] = frames.InitNormalCancelSlice(attackSkillHitmarks[2][1], 37) // N3 -> N4/CA
 
 	attackSkillFrames[3] = frames.InitNormalCancelSlice(attackSkillHitmarks[3][1], 42) // N4 -> N5
 	attackSkillFrames[3][action.ActionCharge] = 26                                     // N4 -> CA
 
-	attackSkillFrames[4] = frames.InitNormalCancelSlice(attackSkillHitmarks[4][0], 30) // N5 -> N1
+	attackSkillFrames[4] = frames.InitNormalCancelSlice(attackSkillHitmarks[4][0], 31) // N5 -> N1
+	attackSkillFrames[3][action.ActionCharge] = 31                                     // N5 -> CA
 }
 
 // Standard attack - nothing special

@@ -63,15 +63,14 @@ func (c *char) ChargeAttack(p map[string]int) (action.Info, error) {
 
 func (c *char) ChargeAttackSkill(p map[string]int) (action.Info, error) {
 	ai := combat.AttackInfo{
-		ActorIndex:         c.Index,
-		AttackTag:          attacks.AttackTagExtra,
-		ICDTag:             attacks.ICDTagNormalAttack,
-		ICDGroup:           attacks.ICDGroupDefault,
-		StrikeType:         attacks.StrikeTypeSlash,
-		Element:            attributes.Cryo,
-		Durability:         25,
-		IgnoreInfusion:     true,
-		CanBeDefenseHalted: false,
+		ActorIndex:     c.Index,
+		AttackTag:      attacks.AttackTagExtra,
+		ICDTag:         attacks.ICDTagNormalAttack,
+		ICDGroup:       attacks.ICDGroupDefault,
+		StrikeType:     attacks.StrikeTypeSlash,
+		Element:        attributes.Cryo,
+		Durability:     25,
+		IgnoreInfusion: true,
 	}
 
 	for i, mult := range skillCharge {
