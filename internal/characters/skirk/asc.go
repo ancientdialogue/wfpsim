@@ -87,7 +87,7 @@ func (c *char) a4Init() {
 
 func (c *char) a4MultAttack() float64 {
 	count := 0
-	for f := range c.a4Stacks {
+	for _, f := range c.a4Stacks {
 		if f != 0 && f+a4Dur > c.TimePassed {
 			count++
 		}
@@ -96,7 +96,7 @@ func (c *char) a4MultAttack() float64 {
 }
 func (c *char) a4MultBurst() float64 {
 	count := 0
-	for f := range c.a4Stacks {
+	for _, f := range c.a4Stacks {
 		if f != 0 && f+a4Dur > c.TimePassed {
 			count++
 		}
