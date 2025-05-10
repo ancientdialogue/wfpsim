@@ -46,6 +46,7 @@ var setNames = []string{
 	"vourukashasglow",
 	"echoesofanoffering",
 	"emblemofseveredfate",
+	"finaleofthedeepgalleries",
 	"flowerofparadiselost",
 	"fragmentofharmonicwhimsy",
 	"gambler",
@@ -104,6 +105,7 @@ const (
 	VourukashasGlow
 	EchoesOfAnOffering
 	EmblemOfSeveredFate
+	FinaleOfTheDeepGalleries
 	FlowerOfParadiseLost
 	FragmentOfHarmonicWhimsy
 	Gambler
