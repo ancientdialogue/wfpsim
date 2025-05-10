@@ -51,6 +51,11 @@ func (c *char) absorbVoidRift() {
 		return
 	}
 	c.AddSerpentsSubtlety("a1-void-rifts", float64(count)*8.0)
+
+	for i := 0; i < count; i++ {
+		c.c1()
+		c.c6OnVoidAbsorb()
+	}
 	c.voidRiftCount = 0
 }
 
@@ -85,21 +90,19 @@ func (c *char) a4Init() {
 	}, a4Key+"-hook")
 }
 
-func (c *char) a4MultAttack() float64 {
+func (c *char) getA4Stacks() int {
 	count := 0
 	for _, f := range c.a4Stacks {
 		if f != 0 && f+a4Dur > c.TimePassed {
 			count++
 		}
 	}
-	return a4MultAttack[count]
+	return count
+}
+
+func (c *char) a4MultAttack() float64 {
+	return a4MultAttack[c.getA4Stacks()]
 }
 func (c *char) a4MultBurst() float64 {
-	count := 0
-	for _, f := range c.a4Stacks {
-		if f != 0 && f+a4Dur > c.TimePassed {
-			count++
-		}
-	}
-	return a4MultBurst[count]
+	return a4MultBurst[c.getA4Stacks()]
 }

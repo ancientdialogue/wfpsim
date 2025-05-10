@@ -147,8 +147,9 @@ func (c *char) AttackSkill(p map[string]int) (action.Info, error) {
 				attackSkillHitboxes[c.NormalCounter][1],
 			)
 		}
+		c6cb := c.c6OnAttackCB()
 		c.QueueCharTask(func() {
-			c.Core.QueueAttack(ai, ap, 0, 0)
+			c.Core.QueueAttack(ai, ap, 0, 0, c6cb)
 		}, attackSkillHitmarks[c.NormalCounter][i])
 	}
 

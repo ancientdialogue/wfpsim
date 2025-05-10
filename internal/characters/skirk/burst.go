@@ -33,9 +33,7 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 
 func (c *char) BurstRuin(p map[string]int) (action.Info, error) {
 	bonusSerpentsSubtlety := c.serpentsSubtlety - 50.0
-	if bonusSerpentsSubtlety > 12 {
-		bonusSerpentsSubtlety = 12
-	}
+	bonusSerpentsSubtlety = min(bonusSerpentsSubtlety, 12+c.c2OnBurstRuin())
 
 	c.QueueCharTask(func() {
 		ai := combat.AttackInfo{
@@ -63,6 +61,8 @@ func (c *char) BurstRuin(p map[string]int) (action.Info, error) {
 		ai.Abil = "Havoc: Ruin (Final)"
 		ai.Mult = (burstFinal[c.TalentLvlBurst()] + bonusSerpentsSubtlety*burstBonus[c.TalentLvlBurst()]) * c.a4MultBurst()
 		c.Core.QueueAttack(ai, ap, 0, 5*5)
+
+		c.c6OnBurstRuin()
 	}, burstHitmark)
 
 	c.ConsumeSerpentsSubtlety(0, c.Base.Key.String()+"-burst")

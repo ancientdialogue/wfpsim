@@ -27,29 +27,39 @@ type char struct {
 	burstVoids       int
 	voidRiftCount    int
 	a4Stacks         []int
+	c6Stacks         RingQueue[int]
 }
 
-func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) error {
+func NewChar(s *core.Core, w *character.CharWrapper, p info.CharacterProfile) error {
 	c := char{}
 	c.Character = tmpl.NewWithWrapper(s, w)
 
 	c.EnergyMax = 0
 	c.NormalHitNum = normalHitNum
-	c.SkillCon = 3
-	c.BurstCon = 5
+	c.SkillCon = 5
+	c.BurstCon = 3
 
 	w.Character = &c
+
+	ss, ok := p.Params["start_serpents_subtlety"]
+	if !ok {
+		ss = maxSerpentsSubtlety
+	}
+	ss = max(min(ss, maxSerpentsSubtlety), 0)
+	c.serpentsSubtlety = float64(ss)
 
 	return nil
 }
 
 func (c *char) Init() error {
-	c.serpentsSubtlety = maxSerpentsSubtlety
 	c.onExitField()
 	c.BurstInit()
 	c.a1Init()
 	c.a4Init()
 	c.talentPassiveInit()
+	c.c2Init()
+	c.c4Init()
+	c.c6Init()
 	return nil
 }
 
@@ -80,6 +90,24 @@ func (c *char) talentPassiveInit() {
 
 	for _, char := range c.Core.Player.Chars() {
 		char.SetTag(keys.SkirkPassive, 1)
+	}
+}
+
+func (c *char) Condition(fields []string) (any, error) {
+	switch fields[0] {
+	case "serpents_subtlety":
+		return c.serpentsSubtlety, nil
+	case "c6_stacks":
+		count := 0
+		for i := 0; i < c.c6Stacks.Len(); i++ {
+			src, _ := c.c6Stacks.Index(i)
+			if src+c6Dur >= c.TimePassed {
+				count++
+			}
+		}
+		return count, nil
+	default:
+		return c.Character.Condition(fields)
 	}
 }
 
