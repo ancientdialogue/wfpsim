@@ -52,7 +52,8 @@ func (c *char) skillTap() (action.Info, error) {
 func (c *char) enterSkillState() {
 	c.skillSrc = c.Core.F
 	c.AddStatus(skillKey, 12.5*60, false)
-	c.AddSerpentsSubtlety(c.Base.Key.String()+"skill", 45.0)
+	c.AddSerpentsSubtlety(c.Base.Key.String()+"-skill", 45.0)
+	c.c2OnSkill()
 	c.serpentsReduceTask(c.skillSrc)
 	src := c.skillSrc
 	c.Core.Tasks.Add(func() { c.exitSkillState(src) }, 12.5*60)
@@ -90,7 +91,9 @@ func (c *char) skillHold(p map[string]int) (action.Info, error) {
 	if duration < 10 {
 		duration = 10
 	}
-	c.AddSerpentsSubtlety(c.Base.Key.String()+"skill-hold", 45.0)
+	c.AddSerpentsSubtlety(c.Base.Key.String()+"-skill-hold", 45.0)
+	c.c2OnSkill()
+
 	c.absorbVoidRift()
 	c.SetCDWithDelay(action.ActionSkill, 9*60, duration)
 
