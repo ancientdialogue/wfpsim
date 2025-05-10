@@ -29,7 +29,7 @@ type char struct {
 	a4Stacks         []int
 }
 
-func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) error {
+func NewChar(s *core.Core, w *character.CharWrapper, p info.CharacterProfile) error {
 	c := char{}
 	c.Character = tmpl.NewWithWrapper(s, w)
 
@@ -40,11 +40,17 @@ func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) er
 
 	w.Character = &c
 
+	ss, ok := p.Params["start_serpents_subtlety"]
+	if !ok {
+		ss = maxSerpentsSubtlety
+	}
+	ss = max(min(ss, maxSerpentsSubtlety), 0)
+	c.serpentsSubtlety = float64(ss)
+
 	return nil
 }
 
 func (c *char) Init() error {
-	c.serpentsSubtlety = maxSerpentsSubtlety
 	c.onExitField()
 	c.BurstInit()
 	c.a1Init()
@@ -80,6 +86,15 @@ func (c *char) talentPassiveInit() {
 
 	for _, char := range c.Core.Player.Chars() {
 		char.SetTag(keys.SkirkPassive, 1)
+	}
+}
+
+func (c *char) Condition(fields []string) (any, error) {
+	switch fields[0] {
+	case "serpents_subtlety":
+		return c.serpentsSubtlety, nil
+	default:
+		return c.Character.Condition(fields)
 	}
 }
 
