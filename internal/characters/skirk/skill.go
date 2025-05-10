@@ -51,11 +51,11 @@ func (c *char) skillTap() (action.Info, error) {
 
 func (c *char) enterSkillState() {
 	c.skillSrc = c.Core.F
-	c.AddStatus(skillKey, 12.5*60, true)
+	c.AddStatus(skillKey, 12.5*60, false)
 	c.AddSerpentsSubtlety(c.Base.Key.String()+"skill", 45.0)
 	c.serpentsReduceTask(c.skillSrc)
 	src := c.skillSrc
-	c.QueueCharTask(func() { c.exitSkillState(src) }, 12.5*60)
+	c.Core.Tasks.Add(func() { c.exitSkillState(src) }, 12.5*60)
 }
 
 func (c *char) exitSkillState(src int) {
@@ -72,11 +72,11 @@ func (c *char) exitSkillState(src int) {
 
 func (c *char) serpentsReduceTask(src int) {
 	const tickInterval = .2
-	c.QueueCharTask(func() {
+	c.Core.Tasks.Add(func() {
 		if c.skillSrc != src {
 			return
 		}
-		// reduce 1.4 point every 12f, which is 5 per second
+		// reduce 1.4 point every 12f, which is 7 per second
 		c.ReduceSerpentsSubtlety(c.Base.Key.String()+"skill", 1.4)
 		if c.serpentsSubtlety == 0 && c.StatusIsActive(skillKey) {
 			c.exitSkillState(src)
@@ -111,7 +111,7 @@ func (c *char) particleCB(a combat.AttackCB) {
 	if c.StatusIsActive(particleICDKey) {
 		return
 	}
-	c.AddStatus(particleICDKey, 12.5*60, true)
+	c.AddStatus(particleICDKey, 12.5*60, false)
 
 	count := 4.0
 	c.Core.QueueParticle(c.Base.Key.String(), count, attributes.Cryo, c.ParticleDelay)
