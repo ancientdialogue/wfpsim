@@ -16,6 +16,7 @@ var burstSkillFrames []int
 const (
 	burstHitmark = 115
 	burstKey     = "skirk-burst"
+	burstICDKey  = "skirk-burst-icd"
 )
 
 func init() {
@@ -95,6 +96,11 @@ func (c *char) BurstInit() {
 				return nil, false
 			}
 
+			if c.StatusIsActive(burstICDKey) {
+				return nil, false
+			}
+			c.AddStatus(burstICDKey, 0.1*60, true)
+			c.burstCount--
 			mDmg[attributes.DmgP] = burstDMG[c.burstVoids][c.TalentLvlBurst()]
 			return mDmg, true
 		},
