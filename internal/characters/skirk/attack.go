@@ -57,25 +57,25 @@ func init() {
 
 	attackSkillFrames = make([][]int, normalHitNum)
 
-	attackSkillFrames[0] = frames.InitNormalCancelSlice(attackSkillHitmarks[0][0], 26) // N1 -> W
-	attackSkillFrames[0][action.ActionCharge] = 13                                     // N1 -> CA
-	attackSkillFrames[0][action.ActionAttack] = 14                                     // N1 -> N2
+	attackSkillFrames[0] = frames.InitNormalCancelSlice(attackSkillHitmarks[0][0], 240) // N1 -> W
+	attackSkillFrames[0][action.ActionCharge] = 13                                      // N1 -> CA
+	attackSkillFrames[0][action.ActionAttack] = 14                                      // N1 -> N2
 
-	attackSkillFrames[1] = frames.InitNormalCancelSlice(attackSkillHitmarks[1][0], 44) // N2 -> W
-	attackSkillFrames[1][action.ActionAttack] = 22                                     // N2 -> N3
-	attackSkillFrames[1][action.ActionCharge] = 22                                     // N2 -> CA
+	attackSkillFrames[1] = frames.InitNormalCancelSlice(attackSkillHitmarks[1][0], 240) // N2 -> W
+	attackSkillFrames[1][action.ActionAttack] = 22                                      // N2 -> N3
+	attackSkillFrames[1][action.ActionCharge] = 22                                      // N2 -> CA
 
-	attackSkillFrames[2] = frames.InitNormalCancelSlice(attackSkillHitmarks[2][1], 74) // N3 -> W
-	attackSkillFrames[2][action.ActionAttack] = 37                                     // N3 -> N4
-	attackSkillFrames[2][action.ActionCharge] = 37                                     // N3 -> CA
+	attackSkillFrames[2] = frames.InitNormalCancelSlice(attackSkillHitmarks[2][1], 240) // N3 -> W
+	attackSkillFrames[2][action.ActionAttack] = 37                                      // N3 -> N4
+	attackSkillFrames[2][action.ActionCharge] = 37                                      // N3 -> CA
 
-	attackSkillFrames[3] = frames.InitNormalCancelSlice(attackSkillHitmarks[3][1], 84) // N4 -> W
-	attackSkillFrames[3][action.ActionAttack] = 42                                     // N4 -> N5
-	attackSkillFrames[3][action.ActionCharge] = 31                                     // N4 -> CA
+	attackSkillFrames[3] = frames.InitNormalCancelSlice(attackSkillHitmarks[3][1], 240) // N4 -> W
+	attackSkillFrames[3][action.ActionAttack] = 42                                      // N4 -> N5
+	attackSkillFrames[3][action.ActionCharge] = 31                                      // N4 -> CA
 
-	attackSkillFrames[4] = frames.InitNormalCancelSlice(attackSkillHitmarks[4][0], 62) // N5 -> W
-	attackSkillFrames[4][action.ActionAttack] = 31                                     // N5 -> N1
-	attackSkillFrames[4][action.ActionCharge] = 31                                     // N5 -> CA
+	attackSkillFrames[4] = frames.InitNormalCancelSlice(attackSkillHitmarks[4][0], 240) // N5 -> W
+	attackSkillFrames[4][action.ActionAttack] = 31                                      // N5 -> N1
+	attackSkillFrames[4][action.ActionCharge] = 31                                      // N5 -> CA
 }
 
 // Standard attack - nothing special
