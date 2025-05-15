@@ -56,12 +56,12 @@ func (c *char) BurstRuin(p map[string]int) (action.Info, error) {
 			5,
 		)
 		for i := 0; i < 5; i++ {
-			c.Core.QueueAttack(ai, ap, 0, i*5)
+			c.Core.QueueAttack(ai, ap, 0, i*5, c.particleCB)
 		}
 
 		ai.Abil = "Havoc: Ruin (Final)"
 		ai.Mult = (burstFinal[c.TalentLvlBurst()] + bonusSerpentsSubtlety*burstBonus[c.TalentLvlBurst()]) * c.a4MultBurst()
-		c.Core.QueueAttack(ai, ap, 0, 5*5)
+		c.Core.QueueAttack(ai, ap, 0, 5*5, c.particleCB)
 
 		c.c6OnBurstRuin()
 	}, burstHitmark)
