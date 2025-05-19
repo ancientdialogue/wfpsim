@@ -67,7 +67,7 @@ func (c *char) exitSkillState(src int) {
 	c.skillSrc = -1
 	c.DeleteAttackMod(c2Key)
 	c.DeleteStatus(skillKey)
-	c.SetCD(action.ActionSkill, 9*60)
+	c.SetCD(action.ActionSkill, 8*60)
 	c.ConsumeSerpentsSubtlety(0, c.Base.Key.String()+"-skill-exit")
 }
 
@@ -95,7 +95,7 @@ func (c *char) skillHold(p map[string]int) (action.Info, error) {
 	c.c2OnSkill()
 
 	c.absorbVoidRift()
-	c.SetCDWithDelay(action.ActionSkill, 9*60, duration)
+	c.SetCDWithDelay(action.ActionSkill, 8*60, duration)
 
 	return action.Info{
 		Frames: func(next action.Action) int {
