@@ -11,6 +11,7 @@ import (
 
 var c4Atkp = []float64{0.0, 0.1, 0.2, 0.5}
 
+const c2Key = "skirk-c2"
 const c6Dur = 15 * 60
 
 func (c *char) c1() {
@@ -55,10 +56,16 @@ func (c *char) c2Init() {
 	if c.Base.Cons < 2 {
 		return
 	}
-	mDmg := make([]float64, attributes.EndStatType)
-	mDmg[attributes.DmgP] = 0.6
+	c.c2Dmg = make([]float64, attributes.EndStatType)
+	c.c2Dmg[attributes.DmgP] = 0.6
+}
+
+func (c *char) c2OnBurstExtinction() {
+	if c.Base.Cons < 2 {
+		return
+	}
 	c.AddAttackMod(character.AttackMod{
-		Base: modifier.NewBase("skirk-c2-dmg", -1),
+		Base: modifier.NewBase(c2Key, 12.5*60),
 		Amount: func(atk *combat.AttackEvent, t combat.Target) ([]float64, bool) {
 			switch atk.Info.AttackTag {
 			case attacks.AttackTagNormal:
@@ -69,7 +76,7 @@ func (c *char) c2Init() {
 			if !c.StatusIsActive(skillKey) {
 				return nil, false
 			}
-			return mDmg, true
+			return c.c2Dmg, true
 		},
 	})
 }

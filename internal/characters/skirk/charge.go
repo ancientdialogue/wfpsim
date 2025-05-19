@@ -85,7 +85,6 @@ func (c *char) ChargeAttackSkill(p map[string]int) (action.Info, error) {
 			),
 			chargeHitmarks[i],
 			chargeHitmarks[i],
-			c.particleCB,
 			c.absorbVoidRiftCB,
 		)
 	}

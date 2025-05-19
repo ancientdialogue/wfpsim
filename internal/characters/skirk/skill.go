@@ -5,8 +5,9 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/action"
 	"github.com/genshinsim/gcsim/pkg/core/attributes"
 	"github.com/genshinsim/gcsim/pkg/core/combat"
+	"github.com/genshinsim/gcsim/pkg/core/event"
 	"github.com/genshinsim/gcsim/pkg/core/glog"
-	"github.com/genshinsim/gcsim/pkg/core/targets"
+	"github.com/genshinsim/gcsim/pkg/enemy"
 )
 
 var skillFrames []int
@@ -65,8 +66,9 @@ func (c *char) exitSkillState(src int) {
 	}
 	c.Core.Log.NewEventBuildMsg(glog.LogCharacterEvent, c.Index, "exit skirk skill").Write("src", src)
 	c.skillSrc = -1
+	c.DeleteAttackMod(c2Key)
 	c.DeleteStatus(skillKey)
-	c.SetCD(action.ActionSkill, 9*60)
+	c.SetCD(action.ActionSkill, 8*60)
 	c.ConsumeSerpentsSubtlety(0, c.Base.Key.String()+"-skill-exit")
 }
 
@@ -94,7 +96,7 @@ func (c *char) skillHold(p map[string]int) (action.Info, error) {
 	c.c2OnSkill()
 
 	c.absorbVoidRift()
-	c.SetCDWithDelay(action.ActionSkill, 9*60, duration)
+	c.SetCDWithDelay(action.ActionSkill, 8*60, duration)
 
 	return action.Info{
 		Frames: func(next action.Action) int {
@@ -106,15 +108,29 @@ func (c *char) skillHold(p map[string]int) (action.Info, error) {
 	}, nil
 }
 
-func (c *char) particleCB(a combat.AttackCB) {
-	if a.Target.Type() != targets.TargettableEnemy {
-		return
-	}
-	if c.StatusIsActive(particleICDKey) {
-		return
-	}
-	c.AddStatus(particleICDKey, 15*60, false)
+func (c *char) particleInit() {
+	c.Core.Events.Subscribe(event.OnEnemyDamage, func(args ...interface{}) bool {
+		atk := args[1].(*combat.AttackEvent)
+		_, ok := args[0].(*enemy.Enemy)
+		if !ok {
+			return false
+		}
+		if atk.Info.ActorIndex != c.Index {
+			return false
+		}
 
-	count := 4.0
-	c.Core.QueueParticle(c.Base.Key.String(), count, attributes.Cryo, c.ParticleDelay)
+		if atk.Info.Element != attributes.Cryo {
+			return false
+		}
+
+		if c.StatusIsActive(particleICDKey) {
+			return false
+		}
+		c.AddStatus(particleICDKey, 15*60, false)
+
+		count := 4.0
+		c.Core.QueueParticle(c.Base.Key.String(), count, attributes.Cryo, c.ParticleDelay)
+
+		return false
+	}, c.Base.Key.String()+"-particles")
 }
