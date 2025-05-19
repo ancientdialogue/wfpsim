@@ -27,6 +27,7 @@ type char struct {
 	burstVoids       int
 	voidRiftCount    int
 	a4Stacks         []int
+	c2Dmg            []float64
 	c6Stacks         RingQueue[int]
 }
 
@@ -192,6 +193,7 @@ func (c *char) onExitField() {
 		if c.StatusIsActive(skillKey) {
 			c.exitSkillState(c.skillSrc)
 		}
+
 		return false
 	}, "skirk-exit")
 }

@@ -65,6 +65,7 @@ func (c *char) exitSkillState(src int) {
 	}
 	c.Core.Log.NewEventBuildMsg(glog.LogCharacterEvent, c.Index, "exit skirk skill").Write("src", src)
 	c.skillSrc = -1
+	c.DeleteAttackMod(c2Key)
 	c.DeleteStatus(skillKey)
 	c.SetCD(action.ActionSkill, 9*60)
 	c.ConsumeSerpentsSubtlety(0, c.Base.Key.String()+"-skill-exit")

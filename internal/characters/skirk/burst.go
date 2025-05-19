@@ -118,7 +118,7 @@ func (c *char) BurstExtinction(p map[string]int) (action.Info, error) {
 		c.burstVoids = count
 		c.absorbVoidRift()
 	}, 30)
-
+	c.c2OnBurstExtinction()
 	c.SetCDWithDelay(action.ActionBurst, 15*60, 0)
 
 	return action.Info{
