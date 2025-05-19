@@ -5,8 +5,9 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/action"
 	"github.com/genshinsim/gcsim/pkg/core/attributes"
 	"github.com/genshinsim/gcsim/pkg/core/combat"
+	"github.com/genshinsim/gcsim/pkg/core/event"
 	"github.com/genshinsim/gcsim/pkg/core/glog"
-	"github.com/genshinsim/gcsim/pkg/core/targets"
+	"github.com/genshinsim/gcsim/pkg/enemy"
 )
 
 var skillFrames []int
@@ -107,15 +108,29 @@ func (c *char) skillHold(p map[string]int) (action.Info, error) {
 	}, nil
 }
 
-func (c *char) particleCB(a combat.AttackCB) {
-	if a.Target.Type() != targets.TargettableEnemy {
-		return
-	}
-	if c.StatusIsActive(particleICDKey) {
-		return
-	}
-	c.AddStatus(particleICDKey, 15*60, false)
+func (c *char) particleInit() {
+	c.Core.Events.Subscribe(event.OnEnemyDamage, func(args ...interface{}) bool {
+		atk := args[1].(*combat.AttackEvent)
+		_, ok := args[0].(*enemy.Enemy)
+		if !ok {
+			return false
+		}
+		if atk.Info.ActorIndex != c.Index {
+			return false
+		}
 
-	count := 4.0
-	c.Core.QueueParticle(c.Base.Key.String(), count, attributes.Cryo, c.ParticleDelay)
+		if atk.Info.Element != attributes.Cryo {
+			return false
+		}
+
+		if c.StatusIsActive(particleICDKey) {
+			return false
+		}
+		c.AddStatus(particleICDKey, 15*60, false)
+
+		count := 4.0
+		c.Core.QueueParticle(c.Base.Key.String(), count, attributes.Cryo, c.ParticleDelay)
+
+		return false
+	}, c.Base.Key.String()+"-particles")
 }

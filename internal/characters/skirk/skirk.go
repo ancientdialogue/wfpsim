@@ -54,6 +54,7 @@ func NewChar(s *core.Core, w *character.CharWrapper, p info.CharacterProfile) er
 
 func (c *char) Init() error {
 	c.onExitField()
+	c.particleInit()
 	c.BurstInit()
 	c.a1Init()
 	c.a4Init()

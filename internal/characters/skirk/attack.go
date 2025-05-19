@@ -162,7 +162,7 @@ func (c *char) AttackSkill(p map[string]int) (action.Info, error) {
 		}
 		c6cb := c.c6OnAttackCB()
 		c.QueueCharTask(func() {
-			c.Core.QueueAttack(ai, ap, 0, 0, c.particleCB, c6cb)
+			c.Core.QueueAttack(ai, ap, 0, 0, c6cb)
 		}, attackSkillHitmarks[c.NormalCounter][i])
 	}
 
