@@ -42,14 +42,14 @@ func (c *char) c2OnSkill() {
 	if c.Base.Cons < 2 {
 		return
 	}
-	c.AddSerpentsSubtlety(c.Base.Key.String()+"-c2", 12.0)
+	c.AddSerpentsSubtlety(c.Base.Key.String()+"-c2", 10.0)
 }
 
 func (c *char) c2OnBurstRuin() float64 {
 	if c.Base.Cons < 2 {
 		return 0
 	}
-	return 12
+	return 10
 }
 
 func (c *char) c2Init() {
