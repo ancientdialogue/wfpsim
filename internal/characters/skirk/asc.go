@@ -66,10 +66,7 @@ func (c *char) createVoidRift() {
 
 func (c *char) a4Init() {
 	c.a4Stacks = make([]int, len(c.Core.Player.Chars()))
-	c.Core.Events.Subscribe(event.OnEnemyDamage, func(args ...interface{}) bool {
-		if dmg := args[2].(float64); dmg == 0 {
-			return false
-		}
+	c.Core.Events.Subscribe(event.OnEnemyHit, func(args ...interface{}) bool {
 		atk := args[1].(*combat.AttackEvent)
 		charElem := c.Core.Player.Chars()[atk.Info.ActorIndex].Base.Element
 		if atk.Info.ActorIndex == c.Index {
