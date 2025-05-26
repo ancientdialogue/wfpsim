@@ -9,7 +9,7 @@ import (
 	"github.com/genshinsim/gcsim/pkg/modifier"
 )
 
-var c4Atkp = []float64{0.0, 0.1, 0.2, 0.5}
+var c4Atkp = []float64{0.0, 0.1, 0.2, 0.4}
 
 const c2Key = "skirk-c2"
 const c6Dur = 15 * 60
@@ -56,27 +56,23 @@ func (c *char) c2Init() {
 	if c.Base.Cons < 2 {
 		return
 	}
-	c.c2Dmg = make([]float64, attributes.EndStatType)
-	c.c2Dmg[attributes.DmgP] = 0.6
+	c.c2Atk = make([]float64, attributes.EndStatType)
+	c.c2Atk[attributes.ATKP] = 0.7
 }
 
 func (c *char) c2OnBurstExtinction() {
 	if c.Base.Cons < 2 {
 		return
 	}
-	c.AddAttackMod(character.AttackMod{
-		Base: modifier.NewBase(c2Key, 12.5*60),
-		Amount: func(atk *combat.AttackEvent, t combat.Target) ([]float64, bool) {
-			switch atk.Info.AttackTag {
-			case attacks.AttackTagNormal:
-			default:
-				return nil, false
-			}
 
+	c.AddStatMod(character.StatMod{
+		Base:         modifier.NewBase(c2Key, 12.5*60),
+		AffectedStat: attributes.ATKP,
+		Amount: func() ([]float64, bool) {
 			if !c.StatusIsActive(skillKey) {
 				return nil, false
 			}
-			return c.c2Dmg, true
+			return c.c2Atk, true
 		},
 	})
 }
@@ -111,7 +107,7 @@ func (c *char) c6OnBurstRuin() {
 	ai := combat.AttackInfo{
 		ActorIndex: c.Index,
 		Abil:       "Havoc: Sever (Burst)",
-		Mult:       6,
+		Mult:       7.5,
 		AttackTag:  attacks.AttackTagElementalBurst,
 		ICDTag:     attacks.ICDTagElementalBurst,
 		ICDGroup:   attacks.ICDGroupDefault,
@@ -165,7 +161,7 @@ func (c *char) c6OnAttackCB() func(a combat.AttackCB) {
 		ai := combat.AttackInfo{
 			ActorIndex: c.Index,
 			Abil:       "Havoc: Sever (Normal)",
-			Mult:       1.5,
+			Mult:       1.8,
 			AttackTag:  attacks.AttackTagNormal,
 			ICDTag:     attacks.ICDTagNormalAttack,
 			ICDGroup:   attacks.ICDGroupDefault,
