@@ -18,10 +18,10 @@ var (
 )
 
 func init() {
-	chargeFrames = frames.InitAbilSlice(31) // CA -> N1
+	chargeFrames = frames.InitAbilSlice(46) // CA -> N1
 	chargeFrames[action.ActionDash] = 25    // CA -> D
 	chargeFrames[action.ActionJump] = 24    // CA -> J
-	chargeFrames[action.ActionSwap] = 31    // CA -> Swap
+	chargeFrames[action.ActionSwap] = 30    // CA -> Swap
 }
 
 func (c *char) ChargeAttack(p map[string]int) (action.Info, error) {

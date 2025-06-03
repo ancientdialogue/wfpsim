@@ -11,20 +11,19 @@ import (
 )
 
 var skillFrames []int
+var skillHoldFrames []int
 
 const (
 	maxSerpentsSubtlety = 100
-	skillHitmark        = 28
+	skillGainSS         = 25
 	skillKey            = "seven-phase-slash"
 	particleICDKey      = "skirk-particle-icd"
+	skillHoldGainSS     = 16
 )
 
 func init() {
-	skillFrames = frames.InitAbilSlice(48) // E -> N1
-	skillFrames[action.ActionBurst] = 48   // E -> Q
-	skillFrames[action.ActionDash] = 25    // E -> D
-	skillFrames[action.ActionJump] = 26    // E -> J
-	skillFrames[action.ActionSwap] = 49    // E -> Swap
+	skillFrames = frames.InitAbilSlice(34)
+	skillHoldFrames = frames.InitAbilSlice(16)
 }
 
 func (c *char) Skill(p map[string]int) (action.Info, error) {
@@ -39,7 +38,7 @@ func (c *char) skillTap() (action.Info, error) {
 	if c.StatusIsActive(skillKey) {
 		c.exitSkillState(c.skillSrc)
 	} else {
-		c.QueueCharTask(func() { c.enterSkillState() }, 26)
+		c.QueueCharTask(func() { c.enterSkillState() }, skillGainSS)
 	}
 
 	return action.Info{
@@ -92,18 +91,22 @@ func (c *char) skillHold(p map[string]int) (action.Info, error) {
 	if duration < 10 {
 		duration = 10
 	}
-	c.AddSerpentsSubtlety(c.Base.Key.String()+"-skill-hold", 45.0)
-	c.c2OnSkill()
 
-	c.absorbVoidRift()
+	c.QueueCharTask(func() {
+		c.AddSerpentsSubtlety(c.Base.Key.String()+"-skill-hold", 45.0)
+		c.c2OnSkill()
+
+		c.absorbVoidRift()
+	}, skillHoldGainSS)
+
 	c.SetCDWithDelay(action.ActionSkill, 8*60, duration)
 
 	return action.Info{
 		Frames: func(next action.Action) int {
-			return skillFrames[next] + duration
+			return skillHoldFrames[next] + duration
 		},
-		AnimationLength: skillFrames[action.InvalidAction] + duration,
-		CanQueueAfter:   skillFrames[action.ActionDash] + duration, // earliest cancel is before skillHitmark
+		AnimationLength: skillHoldFrames[action.InvalidAction] + duration,
+		CanQueueAfter:   skillHoldFrames[action.ActionDash] + duration, // earliest cancel is before skillHitmark
 		State:           action.SkillState,
 	}, nil
 }
