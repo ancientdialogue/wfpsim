@@ -21,10 +21,9 @@ var (
 	attackFanAngles       = [][]float64{{360}, {360}, {30, 360}, {360}, {360}}
 
 	attackSkillFrames          [][]int
-	attackSkillHitmarks        = [][]int{{11}, {9}, {10, 22}, {12, 29}, {25}}
-	attackSkillHitlag          = [][]bool{{false}, {true}, {true, false}, {false, false}, {true}}
-	attackSkillHitlagHaltFrame = [][]float64{{0.00}, {0.03}, {0.03, 0.00}, {0.00, 0.0}, {0.06}}
-	attackSkillHitlagFactor    = [][]float64{{0.01}, {0.01}, {0.05, 0.05}, {0.05, 0.05}, {0.01}}
+	attackSkillHitmarks        = [][]int{{15}, {8}, {11, 22}, {12, 29}, {24}}
+	attackSkillHitlagHaltFrame = [][]float64{{0.01}, {0.01}, {0.01, 0.00}, {0.00, 0.0}, {0.05}}
+	attackSkillHitlagFactor    = [][]float64{{0.05}, {0.05}, {0.05, 0.01}, {0.05, 0.05}, {0.05}}
 	attackSkillHitboxes        = [][]float64{{1.2}, {1.4, 2.2}, {1.6}, {1.6}, {2.2}}
 	attackSkillOffsets         = [][]float64{{0.8}, {0}, {1, 0.6}, {0.6, 0.6}, {1}}
 	attackSkillFanAngles       = [][]float64{{360}, {360}, {30, 360}, {360, 360}, {360}}
@@ -58,24 +57,24 @@ func init() {
 	attackSkillFrames = make([][]int, normalHitNum)
 
 	attackSkillFrames[0] = frames.InitNormalCancelSlice(attackSkillHitmarks[0][0], 240) // N1 -> W
-	attackSkillFrames[0][action.ActionCharge] = 16                                      // N1 -> CA
-	attackSkillFrames[0][action.ActionAttack] = 16                                      // N1 -> N2
+	attackSkillFrames[0][action.ActionCharge] = 18                                      // N1 -> CA
+	attackSkillFrames[0][action.ActionAttack] = 18                                      // N1 -> N2
 
 	attackSkillFrames[1] = frames.InitNormalCancelSlice(attackSkillHitmarks[1][0], 240) // N2 -> W
-	attackSkillFrames[1][action.ActionAttack] = 21                                      // N2 -> N3
-	attackSkillFrames[1][action.ActionCharge] = 21                                      // N2 -> CA
+	attackSkillFrames[1][action.ActionAttack] = 19                                      // N2 -> N3
+	attackSkillFrames[1][action.ActionCharge] = 19                                      // N2 -> CA
 
 	attackSkillFrames[2] = frames.InitNormalCancelSlice(attackSkillHitmarks[2][1], 240) // N3 -> W
-	attackSkillFrames[2][action.ActionAttack] = 35                                      // N3 -> N4
-	attackSkillFrames[2][action.ActionCharge] = 35                                      // N3 -> CA
+	attackSkillFrames[2][action.ActionAttack] = 34                                      // N3 -> N4
+	attackSkillFrames[2][action.ActionCharge] = 34                                      // N3 -> CA
 
 	attackSkillFrames[3] = frames.InitNormalCancelSlice(attackSkillHitmarks[3][1], 240) // N4 -> W
-	attackSkillFrames[3][action.ActionAttack] = 36                                      // N4 -> N5
-	attackSkillFrames[3][action.ActionCharge] = 36                                      // N4 -> CA
+	attackSkillFrames[3][action.ActionAttack] = 33                                      // N4 -> N5
+	attackSkillFrames[3][action.ActionCharge] = 33                                      // N4 -> CA
 
 	attackSkillFrames[4] = frames.InitNormalCancelSlice(attackSkillHitmarks[4][0], 240) // N5 -> W
-	attackSkillFrames[4][action.ActionAttack] = 51                                      // N5 -> N1
-	attackSkillFrames[4][action.ActionCharge] = 51                                      // N5 -> CA
+	attackSkillFrames[4][action.ActionAttack] = 54                                      // N5 -> N1
+	attackSkillFrames[4][action.ActionCharge] = 54                                      // N5 -> CA
 }
 
 // Standard attack - nothing special
@@ -132,19 +131,18 @@ func (c *char) Attack(p map[string]int) (action.Info, error) {
 func (c *char) AttackSkill(p map[string]int) (action.Info, error) {
 	for i, mult := range skillAttack[c.NormalCounter] {
 		ai := combat.AttackInfo{
-			ActorIndex:         c.Index,
-			Abil:               fmt.Sprintf("Normal (Skill) %v", c.NormalCounter),
-			Mult:               mult[c.TalentLvlSkill()] * c.a4MultAttack(),
-			AttackTag:          attacks.AttackTagNormal,
-			ICDTag:             attacks.ICDTagNormalAttack,
-			ICDGroup:           attacks.ICDGroupDefault,
-			StrikeType:         attacks.StrikeTypeSlash,
-			Element:            attributes.Cryo,
-			Durability:         25,
-			HitlagFactor:       attackSkillHitlagFactor[c.NormalCounter][i],
-			HitlagHaltFrames:   attackSkillHitlagHaltFrame[c.NormalCounter][i] * 60,
-			CanBeDefenseHalted: attackSkillHitlag[c.NormalCounter][i],
-			IgnoreInfusion:     true,
+			ActorIndex:       c.Index,
+			Abil:             fmt.Sprintf("Normal (Skill) %v", c.NormalCounter),
+			Mult:             mult[c.TalentLvlSkill()] * c.a4MultAttack(),
+			AttackTag:        attacks.AttackTagNormal,
+			ICDTag:           attacks.ICDTagNormalAttack,
+			ICDGroup:         attacks.ICDGroupDefault,
+			StrikeType:       attacks.StrikeTypeSlash,
+			Element:          attributes.Cryo,
+			Durability:       25,
+			HitlagFactor:     attackSkillHitlagFactor[c.NormalCounter][i],
+			HitlagHaltFrames: attackSkillHitlagHaltFrame[c.NormalCounter][i] * 60,
+			IgnoreInfusion:   true,
 		}
 		ap := combat.NewCircleHitOnTargetFanAngle(
 			c.Core.Combat.Player(),
