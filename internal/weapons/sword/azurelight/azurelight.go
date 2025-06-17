@@ -31,7 +31,7 @@ func NewWeapon(c *core.Core, char *character.CharWrapper, p info.WeaponProfile) 
 	refine := p.Refine
 
 	m := make([]float64, attributes.EndStatType)
-	atkp := 0.20 + 0.04*float64(refine)
+	atkp := 0.18 + 0.06*float64(refine)
 	cd := 0.30 + 0.10*float64(refine)
 
 	c.Events.Subscribe(event.OnSkill, func(args ...interface{}) bool {
