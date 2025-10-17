@@ -1,0 +1,24 @@
+{
+  "name": "@gcsim/wfpworkers",
+  "packageManager": "yarn@3.2.4",
+  "version": "0.0.0",
+  "private": true,
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "wrangler dev",
+    "deploy": "wrangler publish"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20230115.0",
+    "@types/pako": "^2.0.0",
+    "typescript": "^4.8.4",
+    "wrangler": "^3.48.0"
+  },
+  "dependencies": {
+    "@cfworker/json-schema": "^1.12.5",
+    "@cfworker/uuid": "^1.12.4",
+    "axios": "^1.6.7",
+    "itty-router": "^3.0.11",
+    "pako": "^2.1.0"
+  }
+}

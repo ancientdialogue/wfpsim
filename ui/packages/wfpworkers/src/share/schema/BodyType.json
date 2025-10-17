@@ -1,0 +1,28 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "enum": [
+        "INVALID_BODY_TYPE",
+        0,
+        "BODY_UNKNOWN",
+        1,
+        "BODY_BOY",
+        2,
+        "BODY_GIRL",
+        3,
+        "BODY_MALE",
+        4,
+        "BODY_LADY",
+        5,
+        "BODY_LOLI",
+        6
+    ],
+    "oneOf": [
+        {
+            "type": "string"
+        },
+        {
+            "type": "integer"
+        }
+    ],
+    "title": "Body Type"
+}

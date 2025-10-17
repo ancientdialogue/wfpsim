@@ -73,3 +73,10 @@ tasks:
         platforms: [linux, darwin]
         ignore_error: true
       - go run cmd/server/main.go GCSIM_SERVER=1
+  talents:
+    requires:
+      vars: [ID]
+    cmds:
+      - go run scripts/extract-talents/main.go --excels=$GENSHIN_DATA_REPO --avatar={{.ID}}
+  diff-from-upstream:
+    cmd: git diff upstream/main..develop -- ':(exclude)ui/*' &> diff.patch

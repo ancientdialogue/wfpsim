@@ -1,0 +1,183 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$ref": "#/definitions/Sample",
+    "definitions": {
+        "Sample": {
+            "properties": {
+                "build_date": {
+                    "type": "string"
+                },
+                "sim_version": {
+                    "type": "string"
+                },
+                "modified": {
+                    "type": "boolean"
+                },
+                "config": {
+                    "type": "string"
+                },
+                "initial_character": {
+                    "type": "string"
+                },
+                "character_details": {
+                    "items": {
+                        "$ref": "#/definitions/model.Character"
+                    },
+                    "type": "array"
+                },
+                "target_details": {
+                    "items": {
+                        "$ref": "#/definitions/model.Enemy"
+                    },
+                    "type": "array"
+                },
+                "seed": {
+                    "type": "string"
+                },
+                "logs": {
+                    "items": {
+                        "type": "object",
+                        "title": "Struct",
+                        "description": "`Struct` represents a structured data value, consisting of fields which map to dynamically typed values. In some languages, `Struct` might be supported by a native representation. For example, in scripting languages like JS a struct is represented as an object. The details of that representation are described together with the proto support for the language. The JSON representation for `Struct` is JSON object."
+                    },
+                    "additionalProperties": true,
+                    "type": "array"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Sample"
+        },
+        "model.Character": {
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "element": {
+                    "type": "string"
+                },
+                "level": {
+                    "type": "integer"
+                },
+                "max_level": {
+                    "type": "integer"
+                },
+                "cons": {
+                    "type": "integer"
+                },
+                "weapon": {
+                    "$ref": "#/definitions/model.Weapon",
+                    "additionalProperties": true
+                },
+                "talents": {
+                    "$ref": "#/definitions/model.CharacterTalents",
+                    "additionalProperties": true
+                },
+                "sets": {
+                    "additionalProperties": {
+                        "type": "integer"
+                    },
+                    "type": "object"
+                },
+                "stats": {
+                    "items": {
+                        "type": "number"
+                    },
+                    "type": "array"
+                },
+                "snapshot_stats": {
+                    "items": {
+                        "type": "number"
+                    },
+                    "type": "array"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Character"
+        },
+        "model.CharacterTalents": {
+            "properties": {
+                "attack": {
+                    "type": "integer"
+                },
+                "skill": {
+                    "type": "integer"
+                },
+                "burst": {
+                    "type": "integer"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Character Talents"
+        },
+        "model.Coord": {
+            "properties": {
+                "x": {
+                    "type": "number"
+                },
+                "y": {
+                    "type": "number"
+                },
+                "r": {
+                    "type": "number"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Coord"
+        },
+        "model.Enemy": {
+            "properties": {
+                "level": {
+                    "type": "integer"
+                },
+                "HP": {
+                    "type": "number"
+                },
+                "resist": {
+                    "additionalProperties": {
+                        "type": "number"
+                    },
+                    "type": "object"
+                },
+                "pos": {
+                    "$ref": "#/definitions/model.Coord",
+                    "additionalProperties": true
+                },
+                "particle_drop_threshold": {
+                    "type": "number"
+                },
+                "particle_drop_count": {
+                    "type": "number"
+                },
+                "particle_element": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Enemy"
+        },
+        "model.Weapon": {
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "refine": {
+                    "type": "integer"
+                },
+                "level": {
+                    "type": "integer"
+                },
+                "max_level": {
+                    "type": "integer"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Weapon"
+        }
+    }
+}

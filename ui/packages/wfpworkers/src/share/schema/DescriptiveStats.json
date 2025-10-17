@@ -1,0 +1,25 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$ref": "#/definitions/DescriptiveStats",
+    "definitions": {
+        "DescriptiveStats": {
+            "properties": {
+                "min": {
+                    "type": "number"
+                },
+                "max": {
+                    "type": "number"
+                },
+                "mean": {
+                    "type": "number"
+                },
+                "SD": {
+                    "type": "number"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Descriptive Stats"
+        }
+    }
+}

@@ -1,0 +1,30 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "enum": [
+        "DB_TAG_INVALID",
+        0,
+        "DB_TAG_GCSIM",
+        1,
+        "DB_TAG_TESTING",
+        2,
+        "DB_TAG_KQM_GUIDE",
+        3,
+        "DB_TAG_GEO_SIMPS",
+        4,
+        "DB_TAG_ITTO_SIMPS",
+        5,
+        "DB_TAG_RANDOM_DELAYS",
+        6,
+        "DB_TAG_ADMIN_DO_NOT_USE",
+        99999999
+    ],
+    "oneOf": [
+        {
+            "type": "string"
+        },
+        {
+            "type": "integer"
+        }
+    ],
+    "title": "DB Tag"
+}

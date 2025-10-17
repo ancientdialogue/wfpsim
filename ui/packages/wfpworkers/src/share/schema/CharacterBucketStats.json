@@ -1,0 +1,54 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$ref": "#/definitions/CharacterBucketStats",
+    "definitions": {
+        "CharacterBucketStats": {
+            "properties": {
+                "bucket_size": {
+                    "type": "integer"
+                },
+                "characters": {
+                    "items": {
+                        "$ref": "#/definitions/model.CharacterBuckets"
+                    },
+                    "type": "array"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Character Bucket Stats"
+        },
+        "model.CharacterBuckets": {
+            "properties": {
+                "buckets": {
+                    "items": {
+                        "$ref": "#/definitions/model.DescriptiveStats"
+                    },
+                    "type": "array"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Character Buckets"
+        },
+        "model.DescriptiveStats": {
+            "properties": {
+                "min": {
+                    "type": "number"
+                },
+                "max": {
+                    "type": "number"
+                },
+                "mean": {
+                    "type": "number"
+                },
+                "SD": {
+                    "type": "number"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Descriptive Stats"
+        }
+    }
+}
