@@ -132,9 +132,6 @@ func (c *char) c6Init() {
 		return
 	}
 
-	c.c1Buff = make([]float64, attributes.EndStatType)
-	c.c1Buff[attributes.EM] = 80
-
 	for _, char := range c.Core.Player.Chars() {
 		char.AddReactBonusMod(character.ReactBonusMod{
 			Base: modifier.NewBase(c6Key+"-buff", -1),
