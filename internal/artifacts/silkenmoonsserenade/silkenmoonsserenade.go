@@ -48,7 +48,6 @@ func NewSet(c *core.Core, char *character.CharWrapper, count int, param map[stri
 		count: count,
 		Count: count,
 	}
-
 	if count < 2 {
 		return &s, nil
 	}
@@ -68,14 +67,6 @@ func NewSet(c *core.Core, char *character.CharWrapper, count int, param map[stri
 	}
 
 	m2 := make([]float64, attributes.EndStatType)
-	switch s.getMoonsignLevel(c) {
-	case 0:
-		return &s, nil
-	case 1:
-		m2[attributes.EM] = 60
-	default:
-		m2[attributes.EM] = 120
-	}
 
 	lunarReactHook := func(args ...any) bool {
 		if _, ok := args[0].(*enemy.Enemy); !ok {
@@ -87,6 +78,15 @@ func NewSet(c *core.Core, char *character.CharWrapper, count int, param map[stri
 				Base:         modifier.NewBase(gleamingMoonDevotionEMKey, 8*60),
 				AffectedStat: attributes.EM,
 				Amount: func() ([]float64, bool) {
+					switch s.getMoonsignLevel(c) {
+					case 0:
+						return nil, false
+					case 1:
+						m2[attributes.EM] = 60
+					default:
+						m2[attributes.EM] = 120
+					}
+
 					return m2, true
 				},
 			})
