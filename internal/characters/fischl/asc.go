@@ -90,7 +90,7 @@ func (c *char) magicInit() {
 		return
 	}
 
-	m_atkp := make([]float64, attributes.EndStatType)
+	mAtkp := make([]float64, attributes.EndStatType)
 	c.Core.Events.Subscribe(event.OnOverload, func(args ...any) bool {
 		if _, ok := args[0].(*enemy.Enemy); !ok {
 			return false
@@ -104,8 +104,8 @@ func (c *char) magicInit() {
 			Base:         modifier.NewBase("fischl-magic-atkp", 10*60),
 			AffectedStat: attributes.ATKP,
 			Amount: func() ([]float64, bool) {
-				m_atkp[attributes.ATKP] = 0.225 * c.c6MagicBonus()
-				return m_atkp, true
+				mAtkp[attributes.ATKP] = 0.225 * c.c6MagicBonus()
+				return mAtkp, true
 			},
 		})
 
@@ -113,14 +113,14 @@ func (c *char) magicInit() {
 			Base:         modifier.NewBase("fischl-magic-atkp", 10*60),
 			AffectedStat: attributes.ATKP,
 			Amount: func() ([]float64, bool) {
-				m_atkp[attributes.ATKP] = 0.225 * c.c6MagicBonus()
-				return m_atkp, true
+				mAtkp[attributes.ATKP] = 0.225 * c.c6MagicBonus()
+				return mAtkp, true
 			},
 		})
 		return false
 	}, "fischl-magic-ol")
 
-	m_em := make([]float64, attributes.EndStatType)
+	mEM := make([]float64, attributes.EndStatType)
 
 	emStatMod := func(args ...any) bool {
 		if _, ok := args[0].(*enemy.Enemy); !ok {
@@ -135,8 +135,8 @@ func (c *char) magicInit() {
 			Base:         modifier.NewBase("fischl-magic-em", 10*60),
 			AffectedStat: attributes.EM,
 			Amount: func() ([]float64, bool) {
-				m_em[attributes.EM] = 90 * c.c6MagicBonus()
-				return m_em, true
+				mEM[attributes.EM] = 90 * c.c6MagicBonus()
+				return mEM, true
 			},
 		})
 
@@ -144,8 +144,8 @@ func (c *char) magicInit() {
 			Base:         modifier.NewBase("fischl-magic-em", 10*60),
 			AffectedStat: attributes.EM,
 			Amount: func() ([]float64, bool) {
-				m_em[attributes.EM] = 90 * c.c6MagicBonus()
-				return m_em, true
+				mEM[attributes.EM] = 90 * c.c6MagicBonus()
+				return mEM, true
 			},
 		})
 		return false
