@@ -53,6 +53,8 @@ func (c *char) ChargeAttack(p map[string]int) (action.Info, error) {
 		),
 		chargeHitmark-windup,
 		chargeHitmark-windup,
+		c.makeMagicCB(),
+		c.c2CaCB,
 		c.makeC6CAResetCB(),
 	)
 

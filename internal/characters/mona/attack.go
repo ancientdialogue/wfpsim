@@ -57,7 +57,8 @@ func (c *char) Attack(p map[string]int) (action.Info, error) {
 		),
 		attackHitmarks[c.NormalCounter],
 		attackHitmarks[c.NormalCounter],
-		c.c2,
+		c.makeMagicCB(),
+		c.c2NaCB,
 	)
 
 	defer c.AdvanceNormalIndex()

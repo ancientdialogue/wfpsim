@@ -54,6 +54,8 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 		t.AddStatus(bubbleKey, 481, true) // 1 frame extra so we don't run into problems breaking
 		c.Core.Log.NewEvent("mona bubble on target", glog.LogCharacterEvent, c.Index()).
 			Write("char", c.Index())
+
+		c.c6()
 	}
 	c.Core.QueueAttack(ai, combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 10), -1, burstHitmark, cb)
 
@@ -73,6 +75,9 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 
 	c.SetCD(action.ActionBurst, 15*60)
 	c.ConsumeEnergy(5)
+
+	c.magicOnBurst()
+	c.c2OnBurst()
 
 	return action.Info{
 		Frames:          frames.NewAbilFunc(burstFrames),
@@ -141,7 +146,7 @@ func (c *char) triggerBubbleBurst(t *enemy.Enemy) {
 	// remove bubble tag
 	t.DeleteStatus(bubbleKey)
 	// add omen debuff
-	dur := int(omenDuration[c.TalentLvlBurst()] * 60)
+	dur := int(omenDuration[c.TalentLvlBurst()]*60) + c.omenStartingBonusDur
 	t.AddStatus(omenKey, dur, true)
 	// trigger dmg
 	ai := info.AttackInfo{

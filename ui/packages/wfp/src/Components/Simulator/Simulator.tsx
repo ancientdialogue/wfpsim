@@ -44,7 +44,11 @@ export function Simulator({
         them. The following are characters/weapons/artifacts currently not
         implemented in gcsim that we have added here:
         <ul className="list-disc pl-4">
-          {/* <li>Test Char</li> */}
+          <li>Fischl (Magic)</li>
+          <li>Sucrose (Magic)</li>
+          <li>Mona (Magic)</li>
+          <li>Albedo (Magic)</li>
+          <li>Razor (Magic)</li>
         </ul>
         <p className=" font-bold">
           See{' '}

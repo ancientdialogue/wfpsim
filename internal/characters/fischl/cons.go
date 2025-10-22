@@ -1,11 +1,34 @@
 package fischl
 
 import (
+	"github.com/genshinsim/gcsim/internal/template/minazuki"
 	"github.com/genshinsim/gcsim/pkg/core/attacks"
 	"github.com/genshinsim/gcsim/pkg/core/attributes"
 	"github.com/genshinsim/gcsim/pkg/core/combat"
 	"github.com/genshinsim/gcsim/pkg/core/info"
+	"github.com/genshinsim/gcsim/pkg/core/keys"
 )
+
+const c6MagicKey = "fischl-c6-magic"
+
+func (c *char) c6Init() error {
+	if c.Base.Cons < 6 {
+		return nil
+	}
+
+	w, err := minazuki.New(
+		minazuki.WithMandatory(keys.Fischl, "fischl c6", ozActiveKey, "", 60, c.c6Wave, c.Core),
+		minazuki.WithTickOnActive(true),
+		minazuki.WithAnimationDelayCheck(info.AnimationYelanN0StartDelay, func() bool {
+			return c.Core.Player.ActiveChar().NormalCounter == 1
+		}),
+	)
+	if err != nil {
+		return err
+	}
+	c.c6Watcher = w
+	return nil
+}
 
 func (c *char) c6Wave() {
 	ai := info.AttackInfo{
@@ -33,4 +56,19 @@ func (c *char) c6Wave() {
 		),
 		c.ozTravel,
 	)
+
+	if c.IsMagic {
+		c.AddStatus(c6MagicKey, 10*60, true)
+	}
+}
+
+func (c *char) c6MagicBonus() float64 {
+	if c.Base.Cons < 6 {
+		return 1.0
+	}
+
+	if !c.StatusIsActive(c6MagicKey) {
+		return 1.0
+	}
+	return 2.0
 }
