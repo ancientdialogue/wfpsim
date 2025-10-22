@@ -21,7 +21,12 @@ type char struct {
 	skillArea       info.AttackPattern
 	skillAttackInfo info.AttackInfo
 	skillSnapshot   info.Snapshot
+	// magic
+	aureliths      [2]int
+	oldestAurelith int
+	magicBuff      []float64
 	// c2 tracking
+	c1Buff   []float64
 	c2stacks int
 }
 
@@ -42,6 +47,9 @@ func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) er
 func (c *char) Init() error {
 	c.skillHook()
 	c.a1()
+	c.magicInit()
+	c.c1Init()
+	c.c6Init()
 	return nil
 }
 
