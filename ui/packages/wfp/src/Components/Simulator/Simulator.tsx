@@ -48,6 +48,7 @@ export function Simulator({
           <li>Sucrose (Magic)</li>
           <li>Mona (Magic)</li>
           <li>Albedo (Magic)</li>
+          <li>Razor (Magic)</li>
         </ul>
         <p className=" font-bold">
           See{' '}
