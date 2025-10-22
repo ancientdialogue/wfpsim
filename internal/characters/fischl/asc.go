@@ -6,7 +6,9 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/combat"
 	"github.com/genshinsim/gcsim/pkg/core/event"
 	"github.com/genshinsim/gcsim/pkg/core/info"
+	"github.com/genshinsim/gcsim/pkg/core/player/character"
 	"github.com/genshinsim/gcsim/pkg/enemy"
+	"github.com/genshinsim/gcsim/pkg/modifier"
 )
 
 const a4IcdKey = "fischl-a4-icd"
@@ -77,4 +79,88 @@ func (c *char) a4() {
 	c.Core.Events.Subscribe(event.OnHyperbloom, a4cb, "fischl-a4")
 	c.Core.Events.Subscribe(event.OnQuicken, a4cbNoGadget, "fischl-a4")
 	c.Core.Events.Subscribe(event.OnAggravate, a4cbNoGadget, "fischl-a4")
+}
+
+func (c *char) magicInit() {
+	if !c.IsMagic {
+		return
+	}
+
+	if c.getMagicCount() < 2 {
+		return
+	}
+
+	m_atkp := make([]float64, attributes.EndStatType)
+	c.Core.Events.Subscribe(event.OnOverload, func(args ...any) bool {
+		if _, ok := args[0].(*enemy.Enemy); !ok {
+			return false
+		}
+
+		if !c.StatusIsActive(ozActiveKey) {
+			return false
+		}
+
+		c.AddStatMod(character.StatMod{
+			Base:         modifier.NewBase("fischl-magic-atkp", 10*60),
+			AffectedStat: attributes.ATKP,
+			Amount: func() ([]float64, bool) {
+				m_atkp[attributes.ATKP] = 0.225 * c.c6MagicBonus()
+				return m_atkp, true
+			},
+		})
+
+		c.Core.Player.ActiveChar().AddStatMod(character.StatMod{
+			Base:         modifier.NewBase("fischl-magic-atkp", 10*60),
+			AffectedStat: attributes.ATKP,
+			Amount: func() ([]float64, bool) {
+				m_atkp[attributes.ATKP] = 0.225 * c.c6MagicBonus()
+				return m_atkp, true
+			},
+		})
+		return false
+	}, "fischl-magic-ol")
+
+	m_em := make([]float64, attributes.EndStatType)
+
+	emStatMod := func(args ...any) bool {
+		if _, ok := args[0].(*enemy.Enemy); !ok {
+			return false
+		}
+
+		if !c.StatusIsActive(ozActiveKey) {
+			return false
+		}
+
+		c.AddStatMod(character.StatMod{
+			Base:         modifier.NewBase("fischl-magic-em", 10*60),
+			AffectedStat: attributes.EM,
+			Amount: func() ([]float64, bool) {
+				m_em[attributes.EM] = 90 * c.c6MagicBonus()
+				return m_em, true
+			},
+		})
+
+		c.Core.Player.ActiveChar().AddStatMod(character.StatMod{
+			Base:         modifier.NewBase("fischl-magic-em", 10*60),
+			AffectedStat: attributes.EM,
+			Amount: func() ([]float64, bool) {
+				m_em[attributes.EM] = 90 * c.c6MagicBonus()
+				return m_em, true
+			},
+		})
+		return false
+	}
+
+	c.Core.Events.Subscribe(event.OnElectroCharged, emStatMod, "fischl-magic-ec")
+	c.Core.Events.Subscribe(event.OnLunarCharged, emStatMod, "fischl-magic-lc")
+}
+
+func (c *char) getMagicCount() int {
+	count := 0
+	for _, c := range c.Core.Player.Chars() {
+		if c.IsMagic {
+			count += 1
+		}
+	}
+	return count
 }

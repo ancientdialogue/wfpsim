@@ -8,7 +8,14 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/glog"
 	"github.com/genshinsim/gcsim/pkg/core/info"
 	"github.com/genshinsim/gcsim/pkg/core/player/character"
+	"github.com/genshinsim/gcsim/pkg/enemy"
 	"github.com/genshinsim/gcsim/pkg/modifier"
+)
+
+const (
+	phantasmalBubbleKey      = "phantasmal-bubble"
+	phantasmalBubbleIcdKey   = "phantasmal-bubble-icd"
+	magicOmenExtensionIcdKey = "magic-omen-extend-icd"
 )
 
 // After she has used Illusory Torrent for 2s, if there are any opponents nearby,
@@ -70,4 +77,100 @@ func (c *char) a4() {
 	}
 	c.a4Stats[attributes.HydroP] = 0.2 * c.NonExtraStat(attributes.ER)
 	c.QueueCharTask(c.a4, 60)
+}
+
+func (c *char) magicInit() {
+	if !c.IsMagic {
+		return
+	}
+
+	if c.getMagicCount() < 2 {
+		return
+	}
+
+	for _, char := range c.Core.Player.Chars() {
+		if char.Index() == c.Index() {
+			continue
+		}
+		char.AddReactBonusMod(character.ReactBonusMod{
+			Base: modifier.NewBase("mona-magic-on-vaporize", -1),
+			Amount: func(ai info.AttackInfo) (float64, bool) {
+				if !ai.Amped {
+					return 0, false
+				}
+				if ai.AmpType != info.ReactionTypeVaporize {
+					return 0, false
+				}
+				if !c.StatusIsActive(phantasmalBubbleKey) {
+					return 0, false
+				}
+
+				stacks := c.phantasmalBubbleStacks
+				if stacks == 0 {
+					return 0, false
+				}
+				c.phantasmalBubbleStacks = 0
+				return 0.1 * float64(stacks), false
+			},
+		})
+	}
+}
+
+func (c *char) makeMagicCB() info.AttackCBFunc {
+	if !c.IsMagic {
+		return nil
+	}
+	if c.getMagicCount() < 2 {
+		return nil
+	}
+
+	return func(a info.AttackCB) {
+		e, ok := a.Target.(*enemy.Enemy)
+		if !ok {
+			return
+		}
+		if !c.StatusIsActive(phantasmalBubbleIcdKey) {
+			c.AddStatus(phantasmalBubbleIcdKey, 0.1*60, true)
+			c.AddStatus(phantasmalBubbleKey, 8*60, true)
+			c.phantasmalBubbleStacks = min(c.phantasmalBubbleStacks+1, 3)
+		}
+
+		omenExp := e.StatusExpiry(omenKey)
+		if omenExp > c.Core.F && c.magicOmenExtension < 8*60 && !e.StatusIsActive(magicOmenExtensionIcdKey) {
+			e.AddStatus(magicOmenExtensionIcdKey, 0.5*60, true)
+			// calculate new duration
+			newDur := omenExp - c.Core.F + 2*60
+			e.AddStatus(omenKey, newDur, true)
+			c.magicOmenExtension += 2 * 60
+		}
+
+		if e.StatusIsActive(bubbleKey) && !e.StatusIsActive(magicOmenExtensionIcdKey) {
+			e.AddStatus(magicOmenExtensionIcdKey, 0.5*60, true)
+			c.magicOmenExtension += 2 * 60
+			c.omenStartingBonusDur = 2 * 60
+		}
+	}
+}
+
+func (c *char) magicOnBurst() {
+	if !c.IsMagic {
+		return
+	}
+
+	if c.getMagicCount() < 2 {
+		return
+	}
+
+	c.magicOmenExtension = 0
+	c.omenStartingBonusDur = 0
+}
+
+func (c *char) getMagicCount() int {
+	count := 0
+	for _, c := range c.Core.Player.Chars() {
+		if c.IsMagic {
+			count += 1
+		}
+	}
+	return count
 }

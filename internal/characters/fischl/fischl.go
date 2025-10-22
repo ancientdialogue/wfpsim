@@ -46,6 +46,12 @@ func NewChar(s *core.Core, w *character.CharWrapper, p info.CharacterProfile) er
 		c.ozTravel = travel
 	}
 
+	magic, ok := p.Params["magic"]
+	if !ok {
+		magic = 1
+	}
+	c.IsMagic = magic > 0
+
 	w.Character = &c
 
 	return nil
@@ -53,21 +59,8 @@ func NewChar(s *core.Core, w *character.CharWrapper, p info.CharacterProfile) er
 
 func (c *char) Init() error {
 	c.a4()
-
-	if c.Base.Cons >= 6 {
-		w, err := minazuki.New(
-			minazuki.WithMandatory(keys.Fischl, "fischl c6", ozActiveKey, "", 60, c.c6Wave, c.Core),
-			minazuki.WithTickOnActive(true),
-			minazuki.WithAnimationDelayCheck(info.AnimationYelanN0StartDelay, func() bool {
-				return c.Core.Player.ActiveChar().NormalCounter == 1
-			}),
-		)
-		if err != nil {
-			return err
-		}
-		c.c6Watcher = w
-	}
-	return nil
+	c.magicInit()
+	return c.c6Init()
 }
 
 func (c *char) Condition(fields []string) (any, error) {

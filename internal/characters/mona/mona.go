@@ -19,13 +19,18 @@ func init() {
 
 type char struct {
 	*tmpl.Character
-	a4Stats  []float64
-	c2icd    int
-	c6Src    int
-	c6Stacks int
+	a4Stats                []float64
+	phantasmalBubbleStacks int
+	omenStartingBonusDur   int
+	magicOmenExtension     int
+	c2icd                  int
+	c2AfterBurst           bool
+	c2Buff                 []float64
+	c6Src                  int
+	c6Stacks               int
 }
 
-func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) error {
+func NewChar(s *core.Core, w *character.CharWrapper, p info.CharacterProfile) error {
 	c := char{}
 	c.Character = tmpl.NewWithWrapper(s, w)
 
@@ -35,8 +40,15 @@ func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) er
 	c.SkillCon = 5
 
 	c.c2icd = -1
+	c.c6Src = -1
 
 	w.Character = &c
+
+	magic, ok := p.Params["magic"]
+	if !ok {
+		magic = 1
+	}
+	c.IsMagic = magic > 0
 
 	return nil
 }
@@ -45,11 +57,16 @@ func (c *char) Init() error {
 	c.burstHook()
 	c.burstDamageBonus()
 	c.a4()
+
+	c.magicInit()
+
 	if c.Base.Cons >= 1 {
 		c.c1()
 	}
+	c.c2Init()
 	if c.Base.Cons >= 4 {
 		c.c4()
 	}
+	c.c6Init()
 	return nil
 }

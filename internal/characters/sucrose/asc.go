@@ -1,6 +1,7 @@
 package sucrose
 
 import (
+	"github.com/genshinsim/gcsim/pkg/core/attacks"
 	"github.com/genshinsim/gcsim/pkg/core/attributes"
 	"github.com/genshinsim/gcsim/pkg/core/event"
 	"github.com/genshinsim/gcsim/pkg/core/glog"
@@ -91,4 +92,90 @@ func (c *char) a4() {
 	c.Core.Log.NewEvent("sucrose a4 triggered", glog.LogCharacterEvent, c.Index()).
 		Write("em snapshot", c.a4Buff[attributes.EM]).
 		Write("expiry", c.Core.F+480)
+}
+
+func (c *char) magicInit() {
+	if !c.IsMagic {
+		return
+	}
+
+	if c.getMagicCount() < 2 {
+		return
+	}
+
+	c.magicBuffSkill = make([]float64, attributes.EndStatType)
+	c.magicBuffSkill[attributes.DmgP] = 0.0571428
+
+	c.magicBuffBurst = make([]float64, attributes.EndStatType)
+	c.magicBuffBurst[attributes.DmgP] = 0.0714285
+}
+
+func (c *char) getMagicCount() int {
+	count := 0
+	for _, c := range c.Core.Player.Chars() {
+		if c.IsMagic {
+			count += 1
+		}
+	}
+	return count
+}
+
+func (c *char) magicOnSkill() {
+	if !c.IsMagic {
+		return
+	}
+
+	if c.getMagicCount() < 2 {
+		return
+	}
+
+	for _, char := range c.Core.Player.Chars() {
+		char.AddAttackMod(character.AttackMod{
+			Base: modifier.NewBase("sucrose-magic-skill", -1),
+			Amount: func(atk *info.AttackEvent, t info.Target) ([]float64, bool) {
+				switch atk.Info.AttackTag {
+				case attacks.AttackTagNormal,
+					attacks.AttackTagExtra,
+					attacks.AttackTagPlunge,
+					attacks.AttackTagElementalArt,
+					attacks.AttackTagElementalArtHold,
+					attacks.AttackTagElementalBurst:
+				default:
+					return nil, false
+				}
+
+				return c.magicBuffSkill, true
+			},
+		})
+	}
+}
+
+func (c *char) magicOnBurst() {
+	if !c.IsMagic {
+		return
+	}
+
+	if c.getMagicCount() < 2 {
+		return
+	}
+
+	for _, char := range c.Core.Player.Chars() {
+		char.AddAttackMod(character.AttackMod{
+			Base: modifier.NewBase("sucrose-magic-burst", -1),
+			Amount: func(atk *info.AttackEvent, t info.Target) ([]float64, bool) {
+				switch atk.Info.AttackTag {
+				case attacks.AttackTagNormal,
+					attacks.AttackTagExtra,
+					attacks.AttackTagPlunge,
+					attacks.AttackTagElementalArt,
+					attacks.AttackTagElementalArtHold,
+					attacks.AttackTagElementalBurst:
+				default:
+					return nil, false
+				}
+
+				return c.magicBuffBurst, true
+			},
+		})
+	}
 }
