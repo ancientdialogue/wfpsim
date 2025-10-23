@@ -30,7 +30,7 @@ type char struct {
 	c2stacks int
 }
 
-func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) error {
+func NewChar(s *core.Core, w *character.CharWrapper, p info.CharacterProfile) error {
 	c := char{}
 	c.Character = tmpl.NewWithWrapper(s, w)
 
@@ -40,6 +40,12 @@ func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) er
 	c.BurstCon = 5
 
 	w.Character = &c
+
+	magic, ok := p.Params["magic"]
+	if !ok {
+		magic = 1
+	}
+	c.IsMagic = magic > 0
 
 	return nil
 }
