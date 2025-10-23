@@ -147,9 +147,6 @@ func (c *char) particleCB(a info.AttackCB) {
 	}
 	c.AddStatus(particleICDKey, 1*60, true)
 
-	count := 3.0
-	// if c.Core.Rand.Float64() < 0.33 {
-	// 	count = 2
-	// }
+	count := 4.0
 	c.Core.QueueParticle(c.Base.Key.String(), count, attributes.Pyro, c.ParticleDelay)
 }
