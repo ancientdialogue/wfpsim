@@ -70,7 +70,9 @@ func (c *char) burstWhite() (action.Info, error) {
 	c.AddStatus(burstKeyWhite, burstFirstTickDelay+ceil((burstTicks-1)*burstInterval), false)
 
 	c.SetCDWithDelay(action.ActionBurst, burstCD, 22)
+	c.ConsumeEnergy(10)
 	c.a1OnBurst(true)
+
 	return action.Info{
 		Frames:          frames.NewAbilFunc(burstFrames),
 		AnimationLength: burstFrames[action.InvalidAction],
@@ -127,8 +129,9 @@ func (c *char) burstBlack() (action.Info, error) {
 	c.AddStatus(burstKeyBlack, burstFirstTickDelay+ceil((burstTicks-1)*burstInterval), false)
 
 	c.SetCDWithDelay(action.ActionBurst, burstCD, 22)
-
+	c.ConsumeEnergy(10)
 	c.a1OnBurst(false)
+
 	return action.Info{
 		Frames:          frames.NewAbilFunc(burstFrames),
 		AnimationLength: burstFrames[action.InvalidAction],
