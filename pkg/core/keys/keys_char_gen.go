@@ -33,6 +33,7 @@ const (
 	Diluc
 	Diona
 	Dori
+	Durin
 	Emilie
 	Escoffier
 	Eula
@@ -213,6 +214,10 @@ func init() {
 	charNames[Dori] = "dori"
 	charPrettyName[Dori] = "Dori"
 	CharKeyToEle[Dori] = attributes.Electro
+
+	charNames[Durin] = "durin"
+	charPrettyName[Durin] = "Durin"
+	CharKeyToEle[Durin] = attributes.Pyro
 
 	charNames[Emilie] = "emilie"
 	charPrettyName[Emilie] = "Emilie"
