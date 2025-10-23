@@ -90,8 +90,8 @@ func (c *char) burstTickWhite(src int) func() {
 		ai := info.AttackInfo{
 			ActorIndex: c.Index(),
 			Abil:       "Lustrous Light: Searing Flame",
-			AttackTag:  attacks.AttackTagElementalArt,
-			ICDTag:     attacks.ICDTagElementalArt,
+			AttackTag:  attacks.AttackTagElementalBurst,
+			ICDTag:     attacks.ICDTagElementalBurst,
 			ICDGroup:   attacks.ICDGroupDurin,
 			StrikeType: attacks.StrikeTypeDefault,
 			Element:    attributes.Pyro,
@@ -149,8 +149,8 @@ func (c *char) burstTickBlack(src int) func() {
 		ai := info.AttackInfo{
 			ActorIndex: c.Index(),
 			Abil:       "Dark Decay: Abyssal Flame",
-			AttackTag:  attacks.AttackTagElementalArt,
-			ICDTag:     attacks.ICDTagElementalArt,
+			AttackTag:  attacks.AttackTagElementalBurst,
+			ICDTag:     attacks.ICDTagElementalBurst,
 			ICDGroup:   attacks.ICDGroupDurin,
 			StrikeType: attacks.StrikeTypeDefault,
 			Element:    attributes.Pyro,
