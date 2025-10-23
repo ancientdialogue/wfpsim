@@ -13,7 +13,7 @@ import (
 
 var (
 	burstFrames      []int
-	burstInitHitmark []int = []int{110, 110 + 10, 110 + 10 + 10} // Initial Hit
+	burstInitHitmark = []int{110, 110 + 10, 110 + 10 + 10} // Initial Hit
 )
 
 const (

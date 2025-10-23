@@ -45,7 +45,7 @@ func init() {
 // relatively standard with no major differences versus other characters
 func (c *char) Attack(p map[string]int) (action.Info, error) {
 	if c.StatusIsActive(skillWindowKey) {
-		c.skillRecastBlack()
+		return c.skillRecastBlack(), nil
 	}
 
 	for i, mult := range attack[c.NormalCounter] {

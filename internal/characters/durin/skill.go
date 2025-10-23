@@ -12,7 +12,7 @@ import (
 var (
 	skillFrames        []int
 	skillRecastFrames  []int
-	skillBlackHitmarks []int = []int{20, 20 + 5, 20 + 5 + 5}
+	skillBlackHitmarks = []int{20, 20 + 5, 20 + 5 + 5}
 )
 
 const (
@@ -57,7 +57,7 @@ func init() {
 func (c *char) Skill(p map[string]int) (action.Info, error) {
 	// if this is second press, swap and activate a1
 	if c.StatusIsActive(skillWindowKey) {
-		return c.skillRecastWhite()
+		return c.skillRecastWhite(), nil
 	}
 
 	c.AddStatus(skillWindowKey, skillWindowDur, true)
@@ -71,7 +71,7 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 	}, nil
 }
 
-func (c *char) skillRecastWhite() (action.Info, error) {
+func (c *char) skillRecastWhite() action.Info {
 	ai := info.AttackInfo{
 		ActorIndex: c.Index(),
 		Abil:       "Break: Lustrous Light",
@@ -101,10 +101,10 @@ func (c *char) skillRecastWhite() (action.Info, error) {
 		AnimationLength: skillRecastFrames[action.InvalidAction],
 		CanQueueAfter:   skillRecastFrames[action.ActionSkill],
 		State:           action.SkillState,
-	}, nil
+	}
 }
 
-func (c *char) skillRecastBlack() (action.Info, error) {
+func (c *char) skillRecastBlack() action.Info {
 	ai := info.AttackInfo{
 		ActorIndex: c.Index(),
 		Abil:       "Break: Dark Decay",
@@ -135,7 +135,7 @@ func (c *char) skillRecastBlack() (action.Info, error) {
 		AnimationLength: skillRecastFrames[action.InvalidAction],
 		CanQueueAfter:   skillRecastFrames[action.ActionSkill],
 		State:           action.SkillState,
-	}, nil
+	}
 }
 
 func (c *char) particleCB(a info.AttackCB) {
