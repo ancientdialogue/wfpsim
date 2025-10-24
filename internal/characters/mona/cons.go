@@ -47,10 +47,6 @@ func (c *char) c1() {
 				char.AddReactBonusMod(character.ReactBonusMod{
 					Base: modifier.NewBase("mona-c1", 8*60),
 					Amount: func(ai info.AttackInfo) (float64, bool) {
-						// doesn't work off-field
-						if c.Core.Player.Active() != char.Index() {
-							return 0, false
-						}
 						bonus := 0.15
 						if char.Index() != c.Core.Player.Active() {
 							bonus *= 1.6
