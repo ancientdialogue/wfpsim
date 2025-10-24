@@ -82,7 +82,7 @@ func (c *char) skillRecastWhite() action.Info {
 	return action.Info{
 		Frames:          frames.NewAbilFunc(skillRecastFrames),
 		AnimationLength: skillRecastFrames[action.InvalidAction],
-		CanQueueAfter:   skillRecastFrames[action.ActionSkill],
+		CanQueueAfter:   skillRecastFrames[action.ActionBurst],
 		State:           action.SkillState,
 	}
 }
@@ -116,7 +116,7 @@ func (c *char) skillRecastBlack() action.Info {
 	return action.Info{
 		Frames:          frames.NewAbilFunc(skillRecastFrames),
 		AnimationLength: skillRecastFrames[action.InvalidAction],
-		CanQueueAfter:   skillRecastFrames[action.ActionSkill],
+		CanQueueAfter:   skillRecastFrames[action.ActionBurst],
 		State:           action.SkillState,
 	}
 }
