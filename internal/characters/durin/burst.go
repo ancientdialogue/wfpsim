@@ -13,24 +13,25 @@ import (
 
 var (
 	burstFrames      []int
-	burstInitHitmark = []int{110, 110 + 10, 110 + 10 + 10} // Initial Hit
+	burstInitHitmark = []int{99, 99 + 25, 99 + 25 + 26} // Initial Hit
 )
 
 const (
-	burstTicks          = 16
-	burstInterval       = 75
-	burstFirstTickDelay = 140
-	burstCD             = 18 * 60
-	burstKeyWhite       = "durin-burst-white"
-	burstKeyBlack       = "durin-burst-black"
+	burstTicks               = 16
+	burstInterval            = 73
+	burstFirstTickDelayBlack = 99 + 25 + 26 + 53
+	burstFirstTickDelayWhite = 99 + 25 + 26 + 22
+	burstCD                  = 18 * 60
+	burstKeyWhite            = "durin-burst-white"
+	burstKeyBlack            = "durin-burst-black"
 )
 
 func init() {
-	burstFrames = frames.InitAbilSlice(115) // E -> D/J
-	burstFrames[action.ActionAttack] = 115
-	burstFrames[action.ActionBurst] = 115
-	burstFrames[action.ActionWalk] = 115
-	burstFrames[action.ActionSwap] = 115
+	burstFrames = frames.InitAbilSlice(100) // E -> D/J
+	burstFrames[action.ActionAttack] = 100
+	burstFrames[action.ActionBurst] = 100
+	burstFrames[action.ActionWalk] = 100
+	burstFrames[action.ActionSwap] = 100
 }
 
 func ceil(x float64) int {
@@ -64,10 +65,10 @@ func (c *char) burstWhite() (action.Info, error) {
 
 	c.burstSrc = c.Core.F
 	for i := 0.0; i < burstTicks; i++ {
-		c.QueueCharTask(c.burstTickWhite(c.burstSrc), burstFirstTickDelay+ceil(burstInterval*i))
+		c.QueueCharTask(c.burstTickWhite(c.burstSrc), burstFirstTickDelayWhite+ceil(burstInterval*i))
 	}
 	c.DeleteStatus(burstKeyBlack)
-	c.AddStatus(burstKeyWhite, burstFirstTickDelay+ceil((burstTicks-1)*burstInterval), false)
+	c.AddStatus(burstKeyWhite, burstFirstTickDelayWhite+ceil((burstTicks-1)*burstInterval), false)
 
 	c.SetCDWithDelay(action.ActionBurst, burstCD, 22)
 	c.ConsumeEnergy(10)
@@ -91,7 +92,7 @@ func (c *char) burstTickWhite(src int) func() {
 			ActorIndex: c.Index(),
 			Abil:       "Lustrous Light: Searing Flame",
 			AttackTag:  attacks.AttackTagElementalBurst,
-			ICDTag:     attacks.ICDTagElementalBurst,
+			ICDTag:     attacks.ICDTagDurinBurst,
 			ICDGroup:   attacks.ICDGroupDurin,
 			StrikeType: attacks.StrikeTypeDefault,
 			Element:    attributes.Pyro,
@@ -123,10 +124,10 @@ func (c *char) burstBlack() (action.Info, error) {
 
 	c.burstSrc = c.Core.F
 	for i := 0.0; i < burstTicks; i++ {
-		c.QueueCharTask(c.burstTickBlack(c.burstSrc), burstFirstTickDelay+ceil(burstInterval*i))
+		c.QueueCharTask(c.burstTickBlack(c.burstSrc), burstFirstTickDelayBlack+ceil(burstInterval*i))
 	}
 	c.DeleteStatus(burstKeyWhite)
-	c.AddStatus(burstKeyBlack, burstFirstTickDelay+ceil((burstTicks-1)*burstInterval), false)
+	c.AddStatus(burstKeyBlack, burstFirstTickDelayBlack+ceil((burstTicks-1)*burstInterval), false)
 
 	c.SetCDWithDelay(action.ActionBurst, burstCD, 22)
 	c.ConsumeEnergy(10)
@@ -150,7 +151,7 @@ func (c *char) burstTickBlack(src int) func() {
 			ActorIndex: c.Index(),
 			Abil:       "Dark Decay: Abyssal Flame",
 			AttackTag:  attacks.AttackTagElementalBurst,
-			ICDTag:     attacks.ICDTagElementalBurst,
+			ICDTag:     attacks.ICDTagDurinBurst,
 			ICDGroup:   attacks.ICDGroupDurin,
 			StrikeType: attacks.StrikeTypeDefault,
 			Element:    attributes.Pyro,

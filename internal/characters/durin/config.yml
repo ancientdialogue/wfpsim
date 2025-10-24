@@ -7,7 +7,8 @@ icd_groups:
     ele_app_sequence:
       [1, 0, 1, 0, 1, 0 , 1, 0]
     damage_sequence: [1, 1, 1, 1, 1, 1, 1, 1]
-
+icd_tags:
+  - ICDTagDurinBurst
 skill_data_mapping:
     attack: # Cyclonic Duster
         attack_1:
