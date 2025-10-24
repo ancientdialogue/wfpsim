@@ -12,15 +12,15 @@ import (
 var (
 	skillFrames        []int
 	skillRecastFrames  []int
-	skillBlackHitmarks = []int{20, 20 + 5, 20 + 5 + 5}
+	skillBlackHitmarks = []int{38, 38 + 6, 38 + 6 + 7}
 )
 
 const (
 	particleICDKey     = "durin-particle-icd"
 	skillWindowKey     = "durin-essential-transformation"
 	skillWindowDur     = 3 * 60
-	skillCDStarts      = 19
-	skillWhiteHitmarks = 21
+	skillCDStarts      = 2
+	skillWhiteHitmarks = 35
 
 	whiteKey     = "confirmation-of-purity"
 	blackKey     = "denial-of-darkness"
@@ -30,32 +30,15 @@ const (
 func init() {
 	// Tap E
 	skillFrames = frames.InitAbilSlice(180)
-	skillFrames[action.ActionAttack] = 42
-	skillFrames[action.ActionSkill] = 30
+	skillFrames[action.ActionAttack] = 15
+	skillFrames[action.ActionSkill] = 15
 
 	// Recast White
-	skillRecastFrames = frames.InitAbilSlice(88)
-	skillRecastFrames[action.ActionLowPlunge] = 52
-	skillRecastFrames[action.ActionSkill] = 44
-	skillRecastFrames[action.ActionWalk] = 86
-	skillRecastFrames[action.ActionSwap] = 87
+	skillRecastFrames = frames.InitAbilSlice(47)
+	skillRecastFrames[action.ActionBurst] = 37
 }
 
-// Dashes nimbly forward with silken steps. Once this dash ends, Chiori will
-// summon the automaton doll "Tamoto" beside her and sweep her blade upward,
-// dealing AoE Geo DMG to nearby opponents based on her ATK and DEF. Holding the
-// Skill will cause it to behave differently.
-//
-// Hold Enter Aiming Mode to adjust the dash direction.
-//
-// Tamoto
-// - Will slash at nearby opponents at intervals, dealing AoE Geo DMG based on
-// Chiori's ATK and DEF.
-// - While active, when Geo Construct(s) are created nearby, an additional Tamoto
-// will be summoned next to Chiori. Only 1 additional Tamoto can be summoned in
-// this manner, and its duration is independently counted.
 func (c *char) Skill(p map[string]int) (action.Info, error) {
-	// if this is second press, swap and activate a1
 	if c.StatusIsActive(skillWindowKey) {
 		return c.skillRecastWhite(), nil
 	}
@@ -76,7 +59,7 @@ func (c *char) skillRecastWhite() action.Info {
 		ActorIndex: c.Index(),
 		Abil:       "Break: Lustrous Light",
 		AttackTag:  attacks.AttackTagElementalArt,
-		ICDTag:     attacks.ICDTagNone,
+		ICDTag:     attacks.ICDTagElementalArt,
 		ICDGroup:   attacks.ICDGroupDefault,
 		StrikeType: attacks.StrikeTypeDefault,
 		Element:    attributes.Pyro,
@@ -109,7 +92,7 @@ func (c *char) skillRecastBlack() action.Info {
 		ActorIndex: c.Index(),
 		Abil:       "Break: Dark Decay",
 		AttackTag:  attacks.AttackTagElementalArt,
-		ICDTag:     attacks.ICDTagNone,
+		ICDTag:     attacks.ICDTagElementalArt,
 		ICDGroup:   attacks.ICDGroupDefault,
 		StrikeType: attacks.StrikeTypeDefault,
 		Element:    attributes.Pyro,
