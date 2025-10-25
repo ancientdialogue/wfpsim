@@ -72,7 +72,7 @@ func (c *char) applySpark(ai info.AttackInfo) info.Snapshot {
 	snap := c.Snapshot(&ai)
 	if c.StatusIsActive(a1SparkKey) {
 		snap.Stats[attributes.DmgP] += .50
-		// C6 Magic bonus:
+		// Magic bonus (C6):
 		// When Klee uses an Explosive Spark, there is a 50% chance it will not be consumed.
 		previous := c.a1CurrentStack
 		if c.Base.Cons < 6 || c.IsMagic && c.getMagicCount() > 1 && c.Core.Rand.Float64() < 0.5 {

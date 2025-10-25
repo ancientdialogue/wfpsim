@@ -120,6 +120,9 @@ func (c *char) Attack(p map[string]int) (action.Info, error) {
 		done = true
 	}
 
+	// Magic: Secret Rite
+	// When she performs the third Normal Attack in the sequence, an Explosive Spark
+	// will be consumed to unleash Coordinated Charged Attack: Blast.
 	// TODO: delay?
 	if c.IsMagic && c.getMagicCount() > 1 && c.StatusIsActive(a1SparkKey) {
 		if c.NormalCounter == 2 || c.Base.Cons == 6 && c.NormalCounter < 2 && c.Core.Rand.Float64() < 0.4 {

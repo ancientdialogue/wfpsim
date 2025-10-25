@@ -17,6 +17,9 @@ const (
 
 // When Jumpy Dumpty and Normal Attacks deal DMG, Klee has a 50% chance to obtain an Explosive Spark.
 // This Explosive Spark is consumed by the next Charged Attack, which costs no Stamina and deals 50% increased DMG.
+
+// Magic bonus:
+// Using her Elemental Skill or Elemental Burst grants an additional Explosive Spark. Max 3 Explosive Sparks.
 func (c *char) makeA1CB() info.AttackCBFunc {
 	if c.Base.Ascension < 1 {
 		return nil
