@@ -4,6 +4,7 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/attacks"
 	"github.com/genshinsim/gcsim/pkg/core/attributes"
 	"github.com/genshinsim/gcsim/pkg/core/event"
+	"github.com/genshinsim/gcsim/pkg/core/glog"
 	"github.com/genshinsim/gcsim/pkg/core/info"
 	"github.com/genshinsim/gcsim/pkg/core/player/character"
 	"github.com/genshinsim/gcsim/pkg/enemy"
@@ -95,7 +96,7 @@ func (c *char) a4() {
 func (c *char) getAureliths() int {
 	count := 0
 	for _, exp := range c.aureliths {
-		if exp < c.Core.F {
+		if exp >= c.Core.F {
 			count += 1
 		}
 	}
@@ -105,6 +106,9 @@ func (c *char) getAureliths() int {
 func (c *char) createAurelith() {
 	if c.getAureliths() >= 2 {
 		return
+	}
+	if c.Core.Flags.LogDebug {
+		c.Core.Log.NewEventBuildMsg(glog.LogCharacterEvent, c.Index(), "Creating aurelith").Write("expires", c.Core.F+10*60)
 	}
 
 	c.aureliths[c.oldestAurelith] = c.Core.F + 10*60
@@ -136,6 +140,7 @@ func (c *char) magicInit() {
 		if !c.StatusIsActive(magicSkillKey) {
 			return false
 		}
+
 		c.createAurelith()
 		return false
 	}, "albedo-magic-aurelith")
