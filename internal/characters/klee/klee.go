@@ -65,7 +65,6 @@ func (c *char) Condition(fields []string) (any, error) {
 
 // Magic: Secret Rite
 // During Klee's Elemental Burst, her Normal Attack sequence does not reset.
-// TODO: This causes N1Q to not reset counter, is this accurate behavior?
 func (c *char) ResetNormalCounter() {
 	if c.IsMagic && c.getMagicCount() > 1 && c.Core.Player.Active() == c.Index() && c.Core.Status.Duration(burstKey) > 0 {
 		c.NormalCounter = c.savedNormalCounter
