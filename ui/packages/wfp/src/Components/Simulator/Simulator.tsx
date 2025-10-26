@@ -52,6 +52,7 @@ export function Simulator({
           <li>Mona (Magic)</li>
           <li>Albedo (Magic)</li>
           <li>Razor (Magic)</li>
+          <li>Klee (Magic)</li>
           <li>Durin (C0)</li>
         </ul>
         <p className=" font-bold">
