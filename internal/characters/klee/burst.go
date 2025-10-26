@@ -46,6 +46,12 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 		CanBeDefenseHalted: true,
 		IsDeployable:       true,
 	}
+
+	// Force burst to reset counter so N1Q is reset... perhaps there is a better way
+	if c.IsMagic && c.getMagicCount() > 1 {
+		c.savedNormalCounter = 0
+	}
+
 	// lasts 10 seconds, starts after 2.2 seconds maybe?
 	c.Core.Status.Add(burstKey, 600+burstStart)
 
