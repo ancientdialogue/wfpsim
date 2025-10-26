@@ -15,10 +15,13 @@ func init() {
 
 type char struct {
 	*tmpl.Character
-	c1Chance float64
+	a1CurrentStack     int
+	a1MaxStack         int
+	c1Chance           float64
+	savedNormalCounter int
 }
 
-func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) error {
+func NewChar(s *core.Core, w *character.CharWrapper, p info.CharacterProfile) error {
 	c := char{}
 	c.Character = tmpl.NewWithWrapper(s, w)
 
@@ -31,12 +34,44 @@ func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) er
 
 	w.Character = &c
 
+	magic, ok := p.Params["magic"]
+	if !ok {
+		magic = 1
+	}
+	c.IsMagic = magic > 0
+
+	c.a1MaxStack = 1
+	if c.IsMagic {
+		c.a1MaxStack = 3
+	}
+
 	return nil
 }
 
 func (c *char) Init() error {
 	c.onExitField()
+	c.magicInit()
 	return nil
+}
+
+func (c *char) Condition(fields []string) (any, error) {
+	switch fields[0] {
+	case "spark-stacks":
+		return c.a1CurrentStack, nil
+	default:
+		return c.Character.Condition(fields)
+	}
+}
+
+// Magic: Secret Rite
+// During Klee's Elemental Burst, her Normal Attack sequence does not reset.
+// TODO: This causes N1Q to not reset counter, is this accurate behavior?
+func (c *char) ResetNormalCounter() {
+	if c.IsMagic && c.getMagicCount() > 1 && c.Core.Player.Active() == c.Index() && c.Core.Status.Duration(burstKey) > 0 {
+		c.NormalCounter = c.savedNormalCounter
+		return
+	}
+	c.Character.ResetNormalCounter()
 }
 
 func (c *char) ActionStam(a action.Action, p map[string]int) float64 {
