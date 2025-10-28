@@ -59,7 +59,6 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 	ai.Mult = skillTick[c.TalentLvlSkill()]
 	ai.UseDef = true
 	c.skillAttackInfo = ai
-	c.skillSnapshot = c.Snapshot(&c.skillAttackInfo)
 
 	// create a construct
 	// Construct is not fully formed until after the hit lands (exact timing unknown)
@@ -129,10 +128,10 @@ func (c *char) skillHook() {
 		// this ICD is most likely tied to the construct, so it's not hitlag extendable
 		c.AddStatus(skillICDKey, 120, false) // proc every 2s
 
-		c.Core.QueueAttackWithSnap(
+		c.Core.QueueAttack(
 			c.skillAttackInfo,
-			c.skillSnapshot,
 			combat.NewCircleHitOnTarget(trg, nil, 3.4),
+			1,
 			1,
 			c.particleCB,
 		)
