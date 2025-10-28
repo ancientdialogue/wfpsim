@@ -15,15 +15,19 @@ func init() {
 
 type char struct {
 	*tmpl.Character
+	magicBurstExtCount  int
+	magicBuff           []float64
+	qSrc                int
 	qPos                info.Point
 	qAbsorb             attributes.Element
+	qAbsorbBonusTicks   int
 	absorbCheckLocation info.AttackPattern
 	aiAbsorb            info.AttackInfo
 	snapAbsorb          info.Snapshot
 	c4bonus             []float64
 }
 
-func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) error {
+func NewChar(s *core.Core, w *character.CharWrapper, p info.CharacterProfile) error {
 	c := char{}
 	c.Character = tmpl.NewWithWrapper(s, w)
 
@@ -32,17 +36,21 @@ func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) er
 	c.BurstCon = 3
 	c.SkillCon = 5
 
+	magic, ok := p.Params["magic"]
+	if !ok {
+		magic = 1
+	}
+	c.IsMagic = magic > 0
+
 	w.Character = &c
 
 	return nil
 }
 
 func (c *char) Init() error {
-	// C4:
-	// When Venti picks up an Elemental Orb or Particle, he receives a 25% Anemo DMG Bonus for 10s.
-	if c.Base.Cons >= 4 {
-		c.c4()
-	}
+	c.magicInit()
+	c.c4Init()
+	c.c6Init()
 	return nil
 }
 
