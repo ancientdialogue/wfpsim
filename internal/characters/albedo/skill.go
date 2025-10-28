@@ -80,7 +80,6 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 
 	c.SetCDWithDelay(action.ActionSkill, 240, 23)
 	c.magicOnSkill()
-	c.c1OnSkill()
 	return action.Info{
 		Frames:          frames.NewAbilFunc(skillFrames),
 		AnimationLength: skillFrames[action.InvalidAction],
