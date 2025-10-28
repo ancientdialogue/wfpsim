@@ -100,6 +100,23 @@ func (c *char) magicInit() {
 			return false
 		}
 
+		for _, char := range c.Core.Player.Chars() {
+			if char.Index() == c.Index() {
+				continue
+			}
+			char.AddStatMod(character.StatMod{
+				Base:         modifier.NewBase("fischl-magic-atkp", 10*60),
+				AffectedStat: attributes.ATKP,
+				Amount: func() ([]float64, bool) {
+					if c.Core.Player.Active() != char.Index() {
+						return nil, false
+					}
+					mAtkp[attributes.ATKP] = 0.225 * c.c6MagicBonus()
+					return mAtkp, true
+				},
+			})
+		}
+
 		c.AddStatMod(character.StatMod{
 			Base:         modifier.NewBase("fischl-magic-atkp", 10*60),
 			AffectedStat: attributes.ATKP,
@@ -109,14 +126,6 @@ func (c *char) magicInit() {
 			},
 		})
 
-		c.Core.Player.ActiveChar().AddStatMod(character.StatMod{
-			Base:         modifier.NewBase("fischl-magic-atkp", 10*60),
-			AffectedStat: attributes.ATKP,
-			Amount: func() ([]float64, bool) {
-				mAtkp[attributes.ATKP] = 0.225 * c.c6MagicBonus()
-				return mAtkp, true
-			},
-		})
 		return false
 	}, "fischl-magic-ol")
 
@@ -131,6 +140,23 @@ func (c *char) magicInit() {
 			return false
 		}
 
+		for _, char := range c.Core.Player.Chars() {
+			if char.Index() == c.Index() {
+				continue
+			}
+			char.AddStatMod(character.StatMod{
+				Base:         modifier.NewBase("fischl-magic-em", 10*60),
+				AffectedStat: attributes.EM,
+				Amount: func() ([]float64, bool) {
+					if c.Core.Player.Active() != char.Index() {
+						return nil, false
+					}
+					mEM[attributes.EM] = 90 * c.c6MagicBonus()
+					return mEM, true
+				},
+			})
+		}
+
 		c.AddStatMod(character.StatMod{
 			Base:         modifier.NewBase("fischl-magic-em", 10*60),
 			AffectedStat: attributes.EM,
@@ -140,14 +166,6 @@ func (c *char) magicInit() {
 			},
 		})
 
-		c.Core.Player.ActiveChar().AddStatMod(character.StatMod{
-			Base:         modifier.NewBase("fischl-magic-em", 10*60),
-			AffectedStat: attributes.EM,
-			Amount: func() ([]float64, bool) {
-				mEM[attributes.EM] = 90 * c.c6MagicBonus()
-				return mEM, true
-			},
-		})
 		return false
 	}
 
