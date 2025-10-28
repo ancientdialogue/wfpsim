@@ -160,6 +160,9 @@ func (c *char) magicOnBurst() {
 	}
 
 	for _, char := range c.Core.Player.Chars() {
+		if !char.IsMagic {
+			continue
+		}
 		char.AddAttackMod(character.AttackMod{
 			Base: modifier.NewBase("sucrose-magic-burst", -1),
 			Amount: func(atk *info.AttackEvent, t info.Target) ([]float64, bool) {
