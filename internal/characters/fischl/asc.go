@@ -117,10 +117,9 @@ func (c *char) magicInit() {
 			})
 		}
 
-		c.AddStatMod(character.StatMod{
-			Base:         modifier.NewBase("fischl-magic-atkp", 10*60),
-			AffectedStat: attributes.ATKP,
-			Amount: func() ([]float64, bool) {
+		c.AddAttackMod(character.AttackMod{
+			Base: modifier.NewBase("fischl-magic-atkp", 10*60),
+			Amount: func(atk *info.AttackEvent, t info.Target) ([]float64, bool) {
 				mAtkp[attributes.ATKP] = 0.225 * c.c6MagicBonus()
 				return mAtkp, true
 			},
@@ -157,10 +156,9 @@ func (c *char) magicInit() {
 			})
 		}
 
-		c.AddStatMod(character.StatMod{
-			Base:         modifier.NewBase("fischl-magic-em", 10*60),
-			AffectedStat: attributes.EM,
-			Amount: func() ([]float64, bool) {
+		c.AddAttackMod(character.AttackMod{
+			Base: modifier.NewBase("fischl-magic-em", 10*60),
+			Amount: func(atk *info.AttackEvent, t info.Target) ([]float64, bool) {
 				mEM[attributes.EM] = 90 * c.c6MagicBonus()
 				return mEM, true
 			},

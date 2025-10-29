@@ -28,10 +28,12 @@ func (c *char) c1Init() {
 	c.c1Buff[attributes.DEFP] = 0.5
 }
 
-func (c *char) c1OnSkill() {
+func (c *char) c1OnSkillTick() {
 	if c.Base.Cons < 1 {
 		return
 	}
+	c.AddEnergy("albedo-c1", 1.2)
+	c.Core.Log.NewEvent("c1 restoring energy", glog.LogCharacterEvent, c.Index())
 	c.AddStatMod(character.StatMod{
 		Base:         modifier.NewBase("albedo-c1", 20*60),
 		AffectedStat: attributes.DEFP,
@@ -39,14 +41,6 @@ func (c *char) c1OnSkill() {
 			return c.c1Buff, true
 		},
 	})
-}
-
-func (c *char) c1OnSkillTick() {
-	if c.Base.Cons < 1 {
-		return
-	}
-	c.AddEnergy("albedo-c1", 1.2)
-	c.Core.Log.NewEvent("c1 restoring energy", glog.LogCharacterEvent, c.Index())
 }
 
 func (c *char) c2OnSkillTick() {
@@ -68,6 +62,10 @@ func (c *char) c2OnSkillTick() {
 	}
 
 	if c.Core.Player.Active() == c.Index() {
+		return
+	}
+
+	if c.getAureliths() < 1 {
 		return
 	}
 

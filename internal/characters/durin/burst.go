@@ -17,8 +17,10 @@ var (
 )
 
 const (
-	burstTicks               = 16
-	burstInterval            = 73
+	burstTicksWhite          = 20
+	burstTicksBlack          = 16
+	burstIntervalWhite       = 59
+	burstIntervalBlack       = 73
 	burstFirstTickDelayBlack = 99 + 25 + 26 + 53
 	burstFirstTickDelayWhite = 99 + 25 + 26 + 22
 	burstCD                  = 18 * 60
@@ -64,11 +66,11 @@ func (c *char) burstWhite() (action.Info, error) {
 	}
 
 	c.burstSrc = c.Core.F
-	for i := 0.0; i < burstTicks; i++ {
-		c.QueueCharTask(c.burstTickWhite(c.burstSrc), burstFirstTickDelayWhite+ceil(burstInterval*i))
+	for i := 0.0; i < burstTicksWhite; i++ {
+		c.QueueCharTask(c.burstTickWhite(c.burstSrc), burstFirstTickDelayWhite+ceil(burstIntervalWhite*i))
 	}
 	c.DeleteStatus(burstKeyBlack)
-	c.AddStatus(burstKeyWhite, burstFirstTickDelayWhite+ceil((burstTicks-1)*burstInterval), false)
+	c.AddStatus(burstKeyWhite, burstFirstTickDelayWhite+ceil((burstTicksWhite-1)*burstIntervalWhite), false)
 
 	c.SetCDWithDelay(action.ActionBurst, burstCD, 22)
 	c.ConsumeEnergy(10)
@@ -123,11 +125,11 @@ func (c *char) burstBlack() (action.Info, error) {
 	}
 
 	c.burstSrc = c.Core.F
-	for i := 0.0; i < burstTicks; i++ {
-		c.QueueCharTask(c.burstTickBlack(c.burstSrc), burstFirstTickDelayBlack+ceil(burstInterval*i))
+	for i := 0.0; i < burstTicksBlack; i++ {
+		c.QueueCharTask(c.burstTickBlack(c.burstSrc), burstFirstTickDelayBlack+ceil(burstIntervalBlack*i))
 	}
 	c.DeleteStatus(burstKeyWhite)
-	c.AddStatus(burstKeyBlack, burstFirstTickDelayBlack+ceil((burstTicks-1)*burstInterval), false)
+	c.AddStatus(burstKeyBlack, burstFirstTickDelayBlack+ceil((burstTicksBlack-1)*burstIntervalBlack), false)
 
 	c.SetCDWithDelay(action.ActionBurst, burstCD, 22)
 	c.ConsumeEnergy(10)
