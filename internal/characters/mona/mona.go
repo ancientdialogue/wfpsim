@@ -60,13 +60,10 @@ func (c *char) Init() error {
 
 	c.magicInit()
 
-	if c.Base.Cons >= 1 {
-		c.c1()
-	}
+	c.c1Init()
 	c.c2Init()
-	if c.Base.Cons >= 4 {
-		c.c4()
-	}
+	c.c4Init()
 	c.c6Init()
+
 	return nil
 }
