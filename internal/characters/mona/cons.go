@@ -26,7 +26,10 @@ const (
 // - Vaporize DMG increases by 15%.
 // - Hydro Swirl DMG increases by 15%.
 // - Frozen duration is extended by 15%.
-func (c *char) c1() {
+func (c *char) c1Init() {
+	if c.Base.Cons < 1 {
+		return
+	}
 	// TODO: "Frozen duration is extended by 15%." is bugged
 	c.Core.Events.Subscribe(event.OnEnemyDamage, func(args ...any) bool {
 		// ignore if target doesn't have debuff
@@ -147,7 +150,10 @@ func (c *char) c2CaCB(a info.AttackCB) {
 
 // C4:
 // When any party member attacks an opponent affected by an Omen, their CRIT Rate is increased by 15%.
-func (c *char) c4() {
+func (c *char) c4Init() {
+	if c.Base.Cons < 4 {
+		return
+	}
 	m := make([]float64, attributes.EndStatType)
 	m[attributes.CR] = 0.15
 
@@ -316,6 +322,9 @@ func (c *char) c6TimerReset() {
 }
 
 func (c *char) c6Init() {
+	if c.Base.Cons < 6 {
+		return
+	}
 	c.Core.Events.Subscribe(event.OnEnemyHit, func(args ...any) bool {
 		e, ok := args[0].(*enemy.Enemy)
 		if !ok {
