@@ -97,7 +97,6 @@ func (c *char) c1OnBurst(isWhite bool) {
 		}
 		char.RemoveTag(c1Key)
 	}
-	return
 }
 
 var c2ReactToElements = map[event.Event][]attributes.Element{
