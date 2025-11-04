@@ -157,7 +157,7 @@ func (c *char) c2MakeBuff(elements []attributes.Element) {
 		for _, char := range c.Core.Player.Chars() {
 			stat := attributes.EleToDmgP(elem)
 			char.AddStatMod(character.StatMod{
-				Base:         modifier.NewBaseWithHitlag("durin-c2-"+elem.String(), 6),
+				Base:         modifier.NewBaseWithHitlag("durin-c2-"+elem.String(), 6*60),
 				AffectedStat: attributes.EleToDmgP(elem),
 				Amount: func() ([]float64, bool) {
 					c.c2Buff[stat] = 0.5
