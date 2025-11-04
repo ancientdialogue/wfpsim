@@ -43,7 +43,6 @@ func (c *char) Attack(p map[string]int) (action.Info, error) {
 		if ai.Element == attributes.Anemo {
 			c.c1Normal(ai, attackHitmarks[c.NormalCounter][i], travel)
 		}
-
 	}
 
 	defer c.AdvanceNormalIndex()
