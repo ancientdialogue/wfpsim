@@ -3,6 +3,7 @@ package venti
 import (
 	"github.com/genshinsim/gcsim/internal/frames"
 	"github.com/genshinsim/gcsim/pkg/core/action"
+	"github.com/genshinsim/gcsim/pkg/core/attributes"
 )
 
 var (
@@ -39,7 +40,10 @@ func (c *char) Attack(p map[string]int) (action.Info, error) {
 			c.magicNaCB,
 			c2Cb,
 		)
-		c.c1Normal(ai, attackHitmarks[c.NormalCounter][i], travel)
+		if ai.Element == attributes.Anemo {
+			c.c1Normal(ai, attackHitmarks[c.NormalCounter][i], travel)
+		}
+
 	}
 
 	defer c.AdvanceNormalIndex()
