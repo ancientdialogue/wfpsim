@@ -160,6 +160,9 @@ func (c *char) c2MakeBuff(elements []attributes.Element) {
 				Base:         modifier.NewBaseWithHitlag("durin-c2-"+elem.String(), 6*60),
 				AffectedStat: attributes.EleToDmgP(elem),
 				Amount: func() ([]float64, bool) {
+					for i := range c.c2Buff {
+						c.c2Buff[i] = 0
+					}
 					c.c2Buff[stat] = 0.5
 					return c.c2Buff, true
 				},
