@@ -16,6 +16,8 @@ func init() {
 type char struct {
 	*tmpl.Character
 	burstSrc int
+	c2Buff   []float64
+	c4Buff   []float64
 }
 
 func NewChar(s *core.Core, w *character.CharWrapper, p info.CharacterProfile) error {
@@ -40,6 +42,9 @@ func NewChar(s *core.Core, w *character.CharWrapper, p info.CharacterProfile) er
 
 func (c *char) Init() error {
 	c.a1Init()
+	c.c1Init()
+	c.c2Init()
+	c.c4Init()
 	return nil
 }
 

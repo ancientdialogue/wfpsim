@@ -11,7 +11,7 @@ import (
 	"github.com/genshinsim/gcsim/pkg/modifier"
 )
 
-var reactToElements = map[event.Event][]attributes.Element{
+var a1ReactToElements = map[event.Event][]attributes.Element{
 	event.OnOverload:        {attributes.Electro, attributes.Pyro},
 	event.OnSwirlPyro:       {attributes.Anemo, attributes.Pyro},
 	event.OnCrystallizePyro: {attributes.Geo, attributes.Pyro},
@@ -25,9 +25,44 @@ func (c *char) a1Init() {
 		return
 	}
 
-	for event, elements := range reactToElements {
-		c.Core.Events.Subscribe(event, c.a1MakeBuff(elements), fmt.Sprintf("durin-a1-hook-%v", event))
+	for event, elements := range a1ReactToElements {
+		c.Core.Events.Subscribe(event, c.a1MakeResShred(elements), fmt.Sprintf("durin-a1-hook-%v", event))
 	}
+
+	c.Core.Events.Subscribe(event.OnEnemyDamage, func(args ...any) bool {
+		t, ok := args[0].(*enemy.Enemy)
+		atk := args[1].(*info.AttackEvent)
+		if !ok {
+			return false
+		}
+		if !t.IsBurning() {
+			return false
+		}
+		switch atk.Info.Element {
+		case attributes.Dendro:
+		case attributes.Pyro:
+		default:
+			return false
+		}
+
+		if !c.StatusIsActive(burstKeyWhite) {
+			return false
+		}
+
+		t.AddResistMod(info.ResistMod{
+			Base:  modifier.NewBaseWithHitlag("durin-a1-"+attributes.Dendro.String(), 6*60),
+			Ele:   attributes.Dendro,
+			Value: -0.20 * c.magicA1Bonus(),
+		})
+
+		t.AddResistMod(info.ResistMod{
+			Base:  modifier.NewBaseWithHitlag("durin-a1-"+attributes.Pyro.String(), 6*60),
+			Ele:   attributes.Pyro,
+			Value: -0.20 * c.magicA1Bonus(),
+		})
+
+		return false
+	}, "durin-a1-hook-on-dmg")
 }
 
 func (c *char) a1OnBurst(isWhite bool) {
@@ -51,7 +86,7 @@ func (c *char) a1OnBurst(isWhite bool) {
 	})
 }
 
-func (c *char) a1MakeBuff(elements []attributes.Element) func(args ...any) bool {
+func (c *char) a1MakeResShred(elements []attributes.Element) func(args ...any) bool {
 	return func(args ...any) bool {
 		t, ok := args[0].(*enemy.Enemy)
 		if !ok {
@@ -75,14 +110,16 @@ func (c *char) a1MakeBuff(elements []attributes.Element) func(args ...any) bool 
 
 func (c *char) a4Dmg() float64 {
 	if c.Base.Ascension < 4 {
-		return 0
+		return 1.0
 	}
 
 	if !c.StatusIsActive(blackKey) && !c.StatusIsActive(whiteKey) {
-		return 0
+		return 1.0
 	}
 
-	return min(c.TotalAtk()*0.5, 1000)
+	bonus := min(c.TotalAtk()/100*0.01, 0.25)
+
+	return 1 + bonus
 }
 
 func (c *char) magicA1Bonus() float64 {

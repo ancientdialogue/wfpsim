@@ -50,24 +50,30 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 
 func (c *char) burstWhite() (action.Info, error) {
 	ai := info.AttackInfo{
-		ActorIndex: c.Index(),
-		Abil:       "Lustrous Light: Birthed by Dusk",
-		AttackTag:  attacks.AttackTagElementalBurst,
-		ICDTag:     attacks.ICDTagElementalBurst,
-		ICDGroup:   attacks.ICDGroupDefault,
-		StrikeType: attacks.StrikeTypeDefault,
-		Element:    attributes.Pyro,
-		Durability: 25,
-		FlatDmg:    c.a4Dmg(),
+		ActorIndex:       c.Index(),
+		Abil:             "Lustrous Light: Birthed by Dusk",
+		AttackTag:        attacks.AttackTagElementalBurst,
+		ICDTag:           attacks.ICDTagElementalBurst,
+		ICDGroup:         attacks.ICDGroupDefault,
+		StrikeType:       attacks.StrikeTypeDefault,
+		Element:          attributes.Pyro,
+		Durability:       25,
+		IgnoreDefPercent: c.c6DefIgnore(true),
 	}
 	for i, mult := range burstWhiteInitial {
-		ai.Mult = mult[c.TalentLvlBurst()]
-		c.Core.QueueAttack(ai, combat.NewCircleHitOnTarget(c.Core.Combat.Player(), info.Point{Y: -1.5}, 5), burstInitHitmark[i], burstInitHitmark[i])
+		ai.Mult = mult[c.TalentLvlBurst()] * c.a4Dmg()
+		c.Core.QueueAttack(
+			ai,
+			combat.NewCircleHitOnTarget(c.Core.Combat.Player(), info.Point{Y: -1.5}, 5),
+			burstInitHitmark[i],
+			burstInitHitmark[i],
+			c.c6WhiteMakeCB(),
+		)
 	}
 
 	c.burstSrc = c.Core.F
 	for i := 0.0; i < burstTicksWhite; i++ {
-		c.QueueCharTask(c.burstTickWhite(c.burstSrc), burstFirstTickDelayWhite+ceil(burstIntervalWhite*i))
+		c.Core.Tasks.Add(c.burstTickWhite(c.burstSrc), burstFirstTickDelayWhite+ceil(burstIntervalWhite*i))
 	}
 	c.DeleteStatus(burstKeyBlack)
 	c.AddStatus(burstKeyWhite, burstFirstTickDelayWhite+ceil((burstTicksWhite-1)*burstIntervalWhite), false)
@@ -75,7 +81,8 @@ func (c *char) burstWhite() (action.Info, error) {
 	c.SetCDWithDelay(action.ActionBurst, burstCD, 22)
 	c.ConsumeEnergy(10)
 	c.a1OnBurst(true)
-
+	c.c1OnBurst(true)
+	c.c4OnBurst()
 	return action.Info{
 		Frames:          frames.NewAbilFunc(burstFrames),
 		AnimationLength: burstFrames[action.InvalidAction],
@@ -91,42 +98,48 @@ func (c *char) burstTickWhite(src int) func() {
 		}
 
 		ai := info.AttackInfo{
-			ActorIndex: c.Index(),
-			Abil:       "Lustrous Light: Searing Flame",
-			AttackTag:  attacks.AttackTagElementalBurst,
-			ICDTag:     attacks.ICDTagDurinBurst,
-			ICDGroup:   attacks.ICDGroupDurin,
-			StrikeType: attacks.StrikeTypeDefault,
-			Element:    attributes.Pyro,
-			Durability: 25,
-			Mult:       burstWhiteDoT[c.TalentLvlBurst()],
-			FlatDmg:    c.a4Dmg(),
+			ActorIndex:       c.Index(),
+			Abil:             "Lustrous Light: Searing Flame",
+			AttackTag:        attacks.AttackTagElementalBurst,
+			ICDTag:           attacks.ICDTagDurinBurst,
+			ICDGroup:         attacks.ICDGroupDurin,
+			StrikeType:       attacks.StrikeTypeDefault,
+			Element:          attributes.Pyro,
+			Durability:       25,
+			Mult:             burstWhiteDoT[c.TalentLvlBurst()] * c.a4Dmg(),
+			IgnoreDefPercent: c.c6DefIgnore(true),
 		}
 
-		c.Core.QueueAttack(ai, combat.NewCircleHitOnTarget(c.Core.Combat.PrimaryTarget(), nil, 3.5), 0, 0)
+		c.Core.QueueAttack(
+			ai,
+			combat.NewCircleHitOnTarget(c.Core.Combat.PrimaryTarget(), nil, 3.5),
+			0,
+			0,
+			c.c6WhiteMakeCB(),
+		)
 	}
 }
 
 func (c *char) burstBlack() (action.Info, error) {
 	ai := info.AttackInfo{
-		ActorIndex: c.Index(),
-		Abil:       "Dark Decay: Devoured by Dawn",
-		AttackTag:  attacks.AttackTagElementalBurst,
-		ICDTag:     attacks.ICDTagElementalBurst,
-		ICDGroup:   attacks.ICDGroupDefault,
-		StrikeType: attacks.StrikeTypeDefault,
-		Element:    attributes.Pyro,
-		Durability: 25,
-		FlatDmg:    c.a4Dmg(),
+		ActorIndex:       c.Index(),
+		Abil:             "Dark Decay: Devoured by Dawn",
+		AttackTag:        attacks.AttackTagElementalBurst,
+		ICDTag:           attacks.ICDTagElementalBurst,
+		ICDGroup:         attacks.ICDGroupDefault,
+		StrikeType:       attacks.StrikeTypeDefault,
+		Element:          attributes.Pyro,
+		Durability:       25,
+		IgnoreDefPercent: c.c6DefIgnore(false),
 	}
 	for i, mult := range burstBlackInitial {
-		ai.Mult = mult[c.TalentLvlBurst()]
+		ai.Mult = mult[c.TalentLvlBurst()] * c.a4Dmg()
 		c.Core.QueueAttack(ai, combat.NewCircleHitOnTarget(c.Core.Combat.Player(), info.Point{Y: -1.5}, 5), burstInitHitmark[i], burstInitHitmark[i])
 	}
 
 	c.burstSrc = c.Core.F
 	for i := 0.0; i < burstTicksBlack; i++ {
-		c.QueueCharTask(c.burstTickBlack(c.burstSrc), burstFirstTickDelayBlack+ceil(burstIntervalBlack*i))
+		c.Core.Tasks.Add(c.burstTickBlack(c.burstSrc), burstFirstTickDelayBlack+ceil(burstIntervalBlack*i))
 	}
 	c.DeleteStatus(burstKeyWhite)
 	c.AddStatus(burstKeyBlack, burstFirstTickDelayBlack+ceil((burstTicksBlack-1)*burstIntervalBlack), false)
@@ -134,7 +147,8 @@ func (c *char) burstBlack() (action.Info, error) {
 	c.SetCDWithDelay(action.ActionBurst, burstCD, 22)
 	c.ConsumeEnergy(10)
 	c.a1OnBurst(false)
-
+	c.c1OnBurst(false)
+	c.c4OnBurst()
 	return action.Info{
 		Frames:          frames.NewAbilFunc(burstFrames),
 		AnimationLength: burstFrames[action.InvalidAction],
@@ -150,16 +164,16 @@ func (c *char) burstTickBlack(src int) func() {
 		}
 
 		ai := info.AttackInfo{
-			ActorIndex: c.Index(),
-			Abil:       "Dark Decay: Abyssal Flame",
-			AttackTag:  attacks.AttackTagElementalBurst,
-			ICDTag:     attacks.ICDTagDurinBurst,
-			ICDGroup:   attacks.ICDGroupDurin,
-			StrikeType: attacks.StrikeTypeDefault,
-			Element:    attributes.Pyro,
-			Durability: 25,
-			Mult:       burstBlackDoT[c.TalentLvlBurst()],
-			FlatDmg:    c.a4Dmg(),
+			ActorIndex:       c.Index(),
+			Abil:             "Dark Decay: Abyssal Flame",
+			AttackTag:        attacks.AttackTagElementalBurst,
+			ICDTag:           attacks.ICDTagDurinBurst,
+			ICDGroup:         attacks.ICDGroupDurin,
+			StrikeType:       attacks.StrikeTypeDefault,
+			Element:          attributes.Pyro,
+			Durability:       25,
+			Mult:             burstBlackDoT[c.TalentLvlBurst()] * c.a4Dmg(),
+			IgnoreDefPercent: c.c6DefIgnore(false),
 		}
 
 		c.Core.QueueAttack(ai, combat.NewSingleTargetHit(c.Core.Combat.PrimaryTarget().Key()), 0, 0)

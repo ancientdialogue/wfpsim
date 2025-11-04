@@ -54,7 +54,7 @@ export function Simulator({
           <li>Razor (Magic)</li>
           <li>Klee (Magic)</li>
           <li>Venti (Magic)</li>
-          <li>Durin (C0)</li>
+          <li>Durin (C6)</li>
         </ul>
         <p className=" font-bold">
           See{' '}
