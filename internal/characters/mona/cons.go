@@ -296,11 +296,11 @@ func (c *char) c6Tick(src int) func() {
 }
 
 func (c *char) makeC6CAResetCB() info.AttackCBFunc {
-	if c.Base.Cons < 6 || !c.StatusIsActive(c6Key) {
+	if c.Base.Cons < 6 {
 		return nil
 	}
 	return func(a info.AttackCB) {
-		if a.Target.Type() == info.TargettableEnemy {
+		if a.Target.Type() != info.TargettableEnemy {
 			return
 		}
 
