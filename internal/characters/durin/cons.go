@@ -36,10 +36,6 @@ func (c *char) c1Init() {
 
 		char := c.Core.Player.ByIndex(atk.Info.ActorIndex)
 
-		if !char.StatusIsActive(c1Key) {
-			return false
-		}
-
 		if char.Tags[c1Key] == 0 {
 			return false
 		}
