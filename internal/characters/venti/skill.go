@@ -67,7 +67,7 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 	trg := c.Core.Combat.PrimaryTarget()
 	var count float64 = 3
 	if p["short_hold"] != 0 {
-		cdstart = 22
+		cdstart = 9
 		hitmark = 39
 		act = action.Info{
 			Frames:          frames.NewAbilFunc(skillShortHoldFrames),

@@ -3,10 +3,10 @@ genshin_id: 10000123
 key: durin
 icd_groups:
   - group_name: ICDGroupDurin
-    reset_timer: 120
+    reset_timer: 900
     ele_app_sequence:
-      [1, 0, 1, 0, 1, 0 , 1, 0]
-    damage_sequence: [1, 1, 1, 1, 1, 1, 1, 1]
+      [1, 0, 1, 0, 1, 0 , 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0 , 1, 0, 1, 0, 1, 0, 1, 0 , 1, 0]
+    damage_sequence: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 icd_tags:
   - ICDTagDurinBurst
 skill_data_mapping:
