@@ -122,8 +122,7 @@ func (c *char) Attack(p map[string]int) (action.Info, error) {
 
 	// Magic: Secret Rite
 	// When she performs the third Normal Attack in the sequence, an Explosive Spark
-	// will be consumed to unleash Coordinated Charged Attack: Blast.
-	// TODO: delay?
+	// will be consumed to unleash an additional attack equivalent to Boom-Boom Strike.
 	if c.IsMagic && c.getMagicCount() > 1 && c.StatusIsActive(a1SparkKey) {
 		if c.NormalCounter == 2 || c.Base.Cons == 6 && c.NormalCounter < 2 && c.Core.Rand.Float64() < 0.4 {
 			c.queueCoordinatedCharge()
@@ -171,13 +170,13 @@ func (c *char) Attack(p map[string]int) (action.Info, error) {
 }
 
 func (c *char) queueCoordinatedCharge() {
-	delay := 50 // TODO: Proper delay
+	delay := 30
 	travel := 10
 
 	c.Core.Tasks.Add(func() {
 		ai := c.getChargeAttackInfo()
-		ai.Abil = "Coordinated Charge Attack: Blast"
-		snap := c.applySpark(ai)
+		snap := c.applySpark(&ai)
+		ai.Abil += " (Coordinated)"
 		c.Core.QueueAttackWithSnap(
 			ai,
 			snap,

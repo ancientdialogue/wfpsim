@@ -8,18 +8,20 @@ import (
 )
 
 const (
-	a1IcdKey             = "a1-icd"
-	a1SparkKey           = "a1-spark"
-	boomboosterBurstKey  = "boombooster-burst"
-	boomboosterNormalKey = "boombooster-normal"
-	boomboosterSkillKey  = "boomboster-skill"
+	a1IcdKey           = "a1-icd"
+	a1SparkKey         = "a1-spark"
+	boomBadgeBurstKey  = "boombadge-burst"
+	boomBadgeNormalKey = "boombadge-normal"
+	boomBadgeSkillKey  = "boombadge-skill"
 )
 
 // When Jumpy Dumpty and Normal Attacks deal DMG, Klee has a 50% chance to obtain an Explosive Spark.
 // This Explosive Spark is consumed by the next Charged Attack, which costs no Stamina and deals 50% increased DMG.
 
 // Magic bonus:
-// Using her Elemental Skill or Elemental Burst grants an additional Explosive Spark. Max 3 Explosive Sparks.
+// Using her Elemental Skill Jumpy Dumpty or Elemental Burst Sparks 'n' Splash also grants 1 Explosive Spark.
+// Klee can hold up to 3 Explosive Sparks. While holding an Explosive Spark, Klee's Charged Attack will consume
+// 1 Spark to perform a special stamina-free Charged Attack, Boom-Boom Strike, dealing 50% increased DMG.
 func (c *char) makeA1CB() info.AttackCBFunc {
 	if c.Base.Ascension < 1 {
 		return nil
@@ -90,9 +92,9 @@ func (c *char) getMagicCount() int {
 }
 
 // Magic: Secret Rite
-// Each time Klee deals DMG with her Elemental Skill, Elemental Burst, or Normal Attack, she gains a stack of Boom Booster.
-// Each stack lasts for 20s and has its own independent timer. While Klee has 1/2/3 stacks, her Explosive Spark-enhanced
-// Charged Attacks deal 115%/130%/150% of their original DMG.
+// When Klee deals DMG with Normal Attacks, Elemental Skill, or Elemental Burst, she gains 1 Boom Badge, lasting 20s.
+// Each type of attack can grant at most 1 Boom Badge this way, and each badge has its own independent timer.
+// While Klee has 1/2/3 Boom Badges, her special Charged Attack Boom-Boom Strike deals 115%/130%/150% of its original DMG.
 func (c *char) magicInit() {
 	if !c.IsMagic {
 		return
@@ -112,15 +114,15 @@ func (c *char) magicInit() {
 
 		switch atk.Info.AttackTag {
 		case attacks.AttackTagNormal:
-			c.AddStatus(boomboosterNormalKey, 60*20, true)
+			c.AddStatus(boomBadgeNormalKey, 60*20, true)
 		case attacks.AttackTagElementalArt:
-			c.AddStatus(boomboosterSkillKey, 60*20, true)
+			c.AddStatus(boomBadgeSkillKey, 60*20, true)
 		case attacks.AttackTagElementalBurst:
-			c.AddStatus(boomboosterBurstKey, 60*20, true)
+			c.AddStatus(boomBadgeBurstKey, 60*20, true)
 		default:
 			return false
 		}
 
 		return false
-	}, "klee-boombooster")
+	}, "klee-boombadge")
 }
