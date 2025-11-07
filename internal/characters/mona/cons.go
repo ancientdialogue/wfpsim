@@ -124,7 +124,7 @@ func (c *char) c2NaCB(a info.AttackCB) {
 		Mult:       charge[c.TalentLvlAttack()],
 	}
 
-	c.Core.QueueAttack(ai, combat.NewCircleHitOnTarget(trg, nil, 3), 10, 10, c.makeMagicCB(), c.c2CaCB, c.makeC6CAResetCB())
+	c.Core.QueueAttack(ai, combat.NewCircleHitOnTarget(trg, nil, 3), chargeHitmark-chargeWindup, chargeHitmark-chargeWindup, c.makeMagicCB(), c.c2CaCB, c.makeC6CAResetCB())
 }
 
 // C2:

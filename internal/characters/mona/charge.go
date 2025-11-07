@@ -11,7 +11,10 @@ import (
 
 var chargeFrames []int
 
-const chargeHitmark = 66
+const (
+	chargeHitmark = 66
+	chargeWindup  = 14
+)
 
 func init() {
 	chargeFrames = frames.InitAbilSlice(113) // CA -> N1
@@ -38,7 +41,7 @@ func (c *char) ChargeAttack(p map[string]int) (action.Info, error) {
 
 	// add windup if we're in idle or swap only
 	// TODO: this ignores N4 -> CA (which should be illegal anyways)
-	windup := 14
+	windup := chargeWindup
 	if c.Core.Player.CurrentState() == action.Idle || c.Core.Player.CurrentState() == action.SwapState {
 		windup = 0
 	}
