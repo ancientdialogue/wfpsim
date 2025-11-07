@@ -16,8 +16,8 @@ const (
 )
 
 var (
-	boomboosterMult = []float64{1, 1.15, 1.3, 1.5}
-	chargeFrames    []int
+	boombadgeMult = []float64{1, 1.15, 1.3, 1.5}
+	chargeFrames  []int
 )
 
 func init() {
@@ -48,7 +48,7 @@ func (c *char) ChargeAttack(p map[string]int) (action.Info, error) {
 
 	c.Core.Tasks.Add(func() {
 		ai := c.getChargeAttackInfo()
-		snap := c.applySpark(ai)
+		snap := c.applySpark(&ai)
 		c.Core.QueueAttackWithSnap(
 			ai,
 			snap,
@@ -68,9 +68,10 @@ func (c *char) ChargeAttack(p map[string]int) (action.Info, error) {
 	}, nil
 }
 
-func (c *char) applySpark(ai info.AttackInfo) info.Snapshot {
-	snap := c.Snapshot(&ai)
+func (c *char) applySpark(ai *info.AttackInfo) info.Snapshot {
+	snap := c.Snapshot(ai)
 	if c.StatusIsActive(a1SparkKey) {
+		ai.Abil = "Boom-Boom Strike"
 		snap.Stats[attributes.DmgP] += .50
 		// Magic bonus (C6):
 		// When Klee uses an Explosive Spark, there is a 50% chance it will not be consumed.
@@ -81,7 +82,7 @@ func (c *char) applySpark(ai info.AttackInfo) info.Snapshot {
 		c.Core.Log.NewEvent("consuming spark", glog.LogCharacterEvent, c.Index()).
 			Write("previous spark stacks", previous).
 			Write("new spark stacks", c.a1CurrentStack).
-			Write("boombooster mult", c.getBoomBoosterMult())
+			Write("boombadge mult", c.getBoomBadgeMult())
 		if c.a1CurrentStack == 0 {
 			c.DeleteStatus(a1SparkKey)
 		}
@@ -89,26 +90,26 @@ func (c *char) applySpark(ai info.AttackInfo) info.Snapshot {
 	return snap
 }
 
-func (c *char) getBoomBoosterStacks() int {
+func (c *char) getBoomBadgeStacks() int {
 	count := 0
-	if c.StatusIsActive(boomboosterNormalKey) {
+	if c.StatusIsActive(boomBadgeNormalKey) {
 		count++
 	}
-	if c.StatusIsActive(boomboosterSkillKey) {
+	if c.StatusIsActive(boomBadgeSkillKey) {
 		count++
 	}
-	if c.StatusIsActive(boomboosterBurstKey) {
+	if c.StatusIsActive(boomBadgeBurstKey) {
 		count++
 	}
 	return count
 }
 
-// TODO: Is boombooster applied on snapshot?
-func (c *char) getBoomBoosterMult() float64 {
+// TODO: Is boombadge applied on snapshot?
+func (c *char) getBoomBadgeMult() float64 {
 	if !c.StatusIsActive(a1SparkKey) {
 		return 1.0
 	}
-	return boomboosterMult[c.getBoomBoosterStacks()]
+	return boombadgeMult[c.getBoomBadgeStacks()]
 }
 
 func (c *char) getChargeAttackInfo() info.AttackInfo {
@@ -122,7 +123,7 @@ func (c *char) getChargeAttackInfo() info.AttackInfo {
 		PoiseDMG:   180,
 		Element:    attributes.Pyro,
 		Durability: 25,
-		Mult:       charge[c.TalentLvlAttack()] * c.getBoomBoosterMult(),
+		Mult:       charge[c.TalentLvlAttack()] * c.getBoomBadgeMult(),
 	}
 	return ai
 }
