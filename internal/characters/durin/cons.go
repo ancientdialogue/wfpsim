@@ -52,7 +52,7 @@ func (c *char) c1Init() {
 			return false
 		}
 
-		amt := mult * c.TotalAtk()
+		amt := mult * c.TotalAtk() // TODO: Is this affected by A4?
 
 		char.Tags[c1Key] -= consume
 

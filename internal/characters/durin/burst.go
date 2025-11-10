@@ -61,7 +61,7 @@ func (c *char) burstWhite() (action.Info, error) {
 		IgnoreDefPercent: c.c6DefIgnore(true),
 	}
 	for i, mult := range burstWhiteInitial {
-		ai.Mult = mult[c.TalentLvlBurst()] * c.a4Dmg()
+		ai.Mult = mult[c.TalentLvlBurst()]
 		c.Core.QueueAttack(
 			ai,
 			combat.NewCircleHitOnTarget(c.Core.Combat.Player(), info.Point{Y: -1.5}, 5),
@@ -81,6 +81,7 @@ func (c *char) burstWhite() (action.Info, error) {
 	c.SetCDWithDelay(action.ActionBurst, burstCD, 22)
 	c.ConsumeEnergy(10)
 	c.a1OnBurst(true)
+	c.a4OnBurst()
 	c.c1OnBurst(true)
 	c.c4OnBurst()
 	return action.Info{
@@ -133,7 +134,7 @@ func (c *char) burstBlack() (action.Info, error) {
 		IgnoreDefPercent: c.c6DefIgnore(false),
 	}
 	for i, mult := range burstBlackInitial {
-		ai.Mult = mult[c.TalentLvlBurst()] * c.a4Dmg()
+		ai.Mult = mult[c.TalentLvlBurst()]
 		c.Core.QueueAttack(ai, combat.NewCircleHitOnTarget(c.Core.Combat.Player(), info.Point{Y: -1.5}, 5), burstInitHitmark[i], burstInitHitmark[i])
 	}
 
@@ -147,6 +148,7 @@ func (c *char) burstBlack() (action.Info, error) {
 	c.SetCDWithDelay(action.ActionBurst, burstCD, 22)
 	c.ConsumeEnergy(10)
 	c.a1OnBurst(false)
+	c.a4OnBurst()
 	c.c1OnBurst(false)
 	c.c4OnBurst()
 	return action.Info{
