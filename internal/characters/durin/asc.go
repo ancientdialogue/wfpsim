@@ -108,8 +108,19 @@ func (c *char) a1MakeResShred(elements []attributes.Element) func(args ...any) b
 	}
 }
 
+func (c *char) a4OnBurst() {
+	if c.Base.Ascension < 4 {
+		return
+	}
+	c.a4stacks = 10
+}
+
 func (c *char) a4Dmg() float64 {
 	if c.Base.Ascension < 4 {
+		return 1.0
+	}
+
+	if c.a4stacks <= 0 {
 		return 1.0
 	}
 
@@ -117,7 +128,9 @@ func (c *char) a4Dmg() float64 {
 		return 1.0
 	}
 
-	bonus := min(c.TotalAtk()/100*0.01, 0.25)
+	c.a4stacks -= 1
+
+	bonus := min(c.TotalAtk()/100*0.03, 0.75)
 
 	return 1 + bonus
 }
