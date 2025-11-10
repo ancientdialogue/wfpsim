@@ -110,7 +110,7 @@ func (c *char) magicInit() {
 					return 0, false
 				}
 				c.phantasmalBubbleStacks = 0
-				return 0.1 * float64(stacks), false
+				return 0.05 * float64(stacks), false
 			},
 		})
 	}
