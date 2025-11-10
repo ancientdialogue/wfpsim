@@ -29,6 +29,7 @@ const (
 	Clorinde
 	Collei
 	Cyno
+	Dahlia
 	Dehya
 	Diluc
 	Diona
@@ -198,6 +199,10 @@ func init() {
 	charNames[Cyno] = "cyno"
 	charPrettyName[Cyno] = "Cyno"
 	CharKeyToEle[Cyno] = attributes.Electro
+
+	charNames[Dahlia] = "dahlia"
+	charPrettyName[Dahlia] = "Dahlia"
+	CharKeyToEle[Dahlia] = attributes.Hydro
 
 	charNames[Dehya] = "dehya"
 	charPrettyName[Dehya] = "Dehya"
