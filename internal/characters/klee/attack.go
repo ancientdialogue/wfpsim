@@ -16,7 +16,7 @@ import (
 var (
 	attackFrames          [][]int
 	attackFramesWithLag   [][]int
-	attackHitmarks        = []int{16, 23, 37}
+	attackHitmarks        = []int{15, 21, 34}
 	attackPoiseDMG        = []float64{65, 65, 130}
 	attackHitmarksWithLag []int
 	attackRadius          = []float64{1, 1, 1.5}
@@ -34,28 +34,26 @@ func init() {
 
 	// N1 -> x
 	attackFrames[0] = frames.InitNormalCancelSlice(attackHitmarks[0], 34)
-	attackFrames[0][action.ActionAttack] = 31
+	attackFrames[0][action.ActionAttack] = 23
 	attackFrames[0][action.ActionCharge] = 23
 	attackFrames[0][action.ActionSkill] = 6
 	attackFrames[0][action.ActionBurst] = 6
 	attackFrames[0][action.ActionDash] = 6
 	attackFrames[0][action.ActionJump] = 6
-	attackFrames[0][action.ActionWalk] = 34
 
 	// N2 -> x
 	attackFrames[1] = frames.InitNormalCancelSlice(attackHitmarks[1], 41)
-	attackFrames[1][action.ActionAttack] = 38
-	attackFrames[1][action.ActionCharge] = 32
+	attackFrames[1][action.ActionAttack] = 27
+	attackFrames[1][action.ActionCharge] = 25
 	attackFrames[1][action.ActionSkill] = 2
 	attackFrames[1][action.ActionBurst] = 2
 	attackFrames[1][action.ActionDash] = 2
 	attackFrames[1][action.ActionJump] = 2
-	attackFrames[1][action.ActionWalk] = 41
 
 	// N3 -> x
-	attackFrames[2] = frames.InitNormalCancelSlice(attackHitmarks[2], 77)
-	attackFrames[2][action.ActionCharge] = 49
-	attackFrames[2][action.ActionWalk] = 72
+	attackFrames[2] = frames.InitNormalCancelSlice(attackHitmarks[2], 72)
+	attackFrames[2][action.ActionAttack] = 46
+	attackFrames[2][action.ActionCharge] = 47
 
 	// N1 -> x (9f lag)
 	attackFramesWithLag = make([][]int, len(attackFrames))

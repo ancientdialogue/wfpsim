@@ -21,7 +21,7 @@ var bounceHitmarks = []int{71, 111, 140}
 
 func init() {
 	skillFrames = frames.InitAbilSlice(75)
-	skillFrames[action.ActionAttack] = 66
+	skillFrames[action.ActionAttack] = 40
 	skillFrames[action.ActionCharge] = 69
 	skillFrames[action.ActionSkill] = 68
 	skillFrames[action.ActionBurst] = 34
