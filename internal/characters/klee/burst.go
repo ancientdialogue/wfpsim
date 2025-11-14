@@ -125,7 +125,7 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 				Amount: func() ([]float64, bool) {
 					m[attributes.PyroP] = .1
 					// Magic: Secret Rite- self buff is 50% pyro
-					if c.Core.Player.Active() == c.Index() && c.IsMagic && c.getMagicCount() > 1 {
+					if c.Core.Player.Active() == x.Index() && c.IsMagic && c.getMagicCount() > 1 {
 						m[attributes.PyroP] = .5
 					}
 					return m, true
