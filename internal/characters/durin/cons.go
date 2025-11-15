@@ -101,7 +101,7 @@ var c2ReactToElements = map[event.Event][]attributes.Element{
 	event.OnCrystallizePyro: {attributes.Geo, attributes.Pyro},
 	event.OnBurning:         {attributes.Dendro, attributes.Pyro},
 	event.OnVaporize:        {attributes.Hydro, attributes.Pyro},
-	event.OnMelt:            {attributes.Hydro, attributes.Pyro},
+	event.OnMelt:            {attributes.Cryo, attributes.Pyro},
 }
 
 func (c *char) c2Init() {
