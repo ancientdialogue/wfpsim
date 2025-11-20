@@ -40,15 +40,19 @@ func (c *char) c1Init() {
 			return false
 		}
 
-		key := burstKeyWhite
+		key, needOnField := burstKeyWhite, true
 		mult, consume := 0.6, 1
 		if char.Index() == c.Index() {
-			key = burstKeyBlack
+			key, needOnField = burstKeyBlack, false
 			mult, consume = 1.5, 2
 		}
 		consume *= c.c4c1ConsumeMult()
 
 		if !c.StatusIsActive(key) {
+			return false
+		}
+
+		if needOnField && atk.Info.ActorIndex != c.Core.Player.Active() {
 			return false
 		}
 
