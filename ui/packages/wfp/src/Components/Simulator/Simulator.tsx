@@ -55,6 +55,7 @@ export function Simulator({
           <li>Klee (Magic)</li>
           <li>Venti (Magic)</li>
           <li>Durin (C6)</li>
+          <li>Athame Artis</li>
         </ul>
         <p className=" font-bold">
           See{' '}
