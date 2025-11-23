@@ -31,19 +31,19 @@ func NewWeapon(c *core.Core, char *character.CharWrapper, p info.WeaponProfile) 
 	var w Weapon
 	refine := p.Refine
 
-	m_cd := make([]float64, attributes.EndStatType)
-	m_atk := make([]float64, attributes.EndStatType)
+	mCD := make([]float64, attributes.EndStatType)
+	mAtkp := make([]float64, attributes.EndStatType)
 
 	cd := 0.12 + 0.04*float64(refine)
 	atkp := 0.15 + 0.05*float64(refine)
-	atkp_team := 0.12 + 0.04*float64(refine)
+	atkpTeam := 0.12 + 0.04*float64(refine)
 
 	char.AddAttackMod(character.AttackMod{
 		Base: modifier.NewBase("athame-artis-burst-cdmg", -1),
 		Amount: func(atk *info.AttackEvent, t info.Target) ([]float64, bool) {
 			if atk.Info.AttackTag == attacks.AttackTagElementalBurst {
-				m_cd[attributes.CD] = cd * getBonus(c)
-				return m_cd, true
+				mCD[attributes.CD] = cd * getBonus(c)
+				return mCD, true
 			}
 
 			return nil, false
@@ -63,7 +63,7 @@ func NewWeapon(c *core.Core, char *character.CharWrapper, p info.WeaponProfile) 
 		}
 
 		for _, chars := range c.Player.Chars() {
-			buff := atkp_team
+			buff := atkpTeam
 			if chars.Index() == char.Index() {
 				buff = atkp
 			}
@@ -71,8 +71,8 @@ func NewWeapon(c *core.Core, char *character.CharWrapper, p info.WeaponProfile) 
 				Base:         modifier.NewBaseWithHitlag("athame-artis-atkp", 3*60),
 				AffectedStat: attributes.ATKP,
 				Amount: func() ([]float64, bool) {
-					m_atk[attributes.ATKP] = buff * getBonus(c)
-					return m_atk, true
+					mAtkp[attributes.ATKP] = buff * getBonus(c)
+					return mAtkp, true
 				},
 			})
 		}
