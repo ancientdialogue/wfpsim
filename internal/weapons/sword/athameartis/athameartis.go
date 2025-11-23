@@ -17,10 +17,6 @@ func init() {
 	core.RegisterWeaponFunc(keys.AthameArtis, NewWeapon)
 }
 
-const (
-	buffKey = "athameartis-buff"
-)
-
 type Weapon struct {
 	Index int
 }
