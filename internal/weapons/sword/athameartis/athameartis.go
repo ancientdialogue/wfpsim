@@ -38,7 +38,7 @@ func NewWeapon(c *core.Core, char *character.CharWrapper, p info.WeaponProfile) 
 		Base: modifier.NewBase("athame-artis-burst-cdmg", -1),
 		Amount: func(atk *info.AttackEvent, t info.Target) ([]float64, bool) {
 			if atk.Info.AttackTag == attacks.AttackTagElementalBurst {
-				mCD[attributes.CD] = cd * getBonus(c)
+				mCD[attributes.CD] = cd
 				return mCD, true
 			}
 
