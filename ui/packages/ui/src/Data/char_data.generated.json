@@ -465,6 +465,23 @@
       },
       "name_text_hash_map ": "2948362178"
     },
+    "columbina": {
+      "id": 10000125,
+      "key": "columbina",
+      "rarity": "QUALITY_ORANGE",
+      "body": "BODY_GIRL",
+      "region": "ASSOC_TYPE_NODKRAI",
+      "element": "Water",
+      "weapon_class": "WEAPON_CATALYST",
+      "icon_name": "UI_AvatarIcon_Columbina",
+      "skill_details": {
+        "skill": 11252,
+        "burst": 11255,
+        "attack": 11251,
+        "burst_energy_cost": 60
+      },
+      "name_text_hash_map ": "1888371618"
+    },
     "cyno": {
       "id": 10000071,
       "key": "cyno",
@@ -568,7 +585,7 @@
       "name_text_hash_map ": "388272194"
     },
     "durin": {
-      "id": 10000116,
+      "id": 10000123,
       "key": "durin",
       "rarity": "QUALITY_ORANGE",
       "body": "BODY_BOY",
@@ -577,12 +594,12 @@
       "weapon_class": "WEAPON_SWORD_ONE_HAND",
       "icon_name": "UI_AvatarIcon_Durin",
       "skill_details": {
-        "skill": 11162,
-        "burst": 11165,
-        "attack": 11161,
+        "skill": 11232,
+        "burst": 11235,
+        "attack": 11231,
         "burst_energy_cost": 70
       },
-      "name_text_hash_map ": "2759230658"
+      "name_text_hash_map ": "2801077538"
     },
     "emilie": {
       "id": 10000099,

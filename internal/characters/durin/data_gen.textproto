@@ -25,7 +25,7 @@ stats: {
          prop_type: FIGHT_PROP_BASE_ATTACK
       }
       add_props: {
-         prop_type: FIGHT_PROP_CRITICAL
+         prop_type: FIGHT_PROP_CRITICAL_HURT
       }
    }
    promo_data: {
@@ -36,14 +36,14 @@ stats: {
       }
       add_props: {
          prop_type: FIGHT_PROP_BASE_DEFENSE
-         value: 54.891,
+         value: 54.891
       }
       add_props: {
          prop_type: FIGHT_PROP_BASE_ATTACK
          value: 23.14751
       }
       add_props: {
-         prop_type: FIGHT_PROP_CRITICAL
+         prop_type: FIGHT_PROP_CRITICAL_HURT
       }
    }
    promo_data: {
@@ -143,9 +143,9 @@ stats: {
    }
 }
 skill_details: {
-   skill: 11122
-   burst: 11125
-   attack: 11121
+   skill: 11232
+   burst: 11235
+   attack: 11231
    burst_energy_cost: 70
 }
-name_text_hash_map: 4035850498
+name_text_hash_map: 2801077538

@@ -1,5 +1,5 @@
 ---
-title: Ineffa
+title: Durin
 ---
 
 import HitlagTable from "@site/src/components/Hitlag/HitlagTable";
