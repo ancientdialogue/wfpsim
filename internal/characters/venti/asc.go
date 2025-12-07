@@ -15,8 +15,8 @@ import (
 )
 
 const (
-	magicBurstIcdKey = "magic-burst-icd"
-	magicOnSwirlKey  = "magic-on-swirl"
+	hexereiBurstIcdKey = "hexerei-burst-icd"
+	hexereiOnSwirlKey  = "hexerei-on-swirl"
 )
 
 var swirlEvents = []event.Event{
@@ -45,7 +45,7 @@ func (c *char) a4() {
 	}
 }
 
-func (c *char) magicMakeBuff() func(args ...any) bool {
+func (c *char) hexereiMakeBuff() func(args ...any) bool {
 	return func(args ...any) bool {
 		_, ok := args[0].(*enemy.Enemy)
 		if !ok {
@@ -61,12 +61,12 @@ func (c *char) magicMakeBuff() func(args ...any) bool {
 		if !c.StatusIsActive(burstKey) {
 			return false
 		}
-		c.AddStatus(magicOnSwirlKey, 4*60, true)
+		c.AddStatus(hexereiOnSwirlKey, 4*60, true)
 
 		c.Core.Player.ActiveChar().AddAttackMod(character.AttackMod{
-			Base: modifier.NewBaseWithHitlag(magicOnSwirlKey+"-buff", 4*60),
+			Base: modifier.NewBaseWithHitlag(hexereiOnSwirlKey+"-buff", 4*60),
 			Amount: func(atk *info.AttackEvent, t info.Target) ([]float64, bool) {
-				return c.magicBuff, true
+				return c.hexereiBuff, true
 			},
 		})
 
@@ -74,48 +74,48 @@ func (c *char) magicMakeBuff() func(args ...any) bool {
 	}
 }
 
-func (c *char) magicBurstBuff() float64 {
-	if !c.IsMagic {
+func (c *char) hexereiBurstBuff() float64 {
+	if !c.IsHexerei {
 		return 1.0
 	}
 
-	if c.getMagicCount() < 2 {
+	if c.Core.Player.GetHexereiCount() < 2 {
 		return 1.0
 	}
 
-	if !c.StatusIsActive(magicOnSwirlKey) {
+	if !c.StatusIsActive(hexereiOnSwirlKey) {
 		return 1.0
 	}
 
 	return 1.35
 }
 
-func (c *char) magicInit() {
-	if !c.IsMagic {
+func (c *char) hexereiInit() {
+	if !c.IsHexerei {
 		return
 	}
 
-	if c.getMagicCount() < 2 {
+	if c.Core.Player.GetHexereiCount() < 2 {
 		return
 	}
-	c.magicBuff = make([]float64, attributes.EndStatType)
-	c.magicBuff[attributes.DmgP] = 0.50
+	c.hexereiBuff = make([]float64, attributes.EndStatType)
+	c.hexereiBuff[attributes.DmgP] = 0.50
 	for _, evt := range swirlEvents {
-		c.Core.Events.Subscribe(evt, c.magicMakeBuff(), fmt.Sprintf("venti-magic-hook-%v", evt))
+		c.Core.Events.Subscribe(evt, c.hexereiMakeBuff(), fmt.Sprintf("venti-hexerei-hook-%v", evt))
 	}
 }
 
-func (c *char) getMagicCount() int {
+func (c *char) getHexereiCount() int {
 	count := 0
 	for _, c := range c.Core.Player.Chars() {
-		if c.IsMagic {
+		if c.IsHexerei {
 			count += 1
 		}
 	}
 	return count
 }
 
-func (c *char) magicNaBuff(mult float64) (info.AttackInfo, info.AttackPattern, info.AttackCBFunc) {
+func (c *char) hexereiNaBuff(mult float64) (info.AttackInfo, info.AttackPattern, info.AttackCBFunc) {
 	ai := info.AttackInfo{
 		ActorIndex: c.Index(),
 		Abil:       fmt.Sprintf("Normal %v", c.NormalCounter),
@@ -135,11 +135,11 @@ func (c *char) magicNaBuff(mult float64) (info.AttackInfo, info.AttackPattern, i
 		0.1,
 		1,
 	)
-	if !c.IsMagic {
+	if !c.IsHexerei {
 		return ai, ap, nil
 	}
 
-	if c.getMagicCount() < 2 {
+	if c.Core.Player.GetHexereiCount() < 2 {
 		return ai, ap, nil
 	}
 
@@ -168,20 +168,20 @@ func (c *char) magicNaBuff(mult float64) (info.AttackInfo, info.AttackPattern, i
 	return ai, ap, c.c2NaCB
 }
 
-func (c *char) magicNaCB(a info.AttackCB) {
+func (c *char) hexereiNaCB(a info.AttackCB) {
 	if a.Target.Type() != info.TargettableEnemy {
 		return
 	}
 
-	if c.magicBurstExtCount >= 2 {
+	if c.hexereiBurstExtCount >= 2 {
 		return
 	}
 
-	if !c.IsMagic {
+	if !c.IsHexerei {
 		return
 	}
 
-	if c.getMagicCount() < 2 {
+	if c.Core.Player.GetHexereiCount() < 2 {
 		return
 	}
 
@@ -190,16 +190,16 @@ func (c *char) magicNaCB(a info.AttackCB) {
 		return
 	}
 
-	if c.StatusIsActive(magicBurstIcdKey) {
+	if c.StatusIsActive(hexereiBurstIcdKey) {
 		return
 	}
 
-	c.AddStatus(magicBurstIcdKey, 0.1*60, true)
+	c.AddStatus(hexereiBurstIcdKey, 0.1*60, true)
 	c.AddStatus(burstKey, dur+60, false)
 	c.qAbsorbBonusTicks += 3 // three extra ticks per extension?
 
 	// extend CD?
 	c.IncreaseActionCooldown(action.ActionBurst, 0.5*60)
 
-	c.magicBurstExtCount += 1
+	c.hexereiBurstExtCount += 1
 }

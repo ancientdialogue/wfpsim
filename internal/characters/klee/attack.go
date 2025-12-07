@@ -118,10 +118,10 @@ func (c *char) Attack(p map[string]int) (action.Info, error) {
 		done = true
 	}
 
-	// Magic: Secret Rite
+	// Hexerei: Secret Rite
 	// When she performs the third Normal Attack in the sequence, an Explosive Spark
 	// will be consumed to unleash an additional attack equivalent to Boom-Boom Strike.
-	if c.IsMagic && c.getMagicCount() > 1 && c.StatusIsActive(a1SparkKey) {
+	if c.IsHexerei && c.Core.Player.GetHexereiCount() > 1 && c.StatusIsActive(a1SparkKey) {
 		if c.NormalCounter == 2 || c.Base.Cons == 6 && c.NormalCounter < 2 && c.Core.Rand.Float64() < 0.4 {
 			c.queueCoordinatedCharge()
 		}

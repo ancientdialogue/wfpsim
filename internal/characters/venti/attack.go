@@ -31,13 +31,13 @@ func (c *char) Attack(p map[string]int) (action.Info, error) {
 	}
 
 	for i, mult := range attack[c.NormalCounter] {
-		ai, ap, c2Cb := c.magicNaBuff(mult[c.TalentLvlAttack()])
+		ai, ap, c2Cb := c.hexereiNaBuff(mult[c.TalentLvlAttack()])
 		c.Core.QueueAttack(
 			ai,
 			ap,
 			attackHitmarks[c.NormalCounter][i],
 			attackHitmarks[c.NormalCounter][i]+travel,
-			c.magicNaCB,
+			c.hexereiNaCB,
 			c2Cb,
 		)
 		if ai.Element == attributes.Anemo {

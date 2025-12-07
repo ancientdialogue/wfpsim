@@ -15,16 +15,16 @@ func init() {
 
 type char struct {
 	*tmpl.Character
-	magicBurstExtCount  int
-	magicBuff           []float64
-	qSrc                int
-	qPos                info.Point
-	qAbsorb             attributes.Element
-	qAbsorbBonusTicks   int
-	absorbCheckLocation info.AttackPattern
-	aiAbsorb            info.AttackInfo
-	snapAbsorb          info.Snapshot
-	c4bonus             []float64
+	hexereiBurstExtCount int
+	hexereiBuff          []float64
+	qSrc                 int
+	qPos                 info.Point
+	qAbsorb              attributes.Element
+	qAbsorbBonusTicks    int
+	absorbCheckLocation  info.AttackPattern
+	aiAbsorb             info.AttackInfo
+	snapAbsorb           info.Snapshot
+	c4bonus              []float64
 }
 
 func NewChar(s *core.Core, w *character.CharWrapper, p info.CharacterProfile) error {
@@ -36,11 +36,11 @@ func NewChar(s *core.Core, w *character.CharWrapper, p info.CharacterProfile) er
 	c.BurstCon = 3
 	c.SkillCon = 5
 
-	magic, ok := p.Params["magic"]
+	hexerei, ok := p.Params["hexerei"]
 	if !ok {
-		magic = 1
+		hexerei = 1
 	}
-	c.IsMagic = magic > 0
+	c.IsHexerei = hexerei > 0
 
 	w.Character = &c
 
@@ -48,7 +48,7 @@ func NewChar(s *core.Core, w *character.CharWrapper, p info.CharacterProfile) er
 }
 
 func (c *char) Init() error {
-	c.magicInit()
+	c.hexereiInit()
 	c.c4Init()
 	c.c6Init()
 	return nil

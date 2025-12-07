@@ -94,7 +94,7 @@ func (c *char) burstTicks(src int, ai info.AttackInfo, snap *info.Snapshot, ap i
 			return
 		}
 		c.Core.QueueAttackWithSnap(ai, *snap, ap, 0, cb)
-		ai.Mult = burstDot[c.TalentLvlBurst()] * c.magicBurstBuff()
+		ai.Mult = burstDot[c.TalentLvlBurst()] * c.hexereiBurstBuff()
 		c.Core.Tasks.Add(c.burstTicks(src, ai, snap, ap, cb), 24)
 	}
 }
@@ -103,7 +103,7 @@ func (c *char) burstTicks(src int, ai info.AttackInfo, snap *info.Snapshot, ap i
 func (c *char) burstAbsorbedTicks(count int, ai info.AttackInfo, snap info.Snapshot, ap info.AttackPattern, cb info.AttackCBFunc) func() {
 	// ticks at 24f. 15 total
 	return func() {
-		ai.Mult = burstDot[c.TalentLvlBurst()] * c.magicBurstBuff()
+		ai.Mult = burstDot[c.TalentLvlBurst()] * c.hexereiBurstBuff()
 		c.Core.QueueAttackWithSnap(c.aiAbsorb, c.snapAbsorb, ap, 0, cb)
 		if count+c.qAbsorbBonusTicks <= 0 {
 			c.aiAbsorb.Element = attributes.NoElement

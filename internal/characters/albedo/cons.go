@@ -182,7 +182,7 @@ func (c *char) c6Init() {
 	if c.Base.Cons < 6 {
 		return
 	}
-	if !c.IsMagic {
+	if !c.IsHexerei {
 		return
 	}
 
@@ -214,7 +214,7 @@ func (c *char) c6OnBurst() bool {
 	if c.Base.Cons < 6 {
 		return false
 	}
-	if !c.IsMagic {
+	if !c.IsHexerei {
 		return false
 	}
 

@@ -73,10 +73,10 @@ func (c *char) applySpark(ai *info.AttackInfo) info.Snapshot {
 	if c.StatusIsActive(a1SparkKey) {
 		ai.Abil = "Boom-Boom Strike"
 		snap.Stats[attributes.DmgP] += .50
-		// Magic bonus (C6):
+		// Hexerei bonus (C6):
 		// When Klee uses an Explosive Spark, there is a 50% chance it will not be consumed.
 		previous := c.a1CurrentStack
-		if c.Base.Cons < 6 || c.IsMagic && c.getMagicCount() > 1 && c.Core.Rand.Float64() < 0.5 {
+		if c.Base.Cons < 6 || c.IsHexerei && c.Core.Player.GetHexereiCount() > 1 && c.Core.Rand.Float64() < 0.5 {
 			c.a1CurrentStack--
 		}
 		c.Core.Log.NewEvent("consuming spark", glog.LogCharacterEvent, c.Index()).

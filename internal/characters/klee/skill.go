@@ -151,7 +151,7 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 	}, cooldownDelay)
 
 	// TODO: Is this spark created on cast or release? Assume cast for cancel testing
-	if c.IsMagic {
+	if c.IsHexerei {
 		c.addSpark()
 	}
 

@@ -48,7 +48,7 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 	}
 
 	// Force burst to reset counter so N1Q is reset... perhaps there is a better way
-	if c.IsMagic && c.getMagicCount() > 1 {
+	if c.IsHexerei && c.Core.Player.GetHexereiCount() > 1 {
 		c.savedNormalCounter = 0
 	}
 
@@ -84,10 +84,10 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 		}, start)
 	}
 
-	// Magic bonus:
+	// Hexerei bonus:
 	// When the duration of Sparks 'n' Splash ends, or if Klee leaves the field early, an explosion will be triggered,
 	// dealing 555% of her ATK as AoE Pyro DMG. If Klee is active when the explosion occurs, its DMG will be increased by 100%.
-	if c.Base.Cons >= 4 && c.IsMagic {
+	if c.Base.Cons >= 4 && c.IsHexerei {
 		c.Core.Tasks.Add(func() {
 			// check to make sure it hasn't already exploded due to exiting field
 			if c.Core.Player.Active() == c.Index() {
@@ -124,8 +124,8 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 				AffectedStat: attributes.PyroP,
 				Amount: func() ([]float64, bool) {
 					m[attributes.PyroP] = .1
-					// Magic: Secret Rite- self buff is 50% pyro
-					if c.Core.Player.Active() == x.Index() && c.IsMagic && c.getMagicCount() > 1 {
+					// Hexerei: Secret Rite- self buff is 50% pyro
+					if c.Core.Player.Active() == x.Index() && c.IsHexerei && c.Core.Player.GetHexereiCount() > 1 {
 						m[attributes.PyroP] = .5
 					}
 					return m, true
@@ -135,7 +135,7 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 	}
 
 	// TODO: delay?
-	if c.IsMagic {
+	if c.IsHexerei {
 		c.addSpark()
 	}
 	// It appears that C1 procs before burst gadget is created, so assume it snaps

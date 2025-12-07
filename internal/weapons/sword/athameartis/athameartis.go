@@ -79,18 +79,8 @@ func NewWeapon(c *core.Core, char *character.CharWrapper, p info.WeaponProfile) 
 }
 
 func getBonus(c *core.Core) float64 {
-	if getMagicCount(c) < 2 {
+	if c.Player.GetHexereiCount() < 2 {
 		return 1.0
 	}
 	return 1.75
-}
-
-func getMagicCount(c *core.Core) int {
-	count := 0
-	for _, c := range c.Player.Chars() {
-		if c.IsMagic {
-			count += 1
-		}
-	}
-	return count
 }
