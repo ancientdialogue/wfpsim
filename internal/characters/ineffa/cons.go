@@ -160,7 +160,7 @@ func (c *char) c6Init() {
 		IgnoreDefPercent: 1,
 	}
 
-	c.Core.Events.Subscribe(event.OnLunarChargedReactionAttack, func(args ...any) bool {
+	c.Core.Events.Subscribe(event.OnLunarReactionAttack, func(args ...any) bool {
 		if !c.StatusIsActive(c1Key) {
 			return false
 		}

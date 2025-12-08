@@ -13,32 +13,29 @@ import (
 )
 
 const (
-	lunarchargeBonusKey = "columbina-lc-bonus"
-	a1Key               = "columbina-a1"
+	lunarBonusKey = "columbina-lunar-bonus"
+	a1Key         = "columbina-a1"
 )
 
-func (c *char) lunarchargeInit() {
+func (c *char) moonsignInit() {
 	c.Core.Flags.Custom[reactable.LunarChargeEnableKey] = 1
-
+	c.Core.Flags.Custom[reactable.LunarCrystallizeEnableKey] = 1
 	c.Core.Events.Subscribe(event.OnEnemyHit, func(args ...any) bool {
 		atk := args[1].(*info.AttackEvent)
 
-		switch atk.Info.AttackTag {
-		case attacks.AttackTagDirectLunarCharged:
-		case attacks.AttackTagReactionLunarCharge:
-		default:
+		if !attacks.AttackTagIsLunar(atk.Info.AttackTag) {
 			return false
 		}
 
 		bonus := min(c.MaxHP()/1000.0*0.002, 0.07)
 
 		if c.Core.Flags.LogDebug {
-			c.Core.Log.NewEvent("columbina adding lunarcharged base damage", glog.LogCharacterEvent, c.Index()).Write("bonus", bonus)
+			c.Core.Log.NewEvent("columbina adding lunar base damage", glog.LogCharacterEvent, c.Index()).Write("bonus", bonus)
 		}
 
 		atk.Info.BaseDmgBonus += bonus
 		return false
-	}, lunarchargeBonusKey)
+	}, lunarBonusKey)
 }
 
 func (c *char) a1Init() {

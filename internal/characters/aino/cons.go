@@ -144,16 +144,13 @@ func (c *char) c6Init() {
 					buff += 0.2
 				}
 
-				switch ai.AttackTag {
-				case attacks.AttackTagECDamage:
-				case attacks.AttackTagBloom:
-				case attacks.AttackTagBountifulCore: // TODO: Does aino buff bountiful bloom damage?
-				case attacks.AttackTagDirectLunarCharged:
-				case attacks.AttackTagReactionLunarCharge:
-				// TODO: Lunar-Bloom
-				default:
+				if !attacks.AttackTagIsLunar(ai.AttackTag) &&
+					ai.AttackTag != attacks.AttackTagECDamage &&
+					ai.AttackTag != attacks.AttackTagBloom &&
+					ai.AttackTag != attacks.AttackTagBountifulCore {
 					return 0, false
 				}
+
 				return buff, false
 			},
 		})

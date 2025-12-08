@@ -45,16 +45,14 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 		char.AddReactBonusMod(character.ReactBonusMod{
 			Base: modifier.NewBase(burstBuffKey, burstDur+105),
 			Amount: func(ai info.AttackInfo) (float64, bool) {
-				switch ai.AttackTag {
-				case attacks.AttackTagDirectLunarCharged:
-				case attacks.AttackTagReactionLunarCharge:
-				default:
+				if !attacks.AttackTagIsLunar(ai.AttackTag) {
 					return 0, false
 				}
 
 				if !c.Core.Combat.Player().IsWithinArea(c.burstArea) {
 					return 0, false
 				}
+
 				if c.Core.Combat.Debug {
 					c.Core.Log.NewEventBuildMsg(glog.LogCharacterEvent, c.Index(), "Adding columbina burst react bonus")
 				}

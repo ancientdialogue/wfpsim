@@ -46,7 +46,7 @@ func (c *char) Init() error {
 	c.skillInit()
 	c.a1Init()
 	c.a4Init()
-	c.lunarchargeInit()
+	c.moonsignInit()
 
 	return nil
 }

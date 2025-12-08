@@ -74,7 +74,8 @@ const (
 	OnPlunge       // nil
 	OnAimShoot     // nil
 	OnDash
-	OnLunarChargedReactionAttack // target, AttackEvent; event so predamagemods can be applied to the individual LC contributions. Emitted once per contributor
+	OnLunarReactionAttack // target, AttackEvent; event so predamagemods can be applied to the individual Lunar contributions. Emitted once per contributor
+	OnMoondriftHarmony    // target, AttackEvent;
 	// sim stuff
 	OnInitialize  // nil
 	OnStateChange // prev, next

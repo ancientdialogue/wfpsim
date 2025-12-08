@@ -140,6 +140,11 @@ func (c *char) gravityTick() {
 		atkTag = attacks.AttackTagDirectLunarCharged
 		elem = attributes.Electro
 		abil = "Skill Gravity (Lunar-Charged)"
+	case LCrInd:
+		mult = skillLCr[c.TalentLvlSkill()]
+		atkTag = attacks.AttackTagDirectLunarCrystallize
+		elem = attributes.Geo
+		abil = "Skill Gravity (Lunar-Crystallize)"
 	default:
 		return
 	}
