@@ -43,6 +43,10 @@ const (
 	AttackTagLength
 )
 
+func AttackTagIsLunar(atkTag AttackTag) bool {
+	return LunarReactionStartDelim < atkTag && atkTag < LunarReactionEndDelim || DirectLunarReactionStartDelim < atkTag && atkTag < DirectLunarReactionEndDelim
+}
+
 type StrikeType int
 
 const (

@@ -61,7 +61,7 @@ func (c *char) skillInit() {
 
 	c.Core.Events.Subscribe(event.OnEnemyDamage, func(args ...any) bool {
 		atk := args[1].(*info.AttackEvent)
-		if !attackTagIsLunar(atk.Info.AttackTag) {
+		if !attacks.AttackTagIsLunar(atk.Info.AttackTag) {
 			return false
 		}
 		if !c.StatusIsActive(skillKey) {
@@ -79,10 +79,6 @@ func (c *char) skillInit() {
 		}
 		return false
 	}, "columbina-gravity-on-dmg")
-}
-
-func attackTagIsLunar(atkTag attacks.AttackTag) bool {
-	return attacks.LunarReactionStartDelim < atkTag && atkTag < attacks.LunarReactionEndDelim || attacks.DirectLunarReactionStartDelim < atkTag && atkTag < attacks.DirectLunarReactionEndDelim
 }
 
 func (c *char) gravityAccum() {

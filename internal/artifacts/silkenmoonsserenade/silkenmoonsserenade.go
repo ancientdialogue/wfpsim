@@ -84,10 +84,7 @@ func (s *Set) Init() error {
 		char.AddReactBonusMod(character.ReactBonusMod{
 			Base: modifier.NewBase(gleamingMoonDevotionReactKey, -1),
 			Amount: func(ai info.AttackInfo) (float64, bool) {
-				switch ai.AttackTag {
-				case attacks.AttackTagDirectLunarCharged:
-				case attacks.AttackTagReactionLunarCharge:
-				default:
+				if attacks.AttackTagIsLunar(ai.AttackTag) {
 					return 0, false
 				}
 
