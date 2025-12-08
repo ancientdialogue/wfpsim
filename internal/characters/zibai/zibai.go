@@ -57,7 +57,7 @@ func (c *char) ActionReady(a action.Action, p map[string]int) (bool, action.Fail
 	// check if it is possible to use next skill
 	if c.StatusIsActive(skillKey) && a == action.ActionSkill {
 		if c.radiance < 70 {
-			return false, action.InsufficientEnergy
+			return false, action.InsufficientStamina
 		}
 		return true, action.NoFailure
 	}

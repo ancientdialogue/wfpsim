@@ -16,7 +16,7 @@ var (
 	attackHits            = []int{1, 1, 2, 1}
 	attackHitmarks        = [][]int{{11}, {9}, {8, 16}, {16}}
 	attackHitlagHaltFrame = [][]float64{{0.02}, {0.02}, {0.02, 0.02}, {0.02}}
-	attackDefHalt         = [][]bool{{false}, {false}, {false}, {false}}
+	attackDefHalt         = [][]bool{{false}, {false}, {false, false}, {false}}
 	attackHitboxes        = [][]float64{{1.5, 3.8}, {2}, {1, 1.5}, {1.7}}
 	attackOffsets         = []float64{0, 0.8, 0.5, 1.8}
 	attackFanAngles       = []float64{360, 180, 360, 360}
@@ -38,7 +38,7 @@ func init() {
 	attackFrames[2][action.ActionAttack] = 19
 
 	attackFrames[3] = frames.InitNormalCancelSlice(attackHitmarks[3][0], 34)
-	attackFrames[4][action.ActionCharge] = 500 // TODO: this action is illegal; need better way to handle it
+	attackFrames[3][action.ActionCharge] = 500 // TODO: this action is illegal; need better way to handle it
 }
 
 func (c *char) Attack(p map[string]int) (action.Info, error) {
