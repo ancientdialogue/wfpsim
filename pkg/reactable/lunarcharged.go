@@ -13,9 +13,10 @@ import (
 )
 
 const (
-	LcKey    = "lunarcharged-cloud"
-	lcSrcKey = "lunarcharged-cloud-src"
-	lcIcdKey = "lunarcharged-cloud-icd"
+	LcKey            = "lunarcharged-cloud"
+	LcIcdOverrideKey = "lunarcharged-icd-override"
+	lcSrcKey         = "lunarcharged-cloud-src"
+	lcIcdKey         = "lunarcharged-cloud-icd"
 )
 
 var lcContributorMult = []float64{1.0, 1.0 / 2.0, 1.0 / 12.0, 1.0 / 12.0}
@@ -223,14 +224,16 @@ func (r *Reactable) nextLCTick(src int) func() {
 			if enemy.GetAuraDurability(info.ReactionModKeyElectro) <= info.ZeroDur || enemy.GetAuraDurability(info.ReactionModKeyHydro) <= info.ZeroDur {
 				continue
 			}
-			e.AddStatus(lcIcdKey, r.lunarChargedICD, true)
+
+			icd, ok := r.core.Flags.Custom[LcIcdOverrideKey]
+			if !ok {
+				icd = 2 * 60
+			}
+
+			e.AddStatus(lcIcdKey, int(icd), true)
 			enemy.DoLCAttack()
 		}
 		// queue up next tick
 		r.core.Tasks.Add(r.nextLCTick(src), 6)
 	}
-}
-
-func (r *Reactable) SetLunarChargedIcd(icd int) {
-	r.lunarChargedICD = icd
 }

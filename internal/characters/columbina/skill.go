@@ -110,14 +110,12 @@ func (c *char) gravityTick() {
 
 	var mult float64
 	var atkTag attacks.AttackTag
-	var icdGroup attacks.ICDGroup
 	var elem attributes.Element
 	var abil string
 	switch maxReaction {
 	case LCInd:
 		mult = skillLC[c.TalentLvlSkill()]
 		atkTag = attacks.AttackTagDirectLunarCharged
-		icdGroup = attacks.ICDGroupDirectLunarCharged
 		elem = attributes.Electro
 		abil = "Skill Gravity (Lunar-Charged)"
 	default:
@@ -129,7 +127,6 @@ func (c *char) gravityTick() {
 		Abil:             abil,
 		AttackTag:        atkTag,
 		ICDTag:           attacks.ICDTagNone,
-		ICDGroup:         icdGroup,
 		StrikeType:       attacks.StrikeTypeDefault,
 		Element:          elem,
 		Durability:       0,

@@ -75,24 +75,14 @@ func (c *char) a4Init() {
 		}
 
 		if c.StatusIsActive(burstBuffKey) && c.Core.Combat.Player().IsWithinArea(c.burstArea) {
-			for _, t := range c.Core.Combat.Enemies() {
-				e, ok := t.(*enemy.Enemy)
-				if !ok {
-					continue
-				}
-				e.Reactable.SetLunarChargedIcd(1.5 * 60)
-			}
+			c.Core.Flags.Custom[reactable.LcIcdOverrideKey] = 1.5 * 60
+			c.Core.Flags.Custom[reactable.LcrExtraHitOverride] = 0.33
 			return false
 		}
 
 		// player is outside of lunar domain, reset buffs
-		for _, t := range c.Core.Combat.Enemies() {
-			e, ok := t.(*enemy.Enemy)
-			if !ok {
-				continue
-			}
-			e.Reactable.SetLunarChargedIcd(2 * 60)
-		}
+		delete(c.Core.Flags.Custom, reactable.LcIcdOverrideKey)
+		delete(c.Core.Flags.Custom, reactable.LcrExtraHitOverride)
 		return false
 	}
 

@@ -14,9 +14,10 @@ import (
 )
 
 const (
-	LcrKey      = "lunarcrystallize"
-	lcrCountKey = "lunarcrystallize-count"
-	lcrDur      = 5.5 * 60
+	LcrKey              = "lunarcrystallize"
+	LcrExtraHitOverride = "lunarcrystallize-bonus-hit-chance"
+	lcrCountKey         = "lunarcrystallize-count"
+	lcrDur              = 5.5 * 60
 )
 
 var lcrContributorMult = []float64{1.0, 1.0 / 2.0, 1.0 / 12.0, 1.0 / 12.0}
@@ -129,6 +130,9 @@ type lcrContribution = struct {
 func (r *Reactable) DoLCrAttack(owner int) {
 	for _, delay := range []int{1, 4, 7} {
 		r.core.Tasks.Add(func() { r.doSingleLCrAttack(owner) }, delay)
+		if chance, ok := r.core.Flags.Custom[LcrExtraHitOverride]; ok && r.core.Rand.Float64() < chance {
+			r.core.Tasks.Add(func() { r.doSingleLCrAttack(owner) }, delay)
+		}
 	}
 	// clear contributors after last attack
 	r.core.Tasks.Add(func() {
