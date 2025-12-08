@@ -25,9 +25,7 @@ const (
 )
 
 func init() {
-	skillFrames = frames.InitAbilSlice(61)
-	skillFrames[action.ActionDash] = 29
-	skillFrames[action.ActionJump] = 29
+	skillFrames = frames.InitAbilSlice(26)
 }
 
 func (c *char) skillInit() {
