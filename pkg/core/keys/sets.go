@@ -33,8 +33,10 @@ func (s Set) String() string {
 
 var setNames = []string{
 	"",
+	"adaycarvedfromrisingwinds",
 	"adventurer",
 	"archaicpetra",
+	"aubadeofmorningstarandmoon",
 	"berserker",
 	"blizzardstrayer",
 	"bloodstainedchivalry",
@@ -94,8 +96,10 @@ var setNames = []string{
 
 const (
 	NoSet Set = iota
+	ADayCarvedFromRisingWinds
 	Adventurer
 	ArchaicPetra
+	AubadeOfMorningstarAndMoon
 	Berserker
 	BlizzardStrayer
 	BloodstainedChivalry
