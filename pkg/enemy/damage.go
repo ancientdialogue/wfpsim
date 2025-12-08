@@ -104,7 +104,7 @@ func (e *Enemy) calc(atk *info.AttackEvent, evt glog.Event) (float64, bool) {
 		damage *= (atk.Info.AmpMult * (1 + emBonus + reactBonus))
 	}
 
-	if attacks.AttackTagIsLunar(atk.Info.AttackTag) {
+	if attacks.DirectLunarReactionStartDelim < atk.Info.AttackTag && atk.Info.AttackTag < attacks.DirectLunarReactionEndDelim {
 		emBonus = (6 * em) / (2000 + em)
 		reactBonus = e.Core.Player.ByIndex(atk.Info.ActorIndex).ReactBonus(atk.Info)
 		damage *= 1 + emBonus + reactBonus

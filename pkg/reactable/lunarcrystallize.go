@@ -51,7 +51,9 @@ func (r *Reactable) TryLunarCrystallize(a *info.AttackEvent) bool {
 		// trigger three attacks
 		r.core.Flags.Custom[lcrCountKey] = 0
 		r.core.Events.Emit(event.OnMoondriftHarmony, r.self, &a)
+		r.core.Log.NewEvent(fmt.Sprint("Doing lcr attack triggered by ", a.Info.ActorIndex), glog.LogElementEvent, 0)
 		r.DoLCrAttack(a.Info.ActorIndex)
+
 	}
 
 	// TODO: Check if lunar crystallize interacts with crystallize GCD
@@ -152,7 +154,6 @@ func (r *Reactable) doSingleLCrAttack(owner int) {
 	// Do we need to make a new one for each character?
 	ai := info.AttackInfo{
 		DamageSrc:        r.self.Key(),
-		ActorIndex:       owner,
 		Abil:             string(info.ReactionTypeLunarCrystallize),
 		AttackTag:        attacks.AttackTagReactionLunarCrystallize,
 		ICDTag:           attacks.ICDTagNone,
@@ -229,6 +230,7 @@ func (r *Reactable) doSingleLCrAttack(owner int) {
 	if contributions[0].isCrit {
 		snap.Stats[attributes.CR] = 1.0
 	}
+	ai.ActorIndex = owner
 	r.core.QueueAttackWithSnap(
 		ai,
 		snap,
