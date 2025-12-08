@@ -51,7 +51,7 @@ func (c *char) c6() {
 			AffectedStat: stat,
 			Amount: func() ([]float64, bool) {
 				c.c6buff[stat] = .20
-				if char.IsMagic {
+				if char.IsHexerei {
 					c.c6buff[stat] += 0.0857142
 				}
 				return c.c6buff, true

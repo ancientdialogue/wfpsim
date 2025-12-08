@@ -52,13 +52,13 @@ func (c *char) a1Init() {
 		t.AddResistMod(info.ResistMod{
 			Base:  modifier.NewBaseWithHitlag("durin-a1-"+attributes.Dendro.String(), 6*60),
 			Ele:   attributes.Dendro,
-			Value: -0.20 * c.magicA1Bonus(),
+			Value: -0.20 * c.hexereiA1Bonus(),
 		})
 
 		t.AddResistMod(info.ResistMod{
 			Base:  modifier.NewBaseWithHitlag("durin-a1-"+attributes.Pyro.String(), 6*60),
 			Ele:   attributes.Pyro,
-			Value: -0.20 * c.magicA1Bonus(),
+			Value: -0.20 * c.hexereiA1Bonus(),
 		})
 
 		return false
@@ -79,7 +79,7 @@ func (c *char) a1OnBurst(isWhite bool) {
 		Base: modifier.NewBaseWithHitlag(a1BlackKey, 20*60),
 		Amount: func(ai info.AttackInfo) (float64, bool) {
 			if ai.Amped {
-				return 0.40 * c.magicA1Bonus(), false
+				return 0.40 * c.hexereiA1Bonus(), false
 			}
 			return 0, false
 		},
@@ -101,7 +101,7 @@ func (c *char) a1MakeResShred(elements []attributes.Element) func(args ...any) b
 			t.AddResistMod(info.ResistMod{
 				Base:  modifier.NewBaseWithHitlag("durin-a1-"+ele.String(), 6*60),
 				Ele:   ele,
-				Value: -0.20 * c.magicA1Bonus(),
+				Value: -0.20 * c.hexereiA1Bonus(),
 			})
 		}
 		return false
@@ -135,24 +135,14 @@ func (c *char) a4Dmg() float64 {
 	return 1 + bonus
 }
 
-func (c *char) magicA1Bonus() float64 {
-	if !c.IsMagic {
+func (c *char) hexereiA1Bonus() float64 {
+	if !c.IsHexerei {
 		return 1
 	}
 
-	if c.getMagicCount() < 2 {
+	if c.Core.Player.GetHexereiCount() < 2 {
 		return 1
 	}
 
 	return 1.75
-}
-
-func (c *char) getMagicCount() int {
-	count := 0
-	for _, c := range c.Core.Player.Chars() {
-		if c.IsMagic {
-			count += 1
-		}
-	}
-	return count
 }

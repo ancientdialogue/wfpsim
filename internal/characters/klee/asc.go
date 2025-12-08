@@ -18,7 +18,7 @@ const (
 // When Jumpy Dumpty and Normal Attacks deal DMG, Klee has a 50% chance to obtain an Explosive Spark.
 // This Explosive Spark is consumed by the next Charged Attack, which costs no Stamina and deals 50% increased DMG.
 
-// Magic bonus:
+// Hexerei bonus:
 // Using her Elemental Skill Jumpy Dumpty or Elemental Burst Sparks 'n' Splash also grants 1 Explosive Spark.
 // Klee can hold up to 3 Explosive Sparks. While holding an Explosive Spark, Klee's Charged Attack will consume
 // 1 Spark to perform a special stamina-free Charged Attack, Boom-Boom Strike, dealing 50% increased DMG.
@@ -33,7 +33,7 @@ func (c *char) makeA1CB() info.AttackCBFunc {
 		if c.Core.Rand.Float64() < 0.5 {
 			return
 		}
-		// TODO: Does ICD change with magic?
+		// TODO: Does ICD change with hexerei?
 		c.AddStatus(a1IcdKey, 60*5, true)
 		c.addSpark()
 	}
@@ -81,25 +81,15 @@ func (c *char) makeA4CB() info.AttackCBFunc {
 	}
 }
 
-func (c *char) getMagicCount() int {
-	count := 0
-	for _, c := range c.Core.Player.Chars() {
-		if c.IsMagic {
-			count += 1
-		}
-	}
-	return count
-}
-
-// Magic: Secret Rite
+// Hexerei: Secret Rite
 // When Klee deals DMG with Normal Attacks, Elemental Skill, or Elemental Burst, she gains 1 Boom Badge, lasting 20s.
 // Each type of attack can grant at most 1 Boom Badge this way, and each badge has its own independent timer.
 // While Klee has 1/2/3 Boom Badges, her special Charged Attack Boom-Boom Strike deals 115%/130%/150% of its original DMG.
-func (c *char) magicInit() {
-	if !c.IsMagic {
+func (c *char) hexereiInit() {
+	if !c.IsHexerei {
 		return
 	}
-	if c.getMagicCount() < 2 {
+	if c.Core.Player.GetHexereiCount() < 2 {
 		return
 	}
 	c.Core.Events.Subscribe(event.OnEnemyHit, func(args ...any) bool {

@@ -76,7 +76,7 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 	c.SetCD(action.ActionBurst, 15*60)
 	c.ConsumeEnergy(5)
 
-	c.magicOnBurst()
+	c.hexereiOnBurst()
 	c.c2OnBurst()
 
 	return action.Info{

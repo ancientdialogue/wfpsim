@@ -34,14 +34,14 @@ func NewChar(s *core.Core, w *character.CharWrapper, p info.CharacterProfile) er
 
 	w.Character = &c
 
-	magic, ok := p.Params["magic"]
+	hexerei, ok := p.Params["hexerei"]
 	if !ok {
-		magic = 1
+		hexerei = 1
 	}
-	c.IsMagic = magic > 0
+	c.IsHexerei = hexerei > 0
 
 	c.a1MaxStack = 1
-	if c.IsMagic {
+	if c.IsHexerei {
 		c.a1MaxStack = 3
 	}
 
@@ -50,7 +50,7 @@ func NewChar(s *core.Core, w *character.CharWrapper, p info.CharacterProfile) er
 
 func (c *char) Init() error {
 	c.onExitField()
-	c.magicInit()
+	c.hexereiInit()
 	return nil
 }
 
@@ -63,10 +63,10 @@ func (c *char) Condition(fields []string) (any, error) {
 	}
 }
 
-// Magic: Secret Rite
+// Hexerei: Secret Rite
 // During Klee's Elemental Burst, her Normal Attack sequence does not reset.
 func (c *char) ResetNormalCounter() {
-	if c.IsMagic && c.getMagicCount() > 1 && c.Core.Player.Active() == c.Index() && c.Core.Status.Duration(burstKey) > 0 {
+	if c.IsHexerei && c.Core.Player.GetHexereiCount() > 1 && c.Core.Player.Active() == c.Index() && c.Core.Status.Duration(burstKey) > 0 {
 		c.NormalCounter = c.savedNormalCounter
 		return
 	}

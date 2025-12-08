@@ -45,22 +45,22 @@ func (c *char) a4() {
 	})
 }
 
-func (c *char) magicWolfMult() float64 {
-	// It seems like he gets the Q buff regardless if he is a magic character?
+func (c *char) hexereiWolfMult() float64 {
+	// It seems like he gets the Q buff regardless if he is a hexerei character?
 	return 0.7
 }
 
 const (
-	magicSigilIcdKey = "razor-magic-icd"
-	magicSigilKey    = "razor-magic"
+	hexereiSigilIcdKey = "razor-hexerei-icd"
+	hexereiSigilKey    = "razor-hexerei"
 )
 
-func (c *char) magicOnSigilOverflow() {
-	if !c.IsMagic {
+func (c *char) hexereiOnSigilOverflow() {
+	if !c.IsHexerei {
 		return
 	}
 
-	if c.getMagicCount() < 2 {
+	if c.Core.Player.GetHexereiCount() < 2 {
 		return
 	}
 
@@ -68,14 +68,14 @@ func (c *char) magicOnSigilOverflow() {
 		return
 	}
 
-	if c.StatusIsActive(magicSigilIcdKey) {
+	if c.StatusIsActive(hexereiSigilIcdKey) {
 		return
 	}
-	c.AddStatus(magicSigilIcdKey, 60, true)
+	c.AddStatus(hexereiSigilIcdKey, 60, true)
 
 	ai := info.AttackInfo{
 		ActorIndex: c.Index(),
-		Abil:       "Magic: Secret Rite (Razor)",
+		Abil:       "Hexerei: Secret Rite (Razor)",
 		AttackTag:  attacks.AttackTagElementalArt, // TODO: it has another tag?
 		ICDTag:     attacks.ICDTagNone,
 		ICDGroup:   attacks.ICDGroupDefault,
@@ -90,16 +90,6 @@ func (c *char) magicOnSigilOverflow() {
 		6,
 		6,
 	)
-	c.AddEnergy(magicSigilKey, 7)
+	c.AddEnergy(hexereiSigilKey, 7)
 	c.c6OnSiglConsume()
-}
-
-func (c *char) getMagicCount() int {
-	count := 0
-	for _, c := range c.Core.Player.Chars() {
-		if c.IsMagic {
-			count += 1
-		}
-	}
-	return count
 }

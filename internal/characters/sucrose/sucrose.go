@@ -22,8 +22,8 @@ type char struct {
 	a4Buff              []float64
 	c4Count             int
 	c6buff              []float64
-	magicBuffSkill      []float64
-	magicBuffBurst      []float64
+	hexereiBuffSkill    []float64
+	hexereiBuffBurst    []float64
 }
 
 func NewChar(s *core.Core, w *character.CharWrapper, p info.CharacterProfile) error {
@@ -39,11 +39,11 @@ func NewChar(s *core.Core, w *character.CharWrapper, p info.CharacterProfile) er
 		c.SetNumCharges(action.ActionSkill, 2)
 	}
 
-	magic, ok := p.Params["magic"]
+	hexerei, ok := p.Params["hexerei"]
 	if !ok {
-		magic = 1
+		hexerei = 1
 	}
-	c.IsMagic = magic > 0
+	c.IsHexerei = hexerei > 0
 
 	w.Character = &c
 
@@ -56,7 +56,7 @@ func (c *char) Init() error {
 		c.c6buff = make([]float64, attributes.EndStatType)
 	}
 
-	c.magicInit()
+	c.hexereiInit()
 
 	return nil
 }

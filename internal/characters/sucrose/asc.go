@@ -94,44 +94,34 @@ func (c *char) a4() {
 		Write("expiry", c.Core.F+480)
 }
 
-func (c *char) magicInit() {
-	if !c.IsMagic {
+func (c *char) hexereiInit() {
+	if !c.IsHexerei {
 		return
 	}
 
-	if c.getMagicCount() < 2 {
+	if c.Core.Player.GetHexereiCount() < 2 {
 		return
 	}
 
-	c.magicBuffSkill = make([]float64, attributes.EndStatType)
-	c.magicBuffSkill[attributes.DmgP] = 0.0571428
+	c.hexereiBuffSkill = make([]float64, attributes.EndStatType)
+	c.hexereiBuffSkill[attributes.DmgP] = 0.0571428
 
-	c.magicBuffBurst = make([]float64, attributes.EndStatType)
-	c.magicBuffBurst[attributes.DmgP] = 0.0714285
+	c.hexereiBuffBurst = make([]float64, attributes.EndStatType)
+	c.hexereiBuffBurst[attributes.DmgP] = 0.0714285
 }
 
-func (c *char) getMagicCount() int {
-	count := 0
-	for _, c := range c.Core.Player.Chars() {
-		if c.IsMagic {
-			count += 1
-		}
-	}
-	return count
-}
-
-func (c *char) magicOnSkill() {
-	if !c.IsMagic {
+func (c *char) hexereiOnSkill() {
+	if !c.IsHexerei {
 		return
 	}
 
-	if c.getMagicCount() < 2 {
+	if c.Core.Player.GetHexereiCount() < 2 {
 		return
 	}
 
 	for _, char := range c.Core.Player.Chars() {
 		char.AddAttackMod(character.AttackMod{
-			Base: modifier.NewBase("sucrose-magic-skill", -1),
+			Base: modifier.NewBase("sucrose-hexerei-skill", -1),
 			Amount: func(atk *info.AttackEvent, t info.Target) ([]float64, bool) {
 				switch atk.Info.AttackTag {
 				case attacks.AttackTagNormal,
@@ -144,27 +134,27 @@ func (c *char) magicOnSkill() {
 					return nil, false
 				}
 
-				return c.magicBuffSkill, true
+				return c.hexereiBuffSkill, true
 			},
 		})
 	}
 }
 
-func (c *char) magicOnBurst() {
-	if !c.IsMagic {
+func (c *char) hexereiOnBurst() {
+	if !c.IsHexerei {
 		return
 	}
 
-	if c.getMagicCount() < 2 {
+	if c.Core.Player.GetHexereiCount() < 2 {
 		return
 	}
 
 	for _, char := range c.Core.Player.Chars() {
-		if !char.IsMagic {
+		if !char.IsHexerei {
 			continue
 		}
 		char.AddAttackMod(character.AttackMod{
-			Base: modifier.NewBase("sucrose-magic-burst", -1),
+			Base: modifier.NewBase("sucrose-hexerei-burst", -1),
 			Amount: func(atk *info.AttackEvent, t info.Target) ([]float64, bool) {
 				switch atk.Info.AttackTag {
 				case attacks.AttackTagNormal,
@@ -177,7 +167,7 @@ func (c *char) magicOnBurst() {
 					return nil, false
 				}
 
-				return c.magicBuffBurst, true
+				return c.hexereiBuffBurst, true
 			},
 		})
 	}

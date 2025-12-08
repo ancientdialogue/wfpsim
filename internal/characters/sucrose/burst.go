@@ -90,7 +90,7 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 
 	c.SetCDWithDelay(action.ActionBurst, 1200, 18)
 	c.ConsumeEnergy(21)
-	c.magicOnBurst()
+	c.hexereiOnBurst()
 	return action.Info{
 		Frames:          frames.NewAbilFunc(burstFrames),
 		AnimationLength: burstFrames[action.InvalidAction],

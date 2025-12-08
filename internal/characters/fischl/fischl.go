@@ -46,11 +46,11 @@ func NewChar(s *core.Core, w *character.CharWrapper, p info.CharacterProfile) er
 		c.ozTravel = travel
 	}
 
-	magic, ok := p.Params["magic"]
+	hexerei, ok := p.Params["hexerei"]
 	if !ok {
-		magic = 1
+		hexerei = 1
 	}
-	c.IsMagic = magic > 0
+	c.IsHexerei = hexerei > 0
 
 	w.Character = &c
 
@@ -59,7 +59,7 @@ func NewChar(s *core.Core, w *character.CharWrapper, p info.CharacterProfile) er
 
 func (c *char) Init() error {
 	c.a4()
-	c.magicInit()
+	c.hexereiInit()
 	return c.c6Init()
 }
 

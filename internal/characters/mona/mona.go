@@ -22,7 +22,7 @@ type char struct {
 	a4Stats                []float64
 	phantasmalBubbleStacks int
 	omenStartingBonusDur   int
-	magicOmenExtension     int
+	hexereiOmenExtension   int
 	c2icd                  int
 	c2AfterBurst           bool
 	c2Buff                 []float64
@@ -44,11 +44,11 @@ func NewChar(s *core.Core, w *character.CharWrapper, p info.CharacterProfile) er
 
 	w.Character = &c
 
-	magic, ok := p.Params["magic"]
+	hexerei, ok := p.Params["hexerei"]
 	if !ok {
-		magic = 1
+		hexerei = 1
 	}
-	c.IsMagic = magic > 0
+	c.IsHexerei = hexerei > 0
 
 	return nil
 }
@@ -58,7 +58,7 @@ func (c *char) Init() error {
 	c.burstDamageBonus()
 	c.a4()
 
-	c.magicInit()
+	c.hexereiInit()
 
 	c.c1Init()
 	c.c2Init()

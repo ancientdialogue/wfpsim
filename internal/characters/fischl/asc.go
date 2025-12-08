@@ -81,12 +81,12 @@ func (c *char) a4() {
 	c.Core.Events.Subscribe(event.OnAggravate, a4cbNoGadget, "fischl-a4")
 }
 
-func (c *char) magicInit() {
-	if !c.IsMagic {
+func (c *char) hexereiInit() {
+	if !c.IsHexerei {
 		return
 	}
 
-	if c.getMagicCount() < 2 {
+	if c.Core.Player.GetHexereiCount() < 2 {
 		return
 	}
 
@@ -105,28 +105,29 @@ func (c *char) magicInit() {
 				continue
 			}
 			char.AddStatMod(character.StatMod{
-				Base:         modifier.NewBase("fischl-magic-atkp", 10*60),
+				Base:         modifier.NewBase("fischl-hexerei-atkp", 10*60),
 				AffectedStat: attributes.ATKP,
 				Amount: func() ([]float64, bool) {
 					if c.Core.Player.Active() != char.Index() {
 						return nil, false
 					}
-					mAtkp[attributes.ATKP] = 0.225 * c.c6MagicBonus()
+					mAtkp[attributes.ATKP] = 0.225 * c.c6HexereiBonus()
 					return mAtkp, true
 				},
 			})
 		}
 
-		c.AddAttackMod(character.AttackMod{
-			Base: modifier.NewBase("fischl-magic-atkp", 10*60),
-			Amount: func(atk *info.AttackEvent, t info.Target) ([]float64, bool) {
-				mAtkp[attributes.ATKP] = 0.225 * c.c6MagicBonus()
+		c.AddStatMod(character.StatMod{
+			Base:         modifier.NewBase("fischl-hexerei-atkp", 10*60),
+			AffectedStat: attributes.ATKP,
+			Amount: func() ([]float64, bool) {
+				mAtkp[attributes.ATKP] = 0.225 * c.c6HexereiBonus()
 				return mAtkp, true
 			},
 		})
 
 		return false
-	}, "fischl-magic-ol")
+	}, "fischl-hexerei-ol")
 
 	mEM := make([]float64, attributes.EndStatType)
 
@@ -144,22 +145,23 @@ func (c *char) magicInit() {
 				continue
 			}
 			char.AddStatMod(character.StatMod{
-				Base:         modifier.NewBase("fischl-magic-em", 10*60),
+				Base:         modifier.NewBase("fischl-hexerei-em", 10*60),
 				AffectedStat: attributes.EM,
 				Amount: func() ([]float64, bool) {
 					if c.Core.Player.Active() != char.Index() {
 						return nil, false
 					}
-					mEM[attributes.EM] = 90 * c.c6MagicBonus()
+					mEM[attributes.EM] = 90 * c.c6HexereiBonus()
 					return mEM, true
 				},
 			})
 		}
 
-		c.AddAttackMod(character.AttackMod{
-			Base: modifier.NewBase("fischl-magic-em", 10*60),
-			Amount: func(atk *info.AttackEvent, t info.Target) ([]float64, bool) {
-				mEM[attributes.EM] = 90 * c.c6MagicBonus()
+		c.AddStatMod(character.StatMod{
+			Base:         modifier.NewBase("fischl-hexerei-em", 10*60),
+			AffectedStat: attributes.EM,
+			Amount: func() ([]float64, bool) {
+				mEM[attributes.EM] = 90 * c.c6HexereiBonus()
 				return mEM, true
 			},
 		})
@@ -167,16 +169,6 @@ func (c *char) magicInit() {
 		return false
 	}
 
-	c.Core.Events.Subscribe(event.OnElectroCharged, emStatMod, "fischl-magic-ec")
-	c.Core.Events.Subscribe(event.OnLunarCharged, emStatMod, "fischl-magic-lc")
-}
-
-func (c *char) getMagicCount() int {
-	count := 0
-	for _, c := range c.Core.Player.Chars() {
-		if c.IsMagic {
-			count += 1
-		}
-	}
-	return count
+	c.Core.Events.Subscribe(event.OnElectroCharged, emStatMod, "fischl-hexerei-ec")
+	c.Core.Events.Subscribe(event.OnLunarCharged, emStatMod, "fischl-hexerei-lc")
 }

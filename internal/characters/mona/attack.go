@@ -57,7 +57,7 @@ func (c *char) Attack(p map[string]int) (action.Info, error) {
 		),
 		attackHitmarks[c.NormalCounter],
 		attackHitmarks[c.NormalCounter],
-		c.makeMagicCB(),
+		c.makeHexereiCB(),
 		c.c2NaCB,
 	)
 

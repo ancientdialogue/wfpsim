@@ -13,9 +13,9 @@ import (
 )
 
 const (
-	phantasmalBubbleKey      = "phantasmal-bubble"
-	phantasmalBubbleIcdKey   = "phantasmal-bubble-icd"
-	magicOmenExtensionIcdKey = "magic-omen-extend-icd"
+	phantasmalBubbleKey        = "phantasmal-bubble"
+	phantasmalBubbleIcdKey     = "phantasmal-bubble-icd"
+	hexereiOmenExtensionIcdKey = "hexerei-omen-extend-icd"
 )
 
 // After she has used Illusory Torrent for 2s, if there are any opponents nearby,
@@ -79,12 +79,12 @@ func (c *char) a4() {
 	c.QueueCharTask(c.a4, 60)
 }
 
-func (c *char) magicInit() {
-	if !c.IsMagic {
+func (c *char) hexereiInit() {
+	if !c.IsHexerei {
 		return
 	}
 
-	if c.getMagicCount() < 2 {
+	if c.Core.Player.GetHexereiCount() < 2 {
 		return
 	}
 
@@ -93,7 +93,7 @@ func (c *char) magicInit() {
 			continue
 		}
 		char.AddReactBonusMod(character.ReactBonusMod{
-			Base: modifier.NewBase("mona-magic-on-vaporize", -1),
+			Base: modifier.NewBase("mona-hexerei-on-vaporize", -1),
 			Amount: func(ai info.AttackInfo) (float64, bool) {
 				if !ai.Amped {
 					return 0, false
@@ -116,11 +116,11 @@ func (c *char) magicInit() {
 	}
 }
 
-func (c *char) makeMagicCB() info.AttackCBFunc {
-	if !c.IsMagic {
+func (c *char) makeHexereiCB() info.AttackCBFunc {
+	if !c.IsHexerei {
 		return nil
 	}
-	if c.getMagicCount() < 2 {
+	if c.Core.Player.GetHexereiCount() < 2 {
 		return nil
 	}
 
@@ -136,41 +136,31 @@ func (c *char) makeMagicCB() info.AttackCBFunc {
 		}
 
 		omenExp := e.StatusExpiry(omenKey)
-		if omenExp > c.Core.F && c.magicOmenExtension < 8*60 && !e.StatusIsActive(magicOmenExtensionIcdKey) {
-			e.AddStatus(magicOmenExtensionIcdKey, 0.5*60, true)
+		if omenExp > c.Core.F && c.hexereiOmenExtension < 8*60 && !e.StatusIsActive(hexereiOmenExtensionIcdKey) {
+			e.AddStatus(hexereiOmenExtensionIcdKey, 0.5*60, true)
 			// calculate new duration
 			newDur := omenExp - c.Core.F + 2*60
 			e.AddStatus(omenKey, newDur, true)
-			c.magicOmenExtension += 2 * 60
+			c.hexereiOmenExtension += 2 * 60
 		}
 
-		if e.StatusIsActive(bubbleKey) && !e.StatusIsActive(magicOmenExtensionIcdKey) {
-			e.AddStatus(magicOmenExtensionIcdKey, 0.5*60, true)
-			c.magicOmenExtension += 2 * 60
+		if e.StatusIsActive(bubbleKey) && !e.StatusIsActive(hexereiOmenExtensionIcdKey) {
+			e.AddStatus(hexereiOmenExtensionIcdKey, 0.5*60, true)
+			c.hexereiOmenExtension += 2 * 60
 			c.omenStartingBonusDur = 2 * 60
 		}
 	}
 }
 
-func (c *char) magicOnBurst() {
-	if !c.IsMagic {
+func (c *char) hexereiOnBurst() {
+	if !c.IsHexerei {
 		return
 	}
 
-	if c.getMagicCount() < 2 {
+	if c.Core.Player.GetHexereiCount() < 2 {
 		return
 	}
 
-	c.magicOmenExtension = 0
+	c.hexereiOmenExtension = 0
 	c.omenStartingBonusDur = 0
-}
-
-func (c *char) getMagicCount() int {
-	count := 0
-	for _, c := range c.Core.Player.Chars() {
-		if c.IsMagic {
-			count += 1
-		}
-	}
-	return count
 }

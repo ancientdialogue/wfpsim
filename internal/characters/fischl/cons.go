@@ -9,7 +9,7 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/keys"
 )
 
-const c6MagicKey = "fischl-c6-magic"
+const c6HexereiKey = "fischl-c6-hexerei"
 
 func (c *char) c6Init() error {
 	if c.Base.Cons < 6 {
@@ -57,17 +57,17 @@ func (c *char) c6Wave() {
 		c.ozTravel,
 	)
 
-	if c.IsMagic {
-		c.AddStatus(c6MagicKey, 10*60, true)
+	if c.IsHexerei {
+		c.AddStatus(c6HexereiKey, 10*60, true)
 	}
 }
 
-func (c *char) c6MagicBonus() float64 {
+func (c *char) c6HexereiBonus() float64 {
 	if c.Base.Cons < 6 {
 		return 1.0
 	}
 
-	if !c.StatusIsActive(c6MagicKey) {
+	if !c.StatusIsActive(c6HexereiKey) {
 		return 1.0
 	}
 	return 2.0

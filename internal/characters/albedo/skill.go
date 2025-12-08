@@ -68,7 +68,7 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 		c.skillActive = true
 		// Reset ICD after construct is created
 		c.DeleteStatus(skillICDKey)
-		c.magicOnIsotoma()
+		c.hexereiOnIsotoma()
 		// add C4 and C6 checks
 		if c.Base.Cons >= 4 {
 			c.Core.Tasks.Add(c.c4(c.Core.F), 18) // start checking in 0.3s
@@ -79,7 +79,7 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 	}, skillHitmark)
 
 	c.SetCDWithDelay(action.ActionSkill, 240, 23)
-	c.magicOnSkill()
+	c.hexereiOnSkill()
 	return action.Info{
 		Frames:          frames.NewAbilFunc(skillFrames),
 		AnimationLength: skillFrames[action.InvalidAction],

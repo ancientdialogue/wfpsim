@@ -124,7 +124,7 @@ func (c *char) c2NaCB(a info.AttackCB) {
 		Mult:       charge[c.TalentLvlAttack()],
 	}
 
-	c.Core.QueueAttack(ai, combat.NewCircleHitOnTarget(trg, nil, 3), chargeHitmark-chargeWindup, chargeHitmark-chargeWindup, c.makeMagicCB(), c.c2CaCB, c.makeC6CAResetCB())
+	c.Core.QueueAttack(ai, combat.NewCircleHitOnTarget(trg, nil, 3), chargeHitmark-chargeWindup, chargeHitmark-chargeWindup, c.makeHexereiCB(), c.c2CaCB, c.makeC6CAResetCB())
 }
 
 // C2:
@@ -170,8 +170,8 @@ func (c *char) c4Init() {
 					return nil, false
 				}
 
-				// Additionally, when any Magic party member attacks an opponent affected by an Omen, their CRIT DMG is increased by 15%.
-				if char.IsMagic {
+				// Additionally, when any Hexerei party member attacks an opponent affected by an Omen, their CRIT DMG is increased by 15%.
+				if char.IsHexerei {
 					m[attributes.CD] = 0.15
 				} else {
 					m[attributes.CD] = 0
@@ -198,20 +198,20 @@ func (c *char) c4Init() {
 			return false
 		}
 
-		isMagic := c.Core.Player.ByIndex(ae.Info.ActorIndex).IsMagic
+		isHexerei := c.Core.Player.ByIndex(ae.Info.ActorIndex).IsHexerei
 
 		if c.Core.Flags.LogDebug {
 			evt := c.Core.Log.NewEvent("Mona C4 added to Lunarcharged", glog.LogPreDamageMod, ae.Info.ActorIndex).
 				Write("before CR", ae.Snapshot.Stats[attributes.CR]).
 				Write("additional CR", 0.15)
-			if isMagic {
+			if isHexerei {
 				evt.Write("before CDMG", ae.Snapshot.Stats[attributes.CD]).
 					Write("additional CDMG", 0.15)
 			}
 		}
 
 		ae.Snapshot.Stats[attributes.CR] += 0.15
-		if isMagic {
+		if isHexerei {
 			ae.Snapshot.Stats[attributes.CD] += 0.15
 		}
 

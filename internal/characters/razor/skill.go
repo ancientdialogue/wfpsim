@@ -208,7 +208,7 @@ func (c *char) addSigil() info.AttackCBFunc {
 		c.sigils += c.c6Sigil()
 
 		if c.sigils > 3 {
-			c.magicOnSigilOverflow()
+			c.hexereiOnSigilOverflow()
 			c.sigils = 3
 		}
 

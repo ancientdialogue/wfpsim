@@ -342,3 +342,13 @@ func (h *Handler) Airborne() AirborneSource {
 const (
 	XianyunAirborneBuff = "xianyun-airborne-buff"
 )
+
+func (h *Handler) GetHexereiCount() int {
+	count := 0
+	for _, c := range h.Chars() {
+		if c.IsHexerei {
+			count += 1
+		}
+	}
+	return count
+}
