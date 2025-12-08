@@ -20,8 +20,8 @@ const (
 	gravityKey     = "columbina-gravity"
 	gravityMax     = 60
 	LCInd          = 0
+	LCrInd         = 1
 	// LBInd          = 1
-	// LCrInd         = 2
 )
 
 func init() {
@@ -38,12 +38,28 @@ func (c *char) skillInit() {
 		if !c.StatusIsActive(skillKey) {
 			return false
 		}
+		c.gravityLastReaction = info.ReactionTypeLunarCharged
 		c.AddStatus(gravityKey, 2*60, false)
 		if !c.gravityTask {
 			c.gravityAccum()
 		}
 		return false
 	}, "columbina-gravity-lc")
+
+	c.Core.Events.Subscribe(event.OnLunarCrystallize, func(args ...any) bool {
+		if _, ok := args[0].(*enemy.Enemy); !ok {
+			return false
+		}
+		if !c.StatusIsActive(skillKey) {
+			return false
+		}
+		c.gravityLastReaction = info.ReactionTypeLunarCrystallize
+		c.AddStatus(gravityKey, 2*60, false)
+		if !c.gravityTask {
+			c.gravityAccum()
+		}
+		return false
+	}, "columbina-gravity-lcr")
 
 	c.Core.Events.Subscribe(event.OnEnemyDamage, func(args ...any) bool {
 		atk := args[1].(*info.AttackEvent)
@@ -56,6 +72,12 @@ func (c *char) skillInit() {
 		c.AddStatus(gravityKey, 2*60, false)
 		if !c.gravityTask {
 			c.gravityAccum()
+		}
+		switch atk.Info.AttackTag {
+		case attacks.AttackTagDirectLunarCharged | attacks.AttackTagReactionLunarCharge:
+			c.gravityLastReaction = info.ReactionTypeLunarCharged
+		case attacks.AttackTagDirectLunarCrystallize | attacks.AttackTagReactionLunarCrystallize:
+			c.gravityLastReaction = info.ReactionTypeLunarCrystallize
 		}
 		return false
 	}, "columbina-gravity-on-dmg")
@@ -76,7 +98,13 @@ func (c *char) gravityAccum() {
 		return
 	}
 	c.gravityTask = true
-	c.gravity[c.gravityLastReaction] += 1 // 10 gravity per 1s
+	switch c.gravityLastReaction {
+	case info.ReactionTypeLunarCharged:
+		c.gravity[LCInd] += 1 // 10 gravity per 1s
+	case info.ReactionTypeLunarCrystallize:
+		c.gravity[LCrInd] += 1 // 10 gravity per 1s
+	}
+
 	if c.totalGravity() >= gravityMax {
 		c.gravityTick()
 	}

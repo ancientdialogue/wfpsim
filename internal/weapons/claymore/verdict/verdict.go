@@ -30,6 +30,7 @@ func (w *Weapon) Init() error      { return nil }
 const (
 	buffKey           = "verdict-skill-dmg"
 	buffDuration      = 15 * 60
+	sealLcrIcdKey     = "verdict-lcr-icd"
 	dmgWindowKey      = "verdict-dmg-window"
 	dmgWindowDuration = 0.2 * 60
 )
@@ -64,6 +65,24 @@ func NewWeapon(c *core.Core, char *character.CharWrapper, p info.WeaponProfile) 
 		if !char.StatModIsActive(buffKey) {
 			w.stacks = 0
 		}
+		if w.stacks < 2 {
+			w.stacks++
+		}
+		c.Log.NewEvent("verdict adding stack", glog.LogWeaponEvent, char.Index()).
+			Write("stacks", w.stacks)
+		char.AddStatus(buffKey, buffDuration, true)
+		return false
+	}, fmt.Sprintf("verdict-seal-%v", char.Base.Key.String()))
+
+	// seal gain on lunar crystallize
+	c.Events.Subscribe(event.OnLunarCrystallize, func(args ...any) bool {
+		if !char.StatModIsActive(buffKey) {
+			w.stacks = 0
+		}
+		if char.StatusIsActive(sealLcrIcdKey) {
+			return false
+		}
+		char.AddStatus(sealLcrIcdKey, 60, true)
 		if w.stacks < 2 {
 			w.stacks++
 		}

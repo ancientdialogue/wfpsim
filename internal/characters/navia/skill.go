@@ -59,8 +59,9 @@ const (
 
 	bulletBoxLength = 11.5
 
-	particleICDKey = "navia-particle-icd"
-	arkheICDKey    = "navia-arkhe-icd"
+	particleICDKey     = "navia-particle-icd"
+	arkheICDKey        = "navia-arkhe-icd"
+	shrapnelGainIcdKey = "navia-lcr-icd"
 )
 
 func init() {
@@ -258,6 +259,26 @@ func (c *char) addShrapnelBuffs(snap *info.Snapshot, count int) {
 // Navia will gain 1 Crystal Shrapnel charge. Navia can hold up to 6 charges of Crystal Shrapnel at once.
 // Each time Crystal Shrapnel gain is triggered, the duration of the Shards you have already will be reset.
 func (c *char) shrapnelGain() {
+	c.Core.Events.Subscribe(event.OnLunarCrystallize, func(args ...any) bool {
+		if _, ok := args[0].(*enemy.Enemy); !ok {
+			return false
+		}
+
+		if c.shrapnel >= 6 {
+			return false
+		}
+
+		if c.StatusIsActive(shrapnelGainIcdKey) {
+			return false
+		}
+
+		c.AddStatus(shrapnelGainIcdKey, 60, true)
+		c.shrapnel++
+		c.Core.Log.NewEvent("Crystal Shrapnel gained from Lunar Crystallize", glog.LogCharacterEvent, c.Index()).Write("shrapnel", c.shrapnel)
+
+		return false
+	}, fmt.Sprintf("shrapnel-gain-lcr"))
+
 	c.Core.Events.Subscribe(event.OnShielded, func(args ...any) bool {
 		// Check shield
 		shd := args[0].(shield.Shield)
@@ -267,7 +288,7 @@ func (c *char) shrapnelGain() {
 
 		if c.shrapnel < 6 {
 			c.shrapnel++
-			c.Core.Log.NewEvent("Crystal Shrapnel gained from Crystallise", glog.LogCharacterEvent, c.Index()).Write("shrapnel", c.shrapnel)
+			c.Core.Log.NewEvent("Crystal Shrapnel gained from Crystallize", glog.LogCharacterEvent, c.Index()).Write("shrapnel", c.shrapnel)
 		}
 		return false
 	}, "shrapnel-gain")

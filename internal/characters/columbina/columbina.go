@@ -16,14 +16,13 @@ type char struct {
 	*tmpl.Character
 	skillSrc            int
 	a4stacks            int
-	gravity             [1]float64
+	gravity             [2]float64
 	gravityTask         bool
-	gravityLastReaction int
+	gravityLastReaction info.ReactionType
 	burstArea           info.AttackPattern
 	a1Stacks            int
 	a1Buff              []float64
-	// gravityLB float64
-	// gravityLCR float64
+
 	c2Buff []float64
 	c4Buff []float64
 }
