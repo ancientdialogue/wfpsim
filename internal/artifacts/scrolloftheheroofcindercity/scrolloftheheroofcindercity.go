@@ -37,6 +37,7 @@ var reactToElements = map[info.ReactionType][]attributes.Element{
 	info.ReactionTypeBurgeon:            {attributes.Dendro, attributes.Pyro},
 	info.ReactionTypeBurning:            {attributes.Dendro, attributes.Pyro},
 	info.ReactionTypeLunarCharged:       {attributes.Electro, attributes.Hydro},
+	info.ReactionTypeLunarCrystallize:   {attributes.Geo, attributes.Hydro},
 }
 
 func init() {
@@ -143,6 +144,7 @@ func NewSet(c *core.Core, char *character.CharWrapper, count int, param map[stri
 			event.OnSwirlElectro:       info.ReactionTypeSwirlElectro,
 			event.OnSwirlPyro:          info.ReactionTypeSwirlPyro,
 			event.OnCrystallizeHydro:   info.ReactionTypeCrystallizeHydro,
+			event.OnLunarCrystallize:   info.ReactionTypeLunarCrystallize,
 			event.OnCrystallizeCryo:    info.ReactionTypeCrystallizeCryo,
 			event.OnCrystallizeElectro: info.ReactionTypeCrystallizeElectro,
 			event.OnCrystallizePyro:    info.ReactionTypeCrystallizePyro,

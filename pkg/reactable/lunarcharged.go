@@ -118,7 +118,7 @@ func (r *Reactable) DoLCAttack() {
 		cr := ae.Snapshot.Stats[attributes.CR]
 		cd := ae.Snapshot.Stats[attributes.CD]
 
-		flatdmg := 1.8 * combat.CalcLunarChargedDmg(char.Base.Level, char, ae.Info, em)
+		flatdmg := 1.8 * combat.CalcLunarDmg(char.Base.Level, char, ae.Info, em)
 		isCrit := false
 
 		if r.core.Rand.Float64() <= cr {
