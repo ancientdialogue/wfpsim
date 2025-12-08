@@ -223,10 +223,14 @@ func (r *Reactable) nextLCTick(src int) func() {
 			if enemy.GetAuraDurability(info.ReactionModKeyElectro) <= info.ZeroDur || enemy.GetAuraDurability(info.ReactionModKeyHydro) <= info.ZeroDur {
 				continue
 			}
-			e.AddStatus(lcIcdKey, 2*60, true)
+			e.AddStatus(lcIcdKey, r.lunarChargedICD, true)
 			enemy.DoLCAttack()
 		}
 		// queue up next tick
 		r.core.Tasks.Add(r.nextLCTick(src), 6)
 	}
+}
+
+func (r *Reactable) SetLunarChargedIcd(icd int) {
+	r.lunarChargedICD = icd
 }

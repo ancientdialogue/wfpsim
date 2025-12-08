@@ -132,6 +132,7 @@ type ReactableVaporize interface {
 type ReactableLunarCharged interface {
 	TryAddLC(a *AttackEvent) bool
 	DoLCAttack()
+	SetLunarChargedIcd(icd int)
 }
 
 type ReactableLunarCrystallize interface {

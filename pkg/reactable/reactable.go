@@ -23,7 +23,6 @@ type Reactable struct {
 	ecAtk      info.AttackInfo // index of owner of next ec ticks
 	ecSnapshot info.Snapshot
 	ecTickSrc  int
-	lcAtkOwner int // index of owner of next LC tick
 	// burning specific
 	burningAtk      info.AttackInfo
 	burningSnapshot info.Snapshot
@@ -40,7 +39,12 @@ type Reactable struct {
 	swirlPyroGCD    int
 	crystallizeGCD  int
 
+	// lunar crystallize specific
 	lunarCrystallizeContributor [maxChars]bool
+
+	// lunar charged specific
+	lcAtkOwner      int // index of owner of next LC tick
+	lunarChargedICD int
 }
 
 type Enemy interface {
@@ -70,6 +74,7 @@ func (r *Reactable) Init(self info.Target, c *core.Core) *Reactable {
 	r.swirlCryoGCD = -1
 	r.swirlPyroGCD = -1
 	r.crystallizeGCD = -1
+	r.lunarChargedICD = 2 * 60
 	return r
 }
 
