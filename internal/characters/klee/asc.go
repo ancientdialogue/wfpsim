@@ -81,16 +81,6 @@ func (c *char) makeA4CB() info.AttackCBFunc {
 	}
 }
 
-func (c *char) getHexereiCount() int {
-	count := 0
-	for _, c := range c.Core.Player.Chars() {
-		if c.IsHexerei {
-			count += 1
-		}
-	}
-	return count
-}
-
 // Hexerei: Secret Rite
 // When Klee deals DMG with Normal Attacks, Elemental Skill, or Elemental Burst, she gains 1 Boom Badge, lasting 20s.
 // Each type of attack can grant at most 1 Boom Badge this way, and each badge has its own independent timer.

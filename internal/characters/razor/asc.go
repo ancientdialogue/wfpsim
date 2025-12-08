@@ -93,13 +93,3 @@ func (c *char) hexereiOnSigilOverflow() {
 	c.AddEnergy(hexereiSigilKey, 7)
 	c.c6OnSiglConsume()
 }
-
-func (c *char) getHexereiCount() int {
-	count := 0
-	for _, c := range c.Core.Player.Chars() {
-		if c.IsHexerei {
-			count += 1
-		}
-	}
-	return count
-}

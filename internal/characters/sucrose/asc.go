@@ -110,16 +110,6 @@ func (c *char) hexereiInit() {
 	c.hexereiBuffBurst[attributes.DmgP] = 0.0714285
 }
 
-func (c *char) getHexereiCount() int {
-	count := 0
-	for _, c := range c.Core.Player.Chars() {
-		if c.IsHexerei {
-			count += 1
-		}
-	}
-	return count
-}
-
 func (c *char) hexereiOnSkill() {
 	if !c.IsHexerei {
 		return

@@ -164,13 +164,3 @@ func (c *char) hexereiOnBurst() {
 	c.hexereiOmenExtension = 0
 	c.omenStartingBonusDur = 0
 }
-
-func (c *char) getHexereiCount() int {
-	count := 0
-	for _, c := range c.Core.Player.Chars() {
-		if c.IsHexerei {
-			count += 1
-		}
-	}
-	return count
-}

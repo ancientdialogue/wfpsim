@@ -105,16 +105,6 @@ func (c *char) hexereiInit() {
 	}
 }
 
-func (c *char) getHexereiCount() int {
-	count := 0
-	for _, c := range c.Core.Player.Chars() {
-		if c.IsHexerei {
-			count += 1
-		}
-	}
-	return count
-}
-
 func (c *char) hexereiNaBuff(mult float64) (info.AttackInfo, info.AttackPattern, info.AttackCBFunc) {
 	ai := info.AttackInfo{
 		ActorIndex: c.Index(),

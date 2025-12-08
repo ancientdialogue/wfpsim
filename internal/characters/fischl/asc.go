@@ -172,13 +172,3 @@ func (c *char) hexereiInit() {
 	c.Core.Events.Subscribe(event.OnElectroCharged, emStatMod, "fischl-hexerei-ec")
 	c.Core.Events.Subscribe(event.OnLunarCharged, emStatMod, "fischl-hexerei-lc")
 }
-
-func (c *char) getHexereiCount() int {
-	count := 0
-	for _, c := range c.Core.Player.Chars() {
-		if c.IsHexerei {
-			count += 1
-		}
-	}
-	return count
-}

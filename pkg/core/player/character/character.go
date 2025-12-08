@@ -100,7 +100,7 @@ type CharWrapper struct {
 	BurstCon  int
 	HasArkhe  bool
 	Moonsign  int
-	IsHexerei   bool
+	IsHexerei bool
 
 	Equip struct {
 		Weapon info.Weapon
