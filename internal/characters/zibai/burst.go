@@ -1,8 +1,6 @@
 package zibai
 
 import (
-	"fmt"
-
 	"github.com/genshinsim/gcsim/internal/frames"
 	"github.com/genshinsim/gcsim/pkg/core/action"
 	"github.com/genshinsim/gcsim/pkg/core/attacks"
@@ -13,13 +11,11 @@ import (
 
 var burstFrames []int
 
-var burstHitmarks = []int{101, 110}
+var burstHitmarks = []int{96, 96}
 
 func init() {
-	burstFrames = frames.InitAbilSlice(139) // Q -> N1/E
-	burstFrames[action.ActionDash] = 123    // Q -> D
-	burstFrames[action.ActionJump] = 123    // Q -> J
-	burstFrames[action.ActionSwap] = 138    // Q -> Swap
+	burstFrames = frames.InitAbilSlice(96) // Q -> N1/E
+	burstFrames[action.ActionSwap] = 96    // Q -> Swap
 }
 
 func (c *char) Burst(p map[string]int) (action.Info, error) {
@@ -27,7 +23,7 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 	for i, mult := range burst {
 		ai := info.AttackInfo{
 			ActorIndex: c.Index(),
-			Abil:       fmt.Sprintf("Burst %v", i),
+			Abil:       "Burst",
 			AttackTag:  attacks.AttackTagElementalBurst,
 			ICDTag:     attacks.ICDTagNone,
 			ICDGroup:   attacks.ICDGroupDefault,
@@ -38,6 +34,7 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 			Mult:       mult[c.TalentLvlBurst()],
 		}
 		if i == 1 {
+			ai.Abil += " (Lunar-Crystallize)"
 			ai.AttackTag = attacks.AttackTagDirectLunarCrystallize
 			ai.Durability = 0
 			ai.IgnoreDefPercent = 1

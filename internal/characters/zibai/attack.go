@@ -14,14 +14,15 @@ import (
 var (
 	attackFrames          [][]int
 	attackHits            = []int{1, 1, 2, 1}
-	attackHitmarks        = [][]int{{11}, {9}, {8, 16}, {16}}
-	attackHitlagHaltFrame = [][]float64{{0.02}, {0.02}, {0.02, 0.02}, {0.02}}
-	attackDefHalt         = [][]bool{{false}, {false}, {false, false}, {false}}
+	attackHitmarks        = [][]int{{10}, {10}, {10, 20}, {26}}
+	attackHitlagHaltFrame = [][]float64{{0.00}, {0.04}, {0.04, 0.00}, {0.04}}
+	attackDefHalt         = [][]bool{{false}, {true}, {true, false}, {true}}
 	attackHitboxes        = [][]float64{{1.5, 3.8}, {2}, {1, 1.5}, {1.7}}
 	attackOffsets         = []float64{0, 0.8, 0.5, 1.8}
 	attackFanAngles       = []float64{360, 180, 360, 360}
 )
 
+// 242
 const normalHitNum = 4
 
 func init() {
@@ -29,13 +30,13 @@ func init() {
 	attackFrames = make([][]int, normalHitNum)
 
 	attackFrames[0] = frames.InitNormalCancelSlice(attackHitmarks[0][0], 30)
-	attackFrames[0][action.ActionAttack] = 18
+	attackFrames[0][action.ActionAttack] = 24
 
 	attackFrames[1] = frames.InitNormalCancelSlice(attackHitmarks[1][0], 30)
-	attackFrames[1][action.ActionAttack] = 13
+	attackFrames[1][action.ActionAttack] = 22
 
 	attackFrames[2] = frames.InitNormalCancelSlice(attackHitmarks[2][1], 28)
-	attackFrames[2][action.ActionAttack] = 19
+	attackFrames[2][action.ActionAttack] = 32
 
 	attackFrames[3] = frames.InitNormalCancelSlice(attackHitmarks[3][0], 34)
 	attackFrames[3][action.ActionCharge] = 500 // TODO: this action is illegal; need better way to handle it
@@ -126,6 +127,7 @@ func (c *char) skillAttack() (action.Info, error) {
 		}
 		c.Core.QueueAttack(ai, ap, attackHitmarks[c.NormalCounter][i], attackHitmarks[c.NormalCounter][i], c.particleCB, c.radianceCB)
 		if c.NormalCounter == 3 && c.Core.Player.GetMoonsignCount() >= 2 {
+			ai.Abil += " (Lunar-Crystallize)"
 			ai.AttackTag = attacks.AttackTagDirectLunarCrystallize
 			ai.Durability = 0
 			ai.HitlagHaltFrames = 0

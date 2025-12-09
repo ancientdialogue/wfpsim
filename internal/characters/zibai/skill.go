@@ -17,7 +17,7 @@ import (
 var (
 	skillFrames        []int
 	skillSkillFrames   []int
-	skillStrideHitmark = []int{23, 34}
+	skillStrideHitmark = []int{12, 24}
 )
 
 const (
@@ -30,20 +30,9 @@ const (
 )
 
 func init() {
-	skillFrames = frames.InitAbilSlice(44)
-	skillFrames[action.ActionAttack] = 19
-	skillFrames[action.ActionSkill] = 22
-	skillFrames[action.ActionBurst] = 19
-	skillFrames[action.ActionDash] = 17
-	skillFrames[action.ActionJump] = 18
-	skillFrames[action.ActionSwap] = 17
+	skillFrames = frames.InitAbilSlice(30)
 
 	skillSkillFrames = frames.InitAbilSlice(42)
-	skillSkillFrames[action.ActionAttack] = 28
-	skillSkillFrames[action.ActionBurst] = 28
-	skillSkillFrames[action.ActionDash] = 26
-	skillSkillFrames[action.ActionJump] = 26
-	skillSkillFrames[action.ActionWalk] = 32
 }
 
 func (c *char) onExitField() {
@@ -112,6 +101,7 @@ func (c *char) skillSkill() (action.Info, error) {
 		}
 
 		if i == 1 {
+			ai.Abil += " (Lunar-Crystallize)"
 			ai.AttackTag = attacks.AttackTagDirectLunarCrystallize
 			ai.Durability = 0
 			ai.IgnoreDefPercent = 1
