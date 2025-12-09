@@ -108,13 +108,14 @@ func (c *char) skillSkill() (action.Info, error) {
 			Element:    attributes.Geo,
 			UseDef:     true,
 			Durability: 25,
-			Mult:       skillStride[i][c.TalentLvlSkill()] + c.a1StrideBonusMult(),
+			Mult:       skillStride[i][c.TalentLvlSkill()],
 		}
 
 		if i == 1 {
 			ai.AttackTag = attacks.AttackTagDirectLunarCrystallize
 			ai.Durability = 0
 			ai.IgnoreDefPercent = 1
+			ai.Mult += c.a1StrideBonusMult()
 		}
 
 		ap := combat.NewCircleHitOnTargetFanAngle(c.Core.Combat.Player(), nil, 5, 60)

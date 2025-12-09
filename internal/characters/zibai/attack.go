@@ -79,7 +79,6 @@ func (c *char) Attack(p map[string]int) (action.Info, error) {
 		}
 		// the multihit part generates no hitlag so this is fine
 		c.Core.QueueAttack(ai, ap, attackHitmarks[c.NormalCounter][i], attackHitmarks[c.NormalCounter][i])
-
 	}
 
 	defer c.AdvanceNormalIndex()
@@ -134,7 +133,6 @@ func (c *char) skillAttack() (action.Info, error) {
 			ai.IgnoreDefPercent = 1
 			c.Core.QueueAttack(ai, ap, attackHitmarks[c.NormalCounter][i], attackHitmarks[c.NormalCounter][i], c.particleCB, c.radianceCB)
 		}
-
 	}
 
 	defer c.AdvanceNormalIndex()
