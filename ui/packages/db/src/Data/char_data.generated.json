@@ -822,6 +822,23 @@
       },
       "name_text_hash_map ": "1940919994"
     },
+    "illuga": {
+      "id": 10000127,
+      "key": "illuga",
+      "rarity": "QUALITY_PURPLE",
+      "body": "BODY_BOY",
+      "region": "ASSOC_TYPE_NODKRAI",
+      "element": "Rock",
+      "weapon_class": "WEAPON_POLE",
+      "icon_name": "UI_AvatarIcon_Illuga",
+      "skill_details": {
+        "skill": 11272,
+        "burst": 11275,
+        "attack": 11271,
+        "burst_energy_cost": 60
+      },
+      "name_text_hash_map ": "102656986"
+    },
     "ineffa": {
       "id": 10000116,
       "key": "ineffa",
