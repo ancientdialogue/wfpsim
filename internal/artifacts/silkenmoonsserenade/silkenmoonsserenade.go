@@ -64,13 +64,32 @@ func (s *Set) Init() error {
 		if _, ok := args[0].(*enemy.Enemy); !ok {
 			return false
 		}
+		ae, ok := args[1].(*info.AttackEvent)
+		if !ok {
+			return false
+		}
+
+		if ae.Info.ActorIndex != s.char.Index() {
+			return false
+		}
+
+		switch ae.Info.Element {
+		case attributes.Hydro:
+		case attributes.Electro:
+		case attributes.Pyro:
+		case attributes.Cryo:
+		case attributes.Geo:
+		case attributes.Anemo:
+		case attributes.Dendro:
+		default:
+			return false
+		}
 
 		for _, char := range s.core.Player.Chars() {
 			char.AddStatMod(character.StatMod{
 				Base:         modifier.NewBase(gleamingMoonDevotionEMKey, 8*60),
 				AffectedStat: attributes.EM,
 				Amount: func() ([]float64, bool) {
-					m2[attributes.EM] = 120
 					return m2, true
 				},
 			})
@@ -78,8 +97,7 @@ func (s *Set) Init() error {
 
 		return false
 	}
-	s.core.Events.Subscribe(event.OnLunarCharged, lunarReactHook, setKey4+"-lc-"+s.char.Base.Key.String())
-
+	s.core.Events.Subscribe(event.OnEnemyDamage, lunarReactHook, setKey4+"-"+s.char.Base.Key.String())
 	for _, char := range s.core.Player.Chars() {
 		char.AddReactBonusMod(character.ReactBonusMod{
 			Base: modifier.NewBase(gleamingMoonDevotionReactKey, -1),

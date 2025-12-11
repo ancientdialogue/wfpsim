@@ -343,6 +343,14 @@ const (
 	XianyunAirborneBuff = "xianyun-airborne-buff"
 )
 
+func (h *Handler) GetMoonsignCount() int {
+	count := 0
+	for _, c := range h.Chars() {
+		count += c.Moonsign
+	}
+	return count
+}
+
 func (h *Handler) GetHexereiCount() int {
 	count := 0
 	for _, c := range h.Chars() {

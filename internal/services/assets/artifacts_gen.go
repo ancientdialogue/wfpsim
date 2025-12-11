@@ -2,11 +2,21 @@
 package assets
 
 var artfactMap = map[string]string{
+	"adaycarvedfromrisingwinds_circlet":          "UI_RelicIcon_15044_3",
+	"adaycarvedfromrisingwinds_flower":           "UI_RelicIcon_15044_4",
+	"adaycarvedfromrisingwinds_goblet":           "UI_RelicIcon_15044_1",
+	"adaycarvedfromrisingwinds_plume":            "UI_RelicIcon_15044_2",
+	"adaycarvedfromrisingwinds_sands":            "UI_RelicIcon_15044_5",
 	"archaicpetra_circlet":                       "UI_RelicIcon_15014_3",
 	"archaicpetra_flower":                        "UI_RelicIcon_15014_4",
 	"archaicpetra_goblet":                        "UI_RelicIcon_15014_1",
 	"archaicpetra_plume":                         "UI_RelicIcon_15014_2",
 	"archaicpetra_sands":                         "UI_RelicIcon_15014_5",
+	"aubadeofmorningstarandmoon_circlet":         "UI_RelicIcon_15043_3",
+	"aubadeofmorningstarandmoon_flower":          "UI_RelicIcon_15043_4",
+	"aubadeofmorningstarandmoon_goblet":          "UI_RelicIcon_15043_1",
+	"aubadeofmorningstarandmoon_plume":           "UI_RelicIcon_15043_2",
+	"aubadeofmorningstarandmoon_sands":           "UI_RelicIcon_15043_5",
 	"berserker_circlet":                          "UI_RelicIcon_10005_3",
 	"berserker_flower":                           "UI_RelicIcon_10005_4",
 	"berserker_goblet":                           "UI_RelicIcon_10005_1",
