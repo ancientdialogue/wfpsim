@@ -34,7 +34,7 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 			Mult:       mult[c.TalentLvlBurst()],
 		}
 		if i == 1 {
-			ai.Abil += " (Lunar-Crystallize)"
+			ai.Abil += lunarCrystallizeAbil
 			ai.AttackTag = attacks.AttackTagDirectLunarCrystallize
 			ai.Durability = 0
 			ai.IgnoreDefPercent = 1

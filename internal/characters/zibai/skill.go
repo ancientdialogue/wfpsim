@@ -101,7 +101,7 @@ func (c *char) skillSkill() (action.Info, error) {
 		}
 
 		if i == 1 {
-			ai.Abil += " (Lunar-Crystallize)"
+			ai.Abil += lunarCrystallizeAbil
 			ai.AttackTag = attacks.AttackTagDirectLunarCrystallize
 			ai.Durability = 0
 			ai.IgnoreDefPercent = 1

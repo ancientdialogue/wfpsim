@@ -20,6 +20,8 @@ type char struct {
 	skillsUsed float64
 }
 
+const lunarCrystallizeAbil = " (Lunar-Crystallize)"
+
 // TODO: need to clean up zhongli code still
 func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) error {
 	c := char{}

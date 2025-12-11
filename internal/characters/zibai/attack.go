@@ -127,7 +127,7 @@ func (c *char) skillAttack() (action.Info, error) {
 		}
 		c.Core.QueueAttack(ai, ap, attackHitmarks[c.NormalCounter][i], attackHitmarks[c.NormalCounter][i], c.particleCB, c.radianceCB)
 		if c.NormalCounter == 3 && c.Core.Player.GetMoonsignCount() >= 2 {
-			ai.Abil += " (Lunar-Crystallize)"
+			ai.Abil += lunarCrystallizeAbil
 			ai.AttackTag = attacks.AttackTagDirectLunarCrystallize
 			ai.Durability = 0
 			ai.HitlagHaltFrames = 0
