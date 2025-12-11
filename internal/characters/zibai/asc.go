@@ -37,7 +37,7 @@ func (c *char) a1OnSkill() {
 	c.AddStatus(a1Key, 4*60, true)
 }
 
-func (c *char) a1StrideBonusMult() float64 {
+func (c *char) a1StrideBonusDmg() float64 {
 	if c.Base.Ascension < 1 {
 		return 0.0
 	}
@@ -45,7 +45,7 @@ func (c *char) a1StrideBonusMult() float64 {
 		return 0.0
 	}
 
-	return 0.4
+	return 0.4 * c.TotalDef(false)
 }
 
 func (c *char) a4Init() {
