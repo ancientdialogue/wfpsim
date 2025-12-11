@@ -5,6 +5,7 @@ import (
 
 	"github.com/genshinsim/gcsim/pkg/core"
 	"github.com/genshinsim/gcsim/pkg/core/attributes"
+	"github.com/genshinsim/gcsim/pkg/core/construct"
 	"github.com/genshinsim/gcsim/pkg/core/event"
 	"github.com/genshinsim/gcsim/pkg/core/info"
 	"github.com/genshinsim/gcsim/pkg/core/keys"
@@ -107,6 +108,10 @@ func (s *Set) OnCharacterSwap() func(args ...any) bool {
 	}
 }
 
+func (s *Set) nearbyLunarCrystallize() bool {
+	return s.core.Constructs.CountByType(construct.GeoConstructLunarCrystallize) > 0
+}
+
 func (s *Set) OnSkill() func(args ...any) bool {
 	return func(args ...any) bool {
 		if s.core.Player.Active() != s.char.Index() {
@@ -117,7 +122,7 @@ func (s *Set) OnSkill() func(args ...any) bool {
 			Base:         modifier.NewBaseWithHitlag("nighttimewhispers-4pc", 10*60),
 			AffectedStat: attributes.GeoP,
 			Amount: func() ([]float64, bool) {
-				if s.core.F <= s.lastF {
+				if s.core.F <= s.lastF || s.nearbyLunarCrystallize() {
 					m[attributes.GeoP] = 0.2 * 2.5
 				} else {
 					m[attributes.GeoP] = 0.20

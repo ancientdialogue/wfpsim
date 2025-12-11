@@ -38,6 +38,12 @@ type Reactable struct {
 	swirlCryoGCD    int
 	swirlPyroGCD    int
 	crystallizeGCD  int
+
+	// lunar crystallize specific
+	lunarCrystallizeContributor [maxChars]bool
+
+	// lunar charged specific
+	lcAtkOwner int // index of owner of next LC tick
 }
 
 type Enemy interface {

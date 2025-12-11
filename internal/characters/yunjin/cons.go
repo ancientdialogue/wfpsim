@@ -75,6 +75,7 @@ func (c *char) c4() {
 	c.Core.Events.Subscribe(event.OnCrystallizeElectro, charModFunc, "yunjin-c4")
 	c.Core.Events.Subscribe(event.OnCrystallizePyro, charModFunc, "yunjin-c4")
 	c.Core.Events.Subscribe(event.OnCrystallizeHydro, charModFunc, "yunjin-c4")
+	c.Core.Events.Subscribe(event.OnLunarCrystallize, charModFunc, "yunjin-c4")
 }
 
 // Characters under the effects of the Flying Cloud Flag Formation have their Normal ATK SPD increased by 12%.

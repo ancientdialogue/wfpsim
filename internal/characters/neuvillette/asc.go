@@ -22,6 +22,7 @@ func (c *char) a1() {
 	a1 := []NeuvA1Keys{
 		{event.OnBloom, "neuvillette-a1-bloom"},
 		{event.OnCrystallizeHydro, "neuvillette-a1-crystallize-hydro"},
+		{event.OnLunarCrystallize, "neuvillette-a1-lunar-crystallize"},
 		{event.OnElectroCharged, "neuvillette-a1-electro-charged"},
 		{event.OnLunarCharged, "neuvillette-a1-lunar-charged"},
 		{event.OnFrozen, "neuvillette-a1-frozen"},

@@ -1,5 +1,5 @@
 ---
-title: Durin
+title: Columbina
 ---
 
 import HitlagTable from "@site/src/components/Hitlag/HitlagTable";
@@ -13,32 +13,32 @@ import ActionsTable from "@site/src/components/Actions/ActionsTable";
 
 ## Frames
 
-<FramesTable item_key="durin" />
+<FramesTable item_key="columbina" />
 
 ## Hitlag Data
 
-<HitlagTable item_key="durin" />
+<HitlagTable item_key="columbina" />
 
 ## AoE Data
 
-<AoETable item_key="durin" />
+<AoETable item_key="columbina" />
 
 ## Known issues
 
-<IssuesTable item_key="durin" />
+<IssuesTable item_key="columbina" />
 
 ## Names
 
-<NamesList item_key="durin" />
+<NamesList item_key="columbina" />
 
 ## Legal Actions
 
-<ActionsTable item_key="durin" />
+<ActionsTable item_key="columbina" />
 
 ## Params
 
-<ParamsTable item_key="durin" />
+<ParamsTable item_key="columbina" />
 
 ## Fields
 
-<FieldsTable item_key="durin" />
+<FieldsTable item_key="columbina" />

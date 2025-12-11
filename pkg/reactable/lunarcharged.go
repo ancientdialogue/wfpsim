@@ -13,9 +13,10 @@ import (
 )
 
 const (
-	LcKey    = "lunarcharged-cloud"
-	lcSrcKey = "lunarcharged-cloud-src"
-	lcIcdKey = "lunarcharged-cloud-icd"
+	LcKey            = "lunarcharged-cloud"
+	LcIcdOverrideKey = "lunarcharged-icd-override"
+	lcSrcKey         = "lunarcharged-cloud-src"
+	lcIcdKey         = "lunarcharged-cloud-icd"
 )
 
 var lcContributorMult = []float64{1.0, 1.0 / 2.0, 1.0 / 12.0, 1.0 / 12.0}
@@ -57,6 +58,7 @@ func (r *Reactable) TryAddLC(a *info.AttackEvent) bool {
 
 	a.Reacted = true
 	r.core.Events.Emit(event.OnLunarCharged, r.self, a)
+	r.lcAtkOwner = a.Info.ActorIndex
 
 	// if not LC cloud exists, create a new cloud and start ticking
 	if r.core.Status.Duration(LcKey) == 0 {
@@ -111,13 +113,13 @@ func (r *Reactable) DoLCAttack() {
 
 		// Emit even so PreDamageMods can be applied to the individual LC contributions
 		// Is there a way to collect these attackMods to show in logs?
-		r.core.Events.Emit(event.OnLunarChargedReactionAttack, r.self, &ae)
+		r.core.Events.Emit(event.OnLunarReactionAttack, r.self, &ae)
 
 		em := ae.Snapshot.Stats[attributes.EM]
 		cr := ae.Snapshot.Stats[attributes.CR]
 		cd := ae.Snapshot.Stats[attributes.CD]
 
-		flatdmg := 1.8 * combat.CalcLunarChargedDmg(char.Base.Level, char, ae.Info, em)
+		flatdmg := 1.8 * combat.CalcLunarDmg(char.Base.Level, char, ae.Info, em)
 		isCrit := false
 
 		if r.core.Rand.Float64() <= cr {
@@ -157,8 +159,8 @@ func (r *Reactable) DoLCAttack() {
 		ai.FlatDmg += contr.dmg * lcContributorMult[i]
 	}
 
-	// TODO: Make lunarcharged attack count as all contributor's attacks
-	ai.ActorIndex = contributions[0].charInd
+	// LC is owned by the character that last triggered Lunar Charged
+	ai.ActorIndex = r.lcAtkOwner
 	snap := info.Snapshot{}
 	if contributions[0].isCrit {
 		snap.Stats[attributes.CR] = 1.0
@@ -222,7 +224,13 @@ func (r *Reactable) nextLCTick(src int) func() {
 			if enemy.GetAuraDurability(info.ReactionModKeyElectro) <= info.ZeroDur || enemy.GetAuraDurability(info.ReactionModKeyHydro) <= info.ZeroDur {
 				continue
 			}
-			e.AddStatus(lcIcdKey, 2*60, true)
+
+			icd, ok := r.core.Flags.Custom[LcIcdOverrideKey]
+			if !ok {
+				icd = 2 * 60
+			}
+
+			e.AddStatus(lcIcdKey, int(icd), true)
 			enemy.DoLCAttack()
 		}
 		// queue up next tick

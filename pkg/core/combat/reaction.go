@@ -16,7 +16,7 @@ func CalcReactionBaseDmg(lvl int) float64 {
 	return reactionLvlBase[idx]
 }
 
-func CalcLunarChargedDmg(lvl int, src reactionBonusSrc, atk info.AttackInfo, em float64) float64 {
+func CalcLunarDmg(lvl int, src reactionBonusSrc, atk info.AttackInfo, em float64) float64 {
 	return (1 + ((6 * em) / (2000 + em)) + src.ReactBonus(atk)) * CalcReactionBaseDmg(lvl)
 }
 

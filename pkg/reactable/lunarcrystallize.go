@@ -1,0 +1,236 @@
+package reactable
+
+import (
+	"fmt"
+	"slices"
+
+	"github.com/genshinsim/gcsim/pkg/core/attacks"
+	"github.com/genshinsim/gcsim/pkg/core/attributes"
+	"github.com/genshinsim/gcsim/pkg/core/combat"
+	"github.com/genshinsim/gcsim/pkg/core/construct"
+	"github.com/genshinsim/gcsim/pkg/core/event"
+	"github.com/genshinsim/gcsim/pkg/core/glog"
+	"github.com/genshinsim/gcsim/pkg/core/info"
+)
+
+const (
+	LcrKey              = "lunarcrystallize"
+	LcrExtraHitOverride = "lunarcrystallize-bonus-hit-chance"
+	lcrCountKey         = "lunarcrystallize-count"
+	lcrDur              = 5.5 * 60
+)
+
+var lcrContributorMult = []float64{1.0, 1.0 / 2.0, 1.0 / 12.0, 1.0 / 12.0}
+
+func (r *Reactable) TryLunarCrystallize(a *info.AttackEvent) bool {
+	if r.GetAuraDurability(info.ReactionModKeyHydro) <= info.ZeroDur {
+		return false
+	}
+
+	if a.Info.Durability < info.ZeroDur {
+		return false
+	}
+	if r.crystallizeGCD != -1 && r.core.F < r.crystallizeGCD {
+		return false
+	}
+
+	if r.core.Status.Duration(LcrKey) > 0 {
+		r.extendLunarCrystallizeConstructDur()
+	} else {
+		// TODO: Check if constructs expiring will reset the counter
+		r.core.Constructs.NewNoLimitCons(r.newLunarCrystallizeConstruct(r.self.Direction(), r.self.Pos().Add(info.Point{Y: 1, X: 0})), false)
+		r.core.Constructs.NewNoLimitCons(r.newLunarCrystallizeConstruct(r.self.Direction(), r.self.Pos().Add(info.Point{Y: -0.5, X: 0.866})), false)
+		r.core.Constructs.NewNoLimitCons(r.newLunarCrystallizeConstruct(r.self.Direction(), r.self.Pos().Add(info.Point{Y: -0.5, X: -0.866})), false)
+	}
+
+	r.core.Flags.Custom[lcrCountKey] += 1
+	r.core.Status.Add(LcrKey, lcrDur)
+	r.addLCrContributor(a)
+
+	if r.core.Flags.Custom[lcrCountKey] >= 3 {
+		// trigger three attacks
+		r.core.Flags.Custom[lcrCountKey] = 0
+		r.core.Events.Emit(event.OnMoondriftHarmony, r.self, &a)
+		r.core.Log.NewEvent(fmt.Sprint("Doing lcr attack triggered by ", a.Info.ActorIndex), glog.LogElementEvent, 0)
+		r.DoLCrAttack(a.Info.ActorIndex)
+	}
+
+	// reduce
+	r.reduce(attributes.Hydro, a.Info.Durability, 0.5)
+	// TODO: confirm u can only lunar crystallize once
+	a.Info.Durability = 0
+	a.Reacted = true
+
+	// event
+	r.core.Events.Emit(event.OnLunarCrystallize, r.self, a)
+
+	return true
+}
+
+// TODO this needs to be global?
+func (r *Reactable) addLCrContributor(a *info.AttackEvent) {
+	r.lunarCrystallizeContributor[a.Info.ActorIndex] = true
+	for charInd, dur := range r.Durability[info.ReactionModKeyHydro] {
+		if dur <= info.ZeroDur {
+			continue
+		}
+		r.lunarCrystallizeContributor[charInd] = true
+	}
+}
+
+func (r *Reactable) extendLunarCrystallizeConstructDur() {
+	matched, _ := r.core.Constructs.ConstructsByType(construct.GeoConstructLunarCrystallize)
+	for _, construct := range matched {
+		c, ok := (construct).(*skillConstruct)
+		if !ok {
+			continue
+		}
+		c.expiry = r.core.F + lcrDur
+	}
+}
+
+type skillConstruct struct {
+	src    int
+	expiry int
+	react  *Reactable
+	dir    info.Point
+	pos    info.Point
+}
+
+func (r *Reactable) newLunarCrystallizeConstruct(dir, pos info.Point) *skillConstruct {
+	return &skillConstruct{
+		src:    r.core.F,
+		expiry: r.core.F + lcrDur,
+		react:  r,
+		dir:    dir,
+		pos:    pos,
+	}
+}
+
+func (c *skillConstruct) OnDestruct() {}
+func (c *skillConstruct) Key() int    { return c.src }
+func (c *skillConstruct) Type() construct.GeoConstructType {
+	return construct.GeoConstructLunarCrystallize
+}
+func (c *skillConstruct) Expiry() int           { return c.expiry }
+func (c *skillConstruct) IsLimited() bool       { return true }
+func (c *skillConstruct) Count() int            { return 1 }
+func (c *skillConstruct) Direction() info.Point { return c.dir }
+func (c *skillConstruct) Pos() info.Point       { return c.pos }
+
+type lcrContribution = struct {
+	dmg     float64
+	isCrit  bool
+	charInd int
+	cr      float64
+	cd      float64
+	em      float64
+}
+
+func (r *Reactable) DoLCrAttack(owner int) {
+	for _, delay := range []int{1, 4, 7} {
+		r.core.Tasks.Add(func() { r.doSingleLCrAttack(owner) }, delay)
+		if chance, ok := r.core.Flags.Custom[LcrExtraHitOverride]; ok && r.core.Rand.Float64() < chance {
+			r.core.Tasks.Add(func() { r.doSingleLCrAttack(owner) }, delay)
+		}
+	}
+	// clear contributors after last attack
+	r.core.Tasks.Add(func() {
+		for i := range r.lunarCrystallizeContributor {
+			r.lunarCrystallizeContributor[i] = false
+		}
+	}, 7)
+}
+
+func (r *Reactable) doSingleLCrAttack(owner int) {
+	contributions := []lcrContribution{}
+
+	ap := combat.NewSingleTargetHit(r.self.Key())
+
+	// Do we need to make a new one for each character?
+	ai := info.AttackInfo{
+		DamageSrc:        r.self.Key(),
+		Abil:             string(info.ReactionTypeLunarCrystallize),
+		AttackTag:        attacks.AttackTagReactionLunarCrystallize,
+		ICDTag:           attacks.ICDTagNone,
+		ICDGroup:         attacks.ICDGroupDefault,
+		StrikeType:       attacks.StrikeTypeDefault,
+		Element:          attributes.Geo,
+		IgnoreDefPercent: 1,
+	}
+
+	for charInd, char := range r.core.Player.Chars() {
+		if !r.lunarCrystallizeContributor[charInd] {
+			continue
+		}
+
+		ai.ActorIndex = charInd
+		snap := char.Snapshot(&ai)
+
+		ae := info.AttackEvent{
+			Info:        ai,
+			Pattern:     ap,
+			SourceFrame: r.core.F,
+			Snapshot:    snap,
+		}
+
+		// Emit even so PreDamageMods can be applied to the individual LC contributions
+		// Is there a way to collect these attackMods to show in logs?
+		r.core.Events.Emit(event.OnLunarReactionAttack, r.self, &ae)
+
+		em := ae.Snapshot.Stats[attributes.EM]
+		cr := ae.Snapshot.Stats[attributes.CR]
+		cd := ae.Snapshot.Stats[attributes.CD]
+
+		flatdmg := 0.96 * combat.CalcLunarDmg(char.Base.Level, char, ae.Info, em)
+		isCrit := false
+
+		if r.core.Rand.Float64() <= cr {
+			flatdmg *= (1 + cd)
+			isCrit = true
+		}
+
+		contributions = append(contributions, lcrContribution{flatdmg, isCrit, charInd, cr, cd, em})
+	}
+
+	if len(contributions) == 0 {
+		return
+	}
+
+	slices.SortStableFunc(contributions, func(i, j lcrContribution) int {
+		diff := j.dmg - i.dmg
+		switch {
+		case diff < 0:
+			return -1
+		case diff > 0:
+			return 1
+		default:
+			return 0
+		}
+	})
+
+	for i, contr := range contributions {
+		r.core.Combat.Log.NewEvent(fmt.Sprint("lunarcrystallize contributor ", (i+1)), glog.LogElementEvent, contr.charInd).
+			Write("target", r.self.Key()).
+			Write("damage", &contr.dmg).
+			Write("crit", &contr.isCrit).
+			Write("mult", lcrContributorMult[i]).
+			Write("cr", &contr.cr).
+			Write("cd", &contr.cd).
+			Write("em", &contr.em)
+
+		ai.FlatDmg += contr.dmg * lcrContributorMult[i]
+	}
+
+	snap := info.Snapshot{}
+	if contributions[0].isCrit {
+		snap.Stats[attributes.CR] = 1.0
+	}
+	ai.ActorIndex = owner
+	r.core.QueueAttackWithSnap(
+		ai,
+		snap,
+		ap,
+		0,
+	)
+}

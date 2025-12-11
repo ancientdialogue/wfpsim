@@ -260,13 +260,13 @@ var (
 		3.597872,
 		3.79592,
 	}
-
+	// attack: hurricaneBonus = [11]
 	hurricaneBonus = []float64{
 		1.6,
 		1.7,
 		1.8,
 		1.9,
-		2.0,
+		2,
 		2.1,
 		2.2,
 		2.3,
@@ -276,7 +276,7 @@ var (
 		2.7,
 		2.8,
 		2.9,
-		3.0,
+		3,
 	}
 	// skill: skillHold = [2]
 	skillHold = []float64{

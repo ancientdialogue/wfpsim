@@ -58,7 +58,7 @@ func (c *char) c1Init() {
 						// Hydro Swirl DMG increases by 15%.
 						// Electro-Charged DMG increases by 15%.
 						// Lunar-Charged DMG increases by 15%.
-						case attacks.AttackTagSwirlHydro, attacks.AttackTagECDamage, attacks.AttackTagReactionLunarCharge, attacks.AttackTagDirectLunarCharged:
+						case attacks.AttackTagSwirlHydro, attacks.AttackTagECDamage, attacks.AttackTagReactionLunarCharge, attacks.AttackTagDirectLunarCharged, attacks.AttackTagReactionLunarCrystallize, attacks.AttackTagDirectLunarCrystallize:
 							return bonus, false
 						}
 
@@ -183,7 +183,7 @@ func (c *char) c4Init() {
 	}
 
 	// workaround for giving lunarcharge the 15% CR
-	c.Core.Events.Subscribe(event.OnLunarChargedReactionAttack, func(args ...any) bool {
+	c.Core.Events.Subscribe(event.OnLunarReactionAttack, func(args ...any) bool {
 		x, ok := args[0].(*enemy.Enemy)
 		if !ok {
 			return false
@@ -201,7 +201,7 @@ func (c *char) c4Init() {
 		isHexerei := c.Core.Player.ByIndex(ae.Info.ActorIndex).IsHexerei
 
 		if c.Core.Flags.LogDebug {
-			evt := c.Core.Log.NewEvent("Mona C4 added to Lunarcharged", glog.LogPreDamageMod, ae.Info.ActorIndex).
+			evt := c.Core.Log.NewEvent("Mona C4 added to Lunar Damage", glog.LogPreDamageMod, ae.Info.ActorIndex).
 				Write("before CR", ae.Snapshot.Stats[attributes.CR]).
 				Write("additional CR", 0.15)
 			if isHexerei {
@@ -216,7 +216,7 @@ func (c *char) c4Init() {
 		}
 
 		return false
-	}, c4key+"-lunarcharged")
+	}, c4key+"-lunar")
 }
 
 func (c *char) c6Check() bool {
