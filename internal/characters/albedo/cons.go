@@ -4,6 +4,7 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/attacks"
 	"github.com/genshinsim/gcsim/pkg/core/attributes"
 	"github.com/genshinsim/gcsim/pkg/core/combat"
+	"github.com/genshinsim/gcsim/pkg/core/construct"
 	"github.com/genshinsim/gcsim/pkg/core/event"
 	"github.com/genshinsim/gcsim/pkg/core/glog"
 	"github.com/genshinsim/gcsim/pkg/core/info"
@@ -159,8 +160,9 @@ func (c *char) c6(lastConstruct int) func() {
 
 		// apply C6 buff to active char for 1s if they are protected by crystallize and within the skill area
 		crystallizeShield := c.Core.Player.Shields.Get(shield.Crystallize) != nil
+		luanrCrystallize := c.Core.Constructs.CountByType(construct.GeoConstructLunarCrystallize) > 0
 		inSkillArea := c.Core.Combat.Player().IsWithinArea(c.skillArea)
-		if crystallizeShield && inSkillArea {
+		if (crystallizeShield || luanrCrystallize) && inSkillArea {
 			active := c.Core.Player.ActiveChar()
 			m := make([]float64, attributes.EndStatType)
 			m[attributes.DmgP] = 0.17

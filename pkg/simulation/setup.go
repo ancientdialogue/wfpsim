@@ -10,6 +10,7 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/attacks"
 	"github.com/genshinsim/gcsim/pkg/core/attributes"
 	"github.com/genshinsim/gcsim/pkg/core/combat"
+	"github.com/genshinsim/gcsim/pkg/core/construct"
 	"github.com/genshinsim/gcsim/pkg/core/event"
 	"github.com/genshinsim/gcsim/pkg/core/glog"
 	"github.com/genshinsim/gcsim/pkg/core/info"
@@ -196,6 +197,10 @@ func SetupResonance(s *core.Core) {
 			f := func() (float64, bool) { return 0.15, true }
 			s.Player.Shields.AddShieldBonusMod("geo-res", -1, f)
 
+			activateGeoRes := func(index int) bool {
+				return s.Player.Shields.CharacterIsShielded(index, s.Player.Active()) || s.Constructs.CountByType(construct.GeoConstructLunarCrystallize) > 0
+			}
+
 			// shred geo res of target
 			s.Events.Subscribe(event.OnEnemyDamage, func(args ...any) bool {
 				t, ok := args[0].(*enemy.Enemy)
@@ -203,7 +208,7 @@ func SetupResonance(s *core.Core) {
 					return false
 				}
 				atk := args[1].(*info.AttackEvent)
-				if s.Player.Shields.CharacterIsShielded(atk.Info.ActorIndex, s.Player.Active()) {
+				if activateGeoRes(atk.Info.ActorIndex) {
 					t.AddResistMod(info.ResistMod{
 						Base:  modifier.NewBaseWithHitlag("geo-res", 15*60),
 						Ele:   attributes.Geo,
@@ -216,7 +221,7 @@ func SetupResonance(s *core.Core) {
 			val := make([]float64, attributes.EndStatType)
 			val[attributes.DmgP] = .15
 			atkf := func(ae *info.AttackEvent, t info.Target) ([]float64, bool) {
-				if s.Player.Shields.CharacterIsShielded(ae.Info.ActorIndex, s.Player.Active()) {
+				if activateGeoRes(ae.Info.ActorIndex) {
 					return val, true
 				}
 				return nil, false

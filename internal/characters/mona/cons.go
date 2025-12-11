@@ -201,7 +201,7 @@ func (c *char) c4Init() {
 		isMagic := c.Core.Player.ByIndex(ae.Info.ActorIndex).IsMagic
 
 		if c.Core.Flags.LogDebug {
-			evt := c.Core.Log.NewEvent("Mona C4 added to Lunarcharged", glog.LogPreDamageMod, ae.Info.ActorIndex).
+			evt := c.Core.Log.NewEvent("Mona C4 added to Lunar Damage", glog.LogPreDamageMod, ae.Info.ActorIndex).
 				Write("before CR", ae.Snapshot.Stats[attributes.CR]).
 				Write("additional CR", 0.15)
 			if isMagic {
@@ -216,7 +216,7 @@ func (c *char) c4Init() {
 		}
 
 		return false
-	}, c4key+"-lunarcharged")
+	}, c4key+"-lunar")
 }
 
 func (c *char) c6Check() bool {

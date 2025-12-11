@@ -41,9 +41,15 @@ func (c *char) c6Init() {
 			return false
 		}
 
+		atk := args[1].(*info.AttackEvent)
+		if atk.Info.Element != attributes.Electro {
+			return false
+		}
+
 		if !c.Core.Player.ByIndex(ae.Info.ActorIndex).StatModIsActive(c6Key) {
 			return false
 		}
+
 		if c.Core.Flags.LogDebug {
 			c.Core.Log.NewEvent("Sara C6 CD added to Lunarcharged", glog.LogPreDamageMod, ae.Info.ActorIndex).
 				Write("before", ae.Snapshot.Stats[attributes.CD]).

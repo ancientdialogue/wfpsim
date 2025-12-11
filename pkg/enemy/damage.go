@@ -48,17 +48,52 @@ func (e *Enemy) calc(atk *info.AttackEvent, evt glog.Event) (float64, bool) {
 		a = atk.Snapshot.Stats.TotalATK()
 	}
 
-	// BaseDmgBonus affects flat attack for EM scaling based attacks and flatdmg from reactions
-	base := (atk.Info.Mult*a + atk.Info.FlatDmg) * (1 + atk.Info.BaseDmgBonus)
+	var base float64
+	if isDirectLunar(atk.Info.AttackTag) {
+		// Lunar flat damage is added after EM bonus, base Mult bonus, and secret mult bonus
+		base = (atk.Info.Mult * a) * (1 + atk.Info.BaseDmgBonus)
+	} else {
+		base = (atk.Info.Mult*a + atk.Info.FlatDmg) * (1 + atk.Info.BaseDmgBonus)
+	}
+
 	damage := base * (1 + dmgBonus)
 
-	// make sure 0 <= cr <= 1
-	if atk.Snapshot.Stats[attributes.CR] < 0 {
-		atk.Snapshot.Stats[attributes.CR] = 0
+	preampdmg := damage
+
+	// calculate em bonus
+	em := atk.Snapshot.Stats[attributes.EM]
+	emBonus := 0.0
+	var reactBonus float64
+	// check melt/vape
+	if atk.Info.Amped {
+		emBonus = (2.78 * em) / (1400 + em)
+		reactBonus = e.Core.Player.ByIndex(atk.Info.ActorIndex).ReactBonus(atk.Info)
+		// e.Core.Log.Debugw("debug", "frame", e.Core.F, core.LogPreDamageMod, "char", e.Index, "char_react", char.CharIndex(), "reactbonus", char.ReactBonus(atk.Info), "damage_pre", damage)
+		damage *= (atk.Info.AmpMult * (1 + emBonus + reactBonus))
 	}
-	if atk.Snapshot.Stats[attributes.CR] > 1 {
-		atk.Snapshot.Stats[attributes.CR] = 1
+
+	if isDirectLunar(atk.Info.AttackTag) {
+		// special 3x mult for direct lunarcharged, 1.6x mult for direct Lunar crystallize
+		var lunarMult float64
+		switch atk.Info.AttackTag {
+		case attacks.AttackTagDirectLunarCharged:
+			lunarMult = 3.0
+		case attacks.AttackTagDirectLunarCrystallize:
+			lunarMult = 1.6
+		default:
+			lunarMult = 1.0
+		}
+		damage *= lunarMult
+
+		emBonus = (6 * em) / (2000 + em)
+		reactBonus = e.Core.Player.ByIndex(atk.Info.ActorIndex).ReactBonus(atk.Info)
+
+		damage *= 1 + emBonus + reactBonus
+
+		// Lunar flat damage is added after EM bonus, base Mult bonus, and secret mult bonus
+		damage += atk.Info.FlatDmg
 	}
+
 	res := e.resist(&atk.Info, evt)
 	defadj := e.defAdj(evt)
 
@@ -82,6 +117,14 @@ func (e *Enemy) calc(atk *info.AttackEvent, evt glog.Event) (float64, bool) {
 	}
 	damage *= resmod
 
+	// make sure 0 <= cr <= 1
+	if atk.Snapshot.Stats[attributes.CR] < 0 {
+		atk.Snapshot.Stats[attributes.CR] = 0
+	}
+	if atk.Snapshot.Stats[attributes.CR] > 1 {
+		atk.Snapshot.Stats[attributes.CR] = 1
+	}
+
 	precritdmg := damage
 
 	// check if crit
@@ -90,44 +133,12 @@ func (e *Enemy) calc(atk *info.AttackEvent, evt glog.Event) (float64, bool) {
 		isCrit = true
 	}
 
-	preampdmg := damage
-
-	// calculate em bonus
-	em := atk.Snapshot.Stats[attributes.EM]
-	emBonus := 0.0
-	var reactBonus float64
-	// check melt/vape
-	if atk.Info.Amped {
-		emBonus = (2.78 * em) / (1400 + em)
-		reactBonus = e.Core.Player.ByIndex(atk.Info.ActorIndex).ReactBonus(atk.Info)
-		// e.Core.Log.Debugw("debug", "frame", e.Core.F, core.LogPreDamageMod, "char", e.Index, "char_react", char.CharIndex(), "reactbonus", char.ReactBonus(atk.Info), "damage_pre", damage)
-		damage *= (atk.Info.AmpMult * (1 + emBonus + reactBonus))
-	}
-
-	if attacks.DirectLunarReactionStartDelim < atk.Info.AttackTag && atk.Info.AttackTag < attacks.DirectLunarReactionEndDelim {
-		emBonus = (6 * em) / (2000 + em)
-		reactBonus = e.Core.Player.ByIndex(atk.Info.ActorIndex).ReactBonus(atk.Info)
-		damage *= 1 + emBonus + reactBonus
-	}
-
 	// reduce damage by damage group
 	x := 1.0
 	if !atk.Info.SourceIsSim {
 		x = e.GroupTagDamageMult(atk.Info.ICDTag, atk.Info.ICDGroup, atk.Info.ActorIndex)
 		damage *= x
 	}
-
-	// special 3x mult for direct lunarcharged, 1.6x mult for direct Lunar crystallize
-	lunarMult := 1.0
-	switch atk.Info.AttackTag {
-	case attacks.AttackTagDirectLunarCharged:
-		lunarMult = 3.0
-	case attacks.AttackTagDirectLunarCrystallize:
-		lunarMult = 1.6
-	}
-
-	damage *= lunarMult
-	x *= lunarMult
 
 	if e.Core.Flags.LogDebug {
 		e.Core.Log.NewEvent(
@@ -185,4 +196,8 @@ func (e *Enemy) calc(atk *info.AttackEvent, evt glog.Event) (float64, bool) {
 	}
 
 	return damage, isCrit
+}
+
+func isDirectLunar(tag attacks.AttackTag) bool {
+	return attacks.DirectLunarReactionStartDelim < tag && tag < attacks.DirectLunarReactionEndDelim
 }

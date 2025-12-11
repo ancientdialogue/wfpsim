@@ -167,6 +167,10 @@ func (c *char) c6Init() {
 		if c.StatusIsActive(c6IcdKey) {
 			return false
 		}
+		atk := args[1].(*info.AttackEvent)
+		if atk.Info.AttackTag != attacks.AttackTagReactionLunarCharge {
+			return false
+		}
 
 		c.AddStatus(c6IcdKey, 3.5*60, true)
 		// TODO: damage and snapshot delay?
