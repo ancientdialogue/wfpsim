@@ -1,8 +1,6 @@
 package gorou
 
 import (
-	"fmt"
-
 	"github.com/genshinsim/gcsim/pkg/core/action"
 	"github.com/genshinsim/gcsim/pkg/core/attributes"
 	"github.com/genshinsim/gcsim/pkg/core/combat"
@@ -88,7 +86,7 @@ func (c *char) c2() {
 		c.c2Extension++
 		c.Core.Status.Extend(generalGloryKey, 60)
 		return false
-	}, fmt.Sprintf("gorou-c2-lcr"))
+	}, "gorou-c2-lcr")
 
 	c.Core.Events.Subscribe(event.OnShielded, func(args ...any) bool {
 		if c.Core.Status.Duration(generalGloryKey) <= 0 {

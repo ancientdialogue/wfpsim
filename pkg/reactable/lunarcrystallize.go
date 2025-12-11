@@ -53,11 +53,7 @@ func (r *Reactable) TryLunarCrystallize(a *info.AttackEvent) bool {
 		r.core.Events.Emit(event.OnMoondriftHarmony, r.self, &a)
 		r.core.Log.NewEvent(fmt.Sprint("Doing lcr attack triggered by ", a.Info.ActorIndex), glog.LogElementEvent, 0)
 		r.DoLCrAttack(a.Info.ActorIndex)
-
 	}
-
-	// TODO: Check if lunar crystallize interacts with crystallize GCD
-	// r.crystallizeGCD = r.core.F + 60
 
 	// reduce
 	r.reduce(attributes.Hydro, a.Info.Durability, 0.5)

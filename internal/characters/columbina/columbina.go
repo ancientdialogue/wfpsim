@@ -15,16 +15,12 @@ func init() {
 type char struct {
 	*tmpl.Character
 	skillSrc            int
-	a4stacks            int
 	gravity             [2]float64
 	gravityTask         bool
 	gravityLastReaction info.ReactionType
 	burstArea           info.AttackPattern
 	a1Stacks            int
 	a1Buff              []float64
-
-	c2Buff []float64
-	c4Buff []float64
 }
 
 func NewChar(s *core.Core, w *character.CharWrapper, p info.CharacterProfile) error {

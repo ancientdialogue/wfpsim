@@ -277,7 +277,7 @@ func (c *char) shrapnelGain() {
 		c.Core.Log.NewEvent("Crystal Shrapnel gained from Lunar Crystallize", glog.LogCharacterEvent, c.Index()).Write("shrapnel", c.shrapnel)
 
 		return false
-	}, fmt.Sprintf("shrapnel-gain-lcr"))
+	}, "shrapnel-gain-lcr")
 
 	c.Core.Events.Subscribe(event.OnShielded, func(args ...any) bool {
 		// Check shield
