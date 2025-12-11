@@ -116,4 +116,5 @@ var avatarMap = map[string]string{
 	"yoimiya":       "UI_AvatarIcon_Yoimiya",
 	"yunjin":        "UI_AvatarIcon_Yunjin",
 	"zhongli":       "UI_AvatarIcon_Zhongli",
+	"zibai":         "UI_AvatarIcon_Zibai",
 }

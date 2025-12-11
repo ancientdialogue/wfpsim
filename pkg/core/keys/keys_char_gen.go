@@ -109,6 +109,7 @@ const (
 	Yoimiya
 	Yunjin
 	Zhongli
+	Zibai
 	EndCharKeys
 )
 
@@ -520,4 +521,8 @@ func init() {
 	charNames[Zhongli] = "zhongli"
 	charPrettyName[Zhongli] = "Zhongli"
 	CharKeyToEle[Zhongli] = attributes.Geo
+
+	charNames[Zibai] = "zibai"
+	charPrettyName[Zibai] = "Zibai"
+	CharKeyToEle[Zibai] = attributes.Geo
 }
