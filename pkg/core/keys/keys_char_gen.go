@@ -49,6 +49,7 @@ const (
 	Gorou
 	Heizou
 	Hutao
+	Illuga
 	Ineffa
 	Itto
 	Jean
@@ -281,6 +282,10 @@ func init() {
 	charNames[Hutao] = "hutao"
 	charPrettyName[Hutao] = "Hutao"
 	CharKeyToEle[Hutao] = attributes.Pyro
+
+	charNames[Illuga] = "illuga"
+	charPrettyName[Illuga] = "Illuga"
+	CharKeyToEle[Illuga] = attributes.Geo
 
 	charNames[Ineffa] = "ineffa"
 	charPrettyName[Ineffa] = "Ineffa"
