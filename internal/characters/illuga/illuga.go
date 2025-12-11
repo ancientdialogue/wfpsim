@@ -19,7 +19,6 @@ type char struct {
 	a1Buff       []float64
 	a1BuffGleam  []float64
 	a4Count      int
-	c1Buff       []float64
 }
 
 func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) error {
@@ -52,12 +51,4 @@ func (c *char) AnimationStartDelay(k info.AnimationDelayKey) int {
 		return 9
 	}
 	return c.Character.AnimationStartDelay(k)
-}
-
-func (c *char) getMoonsignLevel() int {
-	count := 0
-	for _, c := range c.Core.Player.Chars() {
-		count += c.Moonsign
-	}
-	return count
 }

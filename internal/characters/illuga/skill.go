@@ -27,7 +27,7 @@ func init() {
 func (c *char) Skill(p map[string]int) (action.Info, error) {
 	hold, ok := p["hold"]
 	if ok && hold > 0 {
-		c.skillHold(hold)
+		return c.skillHold(hold)
 	}
 
 	ai := info.AttackInfo{
