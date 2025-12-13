@@ -125,8 +125,9 @@ func (c *char) skillAttack() (action.Info, error) {
 				attackHitboxes[c.NormalCounter][1],
 			)
 		}
-		c.Core.QueueAttack(ai, ap, attackHitmarks[c.NormalCounter][i], attackHitmarks[c.NormalCounter][i], c.particleCB, c.radianceCB)
 		if c.NormalCounter == 3 && c.Core.Player.GetMoonsignCount() >= 2 {
+			ai.Mult = skillLastAttackBonus[c.TalentLvlAttack()]
+			c.Core.QueueAttack(ai, ap, attackHitmarks[c.NormalCounter][i], attackHitmarks[c.NormalCounter][i], c.particleCB, c.radianceCB)
 			ai.Abil += lunarCrystallizeAbil
 			ai.AttackTag = attacks.AttackTagDirectLunarCrystallize
 			ai.Durability = 0
@@ -134,7 +135,10 @@ func (c *char) skillAttack() (action.Info, error) {
 			ai.CanBeDefenseHalted = false
 			ai.IgnoreDefPercent = 1
 			c.Core.QueueAttack(ai, ap, attackHitmarks[c.NormalCounter][i], attackHitmarks[c.NormalCounter][i], c.particleCB, c.radianceCB)
+		} else {
+			c.Core.QueueAttack(ai, ap, attackHitmarks[c.NormalCounter][i], attackHitmarks[c.NormalCounter][i], c.particleCB, c.radianceCB)
 		}
+
 	}
 
 	defer c.AdvanceNormalIndex()
