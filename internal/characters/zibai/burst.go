@@ -32,6 +32,7 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 			Element:    attributes.Geo,
 			Durability: 25,
 			Mult:       mult[c.TalentLvlBurst()],
+			UseDef:     true,
 		}
 		if i == 1 {
 			ai.Abil += lunarCrystallizeAbil
