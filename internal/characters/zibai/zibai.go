@@ -17,7 +17,8 @@ type char struct {
 	*tmpl.Character
 	radiance   float64
 	skillSrc   int
-	skillsUsed float64
+	skillsUsed int
+	c6Elev     float64
 }
 
 const lunarCrystallizeAbil = " (Lunar-Crystallize)"
@@ -45,6 +46,9 @@ func (c *char) Init() error {
 	c.a1Init()
 	c.a4Init()
 	c.moonsignInit()
+	c.c1Init()
+	c.c2Init()
+	c.c6Init()
 	return nil
 }
 
@@ -65,4 +69,8 @@ func (c *char) ActionReady(a action.Action, p map[string]int) (bool, action.Fail
 	}
 
 	return c.Character.ActionReady(a, p)
+}
+
+func (c *char) ResetNormalCounter() {
+	c.c4ResetNormalCount()
 }

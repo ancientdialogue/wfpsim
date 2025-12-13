@@ -134,6 +134,7 @@ func (c *char) skillAttack() (action.Info, error) {
 			ai.HitlagHaltFrames = 0
 			ai.CanBeDefenseHalted = false
 			ai.IgnoreDefPercent = 1
+			ai.Mult *= c.c4N4Bonus()
 			c.Core.QueueAttack(ai, ap, attackHitmarks[c.NormalCounter][i], attackHitmarks[c.NormalCounter][i], c.particleCB, c.radianceCB)
 		} else {
 			c.Core.QueueAttack(ai, ap, attackHitmarks[c.NormalCounter][i], attackHitmarks[c.NormalCounter][i], c.particleCB, c.radianceCB)

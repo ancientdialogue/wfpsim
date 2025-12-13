@@ -27,6 +27,9 @@ const (
 	radianceNAICDKey  = "zibai-radiance-na-icd"
 	radianceLCrICDKey = "zibai-radiance-lcr-icd"
 	maxRadiance       = 100
+
+	skillAbil1 = "Spirit Steed's Stride"
+	skillAbil2 = skillAbil1 + lunarCrystallizeAbil
 )
 
 func init() {
@@ -53,7 +56,7 @@ func (c *char) onExitField() {
 }
 
 func (c *char) Skill(p map[string]int) (action.Info, error) {
-	if c.StatModIsActive(skillKey) {
+	if c.StatusIsActive(skillKey) {
 		return c.skillSkill()
 	}
 
@@ -75,8 +78,13 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 	c.skillsUsed = 0
 
 	c.skillSrc = c.Core.F
-	c.QueueCharTask(c.radianceTicker(c.skillSrc), skillHitmark)
-	c.QueueCharTask(c.a1OnSkill, skillHitmark)
+
+	c.QueueCharTask(func() {
+		c.radianceTicker(c.skillSrc)()
+		c.a1OnSkill()
+		c.c1OnSkill()
+	}, skillHitmark)
+
 	return action.Info{
 		Frames:          func(next action.Action) int { return skillFrames[next] },
 		AnimationLength: skillFrames[action.InvalidAction],
@@ -89,7 +97,7 @@ func (c *char) skillSkill() (action.Info, error) {
 	for i := range skillStride {
 		ai := info.AttackInfo{
 			ActorIndex: c.Index(),
-			Abil:       "Spirit Steed's Stride",
+			Abil:       skillAbil1,
 			AttackTag:  attacks.AttackTagElementalArt,
 			ICDTag:     attacks.ICDTagNone,
 			ICDGroup:   attacks.ICDGroupDefault,
@@ -101,7 +109,7 @@ func (c *char) skillSkill() (action.Info, error) {
 		}
 
 		if i == 1 {
-			ai.Abil += lunarCrystallizeAbil
+			ai.Abil = skillAbil2
 			ai.AttackTag = attacks.AttackTagDirectLunarCrystallize
 			ai.Durability = 0
 			ai.IgnoreDefPercent = 1
@@ -109,14 +117,15 @@ func (c *char) skillSkill() (action.Info, error) {
 		}
 
 		ap := combat.NewCircleHitOnTargetFanAngle(c.Core.Combat.Player(), nil, 5, 60)
-		c.Core.QueueAttack(ai, ap, skillStrideHitmark[i], skillStrideHitmark[i], c.particleCB)
+		c.Core.QueueAttack(ai, ap, skillStrideHitmark[i], skillStrideHitmark[i], c.particleCB, c.c4SkillCB)
 	}
-	c.skillsUsed += 1
-	c.consumeRadiance(70)
 
-	if c.skillsUsed >= 4 {
+	c.skillsUsed += 1
+	c.c6ConsumeRadiance()
+	if c.skillsUsed >= c.c1MaxSkillsPerSkill() {
 		c.DeleteStatus(skillKey)
 	}
+
 	return action.Info{
 		Frames:          func(next action.Action) int { return skillSkillFrames[next] },
 		AnimationLength: skillSkillFrames[action.InvalidAction],
@@ -188,6 +197,7 @@ func (c *char) skillInit() {
 }
 
 func (c *char) addRadiance(amt float64) {
+	amt *= c.c6RadianceEff()
 	c.radiance = min(c.radiance+amt, maxRadiance)
 	if c.Core.Flags.LogDebug {
 		c.Core.Log.NewEvent(fmt.Sprint("Gained ", amt, " radiance (", c.radiance, ")"), glog.LogCharacterEvent, c.Index())
