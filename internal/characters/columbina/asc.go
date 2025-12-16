@@ -84,4 +84,5 @@ func (c *char) a4Init() {
 	}
 
 	c.Core.Events.Subscribe(event.OnLunarCharged, a4Hook, "columbina-gravity-lc")
+	c.Core.Events.Subscribe(event.OnMoondriftHarmony, a4Hook, "columbina-gravity-lcr")
 }
