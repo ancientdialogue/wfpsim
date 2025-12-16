@@ -45,7 +45,7 @@ func (c *char) a1StrideBonusDmg() float64 {
 		return 0.0
 	}
 
-	return 0.4 * c.TotalDef(false)
+	return 0.6 * c.TotalDef(false)
 }
 
 func (c *char) a4Init() {

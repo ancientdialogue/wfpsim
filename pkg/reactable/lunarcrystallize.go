@@ -51,7 +51,7 @@ func (r *Reactable) TryLunarCrystallize(a *info.AttackEvent) bool {
 		// trigger three attacks
 		r.core.Flags.Custom[lcrCountKey] = 0
 		r.core.Events.Emit(event.OnMoondriftHarmony, r.self, &a)
-		r.core.Log.NewEvent(fmt.Sprint("Doing lcr attack triggered by ", a.Info.ActorIndex), glog.LogElementEvent, 0)
+		r.core.Log.NewEvent("Lunar Crystallize attack triggered", glog.LogElementEvent, a.Info.ActorIndex)
 		r.DoLCrAttack(a.Info.ActorIndex)
 	}
 

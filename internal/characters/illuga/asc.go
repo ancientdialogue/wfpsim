@@ -13,7 +13,7 @@ const a1Key = "illuga-a1"
 
 var (
 	a4BonusGeo = []float64{0, 0.07, 0.14, 0.24, 0.24}
-	a4BonusLCr = []float64{0, 0.6, 1.2, 2, 2}
+	a4BonusLCr = []float64{0, 0.48, 0.96, 1.6, 1.6}
 )
 
 func (c *char) a1Init() {
