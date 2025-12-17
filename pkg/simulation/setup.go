@@ -402,7 +402,7 @@ func setupAscendantGleam(core *core.Core) {
 			c.AddReactBonusMod(character.ReactBonusMod{
 				Base: modifier.NewBase("ascendant-gleam", 20*60),
 				Amount: func(ai info.AttackInfo) (float64, bool) {
-					if attacks.AttackTagIsLunar(ai.AttackTag) {
+					if !attacks.AttackTagIsLunar(ai.AttackTag) {
 						return 0, false
 					}
 					if core.Flags.LogDebug {
