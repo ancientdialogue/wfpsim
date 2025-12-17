@@ -119,7 +119,7 @@ func (c *char) skillSkill() (action.Info, error) {
 		ap := combat.NewCircleHitOnTargetFanAngle(c.Core.Combat.Player(), nil, 5, 60)
 		c.Core.QueueAttack(ai, ap, skillStrideHitmark[i], skillStrideHitmark[i], c.particleCB, c.c4SkillCB)
 	}
-
+	c.DeleteStatus(radianceLCrICDKey)
 	c.skillsUsed += 1
 	c.c6ConsumeRadiance()
 	if c.skillsUsed >= c.c1MaxSkillsPerSkill() {
@@ -190,7 +190,7 @@ func (c *char) skillInit() {
 		if c.StatusIsActive(radianceLCrICDKey) {
 			return false
 		}
-		c.AddStatus(radianceLCrICDKey, 2*60, true)
+		c.AddStatus(radianceLCrICDKey, 4*60, true)
 		c.addRadiance(35)
 		return false
 	}, "zibai-radiance-lcr")
