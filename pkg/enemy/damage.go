@@ -167,6 +167,7 @@ func (e *Enemy) calc(atk *info.AttackEvent, evt glog.Event) (float64, bool) {
 			Write("flat_dmg", atk.Info.FlatDmg).
 			Write("total_atk_def", a).
 			Write("base_dmg", base).
+			Write("base_dmg_bonus", atk.Info.BaseDmgBonus).
 			Write("ele", st).
 			Write("ele_per", elePer).
 			Write("bonus_dmg", dmgBonus).
