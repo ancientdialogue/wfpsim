@@ -56,8 +56,8 @@ export function Simulator({
           <li>Venti (Magic)</li>
           <li>Durin (C6)</li>
           <li>Athame Artis</li>
-          <li>Columbina (C0)</li>
-          <li>Zibai (C0)</li>
+          <li>Columbina (C6)</li>
+          <li>Zibai (C6)</li>
           <li>Illuga</li>
         </ul>
         <p className=" font-bold">

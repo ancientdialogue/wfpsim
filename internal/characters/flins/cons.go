@@ -155,8 +155,8 @@ func (c *char) c6Init() {
 	if c.Base.Cons < 6 {
 		return
 	}
-	flinsMult := 1.35
-	otherMult := 1.0
+	flinsMult := 0.35
+	otherMult := 0.0
 
 	if c.getMoonsignLevel() >= 2 {
 		flinsMult += 0.1
@@ -174,8 +174,8 @@ func (c *char) c6Init() {
 		}
 
 		if atk.Info.ActorIndex == c.Index() {
-			atk.Info.Mult *= flinsMult
-			atk.Info.FlatDmg *= flinsMult
+			atk.Info.Elevation += flinsMult
+
 			return false
 		}
 
@@ -183,8 +183,7 @@ func (c *char) c6Init() {
 			return false
 		}
 
-		atk.Info.Mult *= otherMult
-		atk.Info.FlatDmg *= otherMult
+		atk.Info.Elevation += otherMult
 
 		return false
 	}, c6Key)

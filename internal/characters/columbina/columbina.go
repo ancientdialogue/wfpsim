@@ -21,6 +21,10 @@ type char struct {
 	burstArea           info.AttackPattern
 	a1Stacks            int
 	a1Buff              []float64
+	c2Buff              []float64
+	c2LCBuff            []float64
+	c2LCrBuff           []float64
+	c6Buff              []float64
 }
 
 func NewChar(s *core.Core, w *character.CharWrapper, p info.CharacterProfile) error {
@@ -43,7 +47,9 @@ func (c *char) Init() error {
 	c.a1Init()
 	c.a4Init()
 	c.moonsignInit()
-
+	c.consElevationInit()
+	c.c2Init()
+	c.c6Init()
 	return nil
 }
 

@@ -94,6 +94,8 @@ func (e *Enemy) calc(atk *info.AttackEvent, evt glog.Event) (float64, bool) {
 		damage += atk.Info.FlatDmg
 	}
 
+	damage *= (1 + atk.Info.Elevation)
+
 	res := e.resist(&atk.Info, evt)
 	defadj := e.defAdj(evt)
 
@@ -168,6 +170,7 @@ func (e *Enemy) calc(atk *info.AttackEvent, evt glog.Event) (float64, bool) {
 			Write("ele", st).
 			Write("ele_per", elePer).
 			Write("bonus_dmg", dmgBonus).
+			Write("elevation", atk.Info.Elevation).
 			Write("ignore_def", atk.Info.IgnoreDefPercent).
 			Write("def_adj", defadj).
 			Write("target_lvl", e.Level).

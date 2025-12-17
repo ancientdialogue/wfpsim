@@ -92,15 +92,16 @@ func (c *char) gravityAccum() {
 		return
 	}
 	c.gravityTask = true
+	amt := 1 * c.c2GravityRate() // 10 gravity per 1s
 	switch c.gravityLastReaction {
 	case info.ReactionTypeLunarCharged:
-		c.gravity[LCInd] += 1 // 10 gravity per 1s
+		c.gravity[LCInd] += amt
 	case info.ReactionTypeLunarCrystallize:
-		c.gravity[LCrInd] += 1 // 10 gravity per 1s
+		c.gravity[LCrInd] += amt
 	}
 
 	if c.totalGravity() >= gravityMax {
-		c.gravityTick()
+		c.gravityTick(true)
 	}
 	c.QueueCharTask(c.gravityAccum, 6)
 }
@@ -119,7 +120,7 @@ func (c *char) clearGravity() {
 	}
 }
 
-func (c *char) gravityTick() {
+func (c *char) gravityTick(clearGravity bool) {
 	maxReaction := 0
 	maxGravity := 0.0
 	for i, g := range c.gravity {
@@ -128,7 +129,9 @@ func (c *char) gravityTick() {
 			maxReaction = i
 		}
 	}
-	c.clearGravity()
+	if clearGravity {
+		c.clearGravity()
+	}
 
 	var mult float64
 	var atkTag attacks.AttackTag
@@ -164,7 +167,9 @@ func (c *char) gravityTick() {
 
 	ap := combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 6)
 	c.a1OGravityTick()
-
+	c.c1OnGravityTick(maxReaction)
+	c.c2OnGravityTick(maxReaction)
+	ai.FlatDmg += c.c4OnGravityTickFlatDMG(maxReaction)
 	c.Core.QueueAttack(ai, ap, 1, 1)
 }
 
@@ -191,6 +196,7 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 		c.AddStatus(skillKey, 25*60+1, true)
 		c.QueueCharTask(c.skillTickTask(c.skillSrc), 126)
 		c.SetCDWithDelay(action.ActionSkill, 17*60, 0)
+		c.c1OnSkill()
 	}, skillHitmark)
 
 	return action.Info{
