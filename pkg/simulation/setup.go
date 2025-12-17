@@ -406,7 +406,7 @@ func setupAscendantGleam(core *core.Core) {
 						return 0, false
 					}
 					if core.Flags.LogDebug {
-						core.Log.NewEvent("Adding ascendant gleam react bonus", glog.LogPreDamageMod, char.Index()).Write("amt", buff)
+						core.Log.NewEvent("Adding ascendant gleam react bonus", glog.LogPreDamageMod, c.Index()).Write("amt", buff)
 					}
 					return buff, false
 				},

@@ -54,7 +54,7 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 				}
 
 				if c.Core.Combat.Debug {
-					c.Core.Log.NewEventBuildMsg(glog.LogCharacterEvent, c.Index(), "Adding columbina burst react bonus")
+					c.Core.Log.NewEventBuildMsg(glog.LogCharacterEvent, char.Index(), "Adding columbina burst react bonus")
 				}
 				return burstBuff[c.TalentLvlBurst()], false
 			},
