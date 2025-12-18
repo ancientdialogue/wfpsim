@@ -402,11 +402,11 @@ func setupAscendantGleam(core *core.Core) {
 			c.AddReactBonusMod(character.ReactBonusMod{
 				Base: modifier.NewBase("ascendant-gleam", 20*60),
 				Amount: func(ai info.AttackInfo) (float64, bool) {
-					if attacks.AttackTagIsLunar(ai.AttackTag) {
+					if !attacks.AttackTagIsLunar(ai.AttackTag) {
 						return 0, false
 					}
 					if core.Flags.LogDebug {
-						core.Log.NewEvent("Adding ascendant gleam react bonus", glog.LogPreDamageMod, char.Index()).Write("amt", buff)
+						core.Log.NewEvent("Adding ascendant gleam react bonus", glog.LogPreDamageMod, c.Index()).Write("amt", buff)
 					}
 					return buff, false
 				},
