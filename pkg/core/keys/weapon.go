@@ -154,6 +154,7 @@ var weaponNames = []string{
 	"primordialjadecutter",
 	"primordialjadewingedspear",
 	"prospectorsdrill",
+	"prospectorsshovel",
 	"prototypeamber",
 	"prototypearchaic",
 	"prototypecrescent",
@@ -371,6 +372,7 @@ const (
 	PrimordialJadeCutter
 	PrimordialJadeWingedSpear
 	ProspectorsDrill
+	ProspectorsShovel
 	PrototypeAmber
 	PrototypeArchaic
 	PrototypeCrescent

@@ -198,6 +198,7 @@ var weaponMap = map[string]string{
 	"moonweaversdawn":                 "UI_EquipIcon_Sword_Miekka",
 	"peakpatrolsong":                  "UI_EquipIcon_Sword_XochitlsTube",
 	"primordialjadecutter":            "UI_EquipIcon_Sword_Morax",
+	"prospectorsshovel":               "UI_EquipIcon_Pole_Ilmarinen",
 	"prototyperancour":                "UI_EquipIcon_Sword_Proto",
 	"royallongsword":                  "UI_EquipIcon_Sword_Theocrat",
 	"sacrificialsword":                "UI_EquipIcon_Sword_Fossil",
