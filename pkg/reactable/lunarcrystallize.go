@@ -30,9 +30,6 @@ func (r *Reactable) TryLunarCrystallize(a *info.AttackEvent) bool {
 	if a.Info.Durability < info.ZeroDur {
 		return false
 	}
-	if r.crystallizeGCD != -1 && r.core.F < r.crystallizeGCD {
-		return false
-	}
 
 	if r.core.Status.Duration(LcrKey) > 0 {
 		r.extendLunarCrystallizeConstructDur()
