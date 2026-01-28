@@ -66,10 +66,6 @@ func (c *char) c2OnSkillTick() {
 		return
 	}
 
-	if c.getAureliths() < 1 {
-		return
-	}
-
 	ai := info.AttackInfo{
 		ActorIndex: c.Index(),
 		Abil:       "Fatal Blossom (C2)",
@@ -84,7 +80,7 @@ func (c *char) c2OnSkillTick() {
 		UseDef:     true,
 	}
 
-	// generate 7 blossoms
+	// generate 3 blossoms
 	maxBlossoms := 3
 	enemies := c.Core.Combat.RandomEnemiesWithinArea(c.skillArea, nil, maxBlossoms)
 	tracking := len(enemies)
