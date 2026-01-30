@@ -20,6 +20,7 @@ type char struct {
 	skillActive     bool
 	skillArea       info.AttackPattern
 	skillAttackInfo info.AttackInfo
+	skillSnapshot   info.Snapshot
 	// hexerei
 	aureliths      [2]int
 	oldestAurelith int
