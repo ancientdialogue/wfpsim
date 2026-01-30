@@ -105,9 +105,6 @@ func (c *char) getAureliths() int {
 }
 
 func (c *char) createAurelith() {
-	if c.getAureliths() >= 2 {
-		return
-	}
 	if c.Core.Flags.LogDebug {
 		c.Core.Log.NewEventBuildMsg(glog.LogCharacterEvent, c.Index(), "Creating aurelith").Write("expires", c.Core.F+10*60)
 	}
