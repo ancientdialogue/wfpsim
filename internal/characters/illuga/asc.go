@@ -47,12 +47,12 @@ func (c *char) a1Init() {
 		if c.Core.Flags.LogDebug {
 			c.Core.Log.NewEvent("Illuga A1 added to Lunarcrystallize", glog.LogPreDamageMod, ae.Info.ActorIndex).
 				Write("cr before", ae.Snapshot.Stats[attributes.CR]).
-				Write("cr addition", 0.05).
+				Write("cr addition", c.a1Buff[attributes.CR]).
 				Write("cd before", ae.Snapshot.Stats[attributes.CD]).
-				Write("cd addition", 0.1)
+				Write("cd addition", c.a1Buff[attributes.CD])
 		}
-		ae.Snapshot.Stats[attributes.CR] += 0.05
-		ae.Snapshot.Stats[attributes.CD] += 0.1
+		ae.Snapshot.Stats[attributes.CR] += c.a1Buff[attributes.CR]
+		ae.Snapshot.Stats[attributes.CD] += c.a1Buff[attributes.CD]
 		return false
 	}, a1Key+"-lcr")
 }
