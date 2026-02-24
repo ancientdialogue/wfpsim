@@ -70,6 +70,9 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 	// Infusion usually occurs after 4 ticks of anemo according to KQM library
 	c.Core.Tasks.Add(c.absorbCheckQ(c.Core.F, 0, int((480-24*4)/18)), 106+24*3)
 
+	// Ensure that the hex extension cap gets reset
+	c.hexereiBurstExtCount = 0
+
 	if c.Base.Ascension >= 4 {
 		c.Core.Tasks.Add(c.a4, 480+burstStart)
 	}
