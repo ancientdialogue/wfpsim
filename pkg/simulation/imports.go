@@ -21,6 +21,7 @@ import (
 	_ "github.com/genshinsim/gcsim/internal/artifacts/blizzard"
 	_ "github.com/genshinsim/gcsim/internal/artifacts/bloodstained"
 	_ "github.com/genshinsim/gcsim/internal/artifacts/bolide"
+	_ "github.com/genshinsim/gcsim/internal/artifacts/thebountyofnature"
 	_ "github.com/genshinsim/gcsim/internal/artifacts/braveheart"
 	_ "github.com/genshinsim/gcsim/internal/artifacts/crimson"
 	_ "github.com/genshinsim/gcsim/internal/artifacts/deepwood"
