@@ -55,40 +55,38 @@ func NewSet(c *core.Core, char *character.CharWrapper, count int, param map[stri
 		return &s, nil
 	}
 
-	wearer_char_element := char.Base.Element
 	s.buff = make([]float64, attributes.EndStatType)
-
 	c.Events.Subscribe(event.OnSkill, func(args ...any) bool {
 		if c.Player.Active() != char.Index() {
 			return false
 		}
 		duration := 60 * 20
-		effect_start := c.F
-		subscription_key := fmt.Sprintf("thebountyofnature-elem-swap-4pc-%v", char.Base.Key.String())
-		c.Events.Subscribe(event.OnCharacterSwap, func(args ...any) bool {
-			duration = c.F - effect_start
-			if duration <= 0 {
-				c.Events.Unsubscribe(event.OnCharacterSwap, subscription_key)
-				return false
-			}
-			active_char_element := s.core.Player.Chars()[args[1].(int)].Base.Element
-			buffstrenght := 0.2
-			if s.core.Player.GetHexereiCount() >= 2 {
-				buffstrenght = 0.4
-				s.buff[attributes.EleToDmgP(active_char_element)] = buffstrenght
-			}
-			s.buff[attributes.EleToDmgP(wearer_char_element)] = buffstrenght
-			for _, x := range s.core.Player.Chars() {
-				x.AddStatMod(character.StatMod{
-					Base:         modifier.NewBaseWithHitlag(fmt.Sprintf("thebountyofnature-4pc-%v-%v", wearer_char_element, active_char_element), duration),
-					AffectedStat: attributes.NoStat,
-					Amount: func() ([]float64, bool) {
-						return s.buff, true
-					},
-				})
-			}
-			return false
-		}, subscription_key)
+		for _, x := range s.core.Player.Chars() {
+			x.AddStatMod(character.StatMod{
+				Base:         modifier.NewBaseWithHitlag("thebountyofnature-4pc", duration),
+				AffectedStat: attributes.NoStat,
+				Amount: func() ([]float64, bool) {
+					for _, elementP := range [...]attributes.Stat{
+						attributes.PyroP,
+						attributes.HydroP,
+						attributes.AnemoP,
+						attributes.ElectroP,
+						attributes.DendroP,
+						attributes.CryoP,
+						attributes.GeoP,
+					} {
+						s.buff[elementP] = 0
+					}
+					buffStrenght := 0.2
+					if s.core.Player.GetHexereiCount() >= 2 {
+						buffStrenght = 0.4
+						s.buff[attributes.EleToDmgP(s.core.Player.ActiveChar().Base.Element)] = buffStrenght
+					}
+					s.buff[attributes.EleToDmgP(char.Base.Element)] = buffStrenght
+					return s.buff, true
+				},
+			})
+		}
 		return false
 	}, fmt.Sprintf("thebountyofnature-4pc-%v", char.Base.Key.String()))
 
