@@ -5,6 +5,7 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/attributes"
 	"github.com/genshinsim/gcsim/pkg/core/combat"
 	"github.com/genshinsim/gcsim/pkg/core/event"
+	"github.com/genshinsim/gcsim/pkg/core/glog"
 	"github.com/genshinsim/gcsim/pkg/core/info"
 	"github.com/genshinsim/gcsim/pkg/core/player/character"
 	"github.com/genshinsim/gcsim/pkg/core/player/shield"
@@ -125,4 +126,28 @@ func (c *char) c6() {
 			},
 		})
 	}
+
+	// workaround for giving lunarcrystallize the CR/CD
+	c.Core.Events.Subscribe(event.OnLunarReactionAttack, func(args ...any) bool {
+		ae, ok := args[1].(*info.AttackEvent)
+		if !ok {
+			return false
+		}
+
+		if ae.Info.Element != attributes.Geo {
+			return false
+		}
+
+		if !c.Core.Player.ByIndex(ae.Info.ActorIndex).StatModIsActive(c6key) {
+			return false
+		}
+
+		if c.Core.Flags.LogDebug {
+			c.Core.Log.NewEvent("Gorou C6 added to Lunarcrystallize", glog.LogPreDamageMod, ae.Info.ActorIndex).
+				Write("cd before", ae.Snapshot.Stats[attributes.CD]).
+				Write("cd addition", c.c6Buff[attributes.CD])
+		}
+		ae.Snapshot.Stats[attributes.CD] += c.c6Buff[attributes.CD]
+		return false
+	}, c6key+"-lcr")
 }
