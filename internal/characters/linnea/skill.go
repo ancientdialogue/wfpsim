@@ -72,6 +72,9 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 		if c.skillRecastSrc != src {
 			return
 		}
+		if !c.StatusIsActive(skillSuperPower) && c.Core.Constructs.CountByType(construct.GeoConstructLunarCrystallize) > 0 {
+			c.skillHitNum = 1
+		}
 		c.AddStatus(skillSuperPower, skillDur, false)
 		c.skillSrc = src
 		c.a1OnLumi(src)
@@ -152,6 +155,9 @@ func (c *char) skillRecast() action.Info {
 		c.QueueCharTask(func() {
 			if c.skillRecastSrc != src {
 				return
+			}
+			if !c.StatusIsActive(skillSuperPower) && c.Core.Constructs.CountByType(construct.GeoConstructLunarCrystallize) > 0 {
+				c.skillHitNum = 1
 			}
 			c.AddStatus(skillSuperPower, skillDur, false)
 			c.skillSrc = src
@@ -236,7 +242,6 @@ func (c *char) heavyOverdriveHammer() {
 	}
 	snap := c.Snapshot(&ai)
 	ap := combat.NewCircleHitOnTarget(c.Core.Combat.PrimaryTarget(), nil, 4)
-	c.Core.QueueAttackWithSnap(ai, snap, ap, 0)
 
 	ae := info.AttackEvent{
 		Info:        ai,
