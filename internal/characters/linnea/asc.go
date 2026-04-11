@@ -61,7 +61,7 @@ func (c *char) a4Init() {
 			continue
 		}
 		char.AddStatMod(character.StatMod{
-			Base:         modifier.NewBaseWithHitlag(a4Key, 6*60),
+			Base:         modifier.NewBaseWithHitlag(a4Key, -1),
 			AffectedStat: attributes.EM,
 			Amount: func() ([]float64, bool) {
 				if c.Core.Player.Active() != char.Index() {
@@ -76,7 +76,7 @@ func (c *char) a4Init() {
 
 	// give buff to self
 	c.AddStatMod(character.StatMod{
-		Base:         modifier.NewBaseWithHitlag(a4Key, 6*60),
+		Base:         modifier.NewBaseWithHitlag(a4Key, -1),
 		AffectedStat: attributes.EM,
 		Amount: func() ([]float64, bool) {
 			if c.Core.Player.ActiveChar().Moonsign > 0 && c.Core.Player.Active() != c.Index() {
