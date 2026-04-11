@@ -61,7 +61,7 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 	if c.StatusIsActive(skillRecastKey) {
 		return c.skillRecast(), nil
 	}
-
+	c.recastCount = 0
 	c.DeleteStatus(skillStandardPower)
 	c.DeleteStatus(skillSuperPower)
 
@@ -136,7 +136,7 @@ func (c *char) skillRecast() action.Info {
 	src := c.Core.F
 	c.skillRecastSrc = src
 
-	if c.recastCount == 4 {
+	if c.recastCount == 3 {
 		c.DeleteStatus(skillRecastKey)
 		// do the big hit and then lower frequency
 		c.skillHitNum = 0
@@ -148,11 +148,12 @@ func (c *char) skillRecast() action.Info {
 		c.AddStatus(skillStandardPower, skillDur, false)
 		c.Core.Tasks.Add(func() { c.lumiAttack(src) }, skillMillionTonHitmark+skillStandardStart)
 	} else {
+		c.AddStatus(skillRecastKey, skillRecastDur, true)
 		c.QueueCharTask(func() {
 			if c.skillRecastSrc != src {
 				return
 			}
-			c.AddStatus(skillStandardPower, skillDur, false)
+			c.AddStatus(skillSuperPower, skillDur, false)
 			c.skillSrc = src
 			c.a1OnLumi(src)
 			c.Core.Tasks.Add(func() { c.lumiAttack(src) }, skillSuperStart)
@@ -179,10 +180,9 @@ func (c *char) millionTonHammer() {
 		Mult:       skillMillion[c.TalentLvlSkill()],
 		UseDef:     true,
 	}
-	snap := c.Core.Player.ActiveChar().Snapshot(&ai)
+	snap := c.Snapshot(&ai)
 	c.c2MillionTonCDBonus(&snap)
 	ap := combat.NewCircleHitOnTarget(c.Core.Combat.PrimaryTarget(), nil, 5)
-	c.Core.QueueAttackWithSnap(ai, snap, ap, 0)
 
 	ae := info.AttackEvent{
 		Info:        ai,
@@ -232,7 +232,7 @@ func (c *char) heavyOverdriveHammer() {
 		Mult:       skillHeavy[c.TalentLvlSkill()],
 		UseDef:     true,
 	}
-	snap := c.Core.Player.ActiveChar().Snapshot(&ai)
+	snap := c.Snapshot(&ai)
 	ap := combat.NewCircleHitOnTarget(c.Core.Combat.PrimaryTarget(), nil, 4)
 	c.Core.QueueAttackWithSnap(ai, snap, ap, 0)
 
