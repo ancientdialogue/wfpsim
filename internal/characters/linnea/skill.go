@@ -170,15 +170,16 @@ func (c *char) skillRecast() action.Info {
 
 func (c *char) millionTonHammer() {
 	ai := info.AttackInfo{
-		Abil:       skillMillionAbil,
-		ActorIndex: c.Index(),
-		AttackTag:  attacks.AttackTagDirectLunarCrystallize,
-		ICDTag:     attacks.ICDTagNone,
-		ICDGroup:   attacks.ICDGroupDefault,
-		StrikeType: attacks.StrikeTypeBlunt,
-		Element:    attributes.Geo,
-		Mult:       skillMillion[c.TalentLvlSkill()],
-		UseDef:     true,
+		Abil:             skillMillionAbil,
+		ActorIndex:       c.Index(),
+		AttackTag:        attacks.AttackTagDirectLunarCrystallize,
+		ICDTag:           attacks.ICDTagNone,
+		ICDGroup:         attacks.ICDGroupDefault,
+		StrikeType:       attacks.StrikeTypeBlunt,
+		Element:          attributes.Geo,
+		Mult:             skillMillion[c.TalentLvlSkill()],
+		UseDef:           true,
+		IgnoreDefPercent: 1,
 	}
 	snap := c.Snapshot(&ai)
 	c.c2MillionTonCDBonus(&snap)
@@ -222,15 +223,16 @@ func (c *char) poundPoundHammer(src int) {
 
 func (c *char) heavyOverdriveHammer() {
 	ai := info.AttackInfo{
-		Abil:       "Lumi Heavy Overdrive Hammer",
-		ActorIndex: c.Index(),
-		AttackTag:  attacks.AttackTagDirectLunarCrystallize,
-		ICDTag:     attacks.ICDTagNone,
-		ICDGroup:   attacks.ICDGroupDefault,
-		StrikeType: attacks.StrikeTypeBlunt,
-		Element:    attributes.Geo,
-		Mult:       skillHeavy[c.TalentLvlSkill()],
-		UseDef:     true,
+		Abil:             "Lumi Heavy Overdrive Hammer",
+		ActorIndex:       c.Index(),
+		AttackTag:        attacks.AttackTagDirectLunarCrystallize,
+		ICDTag:           attacks.ICDTagNone,
+		ICDGroup:         attacks.ICDGroupDefault,
+		StrikeType:       attacks.StrikeTypeBlunt,
+		Element:          attributes.Geo,
+		Mult:             skillHeavy[c.TalentLvlSkill()],
+		UseDef:           true,
+		IgnoreDefPercent: 1,
 	}
 	snap := c.Snapshot(&ai)
 	ap := combat.NewCircleHitOnTarget(c.Core.Combat.PrimaryTarget(), nil, 4)
