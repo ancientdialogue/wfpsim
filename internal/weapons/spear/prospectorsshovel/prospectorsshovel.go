@@ -32,7 +32,7 @@ func NewWeapon(c *core.Core, char *character.CharWrapper, p info.WeaponProfile) 
 			switch ai.AttackTag {
 			case attacks.AttackTagECDamage:
 				return buff * 4.0, false
-			case attacks.AttackTagReactionLunarCharge | attacks.AttackTagDirectLunarCharged:
+			case attacks.AttackTagReactionLunarCharge, attacks.AttackTagDirectLunarCharged:
 				return buff * getBonus(c), false
 			}
 
