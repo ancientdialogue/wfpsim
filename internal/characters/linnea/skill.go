@@ -93,7 +93,7 @@ func (c *char) lumiAttack(src int) {
 	if c.skillSrc != src {
 		return
 	}
-	if !(c.StatusIsActive(skillStandardPower) || c.StatusIsActive(skillSuperPower)) {
+	if !c.StatusIsActive(skillStandardPower) && !c.StatusIsActive(skillSuperPower) {
 		return
 	}
 

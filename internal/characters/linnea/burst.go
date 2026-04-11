@@ -22,11 +22,12 @@ func init() {
 
 func (c *char) Burst(p map[string]int) (action.Info, error) {
 	c.QueueCharTask(func() {
-		if c.StatusIsActive(skillStandardPower) {
+		switch {
+		case c.StatusIsActive(skillStandardPower):
 			c.AddStatus(skillStandardPower, skillDur, false)
-		} else if c.StatusIsActive(skillSuperPower) {
+		case c.StatusIsActive(skillSuperPower):
 			c.AddStatus(skillSuperPower, skillDur, false)
-		} else {
+		default:
 			src := c.Core.F
 			c.AddStatus(skillSuperPower, skillDur, false)
 			c.skillSrc = src
