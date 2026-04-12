@@ -77,12 +77,12 @@ func NewSet(c *core.Core, char *character.CharWrapper, count int, param map[stri
 					} {
 						s.buff[elementP] = 0
 					}
-					buffStrenght := 0.2
+					buffStrength := 0.2
 					if s.core.Player.GetHexereiCount() >= 2 {
-						buffStrenght = 0.4
-						s.buff[attributes.EleToDmgP(s.core.Player.ActiveChar().Base.Element)] = buffStrenght
+						buffStrength = 0.4
+						s.buff[attributes.EleToDmgP(s.core.Player.ActiveChar().Base.Element)] = buffStrength
 					}
-					s.buff[attributes.EleToDmgP(char.Base.Element)] = buffStrenght
+					s.buff[attributes.EleToDmgP(char.Base.Element)] = buffStrength
 					return s.buff, true
 				},
 			})
