@@ -172,13 +172,13 @@ func (c *char) skillPierce() action.Info {
 	// c6 duration extension happens immediately on skill use
 	// to ensure that the skill doesn't expire during the animation,
 	// causing the extension to fail
-	c.c6OnSkill()
+	c.c6ExtendOnSkill()
 
 	ai := info.AttackInfo{
 		ActorIndex: c.Index(),
 		Abil:       "Etched Into Bone and Soul",
 		AttackTag:  attacks.AttackTagElementalArt,
-		ICDTag:     attacks.ICDTagNone,
+		ICDTag:     attacks.ICDTagElementalArt,
 		ICDGroup:   attacks.ICDGroupDefault,
 		StrikeType: attacks.StrikeTypeDefault,
 		Element:    attributes.Cryo,
@@ -186,17 +186,20 @@ func (c *char) skillPierce() action.Info {
 		Mult:       skillPierce[c.TalentLvlSkill()],
 	}
 
+	var snapshot info.Snapshot
+
 	c.QueueCharTask(func() {
+		snapshot = c.Snapshot(&ai)
 		will := c.consumeWill()
 		ai.Mult *= (1 + will*0.004)
 		c.hexereiOnSkillBurst(will)
 		c.c2OnSkillBurst()
-		c.c6OnSkillBurst(will)
+		c.c6OnSkillBurst(will, &snapshot)
 	}, skillPierceHitmarks[0]-1)
 
 	ap := combat.NewCircleHitOnTargetFanAngle(c.Core.Combat.Player(), nil, 5, 60)
 	for _, delay := range skillPierceHitmarks {
-		c.QueueCharTask(func() { c.Core.QueueAttack(ai, ap, 0, 0) }, delay)
+		c.QueueCharTask(func() { c.Core.QueueAttackWithSnap(ai, snapshot, ap, 0) }, delay)
 	}
 
 	return action.Info{

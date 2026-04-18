@@ -33,7 +33,7 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 		ActorIndex: c.Index(),
 		Abil:       "Manifest Judgement",
 		AttackTag:  attacks.AttackTagElementalBurst,
-		ICDTag:     attacks.ICDTagNone,
+		ICDTag:     attacks.ICDTagElementalBurst,
 		ICDGroup:   attacks.ICDGroupDefault,
 		StrikeType: attacks.StrikeTypeDefault,
 		Element:    attributes.Cryo,
@@ -47,17 +47,19 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 		14,
 		12,
 	)
+	var snapshot info.Snapshot
 	c.QueueCharTask(func() {
+		snapshot = c.Snapshot(&ai)
 		c.c4OnBurst()
 		will := c.consumeWill()
 		ai.Mult *= (1 + will*0.004)
 		c.hexereiOnSkillBurst(will)
 		c.c2OnSkillBurst()
-		c.c6OnSkillBurst(will)
+		c.c6OnSkillBurst(will, &snapshot)
 	}, burstHitmarks[0]-1)
 
 	for _, delay := range burstHitmarks {
-		c.QueueCharTask(func() { c.Core.QueueAttack(ai, ap, 0, 0) }, delay)
+		c.QueueCharTask(func() { c.Core.QueueAttackWithSnap(ai, snapshot, ap, 0) }, delay)
 	}
 
 	c.ConsumeEnergy(7)

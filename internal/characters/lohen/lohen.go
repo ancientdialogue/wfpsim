@@ -51,7 +51,6 @@ func (c *char) Init() error {
 	c.a4Init()
 	c.c1Init()
 	c.c2Init()
-	c.c6Init()
 	return nil
 }
 

@@ -94,7 +94,7 @@ func (c *char) skillAttack() action.Info {
 			Mult:               mult[c.TalentLvlSkill()],
 			AttackTag:          attacks.AttackTagNormal,
 			ICDTag:             attacks.ICDTagNormalAttack,
-			ICDGroup:           attacks.ICDGroupDefault,
+			ICDGroup:           attacks.ICDGroupLohenSkillAttack,
 			StrikeType:         attacks.StrikeTypeSpear,
 			Element:            attributes.Cryo,
 			Durability:         25,

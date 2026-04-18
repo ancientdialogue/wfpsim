@@ -4,6 +4,7 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/attacks"
 	"github.com/genshinsim/gcsim/pkg/core/attributes"
 	"github.com/genshinsim/gcsim/pkg/core/combat"
+	"github.com/genshinsim/gcsim/pkg/core/glog"
 	"github.com/genshinsim/gcsim/pkg/core/info"
 	"github.com/genshinsim/gcsim/pkg/core/player/character"
 	"github.com/genshinsim/gcsim/pkg/modifier"
@@ -63,14 +64,15 @@ func (c *char) c2MakeCB() info.AttackCBFunc {
 	if c.Base.Cons < 2 {
 		return nil
 	}
-	if !c.StatusIsActive(c2Key) {
-		return nil
-	}
+
 	return func(a info.AttackCB) {
+		if !c.StatusIsActive(c2Key) {
+			return
+		}
 		ai := info.AttackInfo{
 			ActorIndex: c.Index(),
 			Abil:       "Lohen C2",
-			AttackTag:  attacks.AttackTagElementalArt,
+			AttackTag:  attacks.AttackTagNormal,
 			ICDTag:     attacks.ICDTagNone,
 			ICDGroup:   attacks.ICDGroupDefault,
 			StrikeType: attacks.StrikeTypeDefault,
@@ -85,6 +87,7 @@ func (c *char) c2MakeCB() info.AttackCBFunc {
 			}
 			char.AddStatMod(c.c2StatMod)
 		}
+		c.DeleteStatus(c2Key)
 	}
 }
 
@@ -119,7 +122,7 @@ func (c *char) c4OnSkillMasterstroke() {
 	c.AddStatus(c4Key, 15*60, true)
 }
 
-func (c *char) c6OnSkill() {
+func (c *char) c6ExtendOnSkill() {
 	if c.Base.Cons < 6 {
 		return
 	}
@@ -127,16 +130,22 @@ func (c *char) c6OnSkill() {
 		return
 	}
 	c.ExtendStatus(skillKey, 1.25*60)
-	c.DeleteStatus(c6Key)
 }
 
-func (c *char) c6OnSkillBurst(amt float64) {
+func (c *char) c6OnSkillBurst(amt float64, snap *info.Snapshot) {
 	if c.Base.Cons < 6 {
 		return
 	}
 	if !c.StatusIsActive(skillKey) {
 		return
 	}
+
+	if c.StatusIsActive(c6Key) {
+		c.c6AddCD(snap)
+		c.DeleteStatus(c6Key)
+		return
+	}
+
 	if c.StatusIsActive(c6IcdKey) {
 		return
 	}
@@ -146,26 +155,16 @@ func (c *char) c6OnSkillBurst(amt float64) {
 	c.joy = joyMax
 	c.AddStatus(c6Key, 18*60, true)
 	c.AddStatus(c6IcdKey, 7*60, true)
+	c.c6AddCD(snap)
 }
 
-func (c *char) c6Init() {
+func (c *char) c6AddCD(snap *info.Snapshot) {
 	if c.Base.Cons < 6 {
 		return
 	}
-	m := make([]float64, attributes.EndStatType)
-	m[attributes.CD] = 0.8
-	c.AddAttackMod(character.AttackMod{
-		Base: modifier.NewBaseWithHitlag("lohen-c6", -1),
-		Amount: func(atk *info.AttackEvent, t info.Target) ([]float64, bool) {
-			if !c.StatusIsActive(skillKey) {
-				return nil, false
-			}
-			switch atk.Info.AttackTag {
-			case attacks.AttackTagElementalArt, attacks.AttackTagElementalBurst:
-				return m, true
-			default:
-				return nil, false
-			}
-		},
-	})
+	old := snap.Stats[attributes.CD]
+	snap.Stats[attributes.CD] += 1.5
+	c.Core.Log.NewEvent("c6 adding crit damage", glog.LogCharacterEvent, c.Index()).
+		Write("old", old).
+		Write("new", snap.Stats[attributes.CD])
 }

@@ -34,6 +34,7 @@ const (
 	ICDGroupLanyanRingAttack
 	ICDGroupLanyanRingAttackMix
 	ICDGroupLayla
+	ICDGroupLohenSkillAttack
 	ICDGroupLyneyExtra
 	ICDGroupMizukiSkill
 	ICDGroupNahidaSkill
@@ -175,6 +176,10 @@ func init() {
 	ICDGroupResetTimer[ICDGroupLanyanRingAttackMix] = 150
 	ICDGroupEleApplicationSequence[ICDGroupLanyanRingAttackMix] = []float64{1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0}
 	ICDGroupDamageSequence[ICDGroupLanyanRingAttackMix] = []float64{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
+
+	ICDGroupResetTimer[ICDGroupLohenSkillAttack] = 300
+	ICDGroupEleApplicationSequence[ICDGroupLohenSkillAttack] = []float64{1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0}
+	ICDGroupDamageSequence[ICDGroupLohenSkillAttack] = []float64{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
 
 	ICDGroupResetTimer[ICDGroupLayla] = 180
 	ICDGroupEleApplicationSequence[ICDGroupLayla] = []float64{1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0}
