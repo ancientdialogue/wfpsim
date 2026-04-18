@@ -66,6 +66,7 @@ const (
 	Layla
 	Linnea
 	Lisa
+	Lohen
 	Lynette
 	Lyney
 	Mavuika
@@ -351,6 +352,10 @@ func init() {
 	charNames[Lisa] = "lisa"
 	charPrettyName[Lisa] = "Lisa"
 	CharKeyToEle[Lisa] = attributes.Electro
+
+	charNames[Lohen] = "lohen"
+	charPrettyName[Lohen] = "Lohen"
+	CharKeyToEle[Lohen] = attributes.Cryo
 
 	charNames[Lynette] = "lynette"
 	charPrettyName[Lynette] = "Lynette"
