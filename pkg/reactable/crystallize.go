@@ -64,9 +64,9 @@ func (r *Reactable) tryCrystallizeWithEle(a *info.AttackEvent, ele attributes.El
 	char := r.core.Player.ByIndex(a.Info.ActorIndex)
 	r.addCrystallizeShard(char, rt, ele, r.core.F)
 	// reduce
-	r.reduce(ele, a.Info.Durability, 0.5)
-	// TODO: confirm u can only crystallize once
-	a.Info.Durability = 0
+	consumed := r.reduce(ele, a.Info.Durability, 0.5)
+	a.Info.Durability -= consumed
+	a.Info.Durability = max(a.Info.Durability, 0)
 	a.Reacted = true
 	// event
 	r.core.Events.Emit(evt, r.self, a)

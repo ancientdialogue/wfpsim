@@ -53,9 +53,9 @@ func (r *Reactable) TryLunarCrystallize(a *info.AttackEvent) bool {
 	}
 
 	// reduce
-	r.reduce(attributes.Hydro, a.Info.Durability, 0.5)
-	// TODO: confirm u can only lunar crystallize once
-	a.Info.Durability = 0
+	consumed := r.reduce(attributes.Hydro, a.Info.Durability, 0.5)
+	a.Info.Durability -= consumed
+	a.Info.Durability = max(a.Info.Durability, 0)
 	a.Reacted = true
 
 	// event
