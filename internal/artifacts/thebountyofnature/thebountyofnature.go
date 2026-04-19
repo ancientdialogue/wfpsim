@@ -2,6 +2,7 @@ package thebountyofnature
 
 import (
 	"fmt"
+
 	"github.com/genshinsim/gcsim/pkg/core"
 	"github.com/genshinsim/gcsim/pkg/core/attributes"
 	"github.com/genshinsim/gcsim/pkg/core/event"
