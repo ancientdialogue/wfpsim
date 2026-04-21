@@ -5,11 +5,6 @@
       "text_map_id": "3721836931",
       "key": "adaycarvedfromrisingwinds"
     },
-    "thebountyofnature": {
-      "id": "15045",
-      "text_map_id": "3721836931",
-      "key": "thebountyofnature"
-    },
     "archaicpetra": {
       "id": "15014",
       "text_map_id": "2040573235",
@@ -109,6 +104,11 @@
       "id": "15016",
       "text_map_id": "156294403",
       "key": "heartofdepth"
+    },
+    "heavensgift": {
+      "id": "15045",
+      "text_map_id": "3721836931",
+      "key": "heavensgift"
     },
     "huskofopulentdreams": {
       "id": "15021",
