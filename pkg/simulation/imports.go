@@ -58,6 +58,7 @@ import (
 	_ "github.com/genshinsim/gcsim/internal/artifacts/sojourner"
 	_ "github.com/genshinsim/gcsim/internal/artifacts/songofdayspast"
 	_ "github.com/genshinsim/gcsim/internal/artifacts/tenacity"
+	_ "github.com/genshinsim/gcsim/internal/artifacts/thebountyofnature"
 	_ "github.com/genshinsim/gcsim/internal/artifacts/thunderingfury"
 	_ "github.com/genshinsim/gcsim/internal/artifacts/thundersoother"
 	_ "github.com/genshinsim/gcsim/internal/artifacts/unfinishedreverie"
