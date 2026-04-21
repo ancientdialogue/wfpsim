@@ -18,6 +18,8 @@ type char struct {
 	joy           int
 	willToWin     float64
 	willToWinMax  float64
+	skillsUsed    int
+	maxSkillsUsed int
 	hexereiAtkMod character.AttackMod
 	c2StatMod     character.StatMod
 }
@@ -63,8 +65,11 @@ func (c *char) AnimationStartDelay(k info.AnimationDelayKey) int {
 
 func (c *char) ActionReady(a action.Action, p map[string]int) (bool, action.Failure) {
 	// check if it is possible to use next skill
-	if c.StatusIsActive(skillKey) && a == action.ActionSkill && c.joy >= joyMax {
-		return true, action.NoFailure
+	if a == action.ActionSkill && c.StatusIsActive(skillKey) {
+		if c.joy >= joyMax {
+			return true, action.NoFailure
+		}
+		return false, action.InsufficientStamina
 	}
 
 	return c.Character.ActionReady(a, p)

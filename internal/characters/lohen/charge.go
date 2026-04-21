@@ -82,7 +82,7 @@ func (c *char) skillChargeAttack() (action.Info, error) {
 	)
 
 	for _, hitmark := range chargeHitmarks {
-		c.Core.QueueAttack(ai, ap, hitmark, hitmark, c.particleCB, c.joyCaCB, c.c2MakeCB())
+		c.Core.QueueAttack(ai, ap, hitmark, hitmark, c.particleCB, c.joyCB, c.c2MakeCB())
 	}
 
 	return action.Info{
