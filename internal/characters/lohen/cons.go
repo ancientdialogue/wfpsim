@@ -23,14 +23,14 @@ func (c *char) c1Init() {
 		return
 	}
 
-	c.willToWinMax = 250
+	c.willToWinMax = 300
 }
 
 func (c *char) c1WillToWinMult() float64 {
 	if c.Base.Cons < 1 {
 		return 1
 	}
-	return 2.5
+	return 5
 }
 
 func (c *char) c2Init() {
@@ -38,7 +38,7 @@ func (c *char) c2Init() {
 		return
 	}
 	m := make([]float64, attributes.EndStatType)
-	m[attributes.EM] = 125
+	m[attributes.EM] = 200
 	c.c2StatMod = character.StatMod{
 		Base: modifier.NewBaseWithHitlag("lohen-c2-em", 8*60),
 		Amount: func() ([]float64, bool) {
@@ -78,7 +78,7 @@ func (c *char) c2MakeCB() info.AttackCBFunc {
 			StrikeType: attacks.StrikeTypeDefault,
 			Element:    attributes.Cryo,
 			Durability: 25,
-			Mult:       3,
+			Mult:       5,
 		}
 		c.Core.QueueAttack(ai, combat.NewCircleHitOnTarget(a.Target, nil, 4), 5, 5)
 		for _, char := range c.Core.Player.Chars() {
@@ -130,6 +130,7 @@ func (c *char) c6ExtendOnSkill() {
 		return
 	}
 	c.ExtendStatus(skillKey, 1.25*60)
+	c.maxSkillsUsed += 1
 }
 
 func (c *char) c6OnSkillBurst(amt float64, snap *info.Snapshot) {
@@ -163,7 +164,7 @@ func (c *char) c6AddCD(snap *info.Snapshot) {
 		return
 	}
 	old := snap.Stats[attributes.CD]
-	snap.Stats[attributes.CD] += 1.5
+	snap.Stats[attributes.CD] += 1.75
 	c.Core.Log.NewEvent("c6 adding crit damage", glog.LogCharacterEvent, c.Index()).
 		Write("old", old).
 		Write("new", snap.Stats[attributes.CD])

@@ -20,11 +20,12 @@ var (
 )
 
 const (
-	skillHitmark   = 19
-	particleICDKey = "lohen-particle-icd"
-	skillKey       = "lohen-masterstroke"
-	joyICDKey      = "lohen-joy-icd"
-	joyMax         = 100
+	skillHitmark         = 19
+	particleICDKey       = "lohen-particle-icd"
+	skillKey             = "lohen-masterstroke"
+	joyICDKey            = "lohen-joy-icd"
+	joyMax               = 100
+	defaultMaxSkillsUsed = 3
 )
 
 func init() {
@@ -67,6 +68,9 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 	}
 	c.willToWin = 0
 	c.joy = 0
+	c.Core.Log.NewEventBuildMsg(glog.LogCharacterEvent, c.Index(), "Joy consumed (0)")
+	c.maxSkillsUsed = defaultMaxSkillsUsed
+	c.skillsUsed = 0
 	// trigger 0 damage attack; matters because this stacks PJWS
 	ai := info.AttackInfo{
 		ActorIndex: c.Index(),
@@ -79,7 +83,7 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 	}
 	c.Core.QueueAttack(ai, combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 3), skillHitmark, skillHitmark)
 
-	c.AddStatus(skillKey, 12.5*60+skillHitmark, true)
+	c.AddStatus(skillKey, 13*60+skillHitmark, true)
 	c.SetCDWithDelay(action.ActionSkill, 18*60, skillHitmark)
 
 	c.skillBonusOnSkillMasterstroke()
@@ -106,8 +110,12 @@ func (c *char) particleCB(ac info.AttackCB) {
 	c.Core.QueueParticle(c.Base.Key.String(), 1, attributes.Cryo, c.ParticleDelay)
 }
 
-func (c *char) joyNaCB(ac info.AttackCB) {
+func (c *char) joyCB(ac info.AttackCB) {
 	if ac.Target.Type() != info.TargettableEnemy {
+		return
+	}
+
+	if c.skillsUsed >= c.maxSkillsUsed {
 		return
 	}
 
@@ -116,20 +124,8 @@ func (c *char) joyNaCB(ac info.AttackCB) {
 	}
 
 	c.AddStatus(joyICDKey, 0.1*60, true)
-	c.joy = min(c.joy+15, joyMax)
-}
-
-func (c *char) joyCaCB(ac info.AttackCB) {
-	if ac.Target.Type() != info.TargettableEnemy {
-		return
-	}
-
-	if c.StatusIsActive(joyICDKey) {
-		return
-	}
-
-	c.AddStatus(joyICDKey, 0.1*60, true)
-	c.joy = min(c.joy+18, joyMax)
+	c.joy = min(c.joy+17, joyMax)
+	c.Core.Log.NewEventBuildMsg(glog.LogCharacterEvent, c.Index(), fmt.Sprintf("Joy gained (%v)", c.joy))
 }
 
 func (c *char) skillInit() {

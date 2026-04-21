@@ -111,7 +111,7 @@ func (c *char) skillAttack() action.Info {
 			attackHitboxes[c.NormalCounter][i][1],
 		)
 		c.QueueCharTask(func() {
-			c.Core.QueueAttack(ai, ap, 0, 0, c.particleCB, c.joyNaCB, c.c2MakeCB())
+			c.Core.QueueAttack(ai, ap, 0, 0, c.particleCB, c.joyCB, c.c2MakeCB())
 		}, attackHitmarks[c.NormalCounter][i])
 	}
 

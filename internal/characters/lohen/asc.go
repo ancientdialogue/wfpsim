@@ -28,7 +28,7 @@ func (c *char) a1BonusWill(dmg float64) float64 {
 	if c.Base.Ascension < 1 {
 		return 0
 	}
-	if dmg < c.Stat(attributes.BaseATK)*40 {
+	if dmg < c.Stat(attributes.BaseATK)*30 {
 		return 0
 	}
 	return 60
