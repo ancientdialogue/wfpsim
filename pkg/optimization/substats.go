@@ -341,10 +341,7 @@ func PrettyPrintStatsCounts(statsCounts []int) string {
 	sb.WriteString("Liquid Substat Counts: ")
 	for i, v := range statsCounts {
 		if v > 0 {
-			sb.WriteString(attributes.StatTypeString[i])
-			sb.WriteString(": ")
-			sb.WriteString(fmt.Sprintf("%v", v))
-			sb.WriteString(" ")
+			fmt.Fprintf(&sb, "%v: %v ", attributes.StatTypeString[i], v)
 		}
 	}
 	return strings.Trim(sb.String(), " ")
