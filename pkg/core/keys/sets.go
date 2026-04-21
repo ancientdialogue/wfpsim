@@ -40,7 +40,6 @@ var setNames = []string{
 	"berserker",
 	"blizzardstrayer",
 	"bloodstainedchivalry",
-	"thebountyofnature",
 	"braveheart",
 	"crimsonwitchofflames",
 	"deepwoodmemories",
@@ -56,6 +55,7 @@ var setNames = []string{
 	"gildeddreams",
 	"goldentroupe",
 	"heartofdepth",
+	"heavensgift",
 	"huskofopulentdreams",
 	"instructor",
 	"lavawalker",
@@ -104,7 +104,6 @@ const (
 	Berserker
 	BlizzardStrayer
 	BloodstainedChivalry
-	TheBountyOfNature
 	BraveHeart
 	CrimsonWitchOfFlames
 	DeepwoodMemories
@@ -120,6 +119,7 @@ const (
 	GildedDreams
 	GoldenTroupe
 	HeartOfDepth
+	HeavensGift
 	HuskOfOpulentDreams
 	Instructor
 	Lavawalker

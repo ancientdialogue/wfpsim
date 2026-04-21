@@ -1,4 +1,4 @@
-package thebountyofnature
+package heavensgift
 
 import (
 	"fmt"
@@ -13,7 +13,7 @@ import (
 )
 
 func init() {
-	core.RegisterSetFunc(keys.TheBountyOfNature, NewSet)
+	core.RegisterSetFunc(keys.HeavensGift, NewSet)
 }
 
 type Set struct {
@@ -45,7 +45,7 @@ func NewSet(c *core.Core, char *character.CharWrapper, count int, param map[stri
 	m := make([]float64, attributes.EndStatType)
 	m[attributes.ER] = 0.2
 	char.AddStatMod(character.StatMod{
-		Base:         modifier.NewBase("thebountyofnature-2pc", -1),
+		Base:         modifier.NewBase("heavensgift-2pc", -1),
 		AffectedStat: attributes.ER,
 		Amount: func() ([]float64, bool) {
 			return m, true
@@ -64,7 +64,7 @@ func NewSet(c *core.Core, char *character.CharWrapper, count int, param map[stri
 		duration := 60 * 20
 		for _, x := range s.core.Player.Chars() {
 			x.AddStatMod(character.StatMod{
-				Base:         modifier.NewBaseWithHitlag("thebountyofnature-4pc", duration),
+				Base:         modifier.NewBaseWithHitlag("heavensgift-4pc", duration),
 				AffectedStat: attributes.NoStat,
 				Amount: func() ([]float64, bool) {
 					for _, elementP := range [...]attributes.Stat{
@@ -89,7 +89,7 @@ func NewSet(c *core.Core, char *character.CharWrapper, count int, param map[stri
 			})
 		}
 		return false
-	}, fmt.Sprintf("thebountyofnature-4pc-%v", char.Base.Key.String()))
+	}, fmt.Sprintf("heavensgift-4pc-%v", char.Base.Key.String()))
 
 	return &s, nil
 }
