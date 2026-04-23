@@ -19,7 +19,7 @@ const (
 	lcIcdKey         = "lunarcharged-cloud-icd"
 )
 
-var lcContributorMult = []float64{1.0, 1.0 / 2.0, 1.0 / 12.0, 1.0 / 12.0}
+var lcContributorMult = []float64{0.6, 0.3, 0.05, 0.05}
 
 func (r *Reactable) TryAddLC(a *info.AttackEvent) bool {
 	if a.Info.Durability < info.ZeroDur {
@@ -119,7 +119,7 @@ func (r *Reactable) DoLCAttack() {
 		cr := ae.Snapshot.Stats[attributes.CR]
 		cd := ae.Snapshot.Stats[attributes.CD]
 
-		flatdmg := 1.8 * combat.CalcLunarDmg(char.Base.Level, char, ae.Info, em)
+		flatdmg := 3*combat.CalcLunarDmg(char.Base.Level, char, ae.Info, em) + ae.Info.FlatDmg
 		isCrit := false
 
 		if r.core.Rand.Float64() <= cr {

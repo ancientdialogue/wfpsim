@@ -20,7 +20,7 @@ const (
 	lcrDur              = 5.5 * 60
 )
 
-var lcrContributorMult = []float64{1.0, 1.0 / 2.0, 1.0 / 12.0, 1.0 / 12.0}
+var lcrContributorMult = []float64{0.6, 0.3, 0.05, 0.05}
 
 func (r *Reactable) TryLunarCrystallize(a *info.AttackEvent) bool {
 	if r.GetAuraDurability(info.ReactionModKeyHydro) <= info.ZeroDur {
@@ -179,7 +179,7 @@ func (r *Reactable) doSingleLCrAttack(owner int) {
 		cr := ae.Snapshot.Stats[attributes.CR]
 		cd := ae.Snapshot.Stats[attributes.CD]
 
-		flatdmg := 0.96 * combat.CalcLunarDmg(char.Base.Level, char, ae.Info, em)
+		flatdmg := 1.6*combat.CalcLunarDmg(char.Base.Level, char, ae.Info, em) + ae.Info.FlatDmg
 		isCrit := false
 
 		if r.core.Rand.Float64() <= cr {

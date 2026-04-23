@@ -43,19 +43,46 @@ func (c *char) c1Init() {
 		return false
 	}, "linnea-c1")
 
-	c.Core.Events.Subscribe(event.OnEnemyHit, func(args ...any) bool {
+	// this is emitted up to 4 times per attack, but we should only consume 1 stack per "attack"
+	// so we only add damage in OnLunarReactionAttack, but we will consume in OnEnemyDamage
+	c.Core.Events.Subscribe(event.OnLunarReactionAttack, func(args ...any) bool {
 		atk := args[1].(*info.AttackEvent)
-
 		switch atk.Info.AttackTag {
 		case attacks.AttackTagReactionLunarCrystallize:
-		case attacks.AttackTagDirectLunarCrystallize:
 		default:
 			return false
 		}
-
 		if !c.StatusIsActive(c1Key) {
 			return false
 		}
+
+		if c.c1Stacks == 0 {
+			return false
+		}
+
+		maxStacks := 1
+		scaling := 0.75
+
+		c6stacks, c6scale := c.c6C1Mult()
+		maxStacks *= c6stacks
+		scaling *= c6scale
+
+		def := c.TotalDef(false)
+		stacks := min(c.c1Stacks, maxStacks)
+		amt := def * scaling * float64(stacks)
+		if c.Core.Flags.LogDebug {
+			c.Core.Log.NewEvent("Linnea C1 proc dmg added to contribution", glog.LogPreDamageMod, atk.Info.ActorIndex).
+				Write("before", atk.Info.FlatDmg).
+				Write("addition", amt).
+				Write("Field Catalog stacks left", c.c1Stacks)
+		}
+		atk.Info.FlatDmg += amt
+
+		return false
+	}, "linnea-c1-lcr-reaction")
+
+	c.Core.Events.Subscribe(event.OnEnemyHit, func(args ...any) bool {
+		atk := args[1].(*info.AttackEvent)
 
 		maxStacks := 1
 		scaling := 0.75
@@ -64,23 +91,41 @@ func (c *char) c1Init() {
 			scaling = 1.5
 		}
 
+		if c.c1Stacks == 0 {
+			return false
+		}
+
 		c6stacks, c6scale := c.c6C1Mult()
 		maxStacks *= c6stacks
 		scaling *= c6scale
 
-		if c.c1Stacks > 0 {
-			def := c.TotalDef(false)
-			stacks := min(c.c1Stacks, maxStacks)
-			amt := def * scaling * float64(stacks)
-			if c.Core.Flags.LogDebug {
-				c.Core.Log.NewEvent("Linnea C1 proc dmg add", glog.LogPreDamageMod, atk.Info.ActorIndex).
-					Write("before", atk.Info.FlatDmg).
-					Write("addition", amt).
-					Write("Field Catalog stacks left", c.c1Stacks)
-			}
-			atk.Info.FlatDmg += amt
-			c.c1Stacks -= stacks
+		if !c.StatusIsActive(c1Key) {
+			return false
 		}
+
+		stacks := min(c.c1Stacks, maxStacks)
+
+		switch atk.Info.AttackTag {
+		case attacks.AttackTagReactionLunarCrystallize:
+			// we added the damage in OnLunarReactionAttack so we only need to reduce stack count here
+			c.c1Stacks -= stacks
+			return false
+		case attacks.AttackTagDirectLunarCrystallize:
+		default:
+			return false
+		}
+
+		c.c1Stacks -= stacks
+		def := c.TotalDef(false)
+		amt := def * scaling * float64(stacks)
+		if c.Core.Flags.LogDebug {
+			c.Core.Log.NewEvent("Linnea C1 proc dmg add", glog.LogPreDamageMod, atk.Info.ActorIndex).
+				Write("before", atk.Info.FlatDmg).
+				Write("addition", amt).
+				Write("Field Catalog stacks left", c.c1Stacks)
+		}
+		atk.Info.FlatDmg += amt
+
 		return false
 	}, "linnea-c1-dmg")
 }
@@ -105,9 +150,6 @@ func (c *char) c2Init() {
 	c.Core.Events.Subscribe(event.OnMoondriftHarmony, func(args ...any) bool {
 		if _, ok := args[0].(*enemy.Enemy); !ok {
 			return false
-		}
-		if !c.StatusIsActive(c1Key) {
-			c.c1Stacks = 0
 		}
 		for _, char := range c.Core.Player.Chars() {
 			switch char.Base.Element {
@@ -142,8 +184,9 @@ func (c *char) c2TriggerMoonDrift(ae *info.AttackEvent) {
 	if c.Core.Player.GetMoonsignCount() < 2 {
 		return
 	}
+	c.Core.Log.NewEventBuildMsg(glog.LogCharacterEvent, c.Index(), "Triggering C2 Moondrift Harmony")
 	c.Core.Events.Emit(event.OnMoondriftHarmony, c.Core.Combat.PrimaryTarget(), ae)
-	c.Core.Log.NewEvent("Linnea C2 Lunar Crystallize attack triggered", glog.LogElementEvent, c.Index())
+	// c.Core.Log.NewEventBuildMsg(glog.LogElementEvent, c.Index(), "Linnea C2 Lunar Crystallize attack triggered")
 	for _, delay := range []int{1, 4, 7} {
 		c.Core.Tasks.Add(func() { c.doSingleLCrAttack() }, delay)
 		if chance, ok := c.Core.Flags.Custom[reactable.LcrExtraHitOverride]; ok && c.Core.Rand.Float64() < chance {
@@ -298,8 +341,8 @@ func (c *char) doSingleLCrAttack() {
 	})
 
 	for i, contr := range contributions {
-		c.Core.Combat.Log.NewEvent(fmt.Sprint("lunarcrystallize contributor ", (i+1)), glog.LogElementEvent, contr.charInd).
-			Write("target", c.Core.Combat.PrimaryTarget()).
+		c.Core.Combat.Log.NewEventBuildMsg(glog.LogElementEvent, contr.charInd, "lunarcrystallize contributor ", fmt.Sprint(i+1)).
+			Write("target", c.Core.Combat.PrimaryTarget().Key()).
 			Write("damage", &contr.dmg).
 			Write("crit", &contr.isCrit).
 			Write("mult", lcrContributorMult[i]).
