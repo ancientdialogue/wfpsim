@@ -25,7 +25,7 @@ stats: {
          prop_type: FIGHT_PROP_BASE_ATTACK
       }
       add_props: {
-         prop_type: FIGHT_PROP_CRITICAL_HURT
+         prop_type: FIGHT_PROP_ATTACK_PERCENT
       }
    }
    promo_data: {
@@ -43,7 +43,7 @@ stats: {
          value: 23.9457
       }
       add_props: {
-         prop_type: FIGHT_PROP_CRITICAL_HURT
+         prop_type: FIGHT_PROP_ATTACK_PERCENT
       }
    }
    promo_data: {
@@ -61,8 +61,8 @@ stats: {
          value: 39.05
       }
       add_props: {
-         prop_type: FIGHT_PROP_CRITICAL_HURT
-         value: 0.096
+         prop_type: FIGHT_PROP_ATTACK_PERCENT
+         value: 0.072
       }
    }
    promo_data: {
@@ -80,8 +80,8 @@ stats: {
          value: 60.67
       }
       add_props: {
-         prop_type: FIGHT_PROP_CRITICAL_HURT
-         value: 0.192
+         prop_type: FIGHT_PROP_ATTACK_PERCENT
+         value: 0.144
       }
    }
    promo_data: {
@@ -99,8 +99,8 @@ stats: {
          value: 76.89
       }
       add_props: {
-         prop_type: FIGHT_PROP_CRITICAL_HURT
-         value: 0.192
+         prop_type: FIGHT_PROP_ATTACK_PERCENT
+         value: 0.144
       }
    }
    promo_data: {
@@ -118,8 +118,8 @@ stats: {
          value: 93.11
       }
       add_props: {
-         prop_type: FIGHT_PROP_CRITICAL_HURT
-         value: 0.288
+         prop_type: FIGHT_PROP_ATTACK_PERCENT
+         value: 0.216
       }
    }
    promo_data: {
@@ -137,8 +137,8 @@ stats: {
          value: 109.33
       }
       add_props: {
-         prop_type: FIGHT_PROP_CRITICAL_HURT
-         value: 0.384
+         prop_type: FIGHT_PROP_ATTACK_PERCENT
+         value: 0.288
       }
    }
 }
