@@ -73,7 +73,7 @@ func (c *char) burstInit() {
 			return false
 		}
 
-		if c.burstHits > 4 {
+		if c.burstHits >= 4 {
 			return false
 		}
 
