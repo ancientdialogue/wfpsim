@@ -239,6 +239,11 @@
     "element": "geo",
     "weapon_class": "catalyst"
   },
+  "nicole": {
+    "rarity": 5,
+    "element": "pyro",
+    "weapon_class": "catalyst"
+  },
   "nilou": {
     "rarity": 5,
     "element": "hydro",
