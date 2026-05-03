@@ -7,7 +7,6 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/attributes"
 	"github.com/genshinsim/gcsim/pkg/core/combat"
 	"github.com/genshinsim/gcsim/pkg/core/event"
-	"github.com/genshinsim/gcsim/pkg/core/glog"
 	"github.com/genshinsim/gcsim/pkg/core/info"
 	"github.com/genshinsim/gcsim/pkg/enemy"
 )
@@ -63,7 +62,6 @@ func (c *char) Burst(_ map[string]int) (action.Info, error) {
 
 func (c *char) burstInit() {
 	c.Core.Events.Subscribe(event.OnEnemyHit, func(args ...any) bool {
-		c.Core.Log.NewEvent("Nicole Burst test", glog.LogCharacterEvent, c.Index())
 		t, ok := args[0].(*enemy.Enemy)
 		if !ok {
 			return false
