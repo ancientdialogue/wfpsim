@@ -58,6 +58,8 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 	}, skillHitmark-1)
 
 	c.a1OnSkill()
+
+	c.SetCDWithDelay(action.ActionSkill, 16*60, 4)
 	return action.Info{
 		Frames:          frames.NewAbilFunc(skillFrames),
 		AnimationLength: skillFrames[action.InvalidAction],

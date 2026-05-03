@@ -34,7 +34,7 @@ func init() {
 func (c *char) Burst(_ map[string]int) (action.Info, error) {
 	c.burstHits = 0
 
-	aiIceStorm := info.AttackInfo{
+	ai := info.AttackInfo{
 		ActorIndex: c.Index(),
 		Abil:       "Revelation: Ladder of Divine Ascent",
 		AttackTag:  attacks.AttackTagElementalBurst,
@@ -51,7 +51,7 @@ func (c *char) Burst(_ map[string]int) (action.Info, error) {
 	c.SetCD(action.ActionBurst, 15*60)
 
 	// initial hit
-	c.Core.QueueAttack(aiIceStorm, combat.NewCircleHitOnTarget(c.Core.Combat.PrimaryTarget(), nil, 6.5), burstHitmark, burstHitmark)
+	c.Core.QueueAttack(ai, combat.NewCircleHitOnTarget(c.Core.Combat.PrimaryTarget(), nil, 6.5), burstHitmark, burstHitmark)
 	c.QueueCharTask(func() { c.AddStatus(burstKey, 20*60, true) }, burstHitmark+1)
 	return action.Info{
 		Frames:          frames.NewAbilFunc(burstFrames),
