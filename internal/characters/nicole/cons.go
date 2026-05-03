@@ -198,18 +198,15 @@ func (c *char) c6OnUpgrade(char *character.CharWrapper) {
 	}
 
 	if char.Index() == c.Index() {
-		for i, other_c := range c.Core.Player.Chars() {
+		for i, otherChar := range c.Core.Player.Chars() {
 			if i == c.Index() {
 				continue
 			}
-			c.a1UpgradeBuff(other_c, -1)
+			c.a1UpgradeBuff(otherChar, -1)
 		}
 	}
 }
 
 func (c *char) c6DeleteA1OnSwap() bool {
-	if c.Base.Cons < 6 {
-		return true
-	}
-	return false
+	return c.Base.Cons < 6
 }
