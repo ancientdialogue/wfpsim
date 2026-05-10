@@ -34,10 +34,6 @@ func (c *char) c1Init() {
 			return false
 		}
 
-		if !c.StatusIsActive(burstKey) {
-			return false
-		}
-
 		if c.StatusIsActive(c1ICDKey) {
 			return false
 		}
