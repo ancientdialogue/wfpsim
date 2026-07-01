@@ -10,6 +10,7 @@ action_param_keys:
     - param: "weakspot"
   skill:
     - param: "hold"
+    - param: "short_hold"
 icd_groups:
   - group_name: ICDGroupVenti
     reset_timer: 60
@@ -38,6 +39,8 @@ skill_data_mapping:
       - 7 # Fully-Charged Aimed Shot|{param7:P}
     highPlunge:
       - 10 # Low/High Plunge DMG|{param9:P}/{param10:P}
+    hurricaneBonus:
+      - 11
   skill:
     skillHold:
       - 2 # Hold DMG|{param2:P}

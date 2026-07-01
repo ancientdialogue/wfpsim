@@ -56,6 +56,7 @@ var setNames = []string{
 	"gildeddreams",
 	"goldentroupe",
 	"heartofdepth",
+	"heavensgift",
 	"huskofopulentdreams",
 	"instructor",
 	"lavawalker",
@@ -120,6 +121,7 @@ const (
 	GildedDreams
 	GoldenTroupe
 	HeartOfDepth
+	HeavensGift
 	HuskOfOpulentDreams
 	Instructor
 	Lavawalker

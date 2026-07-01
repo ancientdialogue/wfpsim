@@ -17,7 +17,7 @@ import (
 var pbData []byte
 var base *model.AvatarData
 var paramKeysValidation = map[action.Action][]string{
-	1: {"hold"},
+	1: {"hold", "short_hold"},
 	3: {"travel"},
 	7: {"hold", "travel", "weakspot"},
 }
@@ -259,6 +259,24 @@ var (
 		3.399824,
 		3.597872,
 		3.79592,
+	}
+	// attack: hurricaneBonus = [11]
+	hurricaneBonus = []float64{
+		1.6,
+		1.7,
+		1.8,
+		1.9,
+		2,
+		2.1,
+		2.2,
+		2.3,
+		2.4,
+		2.5,
+		2.6,
+		2.7,
+		2.8,
+		2.9,
+		3,
 	}
 	// skill: skillHold = [2]
 	skillHold = []float64{

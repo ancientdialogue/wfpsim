@@ -9,13 +9,14 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/attacks"
 	"github.com/genshinsim/gcsim/pkg/core/attributes"
 	"github.com/genshinsim/gcsim/pkg/core/combat"
+	"github.com/genshinsim/gcsim/pkg/core/glog"
 	"github.com/genshinsim/gcsim/pkg/core/info"
 )
 
 var (
 	attackFrames          [][]int
 	attackFramesWithLag   [][]int
-	attackHitmarks        = []int{16, 23, 37}
+	attackHitmarks        = []int{15, 21, 34}
 	attackPoiseDMG        = []float64{65, 65, 130}
 	attackHitmarksWithLag []int
 	attackRadius          = []float64{1, 1, 1.5}
@@ -33,28 +34,26 @@ func init() {
 
 	// N1 -> x
 	attackFrames[0] = frames.InitNormalCancelSlice(attackHitmarks[0], 34)
-	attackFrames[0][action.ActionAttack] = 31
+	attackFrames[0][action.ActionAttack] = 23
 	attackFrames[0][action.ActionCharge] = 23
 	attackFrames[0][action.ActionSkill] = 6
 	attackFrames[0][action.ActionBurst] = 6
 	attackFrames[0][action.ActionDash] = 6
 	attackFrames[0][action.ActionJump] = 6
-	attackFrames[0][action.ActionWalk] = 34
 
 	// N2 -> x
 	attackFrames[1] = frames.InitNormalCancelSlice(attackHitmarks[1], 41)
-	attackFrames[1][action.ActionAttack] = 38
-	attackFrames[1][action.ActionCharge] = 32
+	attackFrames[1][action.ActionAttack] = 27
+	attackFrames[1][action.ActionCharge] = 25
 	attackFrames[1][action.ActionSkill] = 2
 	attackFrames[1][action.ActionBurst] = 2
 	attackFrames[1][action.ActionDash] = 2
 	attackFrames[1][action.ActionJump] = 2
-	attackFrames[1][action.ActionWalk] = 41
 
 	// N3 -> x
-	attackFrames[2] = frames.InitNormalCancelSlice(attackHitmarks[2], 77)
-	attackFrames[2][action.ActionCharge] = 49
-	attackFrames[2][action.ActionWalk] = 72
+	attackFrames[2] = frames.InitNormalCancelSlice(attackHitmarks[2], 72)
+	attackFrames[2][action.ActionAttack] = 46
+	attackFrames[2][action.ActionCharge] = 47
 
 	// N1 -> x (9f lag)
 	attackFramesWithLag = make([][]int, len(attackFrames))
@@ -119,7 +118,19 @@ func (c *char) Attack(p map[string]int) (action.Info, error) {
 		done = true
 	}
 
-	defer c.AdvanceNormalIndex()
+	// Hexerei: Secret Rite
+	// When she performs the third Normal Attack in the sequence, an Explosive Spark
+	// will be consumed to unleash an additional attack equivalent to Boom-Boom Strike.
+	if c.IsHexerei && c.Core.Player.GetHexereiCount() > 1 && c.StatusIsActive(a1SparkKey) {
+		if c.NormalCounter == 2 || c.Base.Cons == 6 && c.NormalCounter < 2 && c.Core.Rand.Float64() < 0.4 {
+			c.queueCoordinatedCharge()
+		}
+	}
+
+	defer func() {
+		c.AdvanceNormalIndex()
+		c.savedNormalCounter = c.NormalCounter
+	}()
 
 	adjustedFrames := attackFrames
 	adjustedHitmarks := attackHitmarks
@@ -154,4 +165,27 @@ func (c *char) Attack(p map[string]int) (action.Info, error) {
 	}
 	actionInfo.QueueAction(tryPerformAttack, adjustedHitmarks[c.NormalCounter])
 	return actionInfo, nil
+}
+
+func (c *char) queueCoordinatedCharge() {
+	delay := 30
+	travel := 10
+
+	c.Core.Tasks.Add(func() {
+		ai := c.getChargeAttackInfo()
+		snap := c.applySpark(&ai)
+		ai.Abil += " (Coordinated)"
+		c.Core.QueueAttackWithSnap(
+			ai,
+			snap,
+			combat.NewCircleHit(c.Core.Combat.Player(), c.Core.Combat.PrimaryTarget(), nil, 3),
+			travel,
+			c.makeA4CB(),
+		)
+	}, delay)
+
+	c.Core.Log.NewEvent("coordinated CA triggered", glog.LogCharacterEvent, c.Index()).
+		Write("expected hit", c.Core.F+delay+travel)
+
+	c.c1(delay - travel)
 }

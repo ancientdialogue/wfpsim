@@ -79,6 +79,8 @@ enum ZoneType {
   ASSOC_TYPE_NATLAN = 10;
   ASSOC_TYPE_OMNI_SCOURGE = 11;
   ASSOC_TYPE_NODKRAI = 12;
+  ASSOC_TYPE_NODKRAI_ZIBAI = 13; // zibai pls
+  ASSOC_TYPE_HVISION = 14;
 }
 
 enum Element {

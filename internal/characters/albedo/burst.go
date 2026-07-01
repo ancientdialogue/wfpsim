@@ -38,9 +38,14 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 	}
 
 	c2Count := 0
-	hasC2 := c.Base.Cons >= 2 && c.StatusIsActive(c2key)
-	// C2 damage for initial hit is calculated on burst start
-	if hasC2 {
+	hasC2 := false
+	if c.c6OnBurst() {
+		hasC2 = true
+		c2Count = 4
+		c.c2stacks = 0
+		ai.FlatDmg = c.TotalDef(false) * float64(c2Count) * 0.3
+	} else if c.Base.Cons >= 2 && c.StatusIsActive(c2key) {
+		hasC2 = true
 		c2Count = c.c2stacks
 		c.c2stacks = 0
 		ai.FlatDmg = c.TotalDef(false) * float64(c2Count) * 0.3
