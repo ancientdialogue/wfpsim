@@ -44,6 +44,7 @@ import (
 	_ "github.com/genshinsim/gcsim/internal/characters/gorou"
 	_ "github.com/genshinsim/gcsim/internal/characters/heizou"
 	_ "github.com/genshinsim/gcsim/internal/characters/hutao"
+	_ "github.com/genshinsim/gcsim/internal/characters/illuga"
 	_ "github.com/genshinsim/gcsim/internal/characters/ineffa"
 	_ "github.com/genshinsim/gcsim/internal/characters/itto"
 	_ "github.com/genshinsim/gcsim/internal/characters/jean"
@@ -59,7 +60,9 @@ import (
 	_ "github.com/genshinsim/gcsim/internal/characters/lanyan"
 	_ "github.com/genshinsim/gcsim/internal/characters/lauma"
 	_ "github.com/genshinsim/gcsim/internal/characters/layla"
+	_ "github.com/genshinsim/gcsim/internal/characters/linnea"
 	_ "github.com/genshinsim/gcsim/internal/characters/lisa"
+	_ "github.com/genshinsim/gcsim/internal/characters/lohen"
 	_ "github.com/genshinsim/gcsim/internal/characters/lynette"
 	_ "github.com/genshinsim/gcsim/internal/characters/lyney"
 	_ "github.com/genshinsim/gcsim/internal/characters/mavuika"
@@ -118,4 +121,5 @@ import (
 	_ "github.com/genshinsim/gcsim/internal/characters/yoimiya"
 	_ "github.com/genshinsim/gcsim/internal/characters/yunjin"
 	_ "github.com/genshinsim/gcsim/internal/characters/zhongli"
+	_ "github.com/genshinsim/gcsim/internal/characters/zibai"
 )

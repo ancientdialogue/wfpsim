@@ -7,7 +7,6 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/attributes"
 	"github.com/genshinsim/gcsim/pkg/core/combat"
 	"github.com/genshinsim/gcsim/pkg/core/event"
-	"github.com/genshinsim/gcsim/pkg/core/glog"
 	"github.com/genshinsim/gcsim/pkg/core/info"
 )
 
@@ -77,6 +76,8 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 		if c.Base.Cons >= 6 {
 			c.Core.Tasks.Add(c.c6(c.Core.F), 18) // start checking in 0.3s
 		}
+		c.hexereiOnSkillCast()
+		c.hexereiOnIsotoma()
 	}, skillHitmark)
 
 	c.SetCDWithDelay(action.ActionSkill, 240, 23)
@@ -136,22 +137,7 @@ func (c *char) skillHook() {
 			c.particleCB,
 		)
 
-		// c1: skill tick regen 1.2 energy
-		if c.Base.Cons >= 1 {
-			c.AddEnergy("albedo-c1", 1.2)
-			c.Core.Log.NewEvent("c1 restoring energy", glog.LogCharacterEvent, c.Index())
-		}
-
-		// c2: skill tick grant stacks, lasts 30s; each stack increase burst dmg by 30% of def, stack up to 4 times
-		if c.Base.Cons >= 2 {
-			if !c.StatusIsActive(c2key) {
-				c.c2stacks = 0
-			}
-			c.AddStatus(c2key, 1800, true) // lasts 30 sec
-			c.c2stacks++
-			if c.c2stacks > 4 {
-				c.c2stacks = 4
-			}
-		}
+		c.c1OnSkillTick()
+		c.c2OnSkillTick()
 	}, "albedo-skill")
 }

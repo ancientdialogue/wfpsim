@@ -1,14 +1,9 @@
 package venti
 
 import (
-	"fmt"
-
 	"github.com/genshinsim/gcsim/internal/frames"
 	"github.com/genshinsim/gcsim/pkg/core/action"
-	"github.com/genshinsim/gcsim/pkg/core/attacks"
 	"github.com/genshinsim/gcsim/pkg/core/attributes"
-	"github.com/genshinsim/gcsim/pkg/core/combat"
-	"github.com/genshinsim/gcsim/pkg/core/info"
 )
 
 var (
@@ -35,31 +30,19 @@ func (c *char) Attack(p map[string]int) (action.Info, error) {
 		travel = 10
 	}
 
-	ai := info.AttackInfo{
-		ActorIndex: c.Index(),
-		Abil:       fmt.Sprintf("Normal %v", c.NormalCounter),
-		AttackTag:  attacks.AttackTagNormal,
-		ICDTag:     attacks.ICDTagNone,
-		ICDGroup:   attacks.ICDGroupDefault,
-		StrikeType: attacks.StrikeTypePierce,
-		Element:    attributes.Physical,
-		Durability: 25,
-	}
-
 	for i, mult := range attack[c.NormalCounter] {
-		ai.Mult = mult[c.TalentLvlAttack()]
+		ai, ap, c2Cb := c.hexereiNaBuff(mult[c.TalentLvlAttack()])
 		c.Core.QueueAttack(
 			ai,
-			combat.NewBoxHit(
-				c.Core.Combat.Player(),
-				c.Core.Combat.PrimaryTarget(),
-				info.Point{Y: -0.5},
-				0.1,
-				1,
-			),
+			ap,
 			attackHitmarks[c.NormalCounter][i],
 			attackHitmarks[c.NormalCounter][i]+travel,
+			c.hexereiNaCB,
+			c2Cb,
 		)
+		if ai.Element == attributes.Anemo {
+			c.c1Normal(ai, attackHitmarks[c.NormalCounter][i], travel)
+		}
 	}
 
 	defer c.AdvanceNormalIndex()

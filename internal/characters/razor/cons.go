@@ -11,8 +11,17 @@ import (
 	"github.com/genshinsim/gcsim/pkg/modifier"
 )
 
+const (
+	c6ICDKey  = "razor-c6-icd"
+	c6BuffKey = "razor-c6-buff"
+)
+
 // Picking up an Elemental Orb or Particle increases Razor's DMG by 10% for 8s.
-func (c *char) c1() {
+func (c *char) c1Init() {
+	if c.Base.Cons < 1 {
+		return
+	}
+
 	c.c1bonus = make([]float64, attributes.EndStatType)
 	c.c1bonus[attributes.DmgP] = 0.1
 
@@ -32,7 +41,11 @@ func (c *char) c1() {
 }
 
 // Increases CRIT Rate against opponents with less than 30% HP by 10%.
-func (c *char) c2() {
+func (c *char) c2Init() {
+	if c.Base.Cons < 2 {
+		return
+	}
+
 	if c.Core.Combat.DamageMode {
 		c.c2bonus = make([]float64, attributes.EndStatType)
 		c.c2bonus[attributes.CR] = 0.1
@@ -65,8 +78,6 @@ func (c *char) c4cb(a info.AttackCB) {
 	})
 }
 
-const c6ICDKey = "razor-c6-icd"
-
 // Every 10s, Razor's sword charges up, causing the next Normal Attack to release lightning that deals 100% of Razor's ATK as Electro DMG.
 // When Razor is not using Lightning Fang, a lightning strike on an opponent will grant Razor an Electro Sigil for Claw and Thunder.
 func (c *char) c6cb(a info.AttackCB) {
@@ -97,7 +108,7 @@ func (c *char) c6cb(a info.AttackCB) {
 		if c.StatusIsActive(burstBuffKey) {
 			return
 		}
-		c.addSigil(false)(a)
+		c.addSigil()(a)
 	}
 
 	c.Core.QueueAttack(
@@ -107,4 +118,32 @@ func (c *char) c6cb(a info.AttackCB) {
 		1,
 		sigilcb,
 	)
+}
+
+func (c *char) c6Init() {
+	if c.Base.Cons < 6 {
+		return
+	}
+	c.c6buff = make([]float64, attributes.EndStatType)
+	c.c6buff[attributes.CR] = 0.1
+	c.c6buff[attributes.CD] = 0.5
+}
+
+func (c *char) c6Sigil() int {
+	if c.Base.Cons < 6 {
+		return 1
+	}
+	return 3
+}
+
+func (c *char) c6OnSiglConsume() {
+	if c.Base.Cons < 6 {
+		return
+	}
+	c.AddStatMod(character.StatMod{
+		Base: modifier.NewBaseWithHitlag(c6BuffKey, 15*60),
+		Amount: func() []float64 {
+			return c.c6buff
+		},
+	})
 }

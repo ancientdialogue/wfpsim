@@ -822,6 +822,23 @@
       },
       "name_text_hash_map ": "1940919482"
     },
+    "illuga": {
+      "id": 10000127,
+      "key": "illuga",
+      "rarity": "QUALITY_PURPLE",
+      "body": "BODY_BOY",
+      "region": "ASSOC_TYPE_NODKRAI",
+      "element": "Rock",
+      "weapon_class": "WEAPON_POLE",
+      "icon_name": "UI_AvatarIcon_Illuga",
+      "skill_details": {
+        "skill": 11272,
+        "burst": 11275,
+        "attack": 11271,
+        "burst_energy_cost": 60
+      },
+      "name_text_hash_map ": "102656474"
+    },
     "ineffa": {
       "id": 10000116,
       "key": "ineffa",
@@ -1077,6 +1094,23 @@
       },
       "name_text_hash_map ": "2889777514"
     },
+    "linnea": {
+      "id": 10000130,
+      "key": "linnea",
+      "rarity": "QUALITY_ORANGE",
+      "body": "BODY_GIRL",
+      "region": "ASSOC_TYPE_NODKRAI",
+      "element": "Rock",
+      "weapon_class": "WEAPON_BOW",
+      "icon_name": "UI_AvatarIcon_Linnea",
+      "skill_details": {
+        "skill": 11302,
+        "burst": 11305,
+        "attack": 11301,
+        "burst_energy_cost": 60
+      },
+      "name_text_hash_map ": "1961019898"
+    },
     "lisa": {
       "id": 10000006,
       "key": "lisa",
@@ -1093,6 +1127,23 @@
         "burst_energy_cost": 80
       },
       "name_text_hash_map ": "3344622722"
+    },
+    "lohen": {
+      "id": 10000129,
+      "key": "lohen",
+      "rarity": "QUALITY_ORANGE",
+      "body": "BODY_BOY",
+      "region": "ASSOC_TYPE_MONDSTADT",
+      "element": "Ice",
+      "weapon_class": "WEAPON_POLE",
+      "icon_name": "UI_AvatarIcon_Lohen",
+      "skill_details": {
+        "skill": 11292,
+        "burst": 11295,
+        "attack": 11291,
+        "burst_energy_cost": 60
+      },
+      "name_text_hash_map ": "2872823194"
     },
     "lumineanemo": {
       "id": 10000007,
@@ -1376,6 +1427,7 @@
       "key": "nicole",
       "rarity": "QUALITY_ORANGE",
       "body": "BODY_LADY",
+      "region": 14,
       "element": "Fire",
       "weapon_class": "WEAPON_CATALYST",
       "icon_name": "UI_AvatarIcon_Nicole",
@@ -1980,6 +2032,23 @@
         "burst_energy_cost": 40
       },
       "name_text_hash_map ": "3862787418"
+    },
+    "zibai": {
+      "id": 10000126,
+      "key": "zibai",
+      "rarity": "QUALITY_ORANGE",
+      "body": "BODY_LADY",
+      "region": 13,
+      "element": "Rock",
+      "weapon_class": "WEAPON_SWORD_ONE_HAND",
+      "icon_name": "UI_AvatarIcon_Zibai",
+      "skill_details": {
+        "skill": 11262,
+        "burst": 11265,
+        "attack": 11261,
+        "burst_energy_cost": 60
+      },
+      "name_text_hash_map ": "937532578"
     }
   }
 }

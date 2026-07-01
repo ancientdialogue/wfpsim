@@ -96,7 +96,7 @@ func (c *char) wolfBurst(normalCounter int) func(info.AttackCB) {
 			StrikeType: attacks.StrikeTypeSlash,
 			Element:    attributes.Electro,
 			Durability: 25,
-			Mult:       wolfDmg[c.TalentLvlBurst()] * a.AttackEvent.Info.Mult,
+			Mult:       wolfDmg[c.TalentLvlBurst()]*a.AttackEvent.Info.Mult + c.hexereiWolfMult(),
 		}
 
 		ap := combat.NewCircleHitOnTarget(

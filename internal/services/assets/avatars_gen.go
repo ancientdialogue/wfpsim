@@ -44,6 +44,7 @@ var avatarMap = map[string]string{
 	"gorou":         "UI_AvatarIcon_Gorou",
 	"heizou":        "UI_AvatarIcon_Heizo",
 	"hutao":         "UI_AvatarIcon_Hutao",
+	"illuga":        "UI_AvatarIcon_Illuga",
 	"ineffa":        "UI_AvatarIcon_Ineffa",
 	"itto":          "UI_AvatarIcon_Itto",
 	"jean":          "UI_AvatarIcon_Qin",
@@ -59,7 +60,9 @@ var avatarMap = map[string]string{
 	"lanyan":        "UI_AvatarIcon_Lanyan",
 	"lauma":         "UI_AvatarIcon_Lauma",
 	"layla":         "UI_AvatarIcon_Layla",
+	"linnea":        "UI_AvatarIcon_Linnea",
 	"lisa":          "UI_AvatarIcon_Lisa",
+	"lohen":         "UI_AvatarIcon_Lohen",
 	"lynette":       "UI_AvatarIcon_Linette",
 	"lyney":         "UI_AvatarIcon_Liney",
 	"mavuika":       "UI_AvatarIcon_Mavuika",
@@ -118,4 +121,5 @@ var avatarMap = map[string]string{
 	"yoimiya":       "UI_AvatarIcon_Yoimiya",
 	"yunjin":        "UI_AvatarIcon_Yunjin",
 	"zhongli":       "UI_AvatarIcon_Zhongli",
+	"zibai":         "UI_AvatarIcon_Zibai",
 }

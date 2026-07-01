@@ -2,6 +2,7 @@ id: 10000131
 key: "nicole"
 rarity: QUALITY_ORANGE
 body: BODY_LADY
+region: 14
 element: Fire
 weapon_class: WEAPON_CATALYST
 icon_name: "UI_AvatarIcon_Nicole"

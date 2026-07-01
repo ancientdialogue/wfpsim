@@ -21,7 +21,7 @@ var bounceHitmarks = []int{71, 111, 140}
 
 func init() {
 	skillFrames = frames.InitAbilSlice(75)
-	skillFrames[action.ActionAttack] = 66
+	skillFrames[action.ActionAttack] = 40
 	skillFrames[action.ActionCharge] = 69
 	skillFrames[action.ActionSkill] = 68
 	skillFrames[action.ActionBurst] = 34
@@ -134,6 +134,7 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 				bounceHitmarks[i]-cooldownDelay,
 				c.makeA1CB(),
 				particleCB,
+				c.makeC2CB(false),
 			)
 		}
 		for i := range mineAttacks {
@@ -142,12 +143,18 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 				mineAttacks[i].snap,
 				combat.NewCircleHit(c.Core.Combat.Player(), c.Core.Combat.PrimaryTarget(), nil, 2),
 				mineHitmark-cooldownDelay,
-				c.c2,
+				c.makeC2CB(true),
 			)
 		}
 		c.c1(bounceHitmarks[0] - cooldownDelay)
 		c.SetCD(action.ActionSkill, 1200)
 	}, cooldownDelay)
+
+	// TODO: Is this spark created on cast or release? Assume cast for cancel testing
+	if c.IsHexerei {
+		c.addSpark()
+	}
+
 	return actionInfo, nil
 }
 

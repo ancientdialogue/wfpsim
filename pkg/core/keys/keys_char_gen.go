@@ -49,6 +49,7 @@ const (
 	Gorou
 	Heizou
 	Hutao
+	Illuga
 	Ineffa
 	Itto
 	Jean
@@ -64,7 +65,9 @@ const (
 	Lanyan
 	Lauma
 	Layla
+	Linnea
 	Lisa
+	Lohen
 	Lynette
 	Lyney
 	Mavuika
@@ -111,6 +114,7 @@ const (
 	Yoimiya
 	Yunjin
 	Zhongli
+	Zibai
 	EndCharKeys
 )
 
@@ -283,6 +287,10 @@ func init() {
 	charPrettyName[Hutao] = "Hutao"
 	CharKeyToEle[Hutao] = attributes.Pyro
 
+	charNames[Illuga] = "illuga"
+	charPrettyName[Illuga] = "Illuga"
+	CharKeyToEle[Illuga] = attributes.Geo
+
 	charNames[Ineffa] = "ineffa"
 	charPrettyName[Ineffa] = "Ineffa"
 	CharKeyToEle[Ineffa] = attributes.Electro
@@ -343,9 +351,17 @@ func init() {
 	charPrettyName[Layla] = "Layla"
 	CharKeyToEle[Layla] = attributes.Cryo
 
+	charNames[Linnea] = "linnea"
+	charPrettyName[Linnea] = "Linnea"
+	CharKeyToEle[Linnea] = attributes.Geo
+
 	charNames[Lisa] = "lisa"
 	charPrettyName[Lisa] = "Lisa"
 	CharKeyToEle[Lisa] = attributes.Electro
+
+	charNames[Lohen] = "lohen"
+	charPrettyName[Lohen] = "Lohen"
+	CharKeyToEle[Lohen] = attributes.Cryo
 
 	charNames[Lynette] = "lynette"
 	charPrettyName[Lynette] = "Lynette"
@@ -530,4 +546,8 @@ func init() {
 	charNames[Zhongli] = "zhongli"
 	charPrettyName[Zhongli] = "Zhongli"
 	CharKeyToEle[Zhongli] = attributes.Geo
+
+	charNames[Zibai] = "zibai"
+	charPrettyName[Zibai] = "Zibai"
+	CharKeyToEle[Zibai] = attributes.Geo
 }
