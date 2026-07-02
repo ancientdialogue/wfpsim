@@ -152,6 +152,7 @@ ace.define(
         'herexcellencythealmightynarukamiogoshogodofthunder',
         'ht',
         'hutao',
+        'illuga',
         'itto',
         'ineffa',
         'jean',
@@ -181,8 +182,10 @@ ace.define(
         'lauma',
         'layla',
         'lesserlordkusanali',
+        'linnea',
         'lisa',
         'liuyun',
+        'lohen',
         'lumine-anemo',
         'lumine-cryo',
         'lumine-dendro',
@@ -268,6 +271,7 @@ ace.define(
         'yunjin',
         'zhong',
         'zhongli',
+        'zibai',
         'zl',
       ];
 
