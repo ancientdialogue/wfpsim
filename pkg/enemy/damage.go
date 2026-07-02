@@ -5,15 +5,21 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/attributes"
 	"github.com/genshinsim/gcsim/pkg/core/glog"
 	"github.com/genshinsim/gcsim/pkg/core/info"
+	"github.com/genshinsim/gcsim/pkg/reactable"
 )
+
+var stellarconductMult = []float64{1, 1.45, 1.5, 1.55, 1.6, 1.65, 1.7, 1.75, 1.8, 1.85, 1.9, 1.95, 2}
 
 func (e *Enemy) calc(atk *info.AttackEvent, evt glog.Event, grpMult float64) (float64, bool) {
 	var isCrit bool
 
-	if atk.Info.AttackTag == attacks.AttackTagDirectLunarCharged ||
-		atk.Info.AttackTag == attacks.AttackTagDirectLunarBloom ||
-		atk.Info.AttackTag == attacks.AttackTagDirectLunarCrystallize {
-		return e.calcDirectLunar(atk, evt, grpMult)
+	switch atk.Info.AttackTag {
+	case
+		attacks.AttackTagDirectLunarCharged,
+		attacks.AttackTagDirectLunarBloom,
+		attacks.AttackTagDirectLunarCrystallize,
+		attacks.AttackTagDirectStellarConduct:
+		return e.calcDirectReaction(atk, evt, grpMult)
 	}
 
 	elePer := 0.0
@@ -182,10 +188,10 @@ func (e *Enemy) calc(atk *info.AttackEvent, evt glog.Event, grpMult float64) (fl
 	return damage, isCrit
 }
 
-func (e *Enemy) calcDirectLunar(atk *info.AttackEvent, evt glog.Event, grpMult float64) (float64, bool) {
+func (e *Enemy) calcDirectReaction(atk *info.AttackEvent, evt glog.Event, grpMult float64) (float64, bool) {
 	var isCrit bool
 
-	// no DMG% for direct lunar damage
+	// no DMG% for direct reaction damage
 
 	// calculate using HP/Def/EM/Atk
 	var a float64
@@ -210,6 +216,9 @@ func (e *Enemy) calcDirectLunar(atk *info.AttackEvent, evt glog.Event, grpMult f
 		mult = 3
 	case attacks.AttackTagDirectLunarCrystallize:
 		mult = 1.6
+	case attacks.AttackTagDirectStellarConduct:
+		buffLevel := int(e.Core.Flags.Custom[reactable.StellarConductStacksKey])
+		mult = stellarconductMult[buffLevel]
 	}
 	damage *= mult
 
@@ -279,6 +288,7 @@ func (e *Enemy) calcDirectLunar(atk *info.AttackEvent, evt glog.Event, grpMult f
 			atk.Info.ActorIndex,
 		).
 			Write("src_frame", atk.SourceFrame).
+			Write("base_react_mult", mult).
 			Write("damage_grp_mult", grpMult).
 			Write("damage", damage).
 			Write("abil", atk.Info.Abil).
