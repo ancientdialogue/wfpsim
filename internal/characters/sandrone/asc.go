@@ -29,7 +29,7 @@ func (c *char) a1OnSkill() float64 {
 	}
 
 	if c.decode > 50 {
-		return 2.0
+		return 4.0
 	}
 
 	return 1.0
