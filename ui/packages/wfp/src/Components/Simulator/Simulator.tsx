@@ -50,6 +50,7 @@ export function Simulator({
           <li>Venti (Hex)</li>
           <li>Zibai (C6)</li>
           <li>Illuga</li>
+          <li>Sandrone (C6)</li>
         </ul>
         <p className=" font-bold">
           See{' '}
