@@ -337,6 +337,6 @@ func (c *char) reduceDecode(amt float64) {
 
 	c.Core.Log.NewEvent(fmt.Sprintf("Reduced %.2f Decode (%.2f)", amt, c.decode), glog.LogCharacterEvent, c.Index())
 
-	actual_amt := start - c.decode
-	c.a1OnDecreaseDecode(actual_amt)
+	actualAmt := start - c.decode
+	c.a1OnDecreaseDecode(actualAmt)
 }

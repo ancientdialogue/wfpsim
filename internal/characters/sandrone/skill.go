@@ -17,7 +17,7 @@ func init() {
 	skillFrames = frames.InitAbilSlice(600) // need to full exit E before actual walk occurs
 	skillFrames[action.ActionAttack] = 10
 	skillFrames[action.ActionCharge] = 46
-	skillFrames[action.ActionSkill] = 46 // TODO
+	skillFrames[action.ActionSkill] = 46 // TODO: Get actual value, currently assuming same as CA which is wrong
 	skillFrames[action.ActionBurst] = 6
 	skillFrames[action.ActionDash] = 26
 	skillFrames[action.ActionSwap] = 28
