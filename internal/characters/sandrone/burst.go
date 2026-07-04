@@ -49,33 +49,36 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 		c.QueueCharTask(func() { c.Core.QueueAttack(ai, ap, 0, 0) }, delay)
 	}
 
-	aiRay := info.AttackInfo{
-		ActorIndex: c.Index(),
-		Abil:       "Convective Inhibition Ray",
-		AttackTag:  attacks.AttackTagElementalBurst,
-		ICDTag:     attacks.ICDTagElementalBurst,
-		ICDGroup:   attacks.ICDGroupDefault,
-		StrikeType: attacks.StrikeTypeDefault,
-		Element:    attributes.Cryo,
-		Durability: 25,
-		Mult:       burstRay[c.TalentLvlSkill()],
-	}
+	c.QueueCharTask(func() {
+		aiRay := info.AttackInfo{
+			ActorIndex: c.Index(),
+			Abil:       "Convective Inhibition Ray",
+			AttackTag:  attacks.AttackTagElementalBurst,
+			ICDTag:     attacks.ICDTagElementalBurst,
+			ICDGroup:   attacks.ICDGroupDefault,
+			StrikeType: attacks.StrikeTypeDefault,
+			Element:    attributes.Cryo,
+			Durability: 25,
+			Mult:       burstRay[c.TalentLvlSkill()],
+		}
 
-	switch c.getRadiance() {
-	case radianceStellarConduct:
-		aiRay.Abil += stellarConductText
-		aiRay.AttackTag = attacks.AttackTagDirectStellarConduct
-		aiRay.Durability = 0
-		aiRay.Mult = burstRaySSC[c.TalentLvlSkill()] * c.a1OnBurstRayStellar()
-		aiRay.IgnoreDefPercent = 1
-	case radianceStellarSwirl:
-		aiRay.Abil += stellarSwirlText
-		aiRay.AttackTag = attacks.AttackTagDirectStellarSwirl
-		aiRay.Durability = 0
-		aiRay.Mult = burstRaySSw[c.TalentLvlSkill()] * c.a1OnBurstRayStellar()
-		aiRay.IgnoreDefPercent = 1
-	}
-	c.QueueCharTask(func() { c.Core.QueueAttack(aiRay, ap, 0, 0) }, rayHitmark)
+		switch c.getRadiance() {
+		case radianceStellarConduct:
+			aiRay.Abil += stellarConductText
+			aiRay.AttackTag = attacks.AttackTagDirectStellarConduct
+			aiRay.Durability = 0
+			aiRay.Mult = burstRaySSC[c.TalentLvlSkill()] * c.a1OnBurstRayStellar()
+			aiRay.IgnoreDefPercent = 1
+		case radianceStellarSwirl:
+			aiRay.Abil += stellarSwirlText
+			aiRay.AttackTag = attacks.AttackTagDirectStellarSwirl
+			aiRay.Durability = 0
+			aiRay.Mult = burstRaySSw[c.TalentLvlSkill()] * c.a1OnBurstRayStellar()
+			aiRay.IgnoreDefPercent = 1
+		}
+
+		c.Core.QueueAttack(aiRay, ap, 0, 0)
+	}, rayHitmark)
 
 	c.ConsumeEnergy(7)
 	c.SetCDWithDelay(action.ActionBurst, 15*60, 0)
