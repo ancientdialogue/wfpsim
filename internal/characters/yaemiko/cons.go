@@ -103,14 +103,15 @@ func (c *char) c2Init() {
 
 	for _, char := range c.Core.Player.Chars() {
 		char.AddStatMod(character.StatMod{
-			Base:         modifier.NewBaseWithHitlag(c2Key, 10*60),
+			Base:         modifier.NewBase(c2Key, -1),
 			AffectedStat: attributes.EM,
 			Amount: func() []float64 {
 				level := c.sakuraLevelCheck()
 				if level == 0 {
 					return nil
 				}
-				m[attributes.EM] = c2BuffVal[level]
+				// c2 also adds 1 to the level
+				m[attributes.EM] = c2BuffVal[level+1]
 				return m
 			},
 		})
