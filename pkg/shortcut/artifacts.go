@@ -120,6 +120,7 @@ var SetNameToKey = map[string]keys.Set{
 	"sms":                                keys.SilkenMoonsSerenade,
 	"songofdayspast":                     keys.SongOfDaysPast,
 	"sodp":                               keys.SongOfDaysPast,
+	"???":                                keys.StellarSupport,
 	"tenacityofthemillelith":             keys.TenacityOfTheMillelith,
 	"tom":                                keys.TenacityOfTheMillelith,
 	"totm":                               keys.TenacityOfTheMillelith,

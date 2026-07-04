@@ -84,6 +84,7 @@ var setNames = []string{
 	"shimenawasreminiscence",
 	"silkenmoonsserenade",
 	"songofdayspast",
+	"stellarsupport",
 	"tenacityofthemillelith",
 	"theexile",
 	"thunderingfury",
@@ -150,6 +151,7 @@ const (
 	ShimenawasReminiscence
 	SilkenMoonsSerenade
 	SongOfDaysPast
+	StellarSupport
 	TenacityOfTheMillelith
 	TheExile
 	ThunderingFury

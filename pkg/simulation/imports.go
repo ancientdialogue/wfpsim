@@ -59,6 +59,7 @@ import (
 	_ "github.com/genshinsim/gcsim/internal/artifacts/silkenmoonsserenade"
 	_ "github.com/genshinsim/gcsim/internal/artifacts/sojourner"
 	_ "github.com/genshinsim/gcsim/internal/artifacts/songofdayspast"
+	_ "github.com/genshinsim/gcsim/internal/artifacts/stellarsupport"
 	_ "github.com/genshinsim/gcsim/internal/artifacts/tenacity"
 	_ "github.com/genshinsim/gcsim/internal/artifacts/thunderingfury"
 	_ "github.com/genshinsim/gcsim/internal/artifacts/thundersoother"
