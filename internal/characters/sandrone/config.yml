@@ -1,0 +1,44 @@
+package_name: sandrone
+genshin_id: 10000133
+key: sandrone
+icd_groups:
+    - group_name: ICDGroupSandroneSweepingFire
+      reset_timer: 85 # should be 1.4s = 84 frames, but adding once to align with hitmarks
+      ele_app_sequence: [1, 0]
+      damage_sequence: [1, 1]
+icd_tags:
+    - ICDTagSandroneExtraAttackSweepingFire
+    - ICDTagSandroneExtraAttackLaser
+action_param_keys:
+    charge:
+        - param: "frames"
+    skill:
+        - param: "travel"
+skill_data_mapping:
+    attack: # Formule Phenomenale: Self-Evident Proposition\
+        attack_1:
+            - 0 # 1-Hit DMG|{param0:F1P}
+        attack_2:
+            - 1 # 2-Hit DMG|{param1:F1P}
+        attack_3:
+            - 2 # 3-Hit DMG|{param2:F1P}
+        chargeSweep:
+            - 3 # Charged Attack Sweeping Fire DMG|{param3:F1P}
+        chargeBeam:
+            - 4 # Charged Attack Condensed Beam DMG|{param4:F1P}
+        chargeBeamSSC:
+            - 5 # Charged Attack Condensed Beam Stellar-Conduct DMG|{param5:F1P}
+        chargeOverdrive:
+            - 6 # DMG When in Power Overdrive|{param6:F1P}
+    skill: # Formule Phenomenale: Differential Analysis
+        skill:
+            - 0 # Prism Shot DMG|{param0:F1P}
+        skillSSC:
+            - 1 # Prism Shot Stellar-Conduct DMG|{param1:F1P}
+    burst: # Formule Phenomenale: Q.E.D.
+        burst:
+            - 0 # Bombardment DMG|{param0:F1P} ×3
+        burstRay:
+            - 1 # Convective Inhibition Ray DMG|{param1:F1P}
+        burstRaySSC:
+            - 2 # Convective Inhibition Ray Stellar-Conduct DMG|{param2:F1P}

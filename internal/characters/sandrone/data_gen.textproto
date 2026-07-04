@@ -1,0 +1,151 @@
+id: 10000133
+key: "sandrone"
+rarity: QUALITY_ORANGE
+body: BODY_GIRL
+region: ASSOC_TYPE_SNEZHNAYA_STAR
+element: Ice
+weapon_class: WEAPON_CLAYMORE
+icon_name: "UI_AvatarIcon_MarionetteNew"
+stats: {
+   base_hp: 1029.5856
+   base_atk: 26.6266
+   base_def: 58.57357
+   hp_curve: GROW_CURVE_HP_S5
+   atk_curve: GROW_CURVE_ATTACK_S5
+   def_cruve: GROW_CURVE_HP_S5
+   promo_data: {
+      max_level: 20
+      add_props: {
+         prop_type: FIGHT_PROP_BASE_HP
+      }
+      add_props: {
+         prop_type: FIGHT_PROP_BASE_DEFENSE
+      }
+      add_props: {
+         prop_type: FIGHT_PROP_BASE_ATTACK
+      }
+      add_props: {
+         prop_type: FIGHT_PROP_CRITICAL
+      }
+   }
+   promo_data: {
+      max_level: 40
+      add_props: {
+         prop_type: FIGHT_PROP_BASE_HP
+         value: 882.77655
+      }
+      add_props: {
+         prop_type: FIGHT_PROP_BASE_DEFENSE
+         value: 50.2227
+      }
+      add_props: {
+         prop_type: FIGHT_PROP_BASE_ATTACK
+         value: 22.828234
+      }
+      add_props: {
+         prop_type: FIGHT_PROP_CRITICAL
+      }
+   }
+   promo_data: {
+      max_level: 50
+      add_props: {
+         prop_type: FIGHT_PROP_BASE_HP
+         value: 1510.0126
+      }
+      add_props: {
+         prop_type: FIGHT_PROP_BASE_DEFENSE
+         value: 85.90725
+      }
+      add_props: {
+         prop_type: FIGHT_PROP_BASE_ATTACK
+         value: 39.048294
+      }
+      add_props: {
+         prop_type: FIGHT_PROP_CRITICAL
+         value: 0.048
+      }
+   }
+   promo_data: {
+      max_level: 60
+      add_props: {
+         prop_type: FIGHT_PROP_BASE_HP
+         value: 2346.3271
+      }
+      add_props: {
+         prop_type: FIGHT_PROP_BASE_DEFENSE
+         value: 133.48665
+      }
+      add_props: {
+         prop_type: FIGHT_PROP_BASE_ATTACK
+         value: 60.67504
+      }
+      add_props: {
+         prop_type: FIGHT_PROP_CRITICAL
+         value: 0.096
+      }
+   }
+   promo_data: {
+      max_level: 70
+      add_props: {
+         prop_type: FIGHT_PROP_BASE_HP
+         value: 2973.5632
+      }
+      add_props: {
+         prop_type: FIGHT_PROP_BASE_DEFENSE
+         value: 169.1712
+      }
+      add_props: {
+         prop_type: FIGHT_PROP_BASE_ATTACK
+         value: 76.8951
+      }
+      add_props: {
+         prop_type: FIGHT_PROP_CRITICAL
+         value: 0.096
+      }
+   }
+   promo_data: {
+      max_level: 80
+      add_props: {
+         prop_type: FIGHT_PROP_BASE_HP
+         value: 3600.799
+      }
+      add_props: {
+         prop_type: FIGHT_PROP_BASE_DEFENSE
+         value: 204.85574
+      }
+      add_props: {
+         prop_type: FIGHT_PROP_BASE_ATTACK
+         value: 93.115166
+      }
+      add_props: {
+         prop_type: FIGHT_PROP_CRITICAL
+         value: 0.144
+      }
+   }
+   promo_data: {
+      max_level: 90
+      add_props: {
+         prop_type: FIGHT_PROP_BASE_HP
+         value: 4228.035
+      }
+      add_props: {
+         prop_type: FIGHT_PROP_BASE_DEFENSE
+         value: 240.5403
+      }
+      add_props: {
+         prop_type: FIGHT_PROP_BASE_ATTACK
+         value: 109.33523
+      }
+      add_props: {
+         prop_type: FIGHT_PROP_CRITICAL
+         value: 0.192
+      }
+   }
+}
+skill_details: {
+   skill: 11332
+   burst: 11335
+   attack: 11331
+   burst_energy_cost: 60
+}
+name_text_hash_map: 108893506

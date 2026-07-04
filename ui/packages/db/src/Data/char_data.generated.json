@@ -1575,6 +1575,23 @@
       },
       "name_text_hash_map ": "4260733330"
     },
+    "sandrone": {
+      "id": 10000133,
+      "key": "sandrone",
+      "rarity": "QUALITY_ORANGE",
+      "body": "BODY_GIRL",
+      "region": "ASSOC_TYPE_SNEZHNAYA_STAR",
+      "element": "Ice",
+      "weapon_class": "WEAPON_CLAYMORE",
+      "icon_name": "UI_AvatarIcon_MarionetteNew",
+      "skill_details": {
+        "skill": 11332,
+        "burst": 11335,
+        "attack": 11331,
+        "burst_energy_cost": 60
+      },
+      "name_text_hash_map ": "108893506"
+    },
     "sara": {
       "id": 10000056,
       "key": "sara",
