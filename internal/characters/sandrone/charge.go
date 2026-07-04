@@ -23,15 +23,23 @@ var (
 
 func init() {
 	chargeEndFrames = frames.InitAbilSlice(20) // CA -> N1/CA
-	chargeEndFrames[action.ActionSwap] = 15
+	chargeEndFrames[action.ActionAttack] = 2
+	chargeEndFrames[action.ActionCharge] = 28
 	chargeEndFrames[action.ActionSkill] = 0
 	chargeEndFrames[action.ActionBurst] = 0
 	chargeEndFrames[action.ActionDash] = 0
 	chargeEndFrames[action.ActionJump] = 0
+	chargeEndFrames[action.ActionSwap] = 1
 }
 
 func (c *char) ChargeAttack(p map[string]int) (action.Info, error) {
-	windup := 26
+	windup := 0
+	switch c.Core.Player.CurrentState() {
+	// other states have windup included in the endlag animation
+	case action.Idle, action.JumpState, action.DashState, action.SwapState:
+		windup = 25
+	}
+
 	c.currSweepingFireTick = 0
 
 	frames, ok := p["frames"]

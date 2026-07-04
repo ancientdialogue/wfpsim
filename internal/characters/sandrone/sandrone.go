@@ -1,8 +1,11 @@
 package sandrone
 
 import (
+	"errors"
+
 	tmpl "github.com/genshinsim/gcsim/internal/template/character"
 	"github.com/genshinsim/gcsim/pkg/core"
+	"github.com/genshinsim/gcsim/pkg/core/action"
 	"github.com/genshinsim/gcsim/pkg/core/info"
 	"github.com/genshinsim/gcsim/pkg/core/keys"
 	"github.com/genshinsim/gcsim/pkg/core/player/character"
@@ -77,9 +80,19 @@ func (c *char) Init() error {
 	return nil
 }
 
+func (c *char) NextQueueItemIsValid(k keys.Char, a action.Action, p map[string]int) error {
+	if a == action.ActionJump && c.Core.Player.LastAction.Type == action.ActionSkill {
+		return errors.New("cannot jump during skill")
+	}
+	return c.Character.NextQueueItemIsValid(k, a, p)
+}
+
 func (c *char) AnimationStartDelay(k info.AnimationDelayKey) int {
-	if k == info.AnimationXingqiuN0StartDelay {
-		return 10
+	switch k {
+	case info.AnimationXingqiuN0StartDelay:
+		return 24
+	case info.AnimationYelanN0StartDelay:
+		return 17
 	}
 	return c.Character.AnimationStartDelay(k)
 }

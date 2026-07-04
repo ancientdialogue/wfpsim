@@ -11,18 +11,18 @@ import (
 
 var (
 	burstFrames   []int
-	burstHitmarks = []int{109, 109 + 5, 109 + 5 + 5}
-	rayHitmark    = 130
+	burstHitmarks = []int{123, 123 + 12, 123 + 12 + 12}
+	rayHitmark    = 123 + 12 + 12 + 30
 )
 
 func init() {
-	burstFrames = frames.InitAbilSlice(151) // Q -> W
-	burstFrames[action.ActionAttack] = 100  // Q -> N1
-	burstFrames[action.ActionCharge] = 102  // Q -> CA
-	burstFrames[action.ActionSkill] = 102   // Q -> E
-	burstFrames[action.ActionDash] = 102    // Q -> D
-	burstFrames[action.ActionJump] = 102    // Q -> J
-	burstFrames[action.ActionSwap] = 101    // Q -> Swap
+	burstFrames = frames.InitAbilSlice(128) // Q -> CA
+	burstFrames[action.ActionAttack] = 101  // Q -> N1
+	burstFrames[action.ActionSkill] = 100   // Q -> E
+	burstFrames[action.ActionDash] = 103    // Q -> D
+	burstFrames[action.ActionJump] = 103    // Q -> J
+	burstFrames[action.ActionWalk] = 105    // Q -> Swap
+	burstFrames[action.ActionSwap] = 102    // Q -> Swap
 }
 
 func (c *char) Burst(p map[string]int) (action.Info, error) {
@@ -83,7 +83,7 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 	return action.Info{
 		Frames:          frames.NewAbilFunc(burstFrames),
 		AnimationLength: burstFrames[action.InvalidAction],
-		CanQueueAfter:   burstFrames[action.ActionAttack], // earliest cancel
+		CanQueueAfter:   burstFrames[action.ActionSkill], // earliest cancel
 		State:           action.BurstState,
 	}, nil
 }

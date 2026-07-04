@@ -14,14 +14,13 @@ var skillFrames []int
 const skillParticleICDKey = "sandrone-particle-icd"
 
 func init() {
-	skillFrames = frames.InitAbilSlice(38) // E -> Charge
-	skillFrames[action.ActionAttack] = 28
-	skillFrames[action.ActionSkill] = 32
-	skillFrames[action.ActionBurst] = 28
-	skillFrames[action.ActionDash] = 27
-	skillFrames[action.ActionJump] = 27
-	skillFrames[action.ActionWalk] = 25
-	skillFrames[action.ActionSwap] = 30
+	skillFrames = frames.InitAbilSlice(600) // need to full exit E before actual walk occurs
+	skillFrames[action.ActionAttack] = 10
+	skillFrames[action.ActionCharge] = 46
+	skillFrames[action.ActionSkill] = 46 // TODO
+	skillFrames[action.ActionBurst] = 6
+	skillFrames[action.ActionDash] = 26
+	skillFrames[action.ActionSwap] = 28
 }
 
 func (c *char) Skill(p map[string]int) (action.Info, error) {
@@ -29,22 +28,23 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 	if !ok {
 		travel = 10
 	}
-	ai := info.AttackInfo{
-		ActorIndex: c.Index(),
-		Abil:       "Prism Shot",
-		AttackTag:  attacks.AttackTagElementalArt,
-		ICDTag:     attacks.ICDTagNone,
-		ICDGroup:   attacks.ICDGroupDefault,
-		StrikeType: attacks.StrikeTypeDefault,
-		Element:    attributes.Cryo,
-		Durability: 25,
-		Mult:       skill[c.TalentLvlSkill()],
-	}
-
-	ap := combat.NewCircleHitOnTarget(c.Core.Combat.PrimaryTarget(), nil, 0.5)
-	c.Core.QueueAttack(ai, ap, 0, travel, c.particleCB)
 
 	c.QueueCharTask(func() {
+		ai := info.AttackInfo{
+			ActorIndex: c.Index(),
+			Abil:       "Prism Shot",
+			AttackTag:  attacks.AttackTagElementalArt,
+			ICDTag:     attacks.ICDTagNone,
+			ICDGroup:   attacks.ICDGroupDefault,
+			StrikeType: attacks.StrikeTypeDefault,
+			Element:    attributes.Cryo,
+			Durability: 25,
+			Mult:       skill[c.TalentLvlSkill()],
+		}
+
+		ap := combat.NewCircleHitOnTarget(c.Core.Combat.PrimaryTarget(), nil, 0.5)
+		c.Core.QueueAttack(ai, ap, 5, 5+travel, c.particleCB)
+
 		switch c.getRadiance() {
 		case radianceStellarConduct:
 			ai.Abil += stellarConductText
@@ -61,19 +61,17 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 		}
 
 		ai.Mult *= c.a1OnSkill()
-
-		ap := combat.NewCircleHitOnTarget(c.Core.Combat.PrimaryTarget(), nil, 0.5)
-		c.Core.QueueAttack(ai, ap, 0, travel, c.particleCB)
+		c.Core.QueueAttack(ai, ap, 5, 5+travel, c.particleCB)
 
 		c.reduceDecode(100)
 	}, 15)
 
-	c.SetCDWithDelay(action.ActionSkill, 4*60, 10)
+	c.SetCD(action.ActionSkill, 4*60)
 
 	return action.Info{
 		Frames:          frames.NewAbilFunc(skillFrames),
 		AnimationLength: skillFrames[action.InvalidAction],
-		CanQueueAfter:   skillFrames[action.ActionWalk], // earliest cancel
+		CanQueueAfter:   skillFrames[action.ActionBurst], // earliest cancel
 		State:           action.SkillState,
 	}, nil
 }
