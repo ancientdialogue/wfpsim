@@ -6,7 +6,9 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/attacks"
 	"github.com/genshinsim/gcsim/pkg/core/attributes"
 	"github.com/genshinsim/gcsim/pkg/core/combat"
+	"github.com/genshinsim/gcsim/pkg/core/event"
 	"github.com/genshinsim/gcsim/pkg/core/info"
+	"github.com/genshinsim/gcsim/pkg/enemy"
 )
 
 var skillFrames []int
@@ -14,6 +16,7 @@ var skillFrames []int
 const (
 	skillHitmark = 32
 	skillBuffKey = "qiqi-e"
+	skillICDKey  = "qiqi-e-icd"
 )
 
 func init() {
@@ -37,8 +40,8 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 			ActorIndex:         c.Index(),
 			Abil:               "Herald of Frost: Initial Damage",
 			AttackTag:          attacks.AttackTagElementalArt,
-			ICDTag:             attacks.ICDTagElementalArt,
-			ICDGroup:           attacks.ICDGroupDefault,
+			ICDTag:             attacks.ICDTagQiqiElementalArt,
+			ICDGroup:           attacks.ICDGroupQiqiElementalArt,
 			StrikeType:         attacks.StrikeTypeDefault,
 			Element:            attributes.Cryo,
 			Durability:         25,
@@ -97,7 +100,7 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 		c.Core.QueueAttackWithSnap(ai, snap, combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 2.5), 0)
 	}, skillHitmark)
 
-	c.SetCDWithDelay(action.ActionSkill, 1800, 3) // 30s * 60
+	c.SetCDWithDelay(action.ActionSkill, c.skillCD, 3) // 30s * 60
 
 	return action.Info{
 		Frames:          frames.NewAbilFunc(skillFrames),
@@ -127,7 +130,7 @@ func (c *char) skillDmgTickTask(src int, ae *info.AttackEvent, lastTickDuration 
 		tick.Pattern = combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 2.5)
 
 		if c.Base.Cons >= 1 {
-			tick.Callbacks = append(tick.Callbacks, c.c1)
+			tick.Callbacks = []info.AttackCBFunc{c.c1, c.c1RevelationCB}
 		}
 
 		c.Core.QueueAttackEvent(&tick, 0)
@@ -163,4 +166,51 @@ func (c *char) skillHealTickTask(src int) func() {
 		// Queue next instance
 		c.Core.Tasks.Add(c.skillHealTickTask(src), 4.5*60)
 	}
+}
+
+func (c *char) skillInit() {
+	if !c.revelation {
+		return
+	}
+
+	c.Core.Events.Subscribe(event.OnEnemyDamage, func(args ...any) {
+		e, ok := args[0].(*enemy.Enemy)
+		if !ok {
+			return
+		}
+		atk := args[1].(*info.AttackEvent)
+		if !c.StatusIsActive(skillBuffKey) {
+			return
+		}
+		if c.StatusIsActive(skillICDKey) {
+			return
+		}
+
+		c.AddStatus(skillICDKey, 2.2*60, true)
+
+		// only be triggered by on field
+		if c.Core.Player.Active() != atk.Info.ActorIndex {
+			return
+		}
+
+		ai := info.AttackInfo{
+			ActorIndex:         c.Index(),
+			Abil:               "Herald of Frost: Coordinated Attack",
+			AttackTag:          attacks.AttackTagElementalArt,
+			ICDTag:             attacks.ICDTagQiqiElementalArt,
+			ICDGroup:           attacks.ICDGroupQiqiElementalArt,
+			StrikeType:         attacks.StrikeTypeDefault,
+			Element:            attributes.Cryo,
+			Durability:         25,
+			Mult:               skillCoord[c.TalentLvlSkill()],
+			HitlagFactor:       0.05,
+			HitlagHaltFrames:   0.05 * 60,
+			CanBeDefenseHalted: true,
+			IsDeployable:       true,
+		}
+
+		ap := combat.NewCircleHitOnTarget(e, nil, 2)
+
+		c.Core.QueueAttack(ai, ap, 5, 5, c.c1RevelationCB)
+	}, "qiqi-e-hook")
 }

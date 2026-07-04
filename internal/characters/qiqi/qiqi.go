@@ -6,11 +6,14 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/info"
 	"github.com/genshinsim/gcsim/pkg/core/keys"
 	"github.com/genshinsim/gcsim/pkg/core/player/character"
+	"github.com/genshinsim/gcsim/pkg/reactable"
 )
 
 const (
-	talismanKey    = "qiqi-talisman"
-	talismanICDKey = "qiqi-talisman-icd"
+	talismanKey        = "qiqi-talisman"
+	talismanICDKey     = "qiqi-talisman-icd"
+	stellarConductText = " (Stellar-Conduct)"
+	radianceSwirlKey   = "radiance-stellar-swirl"
 )
 
 func init() {
@@ -19,13 +22,16 @@ func init() {
 
 type char struct {
 	*tmpl.Character
+	revelation        bool
+	skillCD           int
 	skillLastUsed     int
 	skillHealSnapshot info.Snapshot // Required as both on hit procs and continuous healing need to use this
+	c6Stacks          int
 }
 
 // TODO: Not implemented - C6 (revival mechanic, not suitable for sim)
 // C4 - Enemy Atk reduction, not useful in this sim version
-func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) error {
+func NewChar(s *core.Core, w *character.CharWrapper, p info.CharacterProfile) error {
 	c := char{}
 	c.Character = tmpl.NewWithWrapper(s, w)
 
@@ -34,7 +40,14 @@ func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) er
 	c.BurstCon = 3
 	c.SkillCon = 5
 
+	c.skillCD = 30 * 60
 	c.skillLastUsed = 0
+
+	revelation, ok := p.Params["revelation"]
+	if !ok {
+		revelation = 1
+	}
+	c.revelation = revelation > 0
 
 	w.Character = &c
 
@@ -43,12 +56,13 @@ func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) er
 
 // Ensures the set of targets are initialized properly
 func (c *char) Init() error {
+	c.skillInit()
+	c.revelationInit()
 	c.a1()
 	c.talismanHealHook()
 	c.onNACAHitHook()
-	if c.Base.Cons >= 2 {
-		c.c2()
-	}
+	c.c2Init()
+	c.c6Init()
 	return nil
 }
 
@@ -71,4 +85,28 @@ func (c *char) AnimationStartDelay(k info.AnimationDelayKey) int {
 		return 7
 	}
 	return c.Character.AnimationStartDelay(k)
+}
+
+type radianceState int
+
+const (
+	radianceNone radianceState = iota
+	radianceStellarConduct
+	radianceStellarSwirl
+)
+
+func (c *char) getRadiance() radianceState {
+	if !c.revelation {
+		return radianceNone
+	}
+
+	if c.StatusIsActive(reactable.PolestarFieldKey) {
+		return radianceStellarConduct
+	}
+
+	if c.StatusIsActive(radianceSwirlKey) {
+		return radianceStellarSwirl
+	}
+
+	return radianceNone
 }

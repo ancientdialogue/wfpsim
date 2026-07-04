@@ -1,9 +1,11 @@
 package qiqi
 
 import (
+	"github.com/genshinsim/gcsim/pkg/core/attacks"
 	"github.com/genshinsim/gcsim/pkg/core/event"
 	"github.com/genshinsim/gcsim/pkg/core/info"
 	"github.com/genshinsim/gcsim/pkg/core/player/character"
+	"github.com/genshinsim/gcsim/pkg/enemy"
 	"github.com/genshinsim/gcsim/pkg/modifier"
 )
 
@@ -46,3 +48,70 @@ func (c *char) a1() {
 // she has a 50% chance to apply a Fortune-Preserving Talisman to them for 6s.
 // This effect can only occur once every 30s.
 const a4ICDKey = "qiqi-a4-icd"
+
+func (c *char) revelationA4() (float64, int) {
+	if !c.revelation {
+		return 0.5, 30 * 60
+	}
+	if c.getRadiance() == radianceNone {
+		return 0.5, 30 * 60
+	}
+	return 1.0, 15 * 60
+}
+
+func (c *char) revelationInit() {
+	if !c.revelation {
+		return
+	}
+
+	c.skillCD = 15 * 60
+
+	for _, char := range c.Core.Player.Chars() {
+		char.AddReactBonusMod(character.ReactBonusMod{
+			Base: modifier.NewBase("qiqi-revelation-ssc", -1),
+			Amount: func(ai info.AttackInfo) float64 {
+				if !c.StatusIsActive(skillBuffKey) {
+					return 0
+				}
+				if c.getRadiance() != radianceStellarConduct {
+					return 0
+				}
+				switch ai.AttackTag {
+				case
+					attacks.AttackTagDirectStellarConduct,
+					attacks.AttackTagSuperconductDamage:
+					return 0.5
+				}
+				return 0
+			},
+		})
+
+		char.AddReactBonusMod(character.ReactBonusMod{
+			Base: modifier.NewBase("qiqi-revelation-ssw", -1),
+			Amount: func(ai info.AttackInfo) float64 {
+				if !c.StatusIsActive(skillBuffKey) {
+					return 0
+				}
+				if c.getRadiance() != radianceStellarSwirl {
+					return 0
+				}
+				switch ai.AttackTag {
+				case
+					attacks.AttackTagDirectStellarSwirl,
+					attacks.AttackTagReactionStellarSwirl,
+					attacks.AttackTagSwirlCryo:
+					return 0.5
+				}
+				return 0
+			},
+		})
+	}
+
+	c.Core.Events.Subscribe(event.OnStellarSwirl, func(args ...any) {
+		if _, ok := args[0].(*enemy.Enemy); !ok {
+			return
+		}
+
+		c.AddStatus(radianceSwirlKey, 8*60, false)
+	}, "qiqi-ssw")
+}

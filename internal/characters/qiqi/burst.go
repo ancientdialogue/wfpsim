@@ -40,6 +40,16 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 	ap := combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 7)
 	c.Core.QueueAttack(ai, ap, burstHitmark, burstHitmark)
 
+	if c.getRadiance() == radianceStellarConduct {
+		ai.Abil += stellarConductText
+		ai.Mult = burstSSC[c.TalentLvlBurst()]
+		ai.AttackTag = attacks.AttackTagDirectStellarConduct
+		ai.IgnoreDefPercent = 1
+		ai.Durability = 0
+		ai.ICDTag = attacks.ICDTagNone
+		c.Core.QueueAttack(ai, ap, burstHitmark, burstHitmark)
+	}
+
 	// Talisman is applied via a 0 dmg attack way before the damage is dealt
 	talismanAi := info.AttackInfo{
 		ActorIndex: c.Index(),
@@ -61,6 +71,7 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 
 	c.SetCD(action.ActionBurst, 20*60)
 	c.ConsumeEnergy(8)
+	c.c6OnBurst()
 
 	return action.Info{
 		Frames:          frames.NewAbilFunc(burstFrames),
@@ -96,6 +107,8 @@ func (c *char) talismanHealHook() {
 			Bonus:   c.Stat(attributes.Heal),
 		})
 		e.SetTag(talismanICDKey, c.Core.F+60)
+
+		c.c4OnHeal()
 	}, "talisman-heal-hook")
 }
 
@@ -124,13 +137,15 @@ func (c *char) onNACAHitHook() {
 		// When Qiqi hits opponents with her Normal and Charged Attacks,
 		// she has a 50% chance to apply a Fortune-Preserving Talisman to them for 6s.
 		// This effect can only occur once every 30s.
-		if c.Base.Ascension >= 4 && !c.StatusIsActive(a4ICDKey) && (c.Core.Rand.Float64() < 0.5) {
+		// Changes to 100% and 15 in radiance stellar conduct
+		chance, cd := c.revelationA4()
+		if c.Base.Ascension >= 4 && !c.StatusIsActive(a4ICDKey) && (c.Core.Rand.Float64() < chance) {
 			// Don't want to overwrite a longer burst duration talisman with a shorter duration one
 			// TODO: Unclear how the interaction works if there is already a talisman on enemy
 			// TODO: Being generous for now and not putting it on CD if there is a conflict
 			if e.StatusExpiry(talismanKey) < c.Core.F+360 {
 				e.AddStatus(talismanKey, 360, true)
-				c.AddStatus(a4ICDKey, 1800, true) // 30s icd
+				c.AddStatus(a4ICDKey, cd, true) // 30s icd
 				c.Core.Log.NewEvent(
 					"Qiqi A4 Adding Talisman",
 					glog.LogCharacterEvent,
