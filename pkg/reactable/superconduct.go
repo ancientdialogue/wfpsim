@@ -8,7 +8,10 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/info"
 )
 
-const StellarConductEnableKey = "stellar-conduct-enabled"
+const (
+	StellarConductEnableKey = "stellar-conduct-enabled"
+	SuperConductShredKey    = "superconduct-phys-shred"
+)
 
 func (r *Reactable) TrySuperconduct(a *info.AttackEvent) bool {
 	if _, ok := r.core.Flags.Custom[StellarConductEnableKey]; ok {
