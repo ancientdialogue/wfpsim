@@ -54,6 +54,7 @@ export function Simulator({
           <li>Yae (Revelation)</li>
           <li>Qiqi (Revelation)</li>
           <li>Disenchantment in the Deep Shadow</li>
+          <li>7.0 2nd Artifact set (known as ???)</li>
         </ul>
         <p className=" font-bold">
           See{' '}
