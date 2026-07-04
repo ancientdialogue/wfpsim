@@ -60,6 +60,8 @@ func NewSet(c *core.Core, char *character.CharWrapper, count int, param map[stri
 			case attacks.AttackTagSwirlElectro:
 			case attacks.AttackTagSwirlHydro:
 			case attacks.AttackTagSwirlPyro:
+			case attacks.AttackTagDirectStellarSwirl:
+			case attacks.AttackTagReactionStellarSwirl:
 			default:
 				return 0
 			}
@@ -91,7 +93,9 @@ func NewSet(c *core.Core, char *character.CharWrapper, count int, param map[stri
 			c.Log.NewEventBuildMsg(glog.LogArtifactEvent, char.Index(), "vv 4pc proc: ", key).Write("reaction", key).Write("char", char.Index()).Write("target", t.Key())
 		}
 	}
+
 	c.Events.Subscribe(event.OnSwirlCryo, vvfunc(attributes.Cryo, "vvcryo"), fmt.Sprintf("vv-4pc-%v", char.Base.Key.String()))
+	c.Events.Subscribe(event.OnStellarSwirl, vvfunc(attributes.Cryo, "vvcryo"), fmt.Sprintf("vv-4pc-%v", char.Base.Key.String()))
 	c.Events.Subscribe(event.OnSwirlElectro, vvfunc(attributes.Electro, "vvelectro"), fmt.Sprintf("vv-4pc-%v", char.Base.Key.String()))
 	c.Events.Subscribe(event.OnSwirlHydro, vvfunc(attributes.Hydro, "vvhydro"), fmt.Sprintf("vv-4pc-%v", char.Base.Key.String()))
 	c.Events.Subscribe(event.OnSwirlPyro, vvfunc(attributes.Pyro, "vvpyro"), fmt.Sprintf("vv-4pc-%v", char.Base.Key.String()))
@@ -115,15 +119,21 @@ func NewSet(c *core.Core, char *character.CharWrapper, count int, param map[stri
 		}
 
 		ele := atk.Info.Element
-		key := "vv" + ele.String()
+
 		switch atk.Info.AttackTag {
 		case attacks.AttackTagSwirlCryo:
 		case attacks.AttackTagSwirlElectro:
 		case attacks.AttackTagSwirlHydro:
 		case attacks.AttackTagSwirlPyro:
+		case attacks.AttackTagDirectStellarSwirl:
+			ele = attributes.Cryo
+		case attacks.AttackTagReactionStellarSwirl:
+			ele = attributes.Cryo
 		default:
 			return
 		}
+
+		key := "vv" + ele.String()
 
 		t.AddResistMod(info.ResistMod{
 			Base:  modifier.NewBaseWithHitlag(key, 10*60),
