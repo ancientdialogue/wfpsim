@@ -15,7 +15,7 @@ import (
 
 var (
 	sswContributorMult = []float64{0.6, 0.3, 0.05, 0.05}
-	sswMultStack       = []float64{2, 2.5, 3, 3.5, 4, 4.5}
+	sswMultStack       = []float64{2, 2, 2, 3, 3, 3}
 )
 
 const (
@@ -87,7 +87,7 @@ func (r *Reactable) queueStellarSwirl(charIndex int) {
 			r.detonateSSW(charIndex)
 		}
 	} else {
-		r.core.Status.Add(sswKey, 4.5*60)
+		r.core.Status.Add(sswKey, 3*60)
 		r.core.Flags.Custom[sswStackKey] = 0
 		src := float64(r.core.F)
 		r.core.Flags.Custom[sswSrcKey] = src
@@ -97,7 +97,7 @@ func (r *Reactable) queueStellarSwirl(charIndex int) {
 			}
 			owner := int(r.core.Flags.Custom[sswOwnerKey])
 			r.detonateSSW(owner)
-		}, 4.5*60)
+		}, 3*60)
 	}
 }
 
@@ -219,7 +219,7 @@ func (r *Reactable) detonateSSW(owner int) {
 			ICDTag:           attacks.ICDTagNone,
 			ICDGroup:         attacks.ICDGroupDefault,
 			StrikeType:       attacks.StrikeTypeDefault,
-			Element:          attributes.Anemo,
+			Element:          attributes.Cryo,
 			IgnoreDefPercent: 1,
 		}
 		ap := combat.NewCircleHitOnTarget(r.self, nil, 5)
