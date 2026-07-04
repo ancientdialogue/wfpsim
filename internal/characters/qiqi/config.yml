@@ -1,6 +1,13 @@
 package_name: qiqi
 genshin_id: 10000035
 key: qiqi
+icd_tags:
+    - ICDTagQiqiElementalArt
+icd_groups:
+    - group_name: ICDGroupQiqiElementalArt
+      reset_timer: 120
+      ele_app_sequence: [1, 0]
+      damage_sequence: [1, 1]
 skill_data_mapping:
     attack:
         attack_1:
@@ -37,6 +44,8 @@ skill_data_mapping:
             - 0 # Regeneration on Hit|{param0:F2P} ATK+{param1:I}
         skillInitialDmg:
             - 7 # Skill DMG|{param7:P}
+        skillCoord:
+            - 8 # Herald of Frost Coordinated Attack DMG|{param8:F1P}
     burst:
         burstDmg:
             - 2 # Skill DMG|{param2:P}
@@ -44,3 +53,5 @@ skill_data_mapping:
             - 1 # Healing|{param0:F1P} ATK+{param1:I}
         burstHealPer:
             - 0 # Healing|{param0:F1P} ATK+{param1:I}
+        burstSSC:
+            - 6 # Stellar-Conduct DMG|{param6:F1P}

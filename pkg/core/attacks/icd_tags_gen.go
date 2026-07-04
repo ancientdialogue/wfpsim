@@ -38,6 +38,7 @@ const (
 	ICDTagNeuvilletteC6
 	ICDTagNilouTranquilityAura
 	ICDTagOroronElmentalBurst
+	ICDTagQiqiElementalArt
 	ICDTagSandroneExtraAttackSweepingFire
 	ICDTagSandroneExtraAttackLaser
 	ICDTagSkirkCons

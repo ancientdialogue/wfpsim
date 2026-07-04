@@ -52,6 +52,7 @@ export function Simulator({
           <li>Illuga</li>
           <li>Sandrone (C6)</li>
           <li>Yae (Revelation)</li>
+          <li>Qiqi (Revelation)</li>
           <li>Disenchantment in the Deep Shadow</li>
         </ul>
         <p className=" font-bold">
