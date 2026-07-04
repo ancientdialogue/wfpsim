@@ -63,10 +63,16 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 
 	switch c.getRadiance() {
 	case radianceStellarConduct:
-		aiRay.Abil += stellarconductText
+		aiRay.Abil += stellarConductText
 		aiRay.AttackTag = attacks.AttackTagDirectStellarConduct
 		aiRay.Durability = 0
 		aiRay.Mult = burstRaySSC[c.TalentLvlSkill()] * c.a1OnBurstRayStellar()
+		aiRay.IgnoreDefPercent = 1
+	case radianceStellarSwirl:
+		aiRay.Abil += stellarSwirlText
+		aiRay.AttackTag = attacks.AttackTagDirectStellarSwirl
+		aiRay.Durability = 0
+		aiRay.Mult = burstRaySSw[c.TalentLvlSkill()] * c.a1OnBurstRayStellar()
 		aiRay.IgnoreDefPercent = 1
 	}
 	c.QueueCharTask(func() { c.Core.QueueAttack(aiRay, ap, 0, 0) }, rayHitmark)

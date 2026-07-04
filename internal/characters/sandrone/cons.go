@@ -198,17 +198,24 @@ func (c *char) c6OnBeam() {
 		StrikeType:     attacks.StrikeTypeDefault,
 		Element:        attributes.Cryo,
 		Durability:     25,
-		Mult:           chargeBeam[c.TalentLvlAttack()],
+		Mult:           1,
 	}
 
 	switch c.getRadiance() {
 	case radianceStellarConduct:
-		ai.Abil += " (Stellar-Conduct)"
+		ai.Abil += stellarConductText
 		ai.AttackTag = attacks.AttackTagDirectStellarConduct
 		ai.ICDTag = attacks.ICDTagNone
 		ai.Durability = 0
 		ai.IgnoreDefPercent = 1
-		ai.Mult = chargeBeamSSC[c.TalentLvlAttack()]
+		ai.Mult = 0.8
+	case radianceStellarSwirl:
+		ai.Abil += stellarSwirlText
+		ai.AttackTag = attacks.AttackTagDirectStellarSwirl
+		ai.ICDTag = attacks.ICDTagNone
+		ai.Durability = 0
+		ai.IgnoreDefPercent = 1
+		ai.Mult = 1.2
 	}
 	ap := combat.NewBoxHitOnTarget(
 		c.Core.Combat.Player(),

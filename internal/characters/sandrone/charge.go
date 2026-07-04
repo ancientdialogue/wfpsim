@@ -193,12 +193,19 @@ func (c *char) beamTicker(src int) {
 
 	switch c.getRadiance() {
 	case radianceStellarConduct:
-		ai.Abil += " (Stellar-Conduct)"
+		ai.Abil += stellarConductText
 		ai.AttackTag = attacks.AttackTagDirectStellarConduct
 		ai.ICDTag = attacks.ICDTagNone
 		ai.Durability = 0
 		ai.IgnoreDefPercent = 1
 		ai.Mult = chargeBeamSSC[c.TalentLvlAttack()]
+	case radianceStellarSwirl:
+		ai.Abil += stellarSwirlText
+		ai.AttackTag = attacks.AttackTagDirectStellarSwirl
+		ai.ICDTag = attacks.ICDTagNone
+		ai.Durability = 0
+		ai.IgnoreDefPercent = 1
+		ai.Mult = chargeBeamSSw[c.TalentLvlAttack()]
 	}
 
 	ap := combat.NewBoxHitOnTarget(

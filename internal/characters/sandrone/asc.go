@@ -9,16 +9,18 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/glog"
 	"github.com/genshinsim/gcsim/pkg/core/info"
 	"github.com/genshinsim/gcsim/pkg/core/player/character"
+	"github.com/genshinsim/gcsim/pkg/enemy"
 	"github.com/genshinsim/gcsim/pkg/modifier"
 	"github.com/genshinsim/gcsim/pkg/reactable"
 )
 
 const (
-	stellarconductBonusKey = "sandrone-ssc-bonus"
-	a1MaxStacks            = 10
-	a4Scale                = 0.08
-	a4Max                  = 160
-	a4Key                  = "sandrone-a4"
+	stellarBonusKey  = "sandrone-stellar-bonus"
+	radianceSwirlKey = "radiance-stellar-swirl"
+	a1MaxStacks      = 10
+	a4Scale          = 0.08
+	a4Max            = 160
+	a4Key            = "sandrone-a4"
 )
 
 func (c *char) a1OnSkill() float64 {
@@ -74,14 +76,16 @@ func (c *char) a4Init() {
 	})
 }
 
-func (c *char) stellarconductInit() {
+func (c *char) stellarInit() {
 	reactable.EnableStellarConduct(c.Core)
+	reactable.EnableStellarSwirl(c.Core)
 
 	c.Core.Events.Subscribe(event.OnEnemyHit, func(args ...any) {
 		atk := args[1].(*info.AttackEvent)
 
 		switch atk.Info.AttackTag {
 		case attacks.AttackTagDirectStellarConduct:
+		case attacks.AttackTagDirectStellarSwirl:
 		default:
 			return
 		}
@@ -89,16 +93,43 @@ func (c *char) stellarconductInit() {
 		bonus := min(c.TotalAtk()/100.0*0.007, 0.14)
 
 		if c.Core.Flags.LogDebug {
-			c.Core.Log.NewEvent("sandrone adding stellarconduct base damage", glog.LogCharacterEvent, c.Index()).Write("bonus", bonus)
+			c.Core.Log.NewEvent("sandrone adding stellar base damage", glog.LogCharacterEvent, c.Index()).Write("bonus", bonus)
 		}
 
 		atk.Info.BaseDmgBonus += bonus
-	}, stellarconductBonusKey)
+	}, stellarBonusKey)
+
+	c.Core.Events.Subscribe(event.OnLunarReactionAttack, func(args ...any) {
+		atk := args[1].(*info.AttackEvent)
+		if atk.Info.AttackTag != attacks.AttackTagReactionStellarSwirl {
+			return
+		}
+
+		bonus := min(c.TotalAtk()/100.0*0.007, 0.14)
+
+		if c.Core.Flags.LogDebug {
+			c.Core.Log.NewEvent("sandrone adding stellar base damage", glog.LogCharacterEvent, c.Index()).Write("bonus", bonus)
+		}
+
+		atk.Info.BaseDmgBonus += bonus
+	}, stellarBonusKey+"-lc-atk")
+
+	c.Core.Events.Subscribe(event.OnStellarSwirl, func(args ...any) {
+		if _, ok := args[0].(*enemy.Enemy); !ok {
+			return
+		}
+
+		c.AddStatus(radianceSwirlKey, 8*60, false)
+	}, stellarBonusKey)
 }
 
 func (c *char) getRadiance() radianceState {
 	if c.StatusIsActive(reactable.PolestarFieldKey) {
 		return radianceStellarConduct
+	}
+
+	if c.StatusIsActive(radianceSwirlKey) {
+		return radianceStellarSwirl
 	}
 
 	return radianceNone

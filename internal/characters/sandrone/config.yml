@@ -28,6 +28,8 @@ skill_data_mapping:
             - 4 # Charged Attack Condensed Beam DMG|{param4:F1P}
         chargeBeamSSC:
             - 5 # Charged Attack Condensed Beam Stellar-Conduct DMG|{param5:F1P}
+        chargeBeamSSw:
+            - 4 # Charged Attack Condensed Beam DMG|{param4:F1P}
         chargeOverdrive:
             - 6 # DMG When in Power Overdrive|{param6:F1P}
     skill: # Formule Phenomenale: Differential Analysis
@@ -35,6 +37,8 @@ skill_data_mapping:
             - 0 # Prism Shot DMG|{param0:F1P}
         skillSSC:
             - 1 # Prism Shot Stellar-Conduct DMG|{param1:F1P}
+        skillSSw:
+            - 0 # Prism Shot DMG|{param0:F1P}
     burst: # Formule Phenomenale: Q.E.D.
         burst:
             - 0 # Bombardment DMG|{param0:F1P} ×3
@@ -42,3 +46,5 @@ skill_data_mapping:
             - 1 # Convective Inhibition Ray DMG|{param1:F1P}
         burstRaySSC:
             - 2 # Convective Inhibition Ray Stellar-Conduct DMG|{param2:F1P}
+        burstRaySSw:
+            - 1 # Convective Inhibition Ray DMG|{param1:F1P}

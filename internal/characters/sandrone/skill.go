@@ -47,10 +47,16 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 	c.QueueCharTask(func() {
 		switch c.getRadiance() {
 		case radianceStellarConduct:
-			ai.Abil += stellarconductText
+			ai.Abil += stellarConductText
 			ai.AttackTag = attacks.AttackTagDirectStellarConduct
 			ai.Durability = 0
 			ai.Mult = skillSSC[c.TalentLvlSkill()]
+			ai.IgnoreDefPercent = 1
+		case radianceStellarSwirl:
+			ai.Abil += stellarSwirlText
+			ai.AttackTag = attacks.AttackTagDirectStellarSwirl
+			ai.Durability = 0
+			ai.Mult = skillSSw[c.TalentLvlSkill()]
 			ai.IgnoreDefPercent = 1
 		}
 

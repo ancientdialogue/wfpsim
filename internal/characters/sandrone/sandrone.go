@@ -10,7 +10,8 @@ import (
 
 const (
 	maxDecode          = 100
-	stellarconductText = " (Stellar-Conduct)"
+	stellarConductText = " (Stellar-Conduct)"
+	stellarSwirlText   = " (Stellar-Swirl)"
 )
 
 func init() {
@@ -68,7 +69,7 @@ func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) er
 
 func (c *char) Init() error {
 	c.a4Init()
-	c.stellarconductInit()
+	c.stellarInit()
 	c.c1Init()
 	c.c2Init()
 	c.c4Init()
