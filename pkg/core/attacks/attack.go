@@ -41,8 +41,13 @@ const (
 	AttackTagDirectLunarCrystallize
 	DirectLunarReactionEndDelim
 
+	StellarReactionStartDelim
+	AttackTagReactionStellarSwirl
+	StellarReactionEndDelim
+
 	DirectStellarReactionStartDelim
 	AttackTagDirectStellarConduct
+	AttackTagDirectStellarSwirl
 	DirectStellarReactionEndDelim
 
 	AttackTagLength

@@ -2,7 +2,7 @@ id: 10000126
 key: "zibai"
 rarity: QUALITY_ORANGE
 body: BODY_LADY
-region: 13
+region: ASSOC_TYPE_NODKRAI_ZIBAI
 element: Rock
 weapon_class: WEAPON_SWORD_ONE_HAND
 icon_name: "UI_AvatarIcon_Zibai"
