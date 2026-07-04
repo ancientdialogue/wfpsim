@@ -18,7 +18,8 @@ func (e *Enemy) calc(atk *info.AttackEvent, evt glog.Event, grpMult float64) (fl
 		attacks.AttackTagDirectLunarCharged,
 		attacks.AttackTagDirectLunarBloom,
 		attacks.AttackTagDirectLunarCrystallize,
-		attacks.AttackTagDirectStellarConduct:
+		attacks.AttackTagDirectStellarConduct,
+		attacks.AttackTagDirectStellarSwirl:
 		return e.calcDirectReaction(atk, evt, grpMult)
 	}
 
