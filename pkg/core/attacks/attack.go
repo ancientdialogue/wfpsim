@@ -41,6 +41,15 @@ const (
 	AttackTagDirectLunarCrystallize
 	DirectLunarReactionEndDelim
 
+	StellarReactionStartDelim
+	AttackTagReactionStellarSwirl
+	StellarReactionEndDelim
+
+	DirectStellarReactionStartDelim
+	AttackTagDirectStellarConduct
+	AttackTagDirectStellarSwirl
+	DirectStellarReactionEndDelim
+
 	AttackTagLength
 )
 
@@ -60,10 +69,16 @@ const (
 	AdditionalTagNone AdditionalTag = iota
 	AdditionalTagNightsoul
 	AdditionalTagKinichCannon
+	AdditionalTagSandroneBeam
 )
 
 func AttackTagIsLunar(tag AttackTag) bool {
 	isReaction := LunarReactionStartDelim < tag && tag < LunarReactionEndDelim
 	isDirect := DirectLunarReactionStartDelim < tag && tag < DirectLunarReactionEndDelim
 	return isReaction || isDirect
+}
+
+func AttackTagIsStellar(tag AttackTag) bool {
+	isDirect := DirectStellarReactionStartDelim < tag && tag < DirectStellarReactionEndDelim
+	return isDirect
 }

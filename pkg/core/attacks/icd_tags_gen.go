@@ -38,6 +38,8 @@ const (
 	ICDTagNeuvilletteC6
 	ICDTagNilouTranquilityAura
 	ICDTagOroronElmentalBurst
+	ICDTagSandroneExtraAttackSweepingFire
+	ICDTagSandroneExtraAttackLaser
 	ICDTagSkirkCons
 	ICDTagTartagliaRiptideFlash
 	ICDTagVaresaCombatCycle

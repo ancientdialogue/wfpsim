@@ -1,15 +1,15 @@
-id: 10000126
-key: "zibai"
+id: 10000133
+key: "sandrone"
 rarity: QUALITY_ORANGE
-body: BODY_LADY
-region: ASSOC_TYPE_NODKRAI_ZIBAI
-element: Rock
-weapon_class: WEAPON_SWORD_ONE_HAND
-icon_name: "UI_AvatarIcon_Zibai"
+body: BODY_GIRL
+region: ASSOC_TYPE_SNEZHNAYA_STAR
+element: Ice
+weapon_class: WEAPON_CLAYMORE
+icon_name: "UI_AvatarIcon_MarionetteNew"
 stats: {
-   base_hp: 1005.7526
-   base_atk: 17.5028
-   base_def: 74.48835
+   base_hp: 1029.5856
+   base_atk: 26.6266
+   base_def: 58.57357
    hp_curve: GROW_CURVE_HP_S5
    atk_curve: GROW_CURVE_ATTACK_S5
    def_cruve: GROW_CURVE_HP_S5
@@ -25,127 +25,127 @@ stats: {
          prop_type: FIGHT_PROP_BASE_ATTACK
       }
       add_props: {
-         prop_type: FIGHT_PROP_CRITICAL_HURT
+         prop_type: FIGHT_PROP_CRITICAL
       }
    }
    promo_data: {
       max_level: 40
       add_props: {
          prop_type: FIGHT_PROP_BASE_HP
-         value: 862.3419
+         value: 882.77655
       }
       add_props: {
          prop_type: FIGHT_PROP_BASE_DEFENSE
-         value: 63.8685
+         value: 50.2227
       }
       add_props: {
          prop_type: FIGHT_PROP_BASE_ATTACK
-         value: 15.006
+         value: 22.828234
       }
       add_props: {
-         prop_type: FIGHT_PROP_CRITICAL_HURT
+         prop_type: FIGHT_PROP_CRITICAL
       }
    }
    promo_data: {
       max_level: 50
       add_props: {
          prop_type: FIGHT_PROP_BASE_HP
-         value: 1475.0585
+         value: 1510.0126
       }
       add_props: {
          prop_type: FIGHT_PROP_BASE_DEFENSE
-         value: 109.2488
+         value: 85.90725
       }
       add_props: {
          prop_type: FIGHT_PROP_BASE_ATTACK
-         value: 25.6681
+         value: 39.048294
       }
       add_props: {
-         prop_type: FIGHT_PROP_CRITICAL_HURT
-         value: 0.096
+         prop_type: FIGHT_PROP_CRITICAL
+         value: 0.048
       }
    }
    promo_data: {
       max_level: 60
       add_props: {
          prop_type: FIGHT_PROP_BASE_HP
-         value: 2292.014
+         value: 2346.3271
       }
       add_props: {
          prop_type: FIGHT_PROP_BASE_DEFENSE
-         value: 169.7558
+         value: 133.48665
       }
       add_props: {
          prop_type: FIGHT_PROP_BASE_ATTACK
-         value: 39.8843
+         value: 60.67504
       }
       add_props: {
-         prop_type: FIGHT_PROP_CRITICAL_HURT
-         value: 0.192
+         prop_type: FIGHT_PROP_CRITICAL
+         value: 0.096
       }
    }
    promo_data: {
       max_level: 70
       add_props: {
          prop_type: FIGHT_PROP_BASE_HP
-         value: 2904.7307
+         value: 2973.5632
       }
       add_props: {
          prop_type: FIGHT_PROP_BASE_DEFENSE
-         value: 215.136
+         value: 169.1712
       }
       add_props: {
          prop_type: FIGHT_PROP_BASE_ATTACK
-         value: 50.5464
+         value: 76.8951
       }
       add_props: {
-         prop_type: FIGHT_PROP_CRITICAL_HURT
-         value: 0.192
+         prop_type: FIGHT_PROP_CRITICAL
+         value: 0.096
       }
    }
    promo_data: {
       max_level: 80
       add_props: {
          prop_type: FIGHT_PROP_BASE_HP
-         value: 3517.4473
+         value: 3600.799
       }
       add_props: {
          prop_type: FIGHT_PROP_BASE_DEFENSE
-         value: 260.5163
+         value: 204.85574
       }
       add_props: {
          prop_type: FIGHT_PROP_BASE_ATTACK
-         value: 61.2086
+         value: 93.115166
       }
       add_props: {
-         prop_type: FIGHT_PROP_CRITICAL_HURT
-         value: 0.288
+         prop_type: FIGHT_PROP_CRITICAL
+         value: 0.144
       }
    }
    promo_data: {
       max_level: 90
       add_props: {
          prop_type: FIGHT_PROP_BASE_HP
-         value: 4130.164
+         value: 4228.035
       }
       add_props: {
          prop_type: FIGHT_PROP_BASE_DEFENSE
-         value: 305.8965
+         value: 240.5403
       }
       add_props: {
          prop_type: FIGHT_PROP_BASE_ATTACK
-         value: 71.8707
+         value: 109.33523
       }
       add_props: {
-         prop_type: FIGHT_PROP_CRITICAL_HURT
-         value: 0.384
+         prop_type: FIGHT_PROP_CRITICAL
+         value: 0.192
       }
    }
 }
 skill_details: {
-   skill: 11262
-   burst: 11265
-   attack: 11261
+   skill: 11332
+   burst: 11335
+   attack: 11331
    burst_energy_cost: 60
 }
-name_text_hash_map: 937532578
+name_text_hash_map: 108893506

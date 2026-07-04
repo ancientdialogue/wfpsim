@@ -7,12 +7,11 @@
 package model
 
 import (
+	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
+	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
-
-	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
-	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 )
 
 const (
@@ -400,21 +399,22 @@ func (BodyType) EnumDescriptor() ([]byte, []int) {
 type ZoneType int32
 
 const (
-	ZoneType_INVALID_ZONE_TYPE        ZoneType = 0
-	ZoneType_ASSOC_TYPE_UNKNOWN       ZoneType = 1
-	ZoneType_ASSOC_TYPE_MONDSTADT     ZoneType = 2
-	ZoneType_ASSOC_TYPE_LIYUE         ZoneType = 3
-	ZoneType_ASSOC_TYPE_INAZUMA       ZoneType = 4
-	ZoneType_ASSOC_TYPE_SUMERU        ZoneType = 5
-	ZoneType_ASSOC_TYPE_FATUI         ZoneType = 6
-	ZoneType_ASSOC_TYPE_RANGER        ZoneType = 7 // aloy pls
-	ZoneType_ASSOC_TYPE_MAINACTOR     ZoneType = 8 // traveler is cool
-	ZoneType_ASSOC_TYPE_FONTAINE      ZoneType = 9
-	ZoneType_ASSOC_TYPE_NATLAN        ZoneType = 10
-	ZoneType_ASSOC_TYPE_OMNI_SCOURGE  ZoneType = 11
-	ZoneType_ASSOC_TYPE_NODKRAI 	  ZoneType = 12
-	ZoneType_ASSOC_TYPE_NODKRAI_ZIBAI ZoneType = 13 // Zibai pls
-	ZoneType_ASSOC_TYPE_HVISION       ZoneType = 14
+	ZoneType_INVALID_ZONE_TYPE         ZoneType = 0
+	ZoneType_ASSOC_TYPE_UNKNOWN        ZoneType = 1
+	ZoneType_ASSOC_TYPE_MONDSTADT      ZoneType = 2
+	ZoneType_ASSOC_TYPE_LIYUE          ZoneType = 3
+	ZoneType_ASSOC_TYPE_INAZUMA        ZoneType = 4
+	ZoneType_ASSOC_TYPE_SUMERU         ZoneType = 5
+	ZoneType_ASSOC_TYPE_FATUI          ZoneType = 6
+	ZoneType_ASSOC_TYPE_RANGER         ZoneType = 7 // aloy pls
+	ZoneType_ASSOC_TYPE_MAINACTOR      ZoneType = 8 // traveler is cool
+	ZoneType_ASSOC_TYPE_FONTAINE       ZoneType = 9
+	ZoneType_ASSOC_TYPE_NATLAN         ZoneType = 10
+	ZoneType_ASSOC_TYPE_OMNI_SCOURGE   ZoneType = 11
+	ZoneType_ASSOC_TYPE_NODKRAI        ZoneType = 12
+	ZoneType_ASSOC_TYPE_NODKRAI_ZIBAI  ZoneType = 13 // zibai pls
+	ZoneType_ASSOC_TYPE_HVISION        ZoneType = 14
+	ZoneType_ASSOC_TYPE_SNEZHNAYA_STAR ZoneType = 15
 )
 
 // Enum value maps for ZoneType.
@@ -435,23 +435,25 @@ var (
 		12: "ASSOC_TYPE_NODKRAI",
 		13: "ASSOC_TYPE_NODKRAI_ZIBAI",
 		14: "ASSOC_TYPE_HVISION",
+		15: "ASSOC_TYPE_SNEZHNAYA_STAR",
 	}
 	ZoneType_value = map[string]int32{
-		"INVALID_ZONE_TYPE":        0,
-		"ASSOC_TYPE_UNKNOWN":       1,
-		"ASSOC_TYPE_MONDSTADT":     2,
-		"ASSOC_TYPE_LIYUE":         3,
-		"ASSOC_TYPE_INAZUMA":       4,
-		"ASSOC_TYPE_SUMERU":        5,
-		"ASSOC_TYPE_FATUI":         6,
-		"ASSOC_TYPE_RANGER":        7,
-		"ASSOC_TYPE_MAINACTOR":     8,
-		"ASSOC_TYPE_FONTAINE":      9,
-		"ASSOC_TYPE_NATLAN":        10,
-		"ASSOC_TYPE_OMNI_SCOURGE":  11,
-		"ASSOC_TYPE_NODKRAI":       12,
-		"ASSOC_TYPE_NODKRAI_ZIBAI": 13,
-		"ASSOC_TYPE_HVISION":       14,
+		"INVALID_ZONE_TYPE":         0,
+		"ASSOC_TYPE_UNKNOWN":        1,
+		"ASSOC_TYPE_MONDSTADT":      2,
+		"ASSOC_TYPE_LIYUE":          3,
+		"ASSOC_TYPE_INAZUMA":        4,
+		"ASSOC_TYPE_SUMERU":         5,
+		"ASSOC_TYPE_FATUI":          6,
+		"ASSOC_TYPE_RANGER":         7,
+		"ASSOC_TYPE_MAINACTOR":      8,
+		"ASSOC_TYPE_FONTAINE":       9,
+		"ASSOC_TYPE_NATLAN":         10,
+		"ASSOC_TYPE_OMNI_SCOURGE":   11,
+		"ASSOC_TYPE_NODKRAI":        12,
+		"ASSOC_TYPE_NODKRAI_ZIBAI":  13,
+		"ASSOC_TYPE_HVISION":        14,
+		"ASSOC_TYPE_SNEZHNAYA_STAR": 15,
 	}
 )
 
@@ -959,7 +961,7 @@ const file_protos_model_enums_proto_rawDesc = "" +
 	"\tBODY_GIRL\x10\x03\x12\r\n" +
 	"\tBODY_MALE\x10\x04\x12\r\n" +
 	"\tBODY_LADY\x10\x05\x12\r\n" +
-	"\tBODY_LOLI\x10\x06*\xc4\x02\n" +
+	"\tBODY_LOLI\x10\x06*\x99\x03\n" +
 	"\bZoneType\x12\x15\n" +
 	"\x11INVALID_ZONE_TYPE\x10\x00\x12\x16\n" +
 	"\x12ASSOC_TYPE_UNKNOWN\x10\x01\x12\x18\n" +
@@ -974,7 +976,10 @@ const file_protos_model_enums_proto_rawDesc = "" +
 	"\x11ASSOC_TYPE_NATLAN\x10\n" +
 	"\x12\x1b\n" +
 	"\x17ASSOC_TYPE_OMNI_SCOURGE\x10\v\x12\x16\n" +
-	"\x12ASSOC_TYPE_NODKRAI\x10\f*\xcf\x01\n" +
+	"\x12ASSOC_TYPE_NODKRAI\x10\f\x12\x1c\n" +
+	"\x18ASSOC_TYPE_NODKRAI_ZIBAI\x10\r\x12\x16\n" +
+	"\x12ASSOC_TYPE_HVISION\x10\x0e\x12\x1d\n" +
+	"\x19ASSOC_TYPE_SNEZHNAYA_STAR\x10\x0f*\xcf\x01\n" +
 	"\aElement\x12\x13\n" +
 	"\x0fINVALID_ELEMENT\x10\x00\x12\f\n" +
 	"\bElectric\x10\x01\x12\b\n" +

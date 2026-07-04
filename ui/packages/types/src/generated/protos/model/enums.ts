@@ -413,6 +413,10 @@ export enum ZoneType {
   ASSOC_TYPE_NATLAN = 10,
   ASSOC_TYPE_OMNI_SCOURGE = 11,
   ASSOC_TYPE_NODKRAI = 12,
+  /** ASSOC_TYPE_NODKRAI_ZIBAI - zibai pls */
+  ASSOC_TYPE_NODKRAI_ZIBAI = 13,
+  ASSOC_TYPE_HVISION = 14,
+  ASSOC_TYPE_SNEZHNAYA_STAR = 15,
   UNRECOGNIZED = -1,
 }
 
@@ -457,6 +461,15 @@ export function zoneTypeFromJSON(object: any): ZoneType {
     case 12:
     case "ASSOC_TYPE_NODKRAI":
       return ZoneType.ASSOC_TYPE_NODKRAI;
+    case 13:
+    case "ASSOC_TYPE_NODKRAI_ZIBAI":
+      return ZoneType.ASSOC_TYPE_NODKRAI_ZIBAI;
+    case 14:
+    case "ASSOC_TYPE_HVISION":
+      return ZoneType.ASSOC_TYPE_HVISION;
+    case 15:
+    case "ASSOC_TYPE_SNEZHNAYA_STAR":
+      return ZoneType.ASSOC_TYPE_SNEZHNAYA_STAR;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -492,6 +505,12 @@ export function zoneTypeToJSON(object: ZoneType): string {
       return "ASSOC_TYPE_OMNI_SCOURGE";
     case ZoneType.ASSOC_TYPE_NODKRAI:
       return "ASSOC_TYPE_NODKRAI";
+    case ZoneType.ASSOC_TYPE_NODKRAI_ZIBAI:
+      return "ASSOC_TYPE_NODKRAI_ZIBAI";
+    case ZoneType.ASSOC_TYPE_HVISION:
+      return "ASSOC_TYPE_HVISION";
+    case ZoneType.ASSOC_TYPE_SNEZHNAYA_STAR:
+      return "ASSOC_TYPE_SNEZHNAYA_STAR";
     case ZoneType.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";

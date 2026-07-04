@@ -18,12 +18,14 @@ func CalcReactionBaseDmg(lvl int) float64 {
 }
 
 func CalcLunarReactionDmg(lvl int, reactBonus float64, atk info.AttackInfo, em float64) float64 {
-	var reactionMultiplier float64
+	reactionMultiplier := 1.0
 	switch atk.AttackTag {
 	case attacks.AttackTagReactionLunarCharge:
 		reactionMultiplier = 3
 	case attacks.AttackTagReactionLunarCrystallize:
 		reactionMultiplier = 1.6
+	case attacks.AttackTagReactionStellarSwirl:
+		reactionMultiplier = 1 // actual reaction multiplier applied by the reaction
 	}
 	return (reactionMultiplier*(1+((6*em)/(2000+em))+reactBonus)*CalcReactionBaseDmg(lvl)*(1+atk.BaseDmgBonus) + atk.FlatDmg) * (1 + atk.Elevation)
 }

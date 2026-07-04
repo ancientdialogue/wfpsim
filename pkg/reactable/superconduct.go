@@ -8,7 +8,13 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/info"
 )
 
+const StellarConductEnableKey = "stellar-conduct-enabled"
+
 func (r *Reactable) TrySuperconduct(a *info.AttackEvent) bool {
+	if _, ok := r.core.Flags.Custom[StellarConductEnableKey]; ok {
+		return r.TryStellarConduct(a)
+	}
+
 	if a.Info.Durability < info.ZeroDur {
 		return false
 	}
@@ -41,6 +47,10 @@ func (r *Reactable) TrySuperconduct(a *info.AttackEvent) bool {
 }
 
 func (r *Reactable) TryFrozenSuperconduct(a *info.AttackEvent) bool {
+	if _, ok := r.core.Flags.Custom[LunarCrystallizeEnableKey]; ok {
+		return r.TryStellarConduct(a)
+	}
+
 	if a.Info.Durability < info.ZeroDur {
 		return false
 	}

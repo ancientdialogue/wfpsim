@@ -87,6 +87,7 @@ const (
 	Raiden
 	Razor
 	Rosaria
+	Sandrone
 	Sara
 	Sayu
 	Sethos
@@ -438,6 +439,10 @@ func init() {
 	charNames[Rosaria] = "rosaria"
 	charPrettyName[Rosaria] = "Rosaria"
 	CharKeyToEle[Rosaria] = attributes.Cryo
+
+	charNames[Sandrone] = "sandrone"
+	charPrettyName[Sandrone] = "Sandrone"
+	CharKeyToEle[Sandrone] = attributes.Cryo
 
 	charNames[Sara] = "sara"
 	charPrettyName[Sara] = "Sara"
