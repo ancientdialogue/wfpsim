@@ -15,6 +15,7 @@ const (
 	// but doing global here to be lazy
 	PolestarFieldKey        = "polestar-field"
 	StellarConductStacksKey = "stellar-conduct-stacks"
+	StellarConductShredKey  = PolestarFieldKey + "-phys-shred"
 
 	polestarFieldSrcKey      = "polestar-field-src"
 	polestarFieldDur         = 6 * 60
@@ -212,7 +213,7 @@ func (r *Reactable) polestarFieldTicker(src int) {
 			panic("core.Combat.Enemies() contains enemies that don't implement info.Enemy")
 		}
 		e.AddResistMod(info.ResistMod{
-			Base:  modifier.NewBaseWithHitlag(PolestarFieldKey+"-phys-shred", 4*60),
+			Base:  modifier.NewBaseWithHitlag(StellarConductShredKey, 4*60),
 			Ele:   attributes.Physical,
 			Value: -0.40,
 		})
