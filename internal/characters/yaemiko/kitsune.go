@@ -34,14 +34,15 @@ func (c *char) makeKitsune() {
 		}
 		// ok now we can delete this
 		c.popOldestKitsune()
-	}, 900-skillStart) // e ani + duration
+	}, c.skillDur-skillStart) // e ani + duration
 
 	if len(c.kitsunes) == 0 {
-		c.Core.Status.Add(yaeTotemStatus, 900-skillStart)
+		c.Core.Status.Add(yaeTotemStatus, c.skillDur-skillStart)
 	}
 	// pop oldest first
 	if len(c.kitsunes) == 3 {
 		c.popOldestKitsune()
+		c.a1OnSkillPopKitsune()
 	}
 	c.kitsunes = append(c.kitsunes, k)
 	c.SetTag(yaeTotemCount, c.sakuraLevelCheck())
@@ -67,7 +68,7 @@ func (c *char) popOldestKitsune() {
 
 	// here check for status
 	if len(c.kitsunes) > 0 {
-		dur := c.Core.F - c.kitsunes[0].src + (900 - skillStart)
+		dur := c.Core.F - c.kitsunes[0].src + (c.skillDur - skillStart)
 		if dur < 0 {
 			log.Panicf("oldest totem should have expired already? dur: %v totem: %v", dur, *c.kitsunes[0])
 		}
@@ -87,12 +88,14 @@ func (c *char) kitsuneBurst(ai info.AttackInfo, pattern info.AttackPattern) {
 				c.AddEnergy("yae-c1", 8)
 			}, burstThunderbolt1Hitmark+i*24)
 		}
-		c.a1()
+		c.a1OnBurstTotem()
 		c.Core.Log.NewEvent("sky kitsune thunderbolt", glog.LogCharacterEvent, c.Index()).
 			Write("src", c.kitsunes[i].src).
 			Write("delay", burstThunderbolt1Hitmark+i*24)
 	}
-	c.popAllKitsune()
+	if !c.revelation {
+		c.popAllKitsune()
+	}
 }
 
 func (c *char) kitsuneTick(totem *kitsune) func() {
@@ -119,6 +122,7 @@ func (c *char) kitsuneTick(totem *kitsune) func() {
 			StrikeType: attacks.StrikeTypeDefault,
 			Element:    attributes.Electro,
 			Durability: 25,
+			FlatDmg:    c.revelationEnhanceDMG(),
 		}
 
 		c.Core.Log.NewEvent("sky kitsune tick at level", glog.LogCharacterEvent, c.Index()).
