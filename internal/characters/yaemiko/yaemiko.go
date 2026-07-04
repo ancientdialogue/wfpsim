@@ -80,5 +80,8 @@ func (c *char) AnimationStartDelay(k info.AnimationDelayKey) int {
 }
 
 func (c *char) isRadianceSSC() bool {
+	if !c.revelation {
+		return false
+	}
 	return c.StatusIsActive(reactable.PolestarFieldKey)
 }
