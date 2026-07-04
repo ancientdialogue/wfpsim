@@ -51,6 +51,7 @@ export function Simulator({
           <li>Zibai (C6)</li>
           <li>Illuga</li>
           <li>Sandrone (C6)</li>
+          <li>Yae (Revelation)</li>
         </ul>
         <p className=" font-bold">
           See{' '}

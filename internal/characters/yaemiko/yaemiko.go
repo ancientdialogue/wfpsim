@@ -8,6 +8,7 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/info"
 	"github.com/genshinsim/gcsim/pkg/core/keys"
 	"github.com/genshinsim/gcsim/pkg/core/player/character"
+	"github.com/genshinsim/gcsim/pkg/reactable"
 )
 
 const (
@@ -21,12 +22,15 @@ func init() {
 
 type char struct {
 	*tmpl.Character
+	skillDur               int
 	kitsuneDetectionRadius float64
 	kitsunes               []*kitsune
 	c4buff                 []float64
+	revelation             bool
+	revelationEnhanceTick  bool
 }
 
-func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) error {
+func NewChar(s *core.Core, w *character.CharWrapper, p info.CharacterProfile) error {
 	c := char{}
 	c.Character = tmpl.NewWithWrapper(s, w)
 
@@ -35,7 +39,15 @@ func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) er
 	c.BurstCon = 5
 	c.SkillCon = 3
 
+	c.skillDur = 900
+
 	c.SetNumCharges(action.ActionSkill, 3)
+
+	revelation, ok := p.Params["revelation"]
+	if !ok {
+		revelation = 1
+	}
+	c.revelation = revelation > 0
 
 	w.Character = &c
 
@@ -53,6 +65,10 @@ func (c *char) Init() error {
 		c.c4buff = make([]float64, attributes.EndStatType)
 		c.c4buff[attributes.ElectroP] = .20
 	}
+
+	c.revelationInit()
+	c.c1Init()
+	c.c2Init()
 	return nil
 }
 
@@ -61,4 +77,8 @@ func (c *char) AnimationStartDelay(k info.AnimationDelayKey) int {
 		return 7
 	}
 	return c.Character.AnimationStartDelay(k)
+}
+
+func (c *char) isRadianceSSC() bool {
+	return c.StatusIsActive(reactable.PolestarFieldKey)
 }
