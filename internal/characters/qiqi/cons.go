@@ -204,6 +204,6 @@ func (c *char) c6OnBurst() {
 		return
 	}
 
-	c.AddStatus(c1Key, 10*60, true)
+	c.AddStatus(c6Key, 10*60, true)
 	c.c6Stacks = 4
 }
