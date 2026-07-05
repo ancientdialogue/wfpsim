@@ -1,0 +1,233 @@
+package odette
+
+import (
+	"github.com/genshinsim/gcsim/internal/frames"
+	"github.com/genshinsim/gcsim/pkg/core/action"
+	"github.com/genshinsim/gcsim/pkg/core/attacks"
+	"github.com/genshinsim/gcsim/pkg/core/attributes"
+	"github.com/genshinsim/gcsim/pkg/core/combat"
+	"github.com/genshinsim/gcsim/pkg/core/info"
+)
+
+var (
+	skillFrames       []int
+	skillRecastFrames []int
+)
+
+const (
+	skillHitmark            = 31
+	particleICDKey          = "odette-particle-icd"
+	danceDoubleKey          = "odette-dance-double"
+	danceDoubleUpgradeKey   = "odette-dance-double-duet"
+	skillFirstTickDelay     = 30
+	skillRecastFinalHitmark = 75
+)
+
+var (
+	skillTickDelay         = []int{120, 120}
+	skillRecastDoTHitmarks = []int{30, 45, 60}
+)
+
+func init() {
+	skillFrames = frames.InitAbilSlice(31) // E -> Dash
+	skillFrames[action.ActionAttack] = 30
+	skillFrames[action.ActionCharge] = 30
+	skillFrames[action.ActionBurst] = 30
+	skillFrames[action.ActionJump] = 30
+	skillFrames[action.ActionWalk] = 30
+	skillFrames[action.ActionSwap] = 29
+
+	skillRecastFrames = frames.InitAbilSlice(90) // E -> Dash
+	skillRecastFrames[action.ActionAttack] = 90
+	skillRecastFrames[action.ActionCharge] = 90
+	skillRecastFrames[action.ActionBurst] = 90
+	skillRecastFrames[action.ActionJump] = 90
+	skillRecastFrames[action.ActionWalk] = 90
+	skillRecastFrames[action.ActionSwap] = 90
+}
+
+func (c *char) Skill(p map[string]int) (action.Info, error) {
+	if c.StatusIsActive(danceDoubleKey) && !c.StatusIsActive(danceDoubleUpgradeKey) {
+		return c.skillRecast(p)
+	}
+
+	ai := info.AttackInfo{
+		ActorIndex: c.Index(),
+		Abil:       "Slow Dance",
+		AttackTag:  attacks.AttackTagElementalArt,
+		ICDTag:     attacks.ICDTagElementalArt,
+		ICDGroup:   attacks.ICDGroupDefault,
+		StrikeType: attacks.StrikeTypeDefault,
+		Element:    attributes.Cryo,
+		Durability: 25,
+		Mult:       skill[c.TalentLvlSkill()],
+	}
+
+	ap := combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 6)
+
+	c.Core.QueueAttack(
+		ai,
+		ap,
+		skillHitmark,
+		skillHitmark,
+		c.particleCB,
+	)
+	c.summonDanceDouble()
+	c.SetCDWithDelay(action.ActionSkill, 15*60, 14)
+	return action.Info{
+		Frames:          frames.NewAbilFunc(skillFrames),
+		AnimationLength: skillFrames[action.InvalidAction],
+		CanQueueAfter:   skillFrames[action.ActionSwap], // earliest cancel
+		State:           action.SkillState,
+	}, nil
+}
+
+func (c *char) skillRecast(_ map[string]int) (action.Info, error) {
+	ai := info.AttackInfo{
+		ActorIndex: c.Index(),
+		Abil:       "Daybreak Finale",
+		AttackTag:  attacks.AttackTagElementalArt,
+		ICDTag:     attacks.ICDTagElementalArt,
+		ICDGroup:   attacks.ICDGroupOdette,
+		StrikeType: attacks.StrikeTypeDefault,
+		Element:    attributes.Cryo,
+		Durability: 25,
+		Mult:       daybreakDoT[c.TalentLvlSkill()],
+	}
+	ap := combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 6)
+	for _, delay := range skillRecastDoTHitmarks {
+		c.Core.QueueAttack(ai, ap, delay, delay, c.particleCB)
+	}
+
+	c.QueueCharTask(func() {
+		aiFinal := info.AttackInfo{
+			ActorIndex: c.Index(),
+			Abil:       "Daybreak Finale" + stellarConductText,
+			AttackTag:  attacks.AttackTagDirectStellarConduct,
+			ICDTag:     attacks.ICDTagNone,
+			ICDGroup:   attacks.ICDGroupDefault,
+			StrikeType: attacks.StrikeTypeDefault,
+			Element:    attributes.Cryo,
+			Mult:       daybreakSSC[c.TalentLvlSkill()] * c.a4StellarGlimmerMult(),
+		}
+		if c.getRadiance() == radianceStellarSwirl {
+			aiFinal.Abil = "Daybreak Finale" + stellarSwirlText
+			aiFinal.AttackTag = attacks.AttackTagDirectStellarSwirl
+			aiFinal.Mult = daybreakSSw[c.TalentLvlSkill()] * c.a4StellarGlimmerMult()
+		}
+
+		c.Core.QueueAttack(aiFinal, ap, 0, 0, c.particleCB)
+		c.AddStatus(danceDoubleUpgradeKey, c.StatusDuration(danceDoubleKey), false)
+
+		c.c1OnSkillRecast(ai.AttackTag)
+	}, skillRecastFinalHitmark)
+
+	// cancel existing dance tickers during the recast
+	src := c.Core.F
+	c.danceDoubleSrc = src
+	// restart dance double at the end of the recast
+	c.Core.Tasks.Add(func() {
+		c.danceDoubleTicker(src, 0)
+	}, skillRecastFinalHitmark+skillFirstTickDelay)
+	return action.Info{
+		Frames:          frames.NewAbilFunc(skillRecastFrames),
+		AnimationLength: skillRecastFrames[action.InvalidAction],
+		CanQueueAfter:   skillRecastFrames[action.ActionSwap], // earliest cancel
+		State:           action.SkillState,
+	}, nil
+}
+
+func (c *char) summonDanceDouble() {
+	src := c.Core.F
+	c.danceDoubleSrc = src
+	c.AddStatus(danceDoubleKey, 20*60, false)
+	c.Core.Tasks.Add(func() { c.danceDoubleTicker(src, 0) }, skillFirstTickDelay)
+
+	c.a1OnDanceSummon()
+	c.c2OnDanceSummon()
+}
+
+func (c *char) danceDoubleTicker(src, count int) {
+	if c.danceDoubleSrc != src {
+		return
+	}
+
+	if !c.StatusIsActive(danceDoubleKey) {
+		return
+	}
+
+	ai := info.AttackInfo{
+		ActorIndex: c.Index(),
+		AttackTag:  attacks.AttackTagElementalArt,
+		ICDTag:     attacks.ICDTagNone,
+		ICDGroup:   attacks.ICDGroupDefault,
+		StrikeType: attacks.StrikeTypeDefault,
+		Element:    attributes.Cryo,
+		Durability: 25,
+	}
+	if count%2 == 0 {
+		ai.Abil = "\"Plume\" Dance Move"
+		ai.Mult = plume[c.TalentLvlSkill()]
+	} else {
+		ai.Abil = "\"Wing\" Dance Move"
+		ai.Mult = wing[c.TalentLvlSkill()]
+	}
+
+	ap := combat.NewCircleHitOnTarget(c.Core.Combat.PrimaryTarget(), nil, 4)
+
+	c.Core.QueueAttack(ai, ap, 0, 0)
+	c.Core.Tasks.Add(func() { c.danceDoubleTicker(src, count+1) }, skillTickDelay[count%2])
+
+	if !c.StatusIsActive(danceDoubleUpgradeKey) {
+		return
+	}
+	radiance := c.getRadiance()
+	if radiance == radianceNone {
+		return
+	}
+
+	aiStellar := info.AttackInfo{
+		ActorIndex: c.Index(),
+		ICDTag:     attacks.ICDTagNone,
+		ICDGroup:   attacks.ICDGroupDefault,
+		StrikeType: attacks.StrikeTypeDefault,
+		Element:    attributes.Cryo,
+	}
+
+	baseAbil := "\"Plume\" Dance Move"
+	if count%2 != 0 {
+		baseAbil = "\"Wing\" Dance Move"
+	}
+
+	if radiance == radianceStellarConduct {
+		aiStellar.AttackTag = attacks.AttackTagDirectStellarConduct
+		aiStellar.Abil = baseAbil + stellarConductText
+		if count%2 == 0 {
+			aiStellar.Mult = plumeSSC[c.TalentLvlSkill()] * c.a4StellarGlimmerMult()
+		} else {
+			aiStellar.Mult = wingSSC[c.TalentLvlSkill()] * c.a4StellarGlimmerMult()
+		}
+	} else {
+		aiStellar.AttackTag = attacks.AttackTagDirectStellarSwirl
+		aiStellar.Abil = baseAbil + stellarSwirlText
+		if count%2 == 0 {
+			aiStellar.Mult = plumeSSw[c.TalentLvlSkill()] * c.a4StellarGlimmerMult()
+		} else {
+			aiStellar.Mult = wingSSw[c.TalentLvlSkill()] * c.a4StellarGlimmerMult()
+		}
+	}
+
+	c.Core.QueueAttack(aiStellar, ap, 0, 0)
+}
+
+func (c *char) particleCB(a info.AttackCB) {
+	if a.Target.Type() != info.TargettableEnemy {
+		return
+	}
+
+	if c.StatusIsActive(particleICDKey) {
+		return
+	}
+	c.AddStatus(particleICDKey, 6*60, true)
+	c.Core.QueueParticle(c.Base.Key.String(), 5, attributes.Cryo, c.ParticleDelay)
+}

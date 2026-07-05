@@ -82,6 +82,7 @@ const (
 	Nilou
 	Ningguang
 	Noelle
+	Odette
 	Ororon
 	Qiqi
 	Raiden
@@ -419,6 +420,10 @@ func init() {
 	charNames[Noelle] = "noelle"
 	charPrettyName[Noelle] = "Noelle"
 	CharKeyToEle[Noelle] = attributes.Geo
+
+	charNames[Odette] = "odette"
+	charPrettyName[Odette] = "Odette"
+	CharKeyToEle[Odette] = attributes.Cryo
 
 	charNames[Ororon] = "ororon"
 	charPrettyName[Ororon] = "Ororon"

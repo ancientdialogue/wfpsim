@@ -1,0 +1,8 @@
+package_name: odette
+genshin_id: 10000150
+key: odette
+icd_groups:
+  - group_name: ICDGroupOdette
+    reset_timer: 180
+    ele_app_sequence: [1, 0, 0, 0, 1, 0, 0, 0]
+    damage_sequence: [1, 1, 1, 1, 1, 1, 1, 1]
