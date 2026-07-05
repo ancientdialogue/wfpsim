@@ -24,12 +24,13 @@ func (c *char) c1OnSkillRecast(tag attacks.AttackTag) {
 	}
 
 	ai := info.AttackInfo{
-		ActorIndex: c.Index(),
-		AttackTag:  tag,
-		ICDTag:     attacks.ICDTagNone,
-		ICDGroup:   attacks.ICDGroupDefault,
-		StrikeType: attacks.StrikeTypeDefault,
-		Element:    attributes.Cryo,
+		ActorIndex:       c.Index(),
+		AttackTag:        tag,
+		ICDTag:           attacks.ICDTagNone,
+		ICDGroup:         attacks.ICDGroupDefault,
+		StrikeType:       attacks.StrikeTypeDefault,
+		Element:          attributes.Cryo,
+		IgnoreDefPercent: 1,
 	}
 
 	switch tag {
@@ -191,12 +192,13 @@ func (c *char) c4Init() {
 		c.AddStatus(c4ICDKey, 3.5*60, true)
 
 		ai := info.AttackInfo{
-			ActorIndex: c.Index(),
-			Abil:       "Odette C4",
-			ICDTag:     attacks.ICDTagNone,
-			ICDGroup:   attacks.ICDGroupDefault,
-			StrikeType: attacks.StrikeTypeDefault,
-			Element:    attributes.Cryo,
+			ActorIndex:       c.Index(),
+			Abil:             "Odette C4",
+			ICDTag:           attacks.ICDTagNone,
+			ICDGroup:         attacks.ICDGroupDefault,
+			StrikeType:       attacks.StrikeTypeDefault,
+			Element:          attributes.Cryo,
+			IgnoreDefPercent: 1,
 		}
 
 		switch c.getRadiance() {

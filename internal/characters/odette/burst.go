@@ -13,8 +13,8 @@ import (
 
 var (
 	burstFrames   []int
-	burstHitmarks = []int{100, 100 + 12, 100 + 12 + 12}
-	finalHitmark  = 100 + 12 + 12 + 30
+	burstHitmarks = []int{113, 113 + 18, 113 + 18}
+	finalHitmark  = 113 + 18
 )
 
 const (
@@ -23,7 +23,7 @@ const (
 )
 
 func init() {
-	burstFrames = frames.InitAbilSlice(128) // Q -> CA
+	burstFrames = frames.InitAbilSlice(106) // Q -> CA
 	burstFrames[action.ActionAttack] = 101  // Q -> N1
 	burstFrames[action.ActionSkill] = 100   // Q -> E
 	burstFrames[action.ActionDash] = 103    // Q -> D

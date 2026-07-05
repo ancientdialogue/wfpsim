@@ -15,35 +15,36 @@ var (
 )
 
 const (
-	skillHitmark            = 31
-	particleICDKey          = "odette-particle-icd"
-	danceDoubleKey          = "odette-dance-double"
-	danceDoubleUpgradeKey   = "odette-dance-double-duet"
-	skillFirstTickDelay     = 30
-	skillRecastFinalHitmark = 75
+	skillHitmark              = 31
+	particleICDKey            = "odette-particle-icd"
+	danceDoubleKey            = "odette-dance-double"
+	danceDoubleUpgradeKey     = "odette-dance-double-duet"
+	skillFirstTickDelay       = 130
+	skillRecastFinalHitmark   = 75
+	skillRecastFirstTickDelay = 34
 )
 
 var (
-	skillTickDelay         = []int{120, 120}
-	skillRecastDoTHitmarks = []int{30, 45, 60}
+	skillTickDelay         = []int{110, 130}
+	skillRecastDoTHitmarks = []int{8, 8 + 22, 8 + 22 + 30}
 )
 
 func init() {
-	skillFrames = frames.InitAbilSlice(31) // E -> Dash
-	skillFrames[action.ActionAttack] = 30
-	skillFrames[action.ActionCharge] = 30
-	skillFrames[action.ActionBurst] = 30
-	skillFrames[action.ActionJump] = 30
-	skillFrames[action.ActionWalk] = 30
-	skillFrames[action.ActionSwap] = 29
+	skillFrames = frames.InitAbilSlice(38) // E -> Dash
+	skillFrames[action.ActionAttack] = 38
+	skillFrames[action.ActionCharge] = 38
+	skillFrames[action.ActionBurst] = 38
+	skillFrames[action.ActionJump] = 38
+	skillFrames[action.ActionWalk] = 38
+	skillFrames[action.ActionSwap] = 38
 
-	skillRecastFrames = frames.InitAbilSlice(90) // E -> Dash
-	skillRecastFrames[action.ActionAttack] = 90
-	skillRecastFrames[action.ActionCharge] = 90
-	skillRecastFrames[action.ActionBurst] = 90
-	skillRecastFrames[action.ActionJump] = 90
-	skillRecastFrames[action.ActionWalk] = 90
-	skillRecastFrames[action.ActionSwap] = 90
+	skillRecastFrames = frames.InitAbilSlice(77) // E -> Dash
+	skillRecastFrames[action.ActionAttack] = 77
+	skillRecastFrames[action.ActionCharge] = 77
+	skillRecastFrames[action.ActionBurst] = 77
+	skillRecastFrames[action.ActionJump] = 77
+	skillRecastFrames[action.ActionWalk] = 77
+	skillRecastFrames[action.ActionSwap] = 77
 }
 
 func (c *char) Skill(p map[string]int) (action.Info, error) {
@@ -101,14 +102,15 @@ func (c *char) skillRecast(_ map[string]int) (action.Info, error) {
 
 	c.QueueCharTask(func() {
 		aiFinal := info.AttackInfo{
-			ActorIndex: c.Index(),
-			Abil:       "Daybreak Finale" + stellarConductText,
-			AttackTag:  attacks.AttackTagDirectStellarConduct,
-			ICDTag:     attacks.ICDTagNone,
-			ICDGroup:   attacks.ICDGroupDefault,
-			StrikeType: attacks.StrikeTypeDefault,
-			Element:    attributes.Cryo,
-			Mult:       daybreakSSC[c.TalentLvlSkill()] * c.a4StellarGlimmerMult(),
+			ActorIndex:       c.Index(),
+			Abil:             "Daybreak Finale" + stellarConductText,
+			AttackTag:        attacks.AttackTagDirectStellarConduct,
+			ICDTag:           attacks.ICDTagNone,
+			ICDGroup:         attacks.ICDGroupDefault,
+			StrikeType:       attacks.StrikeTypeDefault,
+			Element:          attributes.Cryo,
+			Mult:             daybreakSSC[c.TalentLvlSkill()] * c.a4StellarGlimmerMult(),
+			IgnoreDefPercent: 1,
 		}
 		if c.getRadiance() == radianceStellarSwirl {
 			aiFinal.Abil = "Daybreak Finale" + stellarSwirlText
@@ -128,7 +130,7 @@ func (c *char) skillRecast(_ map[string]int) (action.Info, error) {
 	// restart dance double at the end of the recast
 	c.Core.Tasks.Add(func() {
 		c.danceDoubleTicker(src, 0)
-	}, skillRecastFinalHitmark+skillFirstTickDelay)
+	}, skillRecastFinalHitmark+skillRecastFirstTickDelay)
 	return action.Info{
 		Frames:          frames.NewAbilFunc(skillRecastFrames),
 		AnimationLength: skillRecastFrames[action.InvalidAction],
@@ -187,34 +189,30 @@ func (c *char) danceDoubleTicker(src, count int) {
 	}
 
 	aiStellar := info.AttackInfo{
-		ActorIndex: c.Index(),
-		ICDTag:     attacks.ICDTagNone,
-		ICDGroup:   attacks.ICDGroupDefault,
-		StrikeType: attacks.StrikeTypeDefault,
-		Element:    attributes.Cryo,
+		ActorIndex:       c.Index(),
+		ICDTag:           attacks.ICDTagNone,
+		ICDGroup:         attacks.ICDGroupDefault,
+		StrikeType:       attacks.StrikeTypeDefault,
+		Element:          attributes.Cryo,
+		IgnoreDefPercent: 1,
 	}
 
 	baseAbil := "\"Plume\" Dance Move"
+	mults := map[radianceState][]float64{radianceNone: plume, radianceStellarConduct: plumeSSC, radianceStellarSwirl: plumeSSw}
 	if count%2 != 0 {
 		baseAbil = "\"Wing\" Dance Move"
+		mults[radianceNone] = wing
+		mults[radianceStellarConduct] = wingSSC
+		mults[radianceStellarSwirl] = wingSSw
 	}
+	aiStellar.Mult = mults[radianceStellarConduct][c.TalentLvlSkill()] * c.a4StellarGlimmerMult()
 
 	if radiance == radianceStellarConduct {
 		aiStellar.AttackTag = attacks.AttackTagDirectStellarConduct
 		aiStellar.Abil = baseAbil + stellarConductText
-		if count%2 == 0 {
-			aiStellar.Mult = plumeSSC[c.TalentLvlSkill()] * c.a4StellarGlimmerMult()
-		} else {
-			aiStellar.Mult = wingSSC[c.TalentLvlSkill()] * c.a4StellarGlimmerMult()
-		}
 	} else {
 		aiStellar.AttackTag = attacks.AttackTagDirectStellarSwirl
 		aiStellar.Abil = baseAbil + stellarSwirlText
-		if count%2 == 0 {
-			aiStellar.Mult = plumeSSw[c.TalentLvlSkill()] * c.a4StellarGlimmerMult()
-		} else {
-			aiStellar.Mult = wingSSw[c.TalentLvlSkill()] * c.a4StellarGlimmerMult()
-		}
 	}
 
 	c.Core.QueueAttack(aiStellar, ap, 0, 0)
