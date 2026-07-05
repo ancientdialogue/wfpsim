@@ -13,6 +13,7 @@ import (
 const (
 	c1Key = "yae-c1"
 	c2Key = "yae-c2"
+	c6Key = "yae-c6"
 )
 
 var c2BuffVal = []float64{0, 60, 90, 120, 200}
@@ -42,7 +43,7 @@ func (c *char) c1Init() {
 				},
 			})
 			char.AddReactBonusMod(character.ReactBonusMod{
-				Base: modifier.NewBase(c1Key+"-ssc", 10*60),
+				Base: modifier.NewBaseWithHitlag(c1Key+"-ssc", 10*60),
 				Amount: func(ai info.AttackInfo) float64 {
 					if ai.AttackTag == attacks.AttackTagDirectStellarConduct {
 						return 0.5
@@ -130,4 +131,26 @@ func (c *char) c4() {
 			},
 		})
 	}
+}
+
+func (c *char) c6Init() {
+	if c.Base.Cons < 6 {
+		return
+	}
+	if !c.revelation {
+		return
+	}
+	m := make([]float64, attributes.EndStatType)
+	m[attributes.CD] = 2 // 200% CDMG
+	c.AddAttackMod(character.AttackMod{
+		Base: modifier.NewBase(c6Key, -1),
+		Amount: func(atk *info.AttackEvent, _ info.Target) []float64 {
+			switch atk.Info.AttackTag {
+			case attacks.AttackTagDirectStellarConduct:
+			default:
+				return nil
+			}
+			return m
+		},
+	})
 }
