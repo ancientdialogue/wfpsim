@@ -23,6 +23,7 @@ var SetNameToKey = map[string]keys.Set{
 	"celestialgift":                      keys.CelestialGift,
 	"gift":                               keys.CelestialGift,
 	"cg":                                 keys.CelestialGift,
+	"crimsonproof":                       keys.CrimsonProof,
 	"crimsonwitchofflames":               keys.CrimsonWitchOfFlames,
 	"cwof":                               keys.CrimsonWitchOfFlames,
 	"cw":                                 keys.CrimsonWitchOfFlames,
