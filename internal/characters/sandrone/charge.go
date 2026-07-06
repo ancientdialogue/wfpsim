@@ -223,7 +223,7 @@ func (c *char) beamTicker(src int) {
 		15,
 	)
 
-	c.Core.QueueAttack(ai, ap, 0, 0)
+	c.Core.QueueAttack(ai, ap, 0, 0, c.particleCB)
 
 	c.addDecode(17)
 	c.c2OnBeam()
