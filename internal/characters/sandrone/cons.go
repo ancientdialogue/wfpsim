@@ -58,14 +58,13 @@ func (c *char) c2Init() {
 		return
 	}
 
-	if c.getRadiance() == radianceNone {
-		return
-	}
-
 	m := make([]float64, attributes.EndStatType)
 	c.AddAttackMod(character.AttackMod{
-		Base: modifier.NewBaseWithHitlag(c2Key, -1),
+		Base: modifier.NewBase(c2Key, -1),
 		Amount: func(atk *info.AttackEvent, t info.Target) []float64 {
+			if c.getRadiance() == radianceNone {
+				return nil
+			}
 			if !slices.Contains(atk.Info.AdditionalTags, attacks.AdditionalTagSandroneBeam) {
 				return nil
 			}
@@ -80,7 +79,7 @@ func (c *char) c2OnBeam() {
 		return
 	}
 	// delay to after beam hits
-	c.Core.Tasks.Add(func() { c.c2stacks += min(c.c2stacks+1, 3) }, 1)
+	c.Core.Tasks.Add(func() { c.c2stacks = min(c.c2stacks+1, 3) }, 1)
 }
 
 func (c *char) c2OnCAStart() {
