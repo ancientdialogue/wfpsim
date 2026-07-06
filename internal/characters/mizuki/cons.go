@@ -235,7 +235,6 @@ func (c *char) c2Ticker(src int) {
 				Value: -0.20,
 			})
 		}
-
 	}
 
 	c.Core.Tasks.Add(func() { c.c2Ticker(src) }, 0.3*60)
