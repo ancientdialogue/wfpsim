@@ -142,6 +142,7 @@ func (c *char) skillRecast(_ map[string]int) (action.Info, error) {
 func (c *char) summonDanceDouble() {
 	src := c.Core.F
 	c.danceDoubleSrc = src
+	c.DeleteStatus(danceDoubleUpgradeKey)
 	c.AddStatus(danceDoubleKey, 20*60, false)
 	c.Core.Tasks.Add(func() { c.danceDoubleTicker(src, 0) }, skillFirstTickDelay)
 
