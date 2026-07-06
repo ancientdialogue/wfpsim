@@ -9,12 +9,15 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/player/character"
 )
 
+const stellarSwirlText = " (Stellar Swirl)"
+
 func init() {
 	core.RegisterCharFunc(keys.Mizuki, NewChar)
 }
 
 type char struct {
 	*tmpl.Character
+	revelation                      bool
 	particleGenerationsRemaining    int
 	dreamDrifterExtensionsRemaining int
 	cloudAttack                     info.AttackInfo
@@ -23,10 +26,11 @@ type char struct {
 	a4Buff                          []float64
 	c1EM                            float64
 	c2Buff                          []float64
+	c2Src                           int
 	c4EnergyGenerationsRemaining    int
 }
 
-func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) error {
+func NewChar(s *core.Core, w *character.CharWrapper, p info.CharacterProfile) error {
 	c := char{}
 	c.Character = tmpl.NewWithWrapper(s, w)
 
@@ -35,6 +39,12 @@ func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) er
 	c.BurstCon = 5
 	c.SkillCon = 3
 
+	revelation, ok := p.Params["revelation"]
+	if !ok {
+		revelation = 1
+	}
+	c.revelation = revelation > 0
+
 	w.Character = &c
 
 	return nil
@@ -42,6 +52,7 @@ func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) er
 
 func (c *char) Init() error {
 	c.skillInit()
+	c.revelationInit()
 	c.a1()
 	c.a4()
 	c.c1()

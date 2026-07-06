@@ -130,6 +130,7 @@ func (c *char) applyDreamDrifterEffect(travel int) {
 		// First cloud (0.45s after skill activation) can trigger it so queue it a few frames later
 		c.c1Task(c.cloudSrc, skillHitmark+2)
 	}
+	c.c2OnSkill()
 }
 
 func (c *char) skillInit() {
@@ -146,16 +147,25 @@ func (c *char) skillInit() {
 				if ai.Amped || ai.Catalyzed {
 					return 0
 				}
+
 				switch ai.AttackTag {
 				case attacks.AttackTagSwirlCryo:
 				case attacks.AttackTagSwirlElectro:
 				case attacks.AttackTagSwirlHydro:
 				case attacks.AttackTagSwirlPyro:
+				case attacks.AttackTagDirectStellarSwirl:
+				case attacks.AttackTagReactionStellarSwirl:
 				default:
 					return 0
 				}
 
-				return swirlDMG[c.TalentLvlSkill()] * c.Stat(attributes.EM)
+				mult := 1.0
+				switch ai.AttackTag {
+				case attacks.AttackTagDirectStellarSwirl, attacks.AttackTagReactionStellarSwirl:
+					mult = 0.1
+				}
+
+				return swirlDMG[c.TalentLvlSkill()] * c.Stat(attributes.EM) * mult
 			},
 		})
 	}
@@ -212,7 +222,8 @@ func (c *char) particleCB(a info.AttackCB) {
 func (c *char) cancelDreamDrifterState() {
 	c.DeleteStatus(dreamDrifterStateKey)
 	c.cloudSrc = -1
-
+	c.revelationOnSkillExit()
+	c.c2OnSkillExit()
 	c.Core.Log.NewEvent("DreamDrifter effect cancelled", glog.LogCharacterEvent, c.Index())
 }
 
@@ -224,12 +235,16 @@ func (c *char) cloudTask(travel, src, hitmark int) {
 		if !c.StatusIsActive(dreamDrifterStateKey) {
 			return
 		}
+
+		flatDmg, cb := c.revelationOnSkillTick()
+		c.cloudAttack.FlatDmg = flatDmg
 		c.Core.QueueAttackWithSnap(
 			c.cloudAttack,
 			c.cloudSnap,
 			combat.NewCircleHitOnTarget(c.Core.Combat.PrimaryTarget(), nil, cloudExplosionRadius),
 			travel,
 			c.particleCB,
+			cb,
 		)
 		c.cloudTask(travel, src, cloudHitInterval)
 	}, hitmark)

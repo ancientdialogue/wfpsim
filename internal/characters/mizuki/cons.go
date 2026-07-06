@@ -56,6 +56,7 @@ func (c *char) c1() {
 		case attacks.AttackTagSwirlElectro:
 		case attacks.AttackTagSwirlHydro:
 		case attacks.AttackTagSwirlPyro:
+		case attacks.AttackTagReactionStellarSwirl:
 		default:
 			return
 		}
@@ -77,6 +78,47 @@ func (c *char) c1() {
 
 		// Cancel the effect
 		e.DeleteStatus(c1Key)
+
+		if !c.revelation {
+			return
+		}
+
+		// She also launches an additional attack on the same opponent,
+		// dealing Anemo DMG equal to 1,100% of Yumemizuki Mizuki's Elemental Mastery.
+
+		mult := 11.0
+		if atk.Info.AttackTag == attacks.AttackTagReactionStellarSwirl {
+			mult = 5.5
+		}
+
+		// this shouldn't swirl because it's right after an existing swirl?
+		ai := info.AttackInfo{
+			ActorIndex: c.Index(),
+			Abil:       "Mizuki C1",
+			AttackTag:  attacks.AttackTagNone,
+			ICDTag:     attacks.ICDTagNone,
+			ICDGroup:   attacks.ICDGroupDefault,
+			StrikeType: attacks.StrikeTypeDefault,
+			Element:    attributes.Anemo,
+			Durability: 25,
+			Mult:       mult,
+			UseEM:      true,
+		}
+
+		if c.isRadianceSSw() {
+			ai.Abil += stellarSwirlText
+			ai.AttackTag = attacks.AttackTagDirectStellarSwirl
+			ai.Mult = 6
+			ai.IgnoreDefPercent = 1
+			ai.Durability = 0
+		}
+
+		ap := combat.NewCircleHitOnTarget(
+			e,
+			nil,
+			5.5,
+		)
+		c.Core.QueueAttack(ai, ap, 3, 3)
 	}, c1Key)
 }
 
@@ -144,6 +186,61 @@ func (c *char) c2UpdateTask() {
 	}, c2Interval)
 }
 
+func (c *char) c2OnSkill() {
+	if c.Base.Cons < 2 {
+		return
+	}
+
+	if !c.revelation {
+		return
+	}
+
+	c.c2Src = c.Core.F
+	c.c2Ticker(c.c2Src)
+}
+
+func (c *char) c2OnSkillExit() {
+	if c.Base.Cons < 2 {
+		return
+	}
+
+	if !c.revelation {
+		return
+	}
+
+	c.c2Src = -1
+}
+
+func (c *char) c2Ticker(src int) {
+	if !c.StatusIsActive(dreamDrifterStateKey) {
+		return
+	}
+
+	if c.c2Src != src {
+		return
+	}
+
+	ap := combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 10)
+
+	elems := []attributes.Element{attributes.Pyro, attributes.Hydro, attributes.Electro, attributes.Cryo, attributes.Anemo}
+	for _, e := range c.Core.Combat.EnemiesWithinArea(ap, nil) {
+		e, ok := e.(*enemy.Enemy)
+		if !ok {
+			continue
+		}
+		for _, elem := range elems {
+			e.AddResistMod(info.ResistMod{
+				Base:  modifier.NewBaseWithHitlag(c2Key+"-"+elem.String(), 1*60),
+				Ele:   elem,
+				Value: -0.20,
+			})
+		}
+
+	}
+
+	c.Core.Tasks.Add(func() { c.c2Ticker(src) }, 0.3*60)
+}
+
 // Picking up a Yumemi Style Special Snack from the Elemental Burst Anraku Secret Spring Therapy will both deal DMG
 // and heal, and will restore 5 Energy to Yumemizuki Mizuki. Energy can be restored this way 4 times per Anraku
 // Secret Spring Therapy duration.
@@ -156,6 +253,28 @@ func (c *char) c4() {
 		c.c4EnergyGenerationsRemaining--
 		c.AddEnergy(c4Key, c4Energy)
 	}
+
+	if !c.revelation {
+		return
+	}
+
+	lowestHPInd := c.Index()
+	lowestHP := c.CurrentHPRatio()
+	for i, char := range c.Core.Player.Chars() {
+		if char.CurrentHPRatio() < lowestHP {
+			lowestHPInd = i
+			lowestHP = char.CurrentHPRatio()
+		}
+	}
+
+	healAmt := 2.66 * c.Stat(attributes.EM)
+	c.Core.Player.Heal(info.HealInfo{
+		Caller:  c.Index(),
+		Target:  lowestHPInd,
+		Message: snackHealName + " (C4)",
+		Src:     healAmt,
+		Bonus:   c.Stat(attributes.Heal),
+	})
 }
 
 // While Yumemizuki Mizuki is in the Dreamdrifter state, Swirl DMG dealt by nearby party members can Crit,
@@ -192,4 +311,58 @@ func (c *char) c6() {
 		ae.Snapshot.Stats[attributes.CR] = c6CR
 		ae.Snapshot.Stats[attributes.CD] = c6CD
 	}, c6Key)
+
+	if !c.revelation {
+		return
+	}
+
+	m := make([]float64, attributes.EndStatType)
+	c.AddStatMod(character.StatMod{
+		Base:         modifier.NewBase(c6Key, -1),
+		Extra:        true,
+		AffectedStat: attributes.NoStat,
+		Amount: func() []float64 {
+			scaling := max(c.NonExtraStat(attributes.EM)-500, 0)
+			m[attributes.CR] = min(scaling*0.0004, 0.2)
+			m[attributes.CD] = min(scaling*0.0016, 0.8)
+			return m
+		},
+	})
+
+	m2 := make([]float64, attributes.EndStatType)
+	m2[attributes.CR] = 0.10
+	m2[attributes.CD] = 0.20
+	for _, char := range c.Core.Player.Chars() {
+		char.AddAttackMod(character.AttackMod{
+			Base: modifier.NewBase(c6Key+"ssw-cr", -1),
+			Amount: func(atk *info.AttackEvent, t info.Target) []float64 {
+				if atk.Info.AttackTag != attacks.AttackTagDirectStellarSwirl {
+					return nil
+				}
+
+				if !c.StatusIsActive(dreamDrifterStateKey) {
+					return nil
+				}
+				return m2
+			},
+		})
+	}
+
+	c.Core.Events.Subscribe(event.OnLunarReactionAttack, func(args ...any) {
+		if _, ok := args[0].(*enemy.Enemy); !ok {
+			return
+		}
+
+		ae, ok := args[1].(*info.AttackEvent)
+		if !ok {
+			return
+		}
+
+		if ae.Info.AttackTag != attacks.AttackTagReactionStellarSwirl {
+			return
+		}
+
+		ae.Snapshot.Stats[attributes.CR] += 0.1
+		ae.Snapshot.Stats[attributes.CD] += 0.2
+	}, c6Key+"-lunar-reaction")
 }

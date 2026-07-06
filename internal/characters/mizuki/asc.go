@@ -3,8 +3,11 @@ package mizuki
 import (
 	"fmt"
 
+	"github.com/genshinsim/gcsim/pkg/core/attacks"
 	"github.com/genshinsim/gcsim/pkg/core/attributes"
+	"github.com/genshinsim/gcsim/pkg/core/combat"
 	"github.com/genshinsim/gcsim/pkg/core/event"
+	"github.com/genshinsim/gcsim/pkg/core/glog"
 	"github.com/genshinsim/gcsim/pkg/core/info"
 	"github.com/genshinsim/gcsim/pkg/core/player/character"
 	"github.com/genshinsim/gcsim/pkg/enemy"
@@ -22,6 +25,10 @@ const (
 	a4EMBuff                      = 100
 	dreamDrifterExtensions        = 2
 	dreamDrifterDurationExtension = 2.5 * 60
+	revelationKey                 = "mizuki-revelation"
+	revelationEMKey               = "mizuki-revelation-em"
+	revelationICDKey              = "mizuki-revelation-icd"
+	radianceSwirlKey              = "radiance-stellar-swirl"
 )
 
 // When Yumemizuki Mizuki triggers Swirl while in her Dreamdrifter state, Dreamdrifter's duration increases by 2.5s.
@@ -69,6 +76,7 @@ func (c *char) a1() {
 	c.Core.Events.Subscribe(event.OnSwirlHydro, swirlFunc, fmt.Sprintf(a1SwirlKey, attributes.Hydro))
 	c.Core.Events.Subscribe(event.OnSwirlElectro, swirlFunc, fmt.Sprintf(a1SwirlKey, attributes.Electro))
 	c.Core.Events.Subscribe(event.OnSwirlCryo, swirlFunc, fmt.Sprintf(a1SwirlKey, attributes.Cryo))
+	c.Core.Events.Subscribe(event.OnStellarSwirl, swirlFunc, fmt.Sprintf(a1SwirlKey, "stellar"))
 }
 
 // While Yumemizuki Mizuki is in the Dreamdrifter state, when other nearby party members hit opponents with
@@ -122,4 +130,131 @@ func (c *char) a4() {
 		})
 	}
 	c.Core.Events.Subscribe(event.OnEnemyHit, hitFunc, a4Key)
+}
+
+func (c *char) revelationInit() {
+	if !c.revelation {
+		return
+	}
+
+	hook := func(args ...any) {
+		atk := args[1].(*info.AttackEvent)
+		_, ok := args[0].(*enemy.Enemy)
+		if !ok {
+			return
+		}
+		if atk.Info.ActorIndex != c.Index() {
+			return
+		}
+
+		// ignore if character not on field
+		if c.Core.Player.Active() != c.Index() {
+			return
+		}
+
+		if !c.StatusIsActive(dreamDrifterStateKey) {
+			return
+		}
+
+		if c.StatusIsActive(revelationICDKey) {
+			return
+		}
+
+		c.AddStatus(revelationICDKey, 2.5*60, true)
+		c.AddStatus(revelationKey, -1, false)
+	}
+
+	c.Core.Events.Subscribe(event.OnSwirlPyro, hook, revelationKey)
+	c.Core.Events.Subscribe(event.OnSwirlHydro, hook, revelationKey)
+	c.Core.Events.Subscribe(event.OnSwirlElectro, hook, revelationKey)
+	c.Core.Events.Subscribe(event.OnSwirlCryo, hook, revelationKey)
+	c.Core.Events.Subscribe(event.OnStellarSwirl, hook, revelationKey)
+
+	m := make([]float64, attributes.EndStatType)
+
+	for _, char := range c.Core.Player.Chars() {
+		char.AddStatMod(character.StatMod{
+			Base:         modifier.NewBase(revelationEMKey, -1),
+			Extra:        true,
+			AffectedStat: attributes.EM,
+			Amount: func() []float64 {
+				if !c.StatusIsActive(dreamDrifterStateKey) {
+					return nil
+				}
+				m[attributes.EM] = c.NonExtraStat(attributes.EM) * 0.1
+				return m
+			},
+		})
+	}
+
+	c.Core.Events.Subscribe(event.OnStellarSwirl, func(args ...any) {
+		if _, ok := args[0].(*enemy.Enemy); !ok {
+			return
+		}
+
+		c.AddStatus(radianceSwirlKey, 8*60, false)
+	}, "mizuki-"+radianceSwirlKey)
+}
+
+func (c *char) revelationOnSkillTick() (float64, info.AttackCBFunc) {
+	if !c.revelation {
+		return 0, nil
+	}
+	if !c.StatusIsActive(revelationKey) {
+		return 0, nil
+	}
+
+	c.DeleteStatus(revelationKey)
+	buff := c.Stat(attributes.EM) * 10
+	done := false
+	cb := func(atk info.AttackCB) {
+		c.Core.Log.NewEvent("TEST2", glog.LogCharacterEvent, c.Index())
+		if atk.Target.Type() != info.TargettableEnemy {
+			return
+		}
+
+		if done {
+			return
+		}
+
+		if !c.isRadianceSSw() {
+			return
+		}
+
+		done = true
+		ai := info.AttackInfo{
+			ActorIndex:       c.Index(),
+			Abil:             "Mizuki Revelation: Radiance" + stellarSwirlText,
+			AttackTag:        attacks.AttackTagDirectStellarSwirl,
+			ICDTag:           attacks.ICDTagNone,
+			ICDGroup:         attacks.ICDGroupDefault,
+			StrikeType:       attacks.StrikeTypeDefault,
+			Element:          attributes.Anemo,
+			Mult:             10,
+			UseEM:            true,
+			IgnoreDefPercent: 1,
+		}
+		ap := combat.NewCircleHitOnTarget(
+			atk.Target,
+			nil,
+			5.5,
+		)
+		c.Core.QueueAttack(ai, ap, 2, 2)
+	}
+	return buff, cb
+}
+
+func (c *char) revelationOnSkillExit() {
+	if !c.revelation {
+		return
+	}
+	c.DeleteStatus(revelationKey)
+}
+
+func (c *char) isRadianceSSw() bool {
+	if !c.revelation {
+		return false
+	}
+
+	return c.StatusIsActive(radianceSwirlKey)
 }
