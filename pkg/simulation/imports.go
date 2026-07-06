@@ -24,6 +24,7 @@ import (
 	_ "github.com/genshinsim/gcsim/internal/artifacts/braveheart"
 	_ "github.com/genshinsim/gcsim/internal/artifacts/celestialgift"
 	_ "github.com/genshinsim/gcsim/internal/artifacts/crimson"
+	_ "github.com/genshinsim/gcsim/internal/artifacts/crimsonproof"
 	_ "github.com/genshinsim/gcsim/internal/artifacts/deepwood"
 	_ "github.com/genshinsim/gcsim/internal/artifacts/defenderswill"
 	_ "github.com/genshinsim/gcsim/internal/artifacts/desertpavilionchronicle"
