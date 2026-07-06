@@ -22,6 +22,8 @@ var cryoReactions = []event.Event{
 	event.OnSuperconduct,
 	event.OnFrozen,
 	event.OnMelt,
+	event.OnStellarSwirl,
+	event.OnStellarConduct,
 }
 
 func (c *char) a1BonusWill(dmg float64) float64 {

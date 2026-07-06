@@ -17,6 +17,7 @@ import (
 var reactToElements = map[info.ReactionType][]attributes.Element{
 	info.ReactionTypeOverload:           {attributes.Electro, attributes.Pyro},
 	info.ReactionTypeSuperconduct:       {attributes.Electro, attributes.Cryo},
+	info.ReactionTypeStellarConduct:     {attributes.Electro, attributes.Cryo},
 	info.ReactionTypeMelt:               {attributes.Pyro, attributes.Cryo},
 	info.ReactionTypeVaporize:           {attributes.Pyro, attributes.Hydro},
 	info.ReactionTypeFreeze:             {attributes.Cryo, attributes.Hydro},
@@ -24,6 +25,7 @@ var reactToElements = map[info.ReactionType][]attributes.Element{
 	info.ReactionTypeLunarCharged:       {attributes.Electro, attributes.Hydro},
 	info.ReactionTypeSwirlHydro:         {attributes.Anemo, attributes.Hydro},
 	info.ReactionTypeSwirlCryo:          {attributes.Anemo, attributes.Cryo},
+	info.ReactionTypeStellarSwirl:       {attributes.Anemo, attributes.Cryo},
 	info.ReactionTypeSwirlElectro:       {attributes.Anemo, attributes.Electro},
 	info.ReactionTypeSwirlPyro:          {attributes.Anemo, attributes.Pyro},
 	info.ReactionTypeCrystallizeHydro:   {attributes.Geo, attributes.Hydro},
@@ -133,6 +135,7 @@ func NewSet(c *core.Core, char *character.CharWrapper, count int, param map[stri
 		for evt, react := range map[event.Event]info.ReactionType{
 			event.OnOverload:           info.ReactionTypeOverload,
 			event.OnSuperconduct:       info.ReactionTypeSuperconduct,
+			event.OnStellarConduct:     info.ReactionTypeStellarConduct,
 			event.OnMelt:               info.ReactionTypeMelt,
 			event.OnVaporize:           info.ReactionTypeVaporize,
 			event.OnFrozen:             info.ReactionTypeFreeze,
@@ -140,6 +143,7 @@ func NewSet(c *core.Core, char *character.CharWrapper, count int, param map[stri
 			event.OnLunarCharged:       info.ReactionTypeLunarCharged,
 			event.OnSwirlHydro:         info.ReactionTypeSwirlHydro,
 			event.OnSwirlCryo:          info.ReactionTypeSwirlCryo,
+			event.OnStellarSwirl:       info.ReactionTypeStellarSwirl,
 			event.OnSwirlElectro:       info.ReactionTypeSwirlElectro,
 			event.OnSwirlPyro:          info.ReactionTypeSwirlPyro,
 			event.OnCrystallizeHydro:   info.ReactionTypeCrystallizeHydro,

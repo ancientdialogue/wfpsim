@@ -22,6 +22,7 @@ const (
 var swirlEvents = []event.Event{
 	event.OnSwirlPyro,
 	event.OnSwirlCryo,
+	event.OnStellarSwirl,
 	event.OnSwirlElectro,
 	event.OnSwirlHydro,
 }

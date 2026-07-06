@@ -10,6 +10,7 @@ import (
 var eventToReaction = map[event.Event]info.ReactionType{
 	event.OnOverload:           info.ReactionTypeOverload,
 	event.OnSuperconduct:       info.ReactionTypeSuperconduct,
+	event.OnStellarConduct:     info.ReactionTypeStellarConduct,
 	event.OnMelt:               info.ReactionTypeMelt,
 	event.OnVaporize:           info.ReactionTypeVaporize,
 	event.OnFrozen:             info.ReactionTypeFreeze,
@@ -18,6 +19,7 @@ var eventToReaction = map[event.Event]info.ReactionType{
 	event.OnLunarCharged:       info.ReactionTypeLunarCharged,
 	event.OnSwirlHydro:         info.ReactionTypeSwirlHydro,
 	event.OnSwirlCryo:          info.ReactionTypeSwirlCryo,
+	event.OnStellarSwirl:       info.ReactionTypeStellarSwirl,
 	event.OnSwirlElectro:       info.ReactionTypeSwirlElectro,
 	event.OnSwirlPyro:          info.ReactionTypeSwirlPyro,
 	event.OnCrystallizeCryo:    info.ReactionTypeCrystallizeCryo,
