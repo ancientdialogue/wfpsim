@@ -7,7 +7,6 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/attributes"
 	"github.com/genshinsim/gcsim/pkg/core/combat"
 	"github.com/genshinsim/gcsim/pkg/core/event"
-	"github.com/genshinsim/gcsim/pkg/core/glog"
 	"github.com/genshinsim/gcsim/pkg/core/info"
 	"github.com/genshinsim/gcsim/pkg/core/player/character"
 	"github.com/genshinsim/gcsim/pkg/enemy"
@@ -208,7 +207,6 @@ func (c *char) revelationOnSkillTick() (float64, info.AttackCBFunc) {
 	buff := c.Stat(attributes.EM) * 10
 	done := false
 	cb := func(atk info.AttackCB) {
-		c.Core.Log.NewEvent("TEST2", glog.LogCharacterEvent, c.Index())
 		if atk.Target.Type() != info.TargettableEnemy {
 			return
 		}
