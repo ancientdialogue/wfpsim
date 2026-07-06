@@ -171,7 +171,7 @@ func (r *Reactable) TryFrozenStellarConduct(a *info.AttackEvent) bool {
 }
 
 func (r *Reactable) queueStellarConduct(a *info.AttackEvent) {
-	r.core.Events.Emit(event.OnSuperconduct, r.self, a)
+	r.core.Events.Emit(event.OnStellarConduct, r.self, a)
 	// setup polestar field
 
 	newPolestarField := r.core.Status.Duration(PolestarFieldKey) <= 0

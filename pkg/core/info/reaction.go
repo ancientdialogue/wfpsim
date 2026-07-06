@@ -32,6 +32,8 @@ const (
 	ReactionTypeLunarCharged       ReactionType = "lunarcharged"
 	ReactionTypeLunarBloom         ReactionType = "lunarbloom"
 	ReactionTypeLunarCrystallize   ReactionType = "lunarcrystallize"
+	ReactionTypeStellarConduct     ReactionType = "stellar-conduct"
+	ReactionTypeStellarSwirl       ReactionType = "stellar-swirl"
 	ReactionTypeNoReaction         ReactionType = ""
 	ReactionTypeFreezeExtend       ReactionType = "freeze-extend"
 )
