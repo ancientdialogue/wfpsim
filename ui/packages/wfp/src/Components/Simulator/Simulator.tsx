@@ -53,7 +53,9 @@ export function Simulator({
           <li>Sandrone (C6)</li>
           <li>Yae (Revelation)</li>
           <li>Qiqi (Revelation)</li>
+          <li>Mizuki (Revelation)</li>
           <li>Disenchantment in the Deep Shadow</li>
+          <li>Crimson Proof</li>
           <li>7.0 2nd Artifact set (known as ???)</li>
           <li>Odette (C6)</li>
         </ul>
