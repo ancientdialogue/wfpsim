@@ -14,17 +14,16 @@ import (
 )
 
 const (
-	c1Key    = "sandrone-c1"
-	c2Key    = "sandrone-c2"
-	c4Key    = "sandrone-c4"
-	c4ICDKey = "sandrone-c4-icd"
-	c6Key    = "sandrone-c6"
+	c1Key     = "sandrone-c1"
+	c2Key     = "sandrone-c2"
+	c4Key     = "sandrone-c4"
+	c4ICDKey  = "sandrone-c4-icd"
+	c6Key     = "sandrone-c6"
+	c6Hitmark = 5
 )
 
-var (
-	c2Buff     = []float64{0.4, 0.6, 0.8, 1.0}
-	c6Hitmarks = []int{5, 10, 15, 20}
-)
+// the first beam already has a stack so the 0.4 is never used
+var c2Buff = []float64{0.4, 0.6, 0.8, 1.0}
 
 func (c *char) c1DecoderGainMult() float64 {
 	if c.Base.Cons < 1 {
@@ -74,12 +73,13 @@ func (c *char) c2Init() {
 	})
 }
 
+// stack gain before beam hits
 func (c *char) c2OnBeam() {
 	if c.Base.Cons < 2 {
 		return
 	}
-	// delay to after beam hits
-	c.Core.Tasks.Add(func() { c.c2stacks = min(c.c2stacks+1, 3) }, 1)
+
+	c.c2stacks = min(c.c2stacks+1, 3)
 }
 
 func (c *char) c2OnCAStart() {
@@ -106,8 +106,12 @@ func (c *char) c4Init() {
 			return
 		}
 
+		mult := 0.0
 		switch atk.Info.AttackTag {
 		case attacks.AttackTagDirectStellarConduct:
+			mult = 1.25
+		case attacks.AttackTagDirectStellarSwirl:
+			mult = 1.875
 		default:
 			return
 		}
@@ -123,7 +127,7 @@ func (c *char) c4Init() {
 			Abil:       "Prismatic Resonance Cannon (C4)",
 			AttackTag:  atk.Info.AttackTag,
 			Element:    attributes.Cryo,
-			Mult:       1.25,
+			Mult:       mult,
 		}
 
 		ap := combat.NewBoxHitOnTarget(
@@ -146,7 +150,10 @@ func (c *char) c6Init() {
 		atk := args[0].(*info.AttackEvent)
 
 		// don't apply elevation to the reaction attack, since the subcomponent contributor attacks each got elevation applied already
-		if atk.Info.AttackTag != attacks.AttackTagDirectStellarConduct {
+		switch atk.Info.AttackTag {
+		case attacks.AttackTagDirectStellarConduct:
+		case attacks.AttackTagDirectStellarSwirl:
+		default:
 			return
 		}
 
@@ -156,18 +163,18 @@ func (c *char) c6Init() {
 		atk.Info.Elevation += 0.2
 	}, c6Key)
 
-	// c.Core.Events.Subscribe(event.OnLunarReactionAttack, func(args ...any) {
-	// 	atk := args[1].(*info.AttackEvent)
-	// 	if atk.Info.AttackTag != attacks.AttackTagReactionLunarCharge {
-	// 		return
-	// 	}
+	c.Core.Events.Subscribe(event.OnLunarReactionAttack, func(args ...any) {
+		atk := args[1].(*info.AttackEvent)
+		if atk.Info.AttackTag != attacks.AttackTagReactionStellarSwirl {
+			return
+		}
 
-	// 	if atk.Info.ActorIndex != c.Index() {
-	// 		return
-	// 	}
+		if atk.Info.ActorIndex != c.Index() {
+			return
+		}
 
-	// 	atk.Info.Elevation += 0.2
-	// }, c6Key+"-lc-atk")
+		atk.Info.Elevation += 0.2
+	}, c6Key+"-stellar-atk")
 }
 
 func (c *char) c6OnCaStart() {
@@ -177,6 +184,7 @@ func (c *char) c6OnCaStart() {
 	c.c6stacks = 0
 }
 
+// stack gain before beam hits
 func (c *char) c6OnBeam() {
 	if c.Base.Cons < 6 {
 		return
@@ -222,7 +230,6 @@ func (c *char) c6OnBeam() {
 		3,
 		15,
 	)
-	for _, delay := range c6Hitmarks {
-		c.Core.QueueAttack(ai, ap, delay, delay)
-	}
+
+	c.Core.QueueAttack(ai, ap, c6Hitmark, c6Hitmark)
 }

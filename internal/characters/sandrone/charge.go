@@ -223,11 +223,11 @@ func (c *char) beamTicker(src int) {
 		15,
 	)
 
+	c.c2OnBeam()
+	c.c6OnBeam()
 	c.Core.QueueAttack(ai, ap, 0, 0, c.particleCB)
 
 	c.addDecode(17)
-	c.c2OnBeam()
-	c.c6OnBeam()
 
 	if c.currFagio != stateDecoding {
 		return
