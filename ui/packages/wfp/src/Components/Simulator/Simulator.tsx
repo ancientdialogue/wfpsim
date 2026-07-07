@@ -58,6 +58,8 @@ export function Simulator({
           <li>Crimson Proof</li>
           <li>7.0 2nd Artifact set (known as ???)</li>
           <li>Odette (C6)</li>
+          <li>Cryo Traveler (C6)</li>
+          <li>Exaiphanes Blade</li>
         </ul>
         <p className=" font-bold">
           See{' '}

@@ -88,6 +88,7 @@ var weaponNames = []string{
 	"engulfinglightning",
 	"etherlightspindlelute",
 	"everlastingmoonglow",
+	"exaiphanesblade",
 	"eyeofperception",
 	"fadingtwilight",
 	"fangofthemountainking",
@@ -320,6 +321,7 @@ const (
 	EngulfingLightning
 	EtherlightSpindlelute
 	EverlastingMoonglow
+	ExaiphanesBlade
 	EyeOfPerception
 	FadingTwilight
 	FangOfTheMountainKing
