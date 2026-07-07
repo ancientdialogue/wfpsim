@@ -74,6 +74,10 @@ func (c *Traveler) AnimationStartDelay(k info.AnimationDelayKey) int {
 
 func (c *Traveler) Condition(fields []string) (any, error) {
 	switch fields[0] {
+	case "frostglow":
+		return c.flostglowStacks, nil
+	case "icepoint":
+		return c.trueMoonStacks, nil
 	default:
 		return c.Character.Condition(fields)
 	}

@@ -21,23 +21,16 @@ func init() {
 }
 
 type Weapon struct {
-	Index    int
-	refine   int
-	c        *core.Core
-	char     *character.CharWrapper
-	teamBuff []float64
-	src      int
+	Index int
 }
 
 func (w *Weapon) SetIndex(idx int) { w.Index = idx }
 func (w *Weapon) Init() error      { return nil }
 
 func NewWeapon(c *core.Core, char *character.CharWrapper, p info.WeaponProfile) (info.Weapon, error) {
-	w := &Weapon{
-		refine: p.Refine,
-		c:      c,
-		char:   char,
-	}
+	w := &Weapon{}
+
+	refine := p.Refine
 
 	switch char.Base.Key {
 	case keys.Lumine:
@@ -61,19 +54,19 @@ func NewWeapon(c *core.Core, char *character.CharWrapper, p info.WeaponProfile) 
 	}
 
 	critDmg := 0.0
-	if w.refine > 1 {
+	if refine > 1 {
 		critDmg = 0.06 * 7 // we assume traveler has all resonances done
 	}
 
 	energy := 0
 	switch {
-	case w.refine == 1, w.refine == 2:
+	case refine == 1, refine == 2:
 		energy = 3
-	case w.refine >= 4:
+	case refine >= 4:
 		energy = 5
 	}
 
-	atkp := 0.12 + 0.04*float64(w.refine)
+	atkp := 0.12 + 0.04*float64(refine)
 	if atkp >= 5 {
 		atkp += 0.04
 	}
