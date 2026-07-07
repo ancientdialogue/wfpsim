@@ -106,7 +106,7 @@ func (c *char) c4Init() {
 			return
 		}
 
-		mult := 0.0
+		var mult float64
 		switch atk.Info.AttackTag {
 		case attacks.AttackTagDirectStellarConduct:
 			mult = 1.25
