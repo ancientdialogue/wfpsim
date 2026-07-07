@@ -11,7 +11,7 @@ import (
 
 const (
 	stellarConductText = " (Stellar-Conduct)"
-	stellarSwirlText   = " (Stellar-Swirl)"
+	stellarSwirlText   = " (Stellar Swirl)"
 )
 
 type Traveler struct {

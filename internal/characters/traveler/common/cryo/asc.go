@@ -88,7 +88,7 @@ func (c *Traveler) stellarInit() {
 			return
 		}
 
-		bonus := min(c.TotalAtk()/100.0*0.0035, 0.7)
+		bonus := min(c.TotalAtk()/100.0*0.0035, 0.07)
 
 		if c.Core.Flags.LogDebug {
 			c.Core.Log.NewEvent("travelercryo adding stellar base damage", glog.LogCharacterEvent, c.Index()).Write("bonus", bonus)
@@ -103,7 +103,7 @@ func (c *Traveler) stellarInit() {
 			return
 		}
 
-		bonus := min(c.TotalAtk()/100.0*0.0035, 0.7)
+		bonus := min(c.TotalAtk()/100.0*0.0035, 0.07)
 
 		if c.Core.Flags.LogDebug {
 			c.Core.Log.NewEvent("travelercryo adding stellar base damage", glog.LogCharacterEvent, c.Index()).Write("bonus", bonus)

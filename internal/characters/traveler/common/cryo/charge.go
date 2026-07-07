@@ -53,14 +53,15 @@ func (c *Traveler) ChargeAttack(p map[string]int) (action.Info, error) {
 		Durability: 25,
 	}
 
-	converted := c.chargeAttackFreezingIce(&ai)
-	if !converted {
-		c.a1Conversion(&ai)
+	conversion := c.chargeAttackFreezingIce()
+	if conversion == nil {
+		conversion = c.a1Conversion
 	}
 
 	for i, mult := range charge[c.gender] {
 		ai.Mult = mult[c.TalentLvlAttack()]
 		ai.Abil = fmt.Sprintf("Charge %v", i)
+		conversion(&ai)
 		c.Core.QueueAttack(
 			ai,
 			combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 2.2),
@@ -78,45 +79,43 @@ func (c *Traveler) ChargeAttack(p map[string]int) (action.Info, error) {
 	}, nil
 }
 
-func (c *Traveler) chargeAttackFreezingIce(ai *info.AttackInfo) bool {
+func (c *Traveler) chargeAttackFreezingIce() func(*info.AttackInfo) {
 	if !c.trueMoonBuff {
-		return false
+		return nil
 	}
 
 	if c.trueMoonStacks < 3 {
-		return false
+		return nil
 	}
 
 	if !c.StatusIsActive(skillKey) {
-		return false
+		return nil
 	}
 
 	if c.StatusIsActive(chargeFreezingIceICDKey) {
-		return false
+		return nil
 	}
 	c.AddStatus(chargeFreezingIceICDKey, 15*60, true)
 	c.trueMoonStacks = 0
-
-	ai.Element = attributes.Cryo
-	ai.IgnoreInfusion = true
-	ai.Mult += 1.4
-
 	c.flostglowStacks = min(c.flostglowStacks+2, skillStacksMax)
+	return func(ai *info.AttackInfo) {
+		ai.Element = attributes.Cryo
+		ai.IgnoreInfusion = true
+		ai.Mult += 1.4
 
-	switch c.getRadiance() {
-	case radianceStellarConduct:
-		ai.Abil += stellarConductText
-		ai.AttackTag = attacks.AttackTagDirectStellarConduct
-		ai.Durability = 0
-		ai.IgnoreDefPercent = 1
-	case radianceStellarSwirl:
-		ai.Abil += stellarSwirlText
-		ai.AttackTag = attacks.AttackTagDirectStellarSwirl
-		ai.Durability = 0
-		ai.IgnoreDefPercent = 1
+		switch c.getRadiance() {
+		case radianceStellarConduct:
+			ai.Abil += stellarConductText
+			ai.AttackTag = attacks.AttackTagDirectStellarConduct
+			ai.Durability = 0
+			ai.IgnoreDefPercent = 1
+		case radianceStellarSwirl:
+			ai.Abil += stellarSwirlText
+			ai.AttackTag = attacks.AttackTagDirectStellarSwirl
+			ai.Durability = 0
+			ai.IgnoreDefPercent = 1
+		}
 	}
-
-	return true
 }
 
 func (c *Traveler) trueMoonInit() {
