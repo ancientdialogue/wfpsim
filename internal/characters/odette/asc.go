@@ -98,7 +98,7 @@ func (c *char) a1Ticker(src int) {
 
 	stacks := min(c.c1a1Remove(), c.a1StacksSelf)
 	c.a1StacksSelf -= stacks * c.c6a1ReduceMod()
-	c.a1StacksOthers += stacks
+	c.a1StacksOthers = min(c.a1StacksOthers+stacks, c.c1a1Stacks())
 
 	c.Core.Tasks.Add(func() { c.a1Ticker(src) }, 60)
 }
