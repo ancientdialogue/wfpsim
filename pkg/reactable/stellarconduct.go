@@ -71,7 +71,7 @@ func EnableStellarConduct(core *core.Core) {
 
 		core.Status.Add(polestarFieldStackICDKey, polestarFieldStackICDDur)
 
-		if core.Flags.Custom[polestarFieldStacksKey] > polestarFieldMaxStacks {
+		if core.Flags.Custom[polestarFieldStacksKey] >= polestarFieldMaxStacks {
 			return
 		}
 
