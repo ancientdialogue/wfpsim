@@ -6,6 +6,7 @@ var avatarMap = map[string]string{
 	"albedo":        "UI_AvatarIcon_Albedo",
 	"alhaitham":     "UI_AvatarIcon_Alhatham",
 	"aloy":          "UI_AvatarIcon_Aloy",
+	"alyosha":       "UI_AvatarIcon_Alyosha",
 	"amber":         "UI_AvatarIcon_Ambor",
 	"arlecchino":    "UI_AvatarIcon_Arlecchino",
 	"ayaka":         "UI_AvatarIcon_Ayaka",

@@ -11,6 +11,7 @@ const (
 	Albedo
 	Alhaitham
 	Aloy
+	Alyosha
 	Amber
 	Arlecchino
 	Ayaka
@@ -136,6 +137,10 @@ func init() {
 	charNames[Aloy] = "aloy"
 	charPrettyName[Aloy] = "Aloy"
 	CharKeyToEle[Aloy] = attributes.Cryo
+
+	charNames[Alyosha] = "alyosha"
+	charPrettyName[Alyosha] = "Alyosha"
+	CharKeyToEle[Alyosha] = attributes.Electro
 
 	charNames[Amber] = "amber"
 	charPrettyName[Amber] = "Amber"
