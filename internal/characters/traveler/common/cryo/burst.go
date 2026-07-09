@@ -13,6 +13,8 @@ var burstFrames [][]int
 
 var burstTickHitmarks = []int{60, 60 + 15, 60 + 15 + 6, 60 + 15 + 6 + 6, 60 + 15 + 6 + 6 + 6}
 
+const burstSpawnFrame = 55
+
 func init() {
 	burstFrames = make([][]int, 2)
 
@@ -31,49 +33,54 @@ func (c *Traveler) Burst(p map[string]int) (action.Info, error) {
 	c.SetCD(action.ActionBurst, 15*60)
 	c.ConsumeEnergy(7)
 
-	ai := info.AttackInfo{
-		ActorIndex: c.Index(),
-		Abil:       "Ice Javelin",
-		AttackTag:  attacks.AttackTagElementalBurst,
-		ICDTag:     attacks.ICDTagNone,
-		ICDGroup:   attacks.ICDGroupDefault,
-		StrikeType: attacks.StrikeTypeDefault,
-		Element:    attributes.Cryo,
-		Durability: 25,
-		Mult:       burst[c.TalentLvlBurst()] + flowGlowBonus[c.TalentLvlBurst()]*float64(c.flostglowStacks),
+	attack := func() {
+		ai := info.AttackInfo{
+			ActorIndex: c.Index(),
+			Abil:       "Ice Javelin",
+			AttackTag:  attacks.AttackTagElementalBurst,
+			ICDTag:     attacks.ICDTagNone,
+			ICDGroup:   attacks.ICDGroupDefault,
+			StrikeType: attacks.StrikeTypeDefault,
+			Element:    attributes.Cryo,
+			Durability: 25,
+			Mult:       burst[c.TalentLvlBurst()] + flowGlowBonus[c.TalentLvlBurst()]*float64(c.flostglowStacks),
+		}
+
+		switch c.getRadiance() {
+		case radianceStellarConduct:
+			ai.Abil += stellarConductText
+			ai.AttackTag = attacks.AttackTagDirectStellarConduct
+			ai.Durability = 0
+			ai.Mult = burstSSC[c.TalentLvlBurst()] + flowGlowBonusSSC[c.TalentLvlBurst()]*float64(c.flostglowStacks)
+			ai.IgnoreDefPercent = 1
+		case radianceStellarSwirl:
+			ai.Abil += stellarSwirlText
+			ai.AttackTag = attacks.AttackTagDirectStellarSwirl
+			ai.Durability = 0
+			ai.Mult = burstSSw[c.TalentLvlBurst()] + flowGlowBonusSSw[c.TalentLvlBurst()]*float64(c.flostglowStacks)
+			ai.IgnoreDefPercent = 1
+		default:
+		}
+
+		hits := 3
+		if c.flostglowStacks == skillStacksMax {
+			hits += 2
+		}
+
+		for _, delay := range burstTickHitmarks[:hits] {
+			c.Core.QueueAttack(
+				ai,
+				combat.NewCircleHitOnTarget(c.Core.Combat.PrimaryTarget(), nil, 4.5),
+				delay-burstSpawnFrame,
+				delay-burstSpawnFrame,
+			)
+		}
+		c.c6OnBurst(c.flostglowStacks)
+		c.flostglowStacks = 0
 	}
 
-	switch c.getRadiance() {
-	case radianceStellarConduct:
-		ai.Abil += stellarConductText
-		ai.AttackTag = attacks.AttackTagDirectStellarConduct
-		ai.Durability = 0
-		ai.Mult = burstSSC[c.TalentLvlBurst()] + flowGlowBonusSSC[c.TalentLvlBurst()]*float64(c.flostglowStacks)
-		ai.IgnoreDefPercent = 1
-	case radianceStellarSwirl:
-		ai.Abil += stellarSwirlText
-		ai.AttackTag = attacks.AttackTagDirectStellarSwirl
-		ai.Durability = 0
-		ai.Mult = burstSSw[c.TalentLvlBurst()] + flowGlowBonusSSw[c.TalentLvlBurst()]*float64(c.flostglowStacks)
-		ai.IgnoreDefPercent = 1
-	default:
-	}
+	c.QueueCharTask(attack, burstSpawnFrame)
 
-	hits := 3
-	if c.flostglowStacks == skillStacksMax {
-		hits += 2
-	}
-
-	for _, delay := range burstTickHitmarks[:hits] {
-		c.Core.QueueAttack(
-			ai,
-			combat.NewCircleHitOnTarget(c.Core.Combat.PrimaryTarget(), nil, 4.5),
-			delay,
-			delay,
-		)
-	}
-	c.c6OnBurst(c.flostglowStacks)
-	c.flostglowStacks = 0
 	return action.Info{
 		Frames:          frames.NewAbilFunc(burstFrames[c.gender]),
 		AnimationLength: burstFrames[c.gender][action.InvalidAction],

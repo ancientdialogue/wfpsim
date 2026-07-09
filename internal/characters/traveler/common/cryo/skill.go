@@ -75,6 +75,7 @@ func (c *Traveler) Skill(p map[string]int) (action.Info, error) {
 	c.skillSrc = src
 	c.QueueCharTask(func() { c.skillTicker(src) }, skillFirstTickDelay)
 	c.AddStatus(skillKey, c.skillDur+skillFirstTickDelay, false)
+	c.SetCD(action.ActionSkill, 15*60)
 
 	return action.Info{
 		Frames:          frames.NewAbilFunc(skillFrames[c.gender]),

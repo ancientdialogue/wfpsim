@@ -36,7 +36,7 @@ func NewTraveler(s *core.Core, w *character.CharWrapper, p info.CharacterProfile
 	c.BurstCon = 3
 	c.SkillCon = 5
 	c.NormalHitNum = 5
-	c.skillDur = 12
+	c.skillDur = 12 * 60
 
 	common.TravelerStoryBuffs(w, p)
 	trueMoonBuff, okTrueMoonBuff := p.Params["true_moon_story_buff"]
