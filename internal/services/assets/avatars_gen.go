@@ -96,6 +96,8 @@ var avatarMap = map[string]string{
 	"tighnari":      "UI_AvatarIcon_Tighnari",
 	"aetheranemo":   "UI_AvatarIcon_PlayerBoy",
 	"lumineanemo":   "UI_AvatarIcon_PlayerGirl",
+	"aethercryo":    "UI_AvatarIcon_PlayerBoy",
+	"luminecryo":    "UI_AvatarIcon_PlayerGirl",
 	"aetherdendro":  "UI_AvatarIcon_PlayerBoy",
 	"luminedendro":  "UI_AvatarIcon_PlayerGirl",
 	"aetherelectro": "UI_AvatarIcon_PlayerBoy",
