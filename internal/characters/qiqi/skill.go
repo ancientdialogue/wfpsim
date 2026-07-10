@@ -183,16 +183,17 @@ func (c *char) skillInit() {
 		if !c.StatusIsActive(skillBuffKey) {
 			return
 		}
-		if c.StatusIsActive(skillICDKey) {
-			return
-		}
-
-		c.AddStatus(skillICDKey, 2.2*60, true)
 
 		// only be triggered by on field
 		if c.Core.Player.Active() != atk.Info.ActorIndex {
 			return
 		}
+		char := c.Core.Player.ActiveChar()
+		if char.StatusIsActive(skillICDKey) {
+			return
+		}
+
+		char.AddStatus(skillICDKey, 2.2*60, true)
 
 		ai := info.AttackInfo{
 			ActorIndex:         c.Index(),
