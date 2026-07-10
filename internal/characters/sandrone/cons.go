@@ -41,6 +41,10 @@ func (c *char) c1Init() {
 		char.AddReactBonusMod(character.ReactBonusMod{
 			Base: modifier.NewBase(c1Key, -1),
 			Amount: func(ai info.AttackInfo) float64 {
+				if c.currFagio != stateDecoding {
+					return 0
+				}
+
 				switch ai.AttackTag {
 				case attacks.AttackTagDirectStellarConduct:
 				default:
