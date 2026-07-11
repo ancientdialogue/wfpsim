@@ -53,10 +53,10 @@ func (c *char) c2BurstDur() int {
 
 func (c *char) c2MakeBurstCB() info.AttackCBFunc {
 	if c.Base.Cons < 2 {
-		return nil
+		return c.triggerSkillMarkCB(false)
 	}
 
-	return c.applySkillMark(false)
+	return c.triggerSkillMarkCB(true)
 }
 
 func (c *char) c4OnBurstTick() {

@@ -74,7 +74,7 @@ func (c *char) Attack(p map[string]int) (action.Info, error) {
 
 		var cb info.AttackCBFunc
 		if c.NormalCounter == normalHitNum-1 {
-			cb = c.applySkillMark(true)
+			cb = c.triggerSkillMarkCB(true)
 		}
 		c.Core.QueueAttack(
 			ai,
