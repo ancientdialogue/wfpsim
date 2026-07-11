@@ -53,7 +53,7 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 		skillHitmark,
 		skillHitmark,
 		c.baseParticleCB,
-		c.applySkillMark(true),
+		c.triggerSkillMarkCB(true),
 	)
 
 	c.SetCDWithDelay(action.ActionSkill, 360, skillHitmark-2)
@@ -87,7 +87,7 @@ func (c *char) skillHold(hold int) (action.Info, error) {
 		hitmark,
 		hitmark,
 		c.baseParticleCB,
-		c.applySkillMark(true),
+		c.triggerSkillMarkCB(true),
 	)
 
 	c.SetCDWithDelay(action.ActionSkill, 15*60, hitmark-2)
@@ -129,7 +129,7 @@ func (c *char) skillInit() {
 	}
 }
 
-func (c *char) applySkillMark(canTrigger bool) info.AttackCBFunc {
+func (c *char) triggerSkillMarkCB(canApply bool) info.AttackCBFunc {
 	return func(ac info.AttackCB) {
 		if ac.Target.Type() != info.TargettableEnemy {
 			return
@@ -140,7 +140,7 @@ func (c *char) applySkillMark(canTrigger bool) info.AttackCBFunc {
 			return
 		}
 
-		if canTrigger && e.StatusIsActive(skillMarkKey) {
+		if e.StatusIsActive(skillMarkKey) {
 			e.DeleteStatus(skillMarkKey)
 			if !c.StatusIsActive(skillBuffKey) {
 				c.skillStacks = 0
@@ -151,6 +151,8 @@ func (c *char) applySkillMark(canTrigger bool) info.AttackCBFunc {
 			return
 		}
 
-		e.AddStatus(skillMarkKey, 15*60, true)
+		if canApply {
+			e.AddStatus(skillMarkKey, 15*60, true)
+		}
 	}
 }
