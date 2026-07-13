@@ -1,4 +1,4 @@
-package stellarsupport
+package heartofthefurnace
 
 import (
 	"github.com/genshinsim/gcsim/pkg/core"
@@ -13,10 +13,10 @@ import (
 )
 
 func init() {
-	core.RegisterSetFunc(keys.StellarSupport, NewSet)
+	core.RegisterSetFunc(keys.HeartOfTheFurnace, NewSet)
 }
 
-const stellar4pcKey = "stellar-support-4pc"
+const stellar4pcKey = "heart-of-the-furnace-4pc"
 
 type Set struct {
 	Index int
@@ -37,7 +37,7 @@ func NewSet(c *core.Core, char *character.CharWrapper, count int, param map[stri
 	m := make([]float64, attributes.EndStatType)
 	m[attributes.ATKP] = 0.18
 	char.AddStatMod(character.StatMod{
-		Base:         modifier.NewBase("stellarsupport-2pc", -1),
+		Base:         modifier.NewBase("heart-of-the-furnace-2pc", -1),
 		AffectedStat: attributes.ATKP,
 		Amount: func() []float64 {
 			return m

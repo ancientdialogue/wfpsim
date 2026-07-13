@@ -56,16 +56,13 @@ func NewSet(c *core.Core, char *character.CharWrapper, count int, param map[stri
 				return 0
 			}
 			switch ai.AttackTag {
-			case attacks.AttackTagSwirlCryo:
-			case attacks.AttackTagSwirlElectro:
-			case attacks.AttackTagSwirlHydro:
-			case attacks.AttackTagSwirlPyro:
-			case attacks.AttackTagDirectStellarSwirl:
-			case attacks.AttackTagReactionStellarSwirl:
+			case attacks.AttackTagSwirlCryo, attacks.AttackTagSwirlElectro, attacks.AttackTagSwirlHydro, attacks.AttackTagSwirlPyro:
+				return 0.6
+			case attacks.AttackTagDirectStellarSwirl, attacks.AttackTagReactionStellarSwirl:
+				return 0.2
 			default:
 				return 0
 			}
-			return 0.6
 		},
 	})
 

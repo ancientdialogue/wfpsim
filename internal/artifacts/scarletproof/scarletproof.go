@@ -1,4 +1,4 @@
-package crimsonproof
+package scarletproof
 
 import (
 	"github.com/genshinsim/gcsim/pkg/core"
@@ -13,7 +13,7 @@ import (
 )
 
 func init() {
-	core.RegisterSetFunc(keys.CrimsonProof, NewSet)
+	core.RegisterSetFunc(keys.ScarletProof, NewSet)
 }
 
 type Set struct {
@@ -36,7 +36,7 @@ func NewSet(c *core.Core, char *character.CharWrapper, count int, param map[stri
 	m := make([]float64, attributes.EndStatType)
 	m[attributes.ATKP] = 0.18
 	char.AddStatMod(character.StatMod{
-		Base:         modifier.NewBase("crimsonproof-2pc", -1),
+		Base:         modifier.NewBase("scarletproof-2pc", -1),
 		AffectedStat: attributes.ATKP,
 		Amount: func() []float64 {
 			return m
@@ -49,6 +49,28 @@ func NewSet(c *core.Core, char *character.CharWrapper, count int, param map[stri
 
 	m2 := make([]float64, attributes.EndStatType)
 	m2[attributes.CR] = 0.16
+
+	gainBuff := func(char *character.CharWrapper) {
+		char.AddStatMod(character.StatMod{
+			Base:         modifier.NewBaseWithHitlag("scarletproof-4pc-cr", 10*60),
+			AffectedStat: attributes.CR,
+			Amount: func() []float64 {
+				return m2
+			},
+		})
+
+		char.AddReactBonusMod(character.ReactBonusMod{
+			Base: modifier.NewBaseWithHitlag("scarletproof-4pc-react", 10*60),
+			Amount: func(ai info.AttackInfo) float64 {
+				switch ai.AttackTag {
+				case attacks.AttackTagDirectStellarSwirl,
+					attacks.AttackTagReactionStellarSwirl:
+					return 0.4
+				}
+				return 0
+			},
+		})
+	}
 	hook := func(args ...any) {
 		atk := args[1].(*info.AttackEvent)
 
@@ -65,27 +87,36 @@ func NewSet(c *core.Core, char *character.CharWrapper, count int, param map[stri
 			return
 		}
 
-		char.AddStatMod(character.StatMod{
-			Base:         modifier.NewBaseWithHitlag("crimsonproof-4pc-cr", 10*60),
-			AffectedStat: attributes.CR,
-			Amount: func() []float64 {
-				return m2
-			},
-		})
-
-		char.AddReactBonusMod(character.ReactBonusMod{
-			Base: modifier.NewBaseWithHitlag("crimsonproof-4pc-react", 10*60),
-			Amount: func(ai info.AttackInfo) float64 {
-				switch ai.AttackTag {
-				case attacks.AttackTagDirectStellarSwirl,
-					attacks.AttackTagReactionStellarSwirl:
-					return 0.4
-				}
-				return 0
-			},
-		})
+		gainBuff(char)
 	}
 
-	c.Events.Subscribe(event.OnStellarSwirl, hook, "crimsonproof-4pc-"+char.Base.Key.String())
+	hookDmg := func(args ...any) {
+		atk := args[1].(*info.AttackEvent)
+
+		if _, ok := args[0].(*enemy.Enemy); !ok {
+			return
+		}
+
+		if atk.Info.ActorIndex != char.Index() {
+			return
+		}
+
+		// ignore if character not on field
+		if c.Player.Active() != char.Index() {
+			return
+		}
+
+		switch atk.Info.AttackTag {
+		case attacks.AttackTagDirectStellarSwirl:
+		case attacks.AttackTagReactionStellarSwirl:
+		default:
+			return
+		}
+
+		gainBuff(char)
+	}
+
+	c.Events.Subscribe(event.OnStellarSwirl, hook, "scarletproof-4pc-"+char.Base.Key.String())
+	c.Events.Subscribe(event.OnEnemyDamage, hookDmg, "scarletproof-4pc-"+char.Base.Key.String())
 	return &s, nil
 }

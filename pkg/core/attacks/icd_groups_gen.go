@@ -74,8 +74,8 @@ func init() {
 	ICDGroupEleApplicationSequence[ICDGroupAlhaithamExtraAttack] = []float64{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 	ICDGroupDamageSequence[ICDGroupAlhaithamExtraAttack] = []float64{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
 
-	ICDGroupResetTimer[ICDGroupAlyoshaBurst] = 210
-	ICDGroupEleApplicationSequence[ICDGroupAlyoshaBurst] = []float64{1, 0, 1, 0, 1, 0, 1, 0}
+	ICDGroupResetTimer[ICDGroupAlyoshaBurst] = 114
+	ICDGroupEleApplicationSequence[ICDGroupAlyoshaBurst] = []float64{1, 0, 0, 0, 0, 0, 0, 0}
 	ICDGroupDamageSequence[ICDGroupAlyoshaBurst] = []float64{1, 1, 1, 1, 1, 1, 1, 1}
 
 	ICDGroupResetTimer[ICDGroupAmber] = 60

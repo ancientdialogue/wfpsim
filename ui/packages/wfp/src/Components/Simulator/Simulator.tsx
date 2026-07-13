@@ -55,8 +55,8 @@ export function Simulator({
           <li>Qiqi (Revelation)</li>
           <li>Mizuki (Revelation)</li>
           <li>Disenchantment in the Deep Shadow</li>
-          <li>Crimson Proof</li>
-          <li>7.0 2nd Artifact set (known as ???)</li>
+          <li>Scarlet Proof</li>
+          <li>Heart of the Furnace</li>
           <li>Odette (C6)</li>
           <li>Cryo Traveler (C6)</li>
           <li>Exaiphanes Blade</li>

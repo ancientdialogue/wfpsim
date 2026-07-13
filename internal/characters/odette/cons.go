@@ -36,10 +36,10 @@ func (c *char) c1OnSkillRecast(tag attacks.AttackTag) {
 	switch tag {
 	case attacks.AttackTagDirectStellarConduct:
 		ai.Abil = "Daybreak Finale (C1)" + stellarConductText
-		ai.Mult = 2
+		ai.Mult = 3
 	case attacks.AttackTagDirectStellarSwirl:
 		ai.Abil = "Daybreak Finale (C1)" + stellarSwirlText
-		ai.Mult = 3
+		ai.Mult = 4.5
 	}
 	ap := combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 6)
 	c.Core.QueueAttack(ai, ap, 0, 0, c.particleCB)
@@ -205,11 +205,11 @@ func (c *char) c4Init() {
 		case radianceStellarConduct:
 			ai.Abil += stellarConductText
 			ai.AttackTag = attacks.AttackTagDirectStellarConduct
-			ai.Mult = 0.5
+			ai.Mult = 0.66
 		case radianceStellarSwirl:
 			ai.Abil += stellarSwirlText
 			ai.AttackTag = attacks.AttackTagDirectStellarSwirl
-			ai.Mult = 0.75
+			ai.Mult = 0.99
 		default:
 			return
 		}
