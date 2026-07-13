@@ -61,7 +61,7 @@ func (c *char) stellarInit() {
 				if ai.AttackTag != attacks.AttackTagDirectStellarConduct {
 					return 0
 				}
-				return 0.25
+				return 0.2
 			},
 		})
 	}

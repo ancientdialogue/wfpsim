@@ -18,7 +18,7 @@ const (
 	skillTapHitmark     = 24
 	skillFirstTickDelay = 60
 	skillInterval       = 3 * 60
-	skillSscICD         = 0.05 * 60
+	skillSscICD         = 0.2 * 60
 	particleICDKey      = "travelercryo-particle-icd"
 	skillKey            = "travelercryo-e"
 	skillICDKey         = "travelercryo-e-icd"

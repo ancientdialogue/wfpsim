@@ -42,7 +42,6 @@ var setNames = []string{
 	"bloodstainedchivalry",
 	"braveheart",
 	"celestialgift",
-	"crimsonproof",
 	"crimsonwitchofflames",
 	"deepwoodmemories",
 	"defenderswill",
@@ -58,6 +57,7 @@ var setNames = []string{
 	"gildeddreams",
 	"goldentroupe",
 	"heartofdepth",
+	"heartofthefurnace",
 	"heavensgift",
 	"huskofopulentdreams",
 	"instructor",
@@ -80,12 +80,12 @@ var setNames = []string{
 	"prayerstospringtime",
 	"resolutionofsojourner",
 	"retracingbolide",
+	"scarletproof",
 	"scholar",
 	"scrolloftheheroofcindercity",
 	"shimenawasreminiscence",
 	"silkenmoonsserenade",
 	"songofdayspast",
-	"stellarsupport",
 	"tenacityofthemillelith",
 	"theexile",
 	"thunderingfury",
@@ -110,7 +110,6 @@ const (
 	BloodstainedChivalry
 	BraveHeart
 	CelestialGift
-	CrimsonProof
 	CrimsonWitchOfFlames
 	DeepwoodMemories
 	DefendersWill
@@ -126,6 +125,7 @@ const (
 	GildedDreams
 	GoldenTroupe
 	HeartOfDepth
+	HeartOfTheFurnace
 	HeavensGift
 	HuskOfOpulentDreams
 	Instructor
@@ -148,12 +148,12 @@ const (
 	PrayersToSpringtime
 	ResolutionOfSojourner
 	RetracingBolide
+	ScarletProof
 	Scholar
 	ScrollOfTheHeroOfCinderCity
 	ShimenawasReminiscence
 	SilkenMoonsSerenade
 	SongOfDaysPast
-	StellarSupport
 	TenacityOfTheMillelith
 	TheExile
 	ThunderingFury
