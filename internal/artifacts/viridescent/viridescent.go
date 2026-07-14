@@ -122,10 +122,6 @@ func NewSet(c *core.Core, char *character.CharWrapper, count int, param map[stri
 		case attacks.AttackTagSwirlElectro:
 		case attacks.AttackTagSwirlHydro:
 		case attacks.AttackTagSwirlPyro:
-		case attacks.AttackTagDirectStellarSwirl:
-			ele = attributes.Cryo
-		case attacks.AttackTagReactionStellarSwirl:
-			ele = attributes.Cryo
 		default:
 			return
 		}
