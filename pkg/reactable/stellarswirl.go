@@ -214,20 +214,18 @@ func (r *Reactable) detonateSSW(owner int) {
 		ai := info.AttackInfo{
 			ActorIndex:       owner,
 			DamageSrc:        r.self.Key(),
-			Abil:             "Stellar Swirl",
+			Abil:             "Stellar Swirl Detonation",
 			AttackTag:        attacks.AttackTagReactionStellarSwirl,
 			ICDTag:           attacks.ICDTagNone,
 			ICDGroup:         attacks.ICDGroupDefault,
 			StrikeType:       attacks.StrikeTypeDefault,
 			Element:          attributes.Cryo,
+			Durability:       25,
 			IgnoreDefPercent: 1,
 		}
 		ap := combat.NewCircleHitOnTarget(r.self, nil, 5)
 
-		stacks := int(r.core.Flags.Custom[sswStackKey])
-		if stacks > maxStacks {
-			stacks = maxStacks
-		}
+		stacks := min(int(r.core.Flags.Custom[sswStackKey]), maxStacks)
 
 		ai, snap := r.calcStellarSwirlDmg(ai, ap, contribMap, sswMultStack[stacks])
 
