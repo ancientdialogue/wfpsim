@@ -60,15 +60,15 @@ func NewWeapon(c *core.Core, char *character.CharWrapper, p info.WeaponProfile) 
 
 	energy := 0
 	switch {
-	case refine == 1, refine == 2:
+	case 1 <= refine && refine < 3:
 		energy = 3
-	case refine >= 4:
+	case 3 <= refine:
 		energy = 5
 	}
 
 	atkp := 0.12 + 0.04*float64(refine)
-	if atkp >= 5 {
-		atkp += 0.04
+	if 4 <= refine {
+		atkp = 0.08 * float64(refine)
 	}
 
 	m := make([]float64, attributes.EndStatType)
