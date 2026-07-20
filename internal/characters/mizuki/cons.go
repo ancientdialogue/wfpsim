@@ -108,7 +108,7 @@ func (c *char) c1() {
 		if c.isRadianceSSw() {
 			ai.Abil += stellarSwirlText
 			ai.AttackTag = attacks.AttackTagDirectStellarSwirl
-			ai.Mult = 6
+			ai.Mult = 4
 			ai.IgnoreDefPercent = 1
 			ai.Durability = 0
 		}
