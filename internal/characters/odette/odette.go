@@ -60,10 +60,25 @@ func (c *char) AnimationStartDelay(k info.AnimationDelayKey) int {
 
 func (c *char) ActionReady(a action.Action, p map[string]int) (bool, action.Failure) {
 	// check if it is possible to use next skill
-	if a == action.ActionSkill && c.StatusIsActive(danceDoubleKey) && !c.StatusIsActive(danceDoubleUpgradeKey) {
+	if a == action.ActionSkill && c.StatusIsActive(danceDoubleKey) && !c.StatusIsActive(danceDoubleUpgradeKey) && !c.StatusIsActive(skillSpecialCDKey) {
 		return true, action.NoFailure
 	}
 	return c.Character.ActionReady(a, p)
+}
+
+func (c *char) ResetActionCooldown(a action.Action) {
+	if a == action.ActionSkill {
+		c.DeleteStatus(skillSpecialCDKey)
+	}
+	c.Character.ResetActionCooldown(a)
+}
+
+func (c *char) ReduceActionCooldown(a action.Action, v int) {
+	if a == action.ActionSkill {
+		dur := c.StatusDuration(skillSpecialCDKey)
+		c.AddStatus(skillSpecialCDKey, dur, false)
+	}
+	c.Character.ResetActionCooldown(a)
 }
 
 type radianceState int

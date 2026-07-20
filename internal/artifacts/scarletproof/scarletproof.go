@@ -90,33 +90,33 @@ func NewSet(c *core.Core, char *character.CharWrapper, count int, param map[stri
 		gainBuff(char)
 	}
 
-	hookDmg := func(args ...any) {
-		atk := args[1].(*info.AttackEvent)
-
-		if _, ok := args[0].(*enemy.Enemy); !ok {
-			return
-		}
-
-		if atk.Info.ActorIndex != char.Index() {
-			return
-		}
-
-		// ignore if character not on field
-		if c.Player.Active() != char.Index() {
-			return
-		}
-
-		switch atk.Info.AttackTag {
-		case attacks.AttackTagDirectStellarSwirl:
-		case attacks.AttackTagReactionStellarSwirl:
-		default:
-			return
-		}
-
-		gainBuff(char)
-	}
-
 	c.Events.Subscribe(event.OnStellarSwirl, hook, "scarletproof-4pc-"+char.Base.Key.String())
-	c.Events.Subscribe(event.OnEnemyDamage, hookDmg, "scarletproof-4pc-"+char.Base.Key.String())
+
+	// hookDmg := func(args ...any) {
+	// 	atk := args[1].(*info.AttackEvent)
+
+	// 	if _, ok := args[0].(*enemy.Enemy); !ok {
+	// 		return
+	// 	}
+
+	// 	if atk.Info.ActorIndex != char.Index() {
+	// 		return
+	// 	}
+
+	// 	// ignore if character not on field
+	// 	if c.Player.Active() != char.Index() {
+	// 		return
+	// 	}
+
+	// 	switch atk.Info.AttackTag {
+	// 	case attacks.AttackTagDirectStellarSwirl:
+	// 	case attacks.AttackTagReactionStellarSwirl:
+	// 	default:
+	// 		return
+	// 	}
+
+	// 	gainBuff(char)
+	// }
+	// c.Events.Subscribe(event.OnEnemyDamage, hookDmg, "scarletproof-4pc-"+char.Base.Key.String())
 	return &s, nil
 }

@@ -19,6 +19,7 @@ const (
 	particleICDKey            = "odette-particle-icd"
 	danceDoubleKey            = "odette-dance-double"
 	danceDoubleUpgradeKey     = "odette-dance-double-duet"
+	skillSpecialCDKey         = "odette-skill-recast-cd"
 	skillFirstTickDelay       = 130
 	skillRecastFinalHitmark   = 75
 	skillRecastFirstTickDelay = 34
@@ -131,6 +132,9 @@ func (c *char) skillRecast(_ map[string]int) (action.Info, error) {
 	c.Core.Tasks.Add(func() {
 		c.danceDoubleTicker(src, 0)
 	}, skillRecastFinalHitmark+skillRecastFirstTickDelay)
+
+	cd := c.CDReduction(action.ActionSkill, 15*60)
+	c.AddStatus(skillSpecialCDKey, cd, false)
 	return action.Info{
 		Frames:          frames.NewAbilFunc(skillRecastFrames),
 		AnimationLength: skillRecastFrames[action.InvalidAction],
