@@ -101,6 +101,10 @@ func (c *char) c6Init() {
 					return nil
 				}
 
+				if c.Core.Player.Active() != char.Index() {
+					return nil
+				}
+
 				return m
 			},
 		})
