@@ -122,6 +122,9 @@ func (c *char) skillInit() {
 				if !c.StatusIsActive(skillBuffKey) {
 					return nil
 				}
+				if c.Core.Player.Active() != char.Index() {
+					return nil
+				}
 				m[attributes.ATKP] = skillBuff[c.TalentLvlSkill()] * float64(c.skillStacks)
 				return m
 			},
