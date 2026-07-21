@@ -4,6 +4,7 @@ import (
 	tmpl "github.com/genshinsim/gcsim/internal/template/character"
 	"github.com/genshinsim/gcsim/pkg/core"
 	"github.com/genshinsim/gcsim/pkg/core/action"
+	"github.com/genshinsim/gcsim/pkg/core/glog"
 	"github.com/genshinsim/gcsim/pkg/core/info"
 	"github.com/genshinsim/gcsim/pkg/core/keys"
 	"github.com/genshinsim/gcsim/pkg/core/player/character"
@@ -67,18 +68,26 @@ func (c *char) ActionReady(a action.Action, p map[string]int) (bool, action.Fail
 }
 
 func (c *char) ResetActionCooldown(a action.Action) {
-	if a == action.ActionSkill {
+	if a == action.ActionSkill && c.StatusIsActive(danceDoubleKey) && !c.StatusIsActive(danceDoubleUpgradeKey) {
 		c.DeleteStatus(skillSpecialCDKey)
+		c.Core.Log.NewEventBuildMsg(glog.LogCooldownEvent, c.Index(), "special skill cooldown forcefully reset").
+			Write("type", a.String()).
+			Write("charges_remain", c.AvailableCDCharge[a])
+		return
 	}
 	c.Character.ResetActionCooldown(a)
 }
 
 func (c *char) ReduceActionCooldown(a action.Action, v int) {
-	if a == action.ActionSkill {
-		dur := c.StatusDuration(skillSpecialCDKey)
+	if a == action.ActionSkill && c.StatusIsActive(danceDoubleKey) && !c.StatusIsActive(danceDoubleUpgradeKey) {
+		dur := max(c.StatusDuration(skillSpecialCDKey)-v, 0)
 		c.AddStatus(skillSpecialCDKey, dur, false)
+		c.Core.Log.NewEventBuildMsg(glog.LogCooldownEvent, c.Index(), "special skill cooldown forcefully reduced").
+			Write("type", a.String()).
+			Write("charges_remain", c.AvailableCDCharge[a])
+		return
 	}
-	c.Character.ResetActionCooldown(a)
+	c.Character.ReduceActionCooldown(a, v)
 }
 
 type radianceState int
