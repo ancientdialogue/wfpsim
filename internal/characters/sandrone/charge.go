@@ -92,8 +92,9 @@ func (c *char) exitCA() {
 		c.currFagio = stateOverdriveIdle
 	}
 	c.caSrc = -1
-	c.decodeReduceSrc = c.Core.F
-	c.heatReduceTicker(c.decodeReduceSrc)
+	src := c.Core.F
+	c.decodeReduceSrc = src
+	c.Core.Tasks.Add(func() { c.heatReduceTicker(src) }, 0.5*60)
 }
 
 func (c *char) sweepingFireTicker(src int) {
