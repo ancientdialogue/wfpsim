@@ -8,7 +8,13 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/attacks"
 	"github.com/genshinsim/gcsim/pkg/core/attributes"
 	"github.com/genshinsim/gcsim/pkg/core/combat"
+	"github.com/genshinsim/gcsim/pkg/core/event"
 	"github.com/genshinsim/gcsim/pkg/core/info"
+)
+
+const (
+	chargeTruemoonICDKey = "travelergeo-special-ca-icd"
+	trueMoonStackICDKey  = "travelergeo-petra-icd"
 )
 
 var (
@@ -46,9 +52,13 @@ func (c *Traveler) ChargeAttack(p map[string]int) (action.Info, error) {
 		Durability: 25,
 	}
 
+	conversion := c.chargeAttackTruemoon()
+
 	for i, mult := range charge[c.gender] {
 		ai.Mult = mult[c.TalentLvlAttack()]
 		ai.Abil = fmt.Sprintf("Charge %v", i)
+		conversion(&ai)
+
 		c.Core.QueueAttack(
 			ai,
 			combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 2.2),
@@ -63,4 +73,49 @@ func (c *Traveler) ChargeAttack(p map[string]int) (action.Info, error) {
 		CanQueueAfter:   chargeHitmarks[c.gender][len(chargeHitmarks[c.gender])-1],
 		State:           action.ChargeAttackState,
 	}, nil
+}
+
+func (c *Traveler) chargeAttackTruemoon() func(*info.AttackInfo) {
+	if !c.trueMoonBuff {
+		return func(*info.AttackInfo) {}
+	}
+
+	if c.trueMoonStacks < 3 {
+		return func(*info.AttackInfo) {}
+	}
+
+	if c.StatusIsActive(chargeTruemoonICDKey) {
+		return func(*info.AttackInfo) {}
+	}
+
+	c.AddStatus(chargeTruemoonICDKey, 15*60, true)
+	c.trueMoonStacks = 0
+	return func(ai *info.AttackInfo) {
+		ai.Element = attributes.Geo
+		ai.IgnoreInfusion = true
+		ai.ICDTag = attacks.ICDTagTravelerEnchancedCA
+		ai.Mult += 1.2
+		ai.Abil += " (Rockfell)"
+		// TODO: This should be applied on callback?
+		c.Core.Player.Shields.AddShieldBonusMod("travelergeo-truemoon", 15*60, func() (float64, bool) {
+			return 0.20, false
+		})
+	}
+}
+
+func (c *Traveler) trueMoonInit() {
+	if !c.trueMoonBuff {
+		return
+	}
+
+	gainStacks := func(args ...any) {
+		if c.StatusIsActive(trueMoonStackICDKey) {
+			return
+		}
+
+		c.AddStatus(trueMoonStackICDKey, 1*60, true)
+		c.trueMoonStacks = min(c.trueMoonStacks+1, 3)
+	}
+	c.Core.Events.Subscribe(event.OnShielded, gainStacks, "travelergeo-truemoon")
+	c.Core.Events.Subscribe(event.OnConstructSpawned, gainStacks, "travelergeo-truemoon")
 }
