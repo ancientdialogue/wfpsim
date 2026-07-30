@@ -34,6 +34,10 @@ func (c *Traveler) a1Conversion(ai *info.AttackInfo) {
 	ai.Element = attributes.Cryo
 	ai.IgnoreInfusion = true
 	ai.Mult += 0.8
+	if ai.AttackTag == attacks.AttackTagExtra && c.gender == 1 {
+		// Will this be the same as PMC? ONLY ON LUMINE: uses enhanced CA tag even for normal infused CA
+		ai.ICDTag = attacks.ICDTagTravelerEnchancedCA
+	}
 }
 
 func (c *Traveler) a4Init() {
