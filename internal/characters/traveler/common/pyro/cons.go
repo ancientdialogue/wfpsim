@@ -102,6 +102,9 @@ func (c *Traveler) c6Conversion(ai *info.AttackInfo) {
 
 	ai.Element = attributes.Pyro
 	ai.IgnoreInfusion = true
+	if ai.AttackTag == attacks.AttackTagExtra && c.gender == 1 {
+		ai.ICDTag = attacks.ICDTagTravelerEnchancedCA // ONLY ON LUMINE: uses enhanced CA tag even for normal infused CA
+	}
 	ai.AdditionalTags = []attacks.AdditionalTag{attacks.AdditionalTagNightsoul}
 }
 
