@@ -19,8 +19,8 @@ var (
 )
 
 const (
-	chargeFreezingIceICDKey = "travelercryo-special-ca-icd"
-	trueMoonStackICDKEy     = "travelercryo-icepoint-icd"
+	chargeTruemoonICDKey = "travelercryo-special-ca-icd"
+	trueMoonStackICDKey  = "travelercryo-icepoint-icd"
 )
 
 func init() {
@@ -53,7 +53,7 @@ func (c *Traveler) ChargeAttack(p map[string]int) (action.Info, error) {
 		Durability: 25,
 	}
 
-	conversion := c.chargeAttackFreezingIce()
+	conversion := c.chargeAttackTruemoon()
 	if conversion == nil {
 		conversion = c.a1Conversion
 	}
@@ -79,7 +79,7 @@ func (c *Traveler) ChargeAttack(p map[string]int) (action.Info, error) {
 	}, nil
 }
 
-func (c *Traveler) chargeAttackFreezingIce() func(*info.AttackInfo) {
+func (c *Traveler) chargeAttackTruemoon() func(*info.AttackInfo) {
 	if !c.trueMoonBuff {
 		return nil
 	}
@@ -92,15 +92,16 @@ func (c *Traveler) chargeAttackFreezingIce() func(*info.AttackInfo) {
 		return nil
 	}
 
-	if c.StatusIsActive(chargeFreezingIceICDKey) {
+	if c.StatusIsActive(chargeTruemoonICDKey) {
 		return nil
 	}
-	c.AddStatus(chargeFreezingIceICDKey, 15*60, true)
+	c.AddStatus(chargeTruemoonICDKey, 15*60, true)
 	c.trueMoonStacks = 0
 	c.flostglowStacks = min(c.flostglowStacks+2, skillStacksMax)
 	return func(ai *info.AttackInfo) {
 		ai.Element = attributes.Cryo
 		ai.IgnoreInfusion = true
+		ai.ICDTag = attacks.ICDTagTravelerEnchancedCA
 		ai.Mult += 1.4
 
 		switch c.getRadiance() {
@@ -137,11 +138,11 @@ func (c *Traveler) trueMoonInit() {
 			return
 		}
 
-		if c.StatusIsActive(trueMoonStackICDKEy) {
+		if c.StatusIsActive(trueMoonStackICDKey) {
 			return
 		}
 
-		c.AddStatus(trueMoonStackICDKEy, 2*60, true)
+		c.AddStatus(trueMoonStackICDKey, 2*60, true)
 
 		c.trueMoonStacks = min(c.trueMoonStacks+1, 3)
 	}, "cryo-mc-truemoon")

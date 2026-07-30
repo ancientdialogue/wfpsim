@@ -16,6 +16,8 @@ type Traveler struct {
 	nightsoulSrc          int
 	gender                int
 	c2ActivationsPerSkill int
+	trueMoonBuff          bool
+	trueMoonStacks        int
 }
 
 func NewTraveler(s *core.Core, w *character.CharWrapper, p info.CharacterProfile, gender int) (*Traveler, error) {
@@ -31,6 +33,12 @@ func NewTraveler(s *core.Core, w *character.CharWrapper, p info.CharacterProfile
 	c.NormalHitNum = 5
 
 	common.TravelerStoryBuffs(w, p)
+	trueMoonBuff, okTrueMoonBuff := p.Params["true_moon_story_buff"]
+
+	if !okTrueMoonBuff {
+		trueMoonBuff = 1
+	}
+	c.trueMoonBuff = trueMoonBuff > 0
 
 	c.nightsoulState = nightsoul.New(s, w)
 	c.nightsoulState.MaxPoints = 80
@@ -45,6 +53,7 @@ func (c *Traveler) Init() error {
 	c.c1Init()
 	c.c2Init()
 	c.c6Init()
+	c.trueMoonInit()
 	return nil
 }
 

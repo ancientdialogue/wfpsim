@@ -17,6 +17,8 @@ type Traveler struct {
 	skillC1                    bool // this variable also ensures that C1 only restores energy once per cast
 	burstTransfig              attributes.Element
 	gender                     int
+	trueMoonBuff               bool
+	trueMoonStacks             int
 }
 
 func NewTraveler(s *core.Core, w *character.CharWrapper, p info.CharacterProfile, gender int) (*Traveler, error) {
@@ -32,10 +34,17 @@ func NewTraveler(s *core.Core, w *character.CharWrapper, p info.CharacterProfile
 	c.NormalHitNum = normalHitNum
 
 	common.TravelerStoryBuffs(w, p)
+	trueMoonBuff, okTrueMoonBuff := p.Params["true_moon_story_buff"]
+
+	if !okTrueMoonBuff {
+		trueMoonBuff = 1
+	}
+	c.trueMoonBuff = trueMoonBuff > 0
 	return &c, nil
 }
 
 func (c *Traveler) Init() error {
+	c.trueMoonInit()
 	c.a1Init()
 	c.a4Init()
 

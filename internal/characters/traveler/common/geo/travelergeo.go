@@ -11,10 +11,12 @@ import (
 
 type Traveler struct {
 	*tmpl.Character
-	skillCD     int
-	burstArea   info.AttackPattern // needed for c1
-	c1TickCount int
-	gender      int
+	skillCD        int
+	burstArea      info.AttackPattern // needed for c1
+	c1TickCount    int
+	gender         int
+	trueMoonBuff   bool
+	trueMoonStacks int
 }
 
 func NewTraveler(s *core.Core, w *character.CharWrapper, p info.CharacterProfile, gender int) (*Traveler, error) {
@@ -31,6 +33,13 @@ func NewTraveler(s *core.Core, w *character.CharWrapper, p info.CharacterProfile
 	c.skillCD = 6 * 60
 
 	common.TravelerStoryBuffs(w, p)
+	trueMoonBuff, okTrueMoonBuff := p.Params["true_moon_story_buff"]
+
+	if !okTrueMoonBuff {
+		trueMoonBuff = 1
+	}
+	c.trueMoonBuff = trueMoonBuff > 0
+
 	return &c, nil
 }
 
@@ -41,6 +50,7 @@ func (c *Traveler) Init() error {
 	if c.Base.Cons >= 6 {
 		c.c1TickCount = 20
 	}
+	c.trueMoonInit()
 	return nil
 }
 

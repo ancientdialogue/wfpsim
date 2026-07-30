@@ -8,7 +8,13 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/attacks"
 	"github.com/genshinsim/gcsim/pkg/core/attributes"
 	"github.com/genshinsim/gcsim/pkg/core/combat"
+	"github.com/genshinsim/gcsim/pkg/core/event"
+	"github.com/genshinsim/gcsim/pkg/core/glog"
 	"github.com/genshinsim/gcsim/pkg/core/info"
+)
+
+const (
+	chargeTruemoonICDKey = "travelergeo-special-ca-icd"
 )
 
 var (
@@ -36,6 +42,12 @@ func init() {
 }
 
 func (c *Traveler) ChargeAttack(p map[string]int) (action.Info, error) {
+	amuletDelay := max(
+		// make it so that it can't be faster than 3+1.79s
+		p["amulet_delay"],
+		// ~1.79s
+		3*60+107)
+
 	ai := info.AttackInfo{
 		ActorIndex: c.Index(),
 		AttackTag:  attacks.AttackTagExtra,
@@ -45,10 +57,12 @@ func (c *Traveler) ChargeAttack(p map[string]int) (action.Info, error) {
 		Element:    attributes.Physical,
 		Durability: 25,
 	}
+	conversion := c.chargeAttackTruemoon(amuletDelay)
 
 	for i, mult := range charge[c.gender] {
 		ai.Mult = mult[c.TalentLvlAttack()]
 		ai.Abil = fmt.Sprintf("Charge %v", i)
+		conversion(&ai)
 		c.Core.QueueAttack(
 			ai,
 			combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 2.2),
@@ -63,4 +77,70 @@ func (c *Traveler) ChargeAttack(p map[string]int) (action.Info, error) {
 		CanQueueAfter:   chargeHitmarks[c.gender][len(chargeHitmarks[c.gender])-1],
 		State:           action.ChargeAttackState,
 	}, nil
+}
+
+func (c *Traveler) chargeAttackTruemoon(amuletDelay int) func(*info.AttackInfo) {
+	if !c.trueMoonBuff {
+		return func(*info.AttackInfo) {}
+	}
+
+	if c.trueMoonStacks < 3 {
+		return func(*info.AttackInfo) {}
+	}
+
+	if c.StatusIsActive(chargeTruemoonICDKey) {
+		return func(*info.AttackInfo) {}
+	}
+
+	c.AddStatus(chargeTruemoonICDKey, 15*60, true)
+	c.trueMoonStacks = 0
+
+	lightning := func() {
+		ai := info.AttackInfo{
+			ActorIndex:     c.Index(),
+			AttackTag:      attacks.AttackTagExtra,
+			ICDTag:         attacks.ICDTagNone,
+			ICDGroup:       attacks.ICDGroupDefault,
+			StrikeType:     attacks.StrikeTypeSlash,
+			Element:        attributes.Electro,
+			Durability:     25,
+			Mult:           2,
+			IgnoreInfusion: true,
+		}
+
+		ap := combat.NewCircleHitOnTarget(c.Core.Combat.PrimaryTarget(), info.Point{Y: -1}, 1.5)
+		c.Core.QueueAttack(ai, ap, 0, 0)
+
+		// 1 amulet per attack
+		c.abundanceAmulets++
+		c.SetTag("generated", c.abundanceAmulets)
+
+		c.Core.Log.NewEvent("travelerelectro abundance amulet generated", glog.LogCharacterEvent, c.Index()).
+			Write("amulets", c.abundanceAmulets)
+	}
+	c.Core.Tasks.Add(lightning, chargeHitmarks[c.gender][len(chargeHitmarks[c.gender])-1]+3*60)
+
+	c.Core.Tasks.Add(func() {
+		active := c.Core.Player.ActiveChar()
+		c.collectAmulets(active)
+	}, amuletDelay)
+
+	return func(ai *info.AttackInfo) {
+		ai.Element = attributes.Geo
+		ai.IgnoreInfusion = true
+		ai.ICDTag = attacks.ICDTagTravelerEnchancedCA
+		ai.Mult += 1
+		ai.Abil += " (Detonate)"
+	}
+}
+
+func (c *Traveler) trueMoonInit() {
+	if !c.trueMoonBuff {
+		return
+	}
+
+	gainStacks := func(args ...any) {
+		c.trueMoonStacks = min(c.trueMoonStacks+1, 3)
+	}
+	c.Core.Events.Subscribe(event.OnBurst, gainStacks, "travelergeo-truemoon")
 }

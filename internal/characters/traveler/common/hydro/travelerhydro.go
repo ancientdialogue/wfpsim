@@ -11,8 +11,10 @@ import (
 
 type Traveler struct {
 	*tmpl.Character
-	a4Bonus float64
-	gender  int
+	a4Bonus        float64
+	gender         int
+	trueMoonBuff   bool
+	trueMoonStacks int
 }
 
 func NewTraveler(s *core.Core, w *character.CharWrapper, p info.CharacterProfile, gender int) (*Traveler, error) {
@@ -29,10 +31,17 @@ func NewTraveler(s *core.Core, w *character.CharWrapper, p info.CharacterProfile
 	c.NormalHitNum = normalHitNum
 
 	common.TravelerStoryBuffs(w, p)
+	trueMoonBuff, okTrueMoonBuff := p.Params["true_moon_story_buff"]
+
+	if !okTrueMoonBuff {
+		trueMoonBuff = 1
+	}
+	c.trueMoonBuff = trueMoonBuff > 0
 	return &c, nil
 }
 
 func (c *Traveler) Init() error {
+	c.trueMoonInit()
 	return nil
 }
 

@@ -19,6 +19,8 @@ type Traveler struct {
 	eICDTag              attacks.ICDTag
 	eAbsorbCheckLocation info.AttackPattern
 	gender               int
+	trueMoonBuff         bool
+	trueMoonStacks       []bool
 }
 
 func NewTraveler(s *core.Core, w *character.CharWrapper, p info.CharacterProfile, gender int) (*Traveler, error) {
@@ -34,10 +36,18 @@ func NewTraveler(s *core.Core, w *character.CharWrapper, p info.CharacterProfile
 	c.NormalHitNum = normalHitNum
 
 	common.TravelerStoryBuffs(w, p)
+	trueMoonBuff, okTrueMoonBuff := p.Params["true_moon_story_buff"]
+
+	if !okTrueMoonBuff {
+		trueMoonBuff = 1
+	}
+	c.trueMoonBuff = trueMoonBuff > 0
+	c.trueMoonStacks = make([]bool, attributes.EndEleType)
 	return &c, nil
 }
 
 func (c *Traveler) Init() error {
+	c.trueMoonInit()
 	c.a4()
 	if c.Base.Cons >= 2 {
 		c.c2()

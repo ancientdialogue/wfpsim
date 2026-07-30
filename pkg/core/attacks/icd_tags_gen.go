@@ -43,6 +43,7 @@ const (
 	ICDTagSandroneExtraAttackLaser
 	ICDTagSkirkCons
 	ICDTagTartagliaRiptideFlash
+	ICDTagTravelerEnchancedCA
 	ICDTagVaresaCombatCycle
 	ICDTagWandererC6
 	ICDTagWandererA4

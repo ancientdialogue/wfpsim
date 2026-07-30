@@ -3,6 +3,7 @@ package player
 import (
 	"fmt"
 
+	"github.com/genshinsim/gcsim/pkg/core/event"
 	"github.com/genshinsim/gcsim/pkg/core/glog"
 )
 
@@ -49,7 +50,7 @@ func (h *Handler) AddVerdantDew() {
 		return
 	}
 	h.verdantDew++
-
+	h.Events.Emit(event.OnVerdantDew)
 	h.Log.NewEvent(fmt.Sprintf("verdant dew gained: %v", h.verdantDew), glog.LogElementEvent, -1).Write("max", MaxVerdantDew)
 }
 

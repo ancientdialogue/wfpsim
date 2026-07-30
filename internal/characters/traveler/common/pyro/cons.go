@@ -91,6 +91,20 @@ func (c *Traveler) c4AddMod() {
 	})
 }
 
+func (c *Traveler) c6Conversion(ai *info.AttackInfo) {
+	if c.Base.Cons < 6 {
+		return
+	}
+
+	if !c.nightsoulState.HasBlessing() {
+		return
+	}
+
+	ai.Element = attributes.Pyro
+	ai.IgnoreInfusion = true
+	ai.AdditionalTags = []attacks.AdditionalTag{attacks.AdditionalTagNightsoul}
+}
+
 func (c *Traveler) c6Init() {
 	if c.Base.Cons < 6 {
 		return

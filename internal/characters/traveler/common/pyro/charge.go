@@ -8,8 +8,12 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/attacks"
 	"github.com/genshinsim/gcsim/pkg/core/attributes"
 	"github.com/genshinsim/gcsim/pkg/core/combat"
+	"github.com/genshinsim/gcsim/pkg/core/event"
 	"github.com/genshinsim/gcsim/pkg/core/info"
+	"github.com/genshinsim/gcsim/pkg/enemy"
 )
+
+const chargeTruemoonICDKey = "travelerpyro-special-ca-icd"
 
 var (
 	chargeFrames   [][]int
@@ -36,6 +40,11 @@ func init() {
 }
 
 func (c *Traveler) ChargeAttack(p map[string]int) (action.Info, error) {
+	conversion := c.chargeAttackTruemoon()
+	if conversion == nil {
+		conversion = c.c6Conversion
+	}
+
 	ai := info.AttackInfo{
 		ActorIndex: c.Index(),
 		AttackTag:  attacks.AttackTagExtra,
@@ -45,15 +54,11 @@ func (c *Traveler) ChargeAttack(p map[string]int) (action.Info, error) {
 		Element:    attributes.Physical,
 		Durability: 25,
 	}
-	if c.Base.Cons >= 6 && c.nightsoulState.HasBlessing() {
-		ai.Element = attributes.Pyro
-		ai.IgnoreInfusion = true
-		ai.AdditionalTags = []attacks.AdditionalTag{attacks.AdditionalTagNightsoul}
-	}
 
 	for i, mult := range charge[c.gender] {
 		ai.Mult = mult[c.TalentLvlAttack()]
 		ai.Abil = fmt.Sprintf("Charge %v", i)
+		conversion(&ai)
 		c.Core.QueueAttack(
 			ai,
 			combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 2.2),
@@ -68,4 +73,41 @@ func (c *Traveler) ChargeAttack(p map[string]int) (action.Info, error) {
 		CanQueueAfter:   chargeHitmarks[c.gender][len(chargeHitmarks[c.gender])-1],
 		State:           action.ChargeAttackState,
 	}, nil
+}
+
+func (c *Traveler) chargeAttackTruemoon() func(*info.AttackInfo) {
+	if !c.trueMoonBuff {
+		return nil
+	}
+
+	if c.trueMoonStacks < 2 {
+		return nil
+	}
+
+	if c.StatusIsActive(chargeTruemoonICDKey) {
+		return nil
+	}
+	c.AddStatus(chargeTruemoonICDKey, 15*60, true)
+	c.trueMoonStacks = 0
+	return func(ai *info.AttackInfo) {
+		ai.Element = attributes.Pyro
+		ai.IgnoreInfusion = true
+		ai.ICDTag = attacks.ICDTagTravelerEnchancedCA
+		ai.AdditionalTags = []attacks.AdditionalTag{attacks.AdditionalTagNightsoul}
+		ai.Mult += 2
+		ai.Abil += " (Inferno)"
+	}
+}
+
+func (c *Traveler) trueMoonInit() {
+	if !c.trueMoonBuff {
+		return
+	}
+
+	c.Core.Events.Subscribe(event.OnNightsoulBurst, func(args ...any) {
+		if _, ok := args[0].(*enemy.Enemy); !ok {
+			return
+		}
+		c.trueMoonStacks = min(c.trueMoonStacks+1, 2)
+	}, "travelerpyro-truemoon")
 }

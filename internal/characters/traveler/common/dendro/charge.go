@@ -8,7 +8,13 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/attacks"
 	"github.com/genshinsim/gcsim/pkg/core/attributes"
 	"github.com/genshinsim/gcsim/pkg/core/combat"
+	"github.com/genshinsim/gcsim/pkg/core/event"
 	"github.com/genshinsim/gcsim/pkg/core/info"
+)
+
+const (
+	chargeTruemoonICDKey = "travelerdendro-special-ca-icd"
+	trueMoonStackICDKey  = "travelerdendro-verdant-icd"
 )
 
 var (
@@ -46,9 +52,11 @@ func (c *Traveler) ChargeAttack(p map[string]int) (action.Info, error) {
 		Durability: 25,
 	}
 
+	conversion := c.chargeAttackTruemoon()
 	for i, mult := range charge[c.gender] {
 		ai.Mult = mult[c.TalentLvlAttack()]
 		ai.Abil = fmt.Sprintf("Charge %v", i)
+		conversion(&ai)
 		c.Core.QueueAttack(
 			ai,
 			combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 2.2),
@@ -63,4 +71,66 @@ func (c *Traveler) ChargeAttack(p map[string]int) (action.Info, error) {
 		CanQueueAfter:   chargeHitmarks[c.gender][len(chargeHitmarks[c.gender])-1],
 		State:           action.ChargeAttackState,
 	}, nil
+}
+
+func (c *Traveler) chargeAttackTruemoon() func(*info.AttackInfo) {
+	if !c.trueMoonBuff {
+		return func(*info.AttackInfo) {}
+	}
+
+	if c.trueMoonStacks < 3 {
+		return func(*info.AttackInfo) {}
+	}
+
+	if c.StatusIsActive(chargeTruemoonICDKey) {
+		return func(*info.AttackInfo) {}
+	}
+
+	c.AddStatus(chargeTruemoonICDKey, 15*60, true)
+	c.trueMoonStacks = 0
+
+	caStart := chargeHitmarks[c.gender][len(chargeHitmarks[c.gender])-1]
+
+	for delay := range []int{4 * 60, 8 * 60} {
+		ai := info.AttackInfo{
+			ActorIndex:     c.Index(),
+			AttackTag:      attacks.AttackTagExtra,
+			ICDTag:         attacks.ICDTagNone,
+			ICDGroup:       attacks.ICDGroupDefault,
+			StrikeType:     attacks.StrikeTypeSlash,
+			Element:        attributes.Dendro,
+			Durability:     25,
+			Mult:           1.2,
+			IgnoreInfusion: true,
+		}
+
+		ap := combat.NewCircleHitOnTarget(c.Core.Combat.PrimaryTarget(), info.Point{Y: -1}, 1.5)
+		// TODO: can't have everything hit the same frame due to issues with same frame element app in gcsim
+		c.Core.QueueAttack(ai, ap, caStart+delay, caStart+delay)
+	}
+
+	return func(ai *info.AttackInfo) {
+		ai.Element = attributes.Dendro
+		ai.IgnoreInfusion = true
+		ai.ICDTag = attacks.ICDTagTravelerEnchancedCA
+		ai.Mult += 0.8
+		ai.Abil += " (Verdessence)"
+	}
+}
+
+func (c *Traveler) trueMoonInit() {
+	if !c.trueMoonBuff {
+		return
+	}
+
+	gainStacks := func(args ...any) {
+		if c.StatusIsActive(trueMoonStackICDKey) {
+			return
+		}
+
+		c.AddStatus(trueMoonStackICDKey, 1*60, true)
+		c.trueMoonStacks = min(c.trueMoonStacks+1, 3)
+	}
+	c.Core.Events.Subscribe(event.OnDendroCore, gainStacks, "travelerdendro-truemoon")
+	c.Core.Events.Subscribe(event.OnVerdantDew, gainStacks, "travelerdendro-truemoon")
 }
