@@ -109,7 +109,7 @@ func (c *Traveler) chargeAttackTruemoon() func(*info.AttackInfo) {
 			ICDTag:         attacks.ICDTagNone, // they don't share ICD with each other
 			ICDGroup:       attacks.ICDGroupDefault,
 			StrikeType:     attacks.StrikeTypeSlash,
-			Element:        attributes.Element(ele),
+			Element:        ele,
 			Durability:     25,
 			Mult:           0.5,
 			IgnoreInfusion: true,

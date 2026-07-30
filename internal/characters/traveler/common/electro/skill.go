@@ -140,10 +140,10 @@ func (c *Traveler) makeParticleCB() info.AttackCBFunc {
 	}
 }
 
-func (c *Traveler) collectAmulets(collector *character.CharWrapper) bool {
+func (c *Traveler) collectAmulets(collector *character.CharWrapper) {
 	// if there are no amulets to collect, return
 	if c.abundanceAmulets <= 0 {
-		return false
+		return
 	}
 
 	// Assume all available amulets are collected simultaneously
@@ -191,6 +191,4 @@ func (c *Traveler) collectAmulets(collector *character.CharWrapper) bool {
 
 	// Reset amulets
 	c.abundanceAmulets = 0
-
-	return true
 }

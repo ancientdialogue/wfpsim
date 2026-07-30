@@ -79,7 +79,7 @@ func (c *Traveler) ChargeAttack(p map[string]int) (action.Info, error) {
 	}, nil
 }
 
-func (c *Traveler) chargeAttackTruemoon(amulet_delay int) func(*info.AttackInfo) {
+func (c *Traveler) chargeAttackTruemoon(amuletDelay int) func(*info.AttackInfo) {
 	if !c.trueMoonBuff {
 		return func(*info.AttackInfo) {}
 	}
@@ -123,7 +123,7 @@ func (c *Traveler) chargeAttackTruemoon(amulet_delay int) func(*info.AttackInfo)
 	c.Core.Tasks.Add(func() {
 		active := c.Core.Player.ActiveChar()
 		c.collectAmulets(active)
-	}, amulet_delay)
+	}, amuletDelay)
 
 	return func(ai *info.AttackInfo) {
 		ai.Element = attributes.Geo
