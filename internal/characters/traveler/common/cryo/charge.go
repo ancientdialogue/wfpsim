@@ -108,11 +108,13 @@ func (c *Traveler) chargeAttackTruemoon() func(*info.AttackInfo) {
 		case radianceStellarConduct:
 			ai.Abil += stellarConductText
 			ai.AttackTag = attacks.AttackTagDirectStellarConduct
+			ai.ICDTag = attacks.ICDTagNone
 			ai.Durability = 0
 			ai.IgnoreDefPercent = 1
 		case radianceStellarSwirl:
 			ai.Abil += stellarSwirlText
 			ai.AttackTag = attacks.AttackTagDirectStellarSwirl
+			ai.ICDTag = attacks.ICDTagNone
 			ai.Durability = 0
 			ai.IgnoreDefPercent = 1
 		}
