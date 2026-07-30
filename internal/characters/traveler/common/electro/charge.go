@@ -126,7 +126,7 @@ func (c *Traveler) chargeAttackTruemoon(amuletDelay int) func(*info.AttackInfo) 
 	}, amuletDelay)
 
 	return func(ai *info.AttackInfo) {
-		ai.Element = attributes.Geo
+		ai.Element = attributes.Electro
 		ai.IgnoreInfusion = true
 		ai.ICDTag = attacks.ICDTagTravelerEnchancedCA
 		ai.Mult += 1
