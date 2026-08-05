@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/genshinsim/gcsim/pkg/core/action"
+	"github.com/genshinsim/gcsim/pkg/core/attacks"
 	"github.com/genshinsim/gcsim/pkg/core/attributes"
 	"github.com/genshinsim/gcsim/pkg/core/event"
 	"github.com/genshinsim/gcsim/pkg/core/glog"
@@ -13,6 +14,30 @@ import (
 	"github.com/genshinsim/gcsim/pkg/model"
 	"github.com/genshinsim/gcsim/pkg/modifier"
 )
+
+var AttackTagToReaction = map[attacks.AttackTag]info.ReactionType{
+	attacks.AttackTagOverloadDamage:           info.ReactionTypeOverload,
+	attacks.AttackTagSuperconductDamage:       info.ReactionTypeSuperconduct,
+	attacks.AttackTagECDamage:                 info.ReactionTypeElectroCharged,
+	attacks.AttackTagShatter:                  info.ReactionTypeShatter,
+	attacks.AttackTagSwirlPyro:                info.ReactionTypeSwirlPyro,
+	attacks.AttackTagSwirlHydro:               info.ReactionTypeSwirlHydro,
+	attacks.AttackTagSwirlCryo:                info.ReactionTypeSwirlCryo,
+	attacks.AttackTagSwirlElectro:             info.ReactionTypeSwirlElectro,
+	attacks.AttackTagBurningDamage:            info.ReactionTypeBurning,
+	attacks.AttackTagBloom:                    info.ReactionTypeBloom,
+	attacks.AttackTagBountifulCore:            info.ReactionTypeBloom,
+	attacks.AttackTagBurgeon:                  info.ReactionTypeBurgeon,
+	attacks.AttackTagHyperbloom:               info.ReactionTypeHyperbloom,
+	attacks.AttackTagReactionLunarCharge:      info.ReactionTypeLunarCharged,
+	attacks.AttackTagReactionLunarCrystallize: info.ReactionTypeLunarCrystallize,
+	attacks.AttackTagDirectLunarCharged:       info.ReactionTypeLunarCharged,
+	attacks.AttackTagDirectLunarBloom:         info.ReactionTypeLunarBloom,
+	attacks.AttackTagDirectLunarCrystallize:   info.ReactionTypeLunarCrystallize,
+	attacks.AttackTagReactionStellarSwirl:     info.ReactionTypeStellarSwirl,
+	attacks.AttackTagDirectStellarConduct:     info.ReactionTypeStellarConduct,
+	attacks.AttackTagDirectStellarSwirl:       info.ReactionTypeStellarSwirl,
+}
 
 type Character interface {
 	Base
@@ -176,6 +201,27 @@ func New(
 	}
 	if c.Talents.Burst < 1 || c.Talents.Burst > 10 {
 		return nil, fmt.Errorf("invalid talent lvl: burst - %v", c.Talents.Burst)
+	}
+
+	if len(p.ReactBonus) > 0 {
+		c.AddReactBonusMod(ReactBonusMod{
+			Base: modifier.NewBase("base-stat", -1),
+			Amount: func(ai info.AttackInfo) float64 {
+				if ai.Amped {
+					return p.ReactBonus[ai.AmpType]
+				}
+				if ai.Catalyzed {
+					return p.ReactBonus[ai.CatalyzedType]
+				}
+
+				reactType, ok := AttackTagToReaction[ai.AttackTag]
+				if !ok {
+					return 0
+				}
+
+				return p.ReactBonus[reactType]
+			},
+		})
 	}
 
 	return c, nil

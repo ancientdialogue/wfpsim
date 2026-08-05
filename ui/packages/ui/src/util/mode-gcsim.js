@@ -283,6 +283,8 @@ ace.define(
       var gcsimStats = '\\b(hp%?|atk%?|def%?|er|em|cr|cd|heal|phys%)(?!\\w)';
       var gcsimOthers =
         '(interval|every|once|amount|electro%?|element|resist|pyro%?|dendro%?|hydro%?|geo%?|anemo%?|physical|cryo%?|start_hp%?|start_energy|pos|radius|freeze_resist)';
+      var gcsimReactStats =
+        '(aggravate%?|bloom%?|burgeon%?|burning%?|crystallize-electro%?|crystallize-hydro%?|crystallize-pyro%?|crystallize-cryo%?|electrocharged%?|hyperbloom%?|lunarcharged%?|lunarbloom%?|lunarcrystallize%?|melt%?|overload%?|quicken%?|shatter%?|spread%?|stellar-conduct%?|stellar-swirl%?|superconduct%?|swirl-electro%?|swirl-hydro%?|swirl-pyro%?|swirl-cryo%?|vaporize%?)';
       var gcsimOptions =
         'iteration|duration|swap_delay|workers|hitlag|defhalt|ignore_burst_energy';
       var keywordMapper = this.createKeywordMapper(
@@ -329,7 +331,7 @@ ace.define(
           },
           {
             token: 'support.variable',
-            regex: gcsimStats + '|' + gcsimOthers,
+            regex: gcsimStats + '|' + gcsimOthers + '|' + gcsimReactStats,
           },
           {
             token: 'constant.numeric', // rune

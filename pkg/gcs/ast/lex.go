@@ -385,6 +385,9 @@ func checkIdentifier(word string) TokenType {
 	if _, ok := actionKeys[word]; ok {
 		return ItemActionKey
 	}
+	if _, ok := ReactKeys[word]; ok {
+		return ItemReactKey
+	}
 	return ItemIdentifier
 }
 

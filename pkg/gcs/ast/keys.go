@@ -3,6 +3,7 @@ package ast
 import (
 	"github.com/genshinsim/gcsim/pkg/core/action"
 	"github.com/genshinsim/gcsim/pkg/core/attributes"
+	"github.com/genshinsim/gcsim/pkg/core/info"
 )
 
 var key = map[string]TokenType{
@@ -101,4 +102,33 @@ var actionKeys = map[string]action.Action{
 	"jump":        action.ActionJump,
 	"walk":        action.ActionWalk,
 	"swap":        action.ActionSwap,
+}
+
+var ReactKeys = map[string]info.ReactionType{
+	"aggravate%":           info.ReactionTypeAggravate,
+	"bloom%":               info.ReactionTypeBloom,
+	"burgeon%":             info.ReactionTypeBurgeon,
+	"burning%":             info.ReactionTypeBurning,
+	"crystallize-electro%": info.ReactionTypeCrystallizeElectro,
+	"crystallize-hydro%":   info.ReactionTypeCrystallizeHydro,
+	"crystallize-pyro%":    info.ReactionTypeCrystallizePyro,
+	"crystallize-cryo%":    info.ReactionTypeCrystallizeCryo,
+	"electrocharged%":      info.ReactionTypeElectroCharged,
+	"hyperbloom%":          info.ReactionTypeHyperbloom,
+	"lunarcharged%":        info.ReactionTypeLunarCharged,
+	"lunarbloom%":          info.ReactionTypeLunarBloom,
+	"lunarcrystallize%":    info.ReactionTypeLunarCrystallize,
+	"melt%":                info.ReactionTypeMelt,
+	"overload%":            info.ReactionTypeOverload,
+	"quicken%":             info.ReactionTypeQuicken,
+	"shatter%":             info.ReactionTypeShatter,
+	"spread%":              info.ReactionTypeSpread,
+	"stellar-conduct%":     info.ReactionTypeStellarConduct,
+	"stellar-swirl%":       info.ReactionTypeStellarSwirl,
+	"superconduct%":        info.ReactionTypeSuperconduct,
+	"swirl-electro%":       info.ReactionTypeSwirlElectro,
+	"swirl-hydro%":         info.ReactionTypeSwirlHydro,
+	"swirl-pyro%":          info.ReactionTypeSwirlPyro,
+	"swirl-cryo%":          info.ReactionTypeSwirlCryo,
+	"vaporize%":            info.ReactionTypeVaporize,
 }

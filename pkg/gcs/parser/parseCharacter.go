@@ -35,6 +35,7 @@ func (p *Parser) newChar(key keys.Char) {
 	r.Sets = make(map[keys.Set]int)
 	r.SetParams = make(map[keys.Set]map[string]int)
 	r.Weapon.Params = make(map[string]int)
+	r.ReactBonus = make(map[info.ReactionType]float64)
 	r.Base.Element = keys.CharKeyToEle[key]
 	p.chars[key] = &r
 	p.charOrder = append(p.charOrder, key)
@@ -255,6 +256,9 @@ func parseCharAddStats(p *Parser) (parseFn, error) {
 
 	// each line will be parsed separately into the map
 	line := make([]float64, attributes.EndStatType)
+
+	// react
+	react := make(map[info.ReactionType]float64)
 	var key string
 
 	for n := p.next(); n.Typ != ast.ItemEOF; n = p.next() {
@@ -270,6 +274,18 @@ func parseCharAddStats(p *Parser) (parseFn, error) {
 			// TODO: use attributes.StrToStatType?
 			pos := ast.StatKeys[n.Val]
 			line[pos] += amt
+		case ast.ItemReactKey:
+			if _, err := p.consume(ast.ItemAssign); err != nil {
+				return nil, err
+			}
+			amt, err := p.parseFloat64Const()
+			if err != nil {
+				return nil, err
+			}
+			// TODO: use attributes.StrToStatType?
+			reactType := ast.ReactKeys[n.Val]
+			val := react[reactType]
+			react[reactType] = val + amt
 		case ast.KeywordLabel:
 			x, err := p.acceptSeqReturnLast(ast.ItemAssign, ast.ItemIdentifier)
 			if err != nil {
@@ -287,6 +303,9 @@ func parseCharAddStats(p *Parser) (parseFn, error) {
 				m[i] += v
 			}
 			c.StatsByLabel[key] = m
+			for r, v := range react {
+				c.ReactBonus[r] += v
+			}
 			return parseRows, nil
 		case ast.ItemIdentifier:
 			if n.Val == "random" {
