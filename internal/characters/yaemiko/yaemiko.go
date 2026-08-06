@@ -69,6 +69,7 @@ func (c *char) Init() error {
 	c.revelationInit()
 	c.c1Init()
 	c.c2Init()
+	c.c4Init()
 	c.c6Init()
 	return nil
 }
