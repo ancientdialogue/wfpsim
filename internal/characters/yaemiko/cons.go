@@ -11,9 +11,11 @@ import (
 )
 
 const (
-	c1Key = "yae-c1"
-	c2Key = "yae-c2"
-	c6Key = "yae-c6"
+	c1Key          = "yae-c1"
+	c2Key          = "yae-c2"
+	c4Key          = "yae-c4"
+	c4EnergyIcdKey = c4Key + "-icd"
+	c6Key          = "yae-c6"
 )
 
 var c2BuffVal = []float64{0, 60, 90, 120, 200}
@@ -119,7 +121,28 @@ func (c *char) c2Init() {
 	}
 }
 
-// When Sesshou Sakura lightning hits opponents, the Electro DMG Bonus of all nearby party members is increased by 20% for 5s.
+// Additionally, Yae Miko's Elemental Burst DMG is increased by 100%.
+func (c *char) c4Init() {
+	if !c.revelation {
+		return
+	}
+
+	m := make([]float64, attributes.EndStatType)
+	m[attributes.DmgP] = 1
+	c.AddAttackMod(character.AttackMod{
+		Base: modifier.NewBase(c4Key, -1),
+		Amount: func(atk *info.AttackEvent, t info.Target) []float64 {
+			if atk.Info.AttackTag == attacks.AttackTagElementalBurst {
+				return m
+			}
+			return nil
+		},
+	})
+}
+
+// When Sesshou Sakura lightning hits opponents, the Electro DMG Bonus of all nearby party members is increased by 20% for 5s,
+// and Yae Miko regenerates 8 Elemental Energy.
+// The aforementioned Elemental Energy recovery effect can trigger once every 5s.
 func (c *char) c4() {
 	// TODO: does this trigger for yaemiko too? assuming it does
 	for _, char := range c.Core.Player.Chars() {
@@ -131,6 +154,16 @@ func (c *char) c4() {
 			},
 		})
 	}
+
+	if !c.revelation {
+		return
+	}
+
+	if c.StatusIsActive(c4EnergyIcdKey) {
+		return
+	}
+	c.AddStatus(c4EnergyIcdKey, 5*60, true)
+	c.AddEnergy(c4Key, 8)
 }
 
 func (c *char) c6Init() {
