@@ -116,6 +116,7 @@ const (
 	ItemElementKey   // elements: pyro, hydro, etc..
 	ItemCharacterKey // characters: albedo, amber, etc..
 	ItemActionKey    // actions: skill, burst, attack, charge, etc...
+	ItemReactKey     // Reactbonus: bloom%...
 )
 
 type Precedence int

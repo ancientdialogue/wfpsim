@@ -20,6 +20,7 @@ type CharacterProfile struct {
 	Sets           Sets                        `json:"sets"`
 	SetParams      map[keys.Set]map[string]int `json:"-"`
 	Params         map[string]int              `json:"-"`
+	ReactBonus     map[ReactionType]float64    `json:"react_bonus"`
 }
 
 type RandomSubstats struct {
