@@ -123,10 +123,10 @@ const DialogBody = ({ mismatch, data, latestCommit }: BodyProps) => {
 
   const shortResultCommit = simCommit?.substring(0, 7);
   const shortLatestCommit = latestCommit?.substring(0, 7);
-  const resultCommitUrl = "https://github.com/genshinsim/gcsim/commits/" + simCommit;
-  const latestCommitUrl = "https://github.com/genshinsim/gcsim/commits/" + latestCommit;
+  const resultCommitUrl = "https://github.com/ancientdialogue/wfpsim/commits/" + simCommit;
+  const latestCommitUrl = "https://github.com/ancientdialogue/wfpsim/commits/" + latestCommit;
   const diffUrl = (
-    "https://github.com/genshinsim/gcsim/compare/" + simCommit + "..." + latestCommit
+    "https://github.com/ancientdialogue/wfpsim/compare/" + simCommit + "..." + latestCommit
   );
 
   const dirty = data?.modified || simCommit === "";
