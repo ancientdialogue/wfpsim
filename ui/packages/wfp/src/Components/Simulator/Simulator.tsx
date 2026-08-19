@@ -61,6 +61,7 @@ export function Simulator({
           <li>Cryo Traveler (C6)</li>
           <li>Exaiphanes Blade</li>
           <li>Alyosha</li>
+          <li>Vodyanitsa</li>
         </ul>
         <p className=" font-bold">
           See{' '}

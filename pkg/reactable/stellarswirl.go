@@ -15,12 +15,12 @@ import (
 
 var (
 	sswContributorMult = []float64{0.6, 0.3, 0.05, 0.05}
-	sswMultStack       = []float64{2, 2, 2, 3, 3, 3}
+	sswMultStack       = []float64{2, 2, 3, 3, 3, 3}
 )
 
 const (
 	sswStackKey        = "stellar-swirl-stacks"
-	sswKey             = "stellar-swirl"
+	SswKey             = "stellar-swirl"
 	maxStacks          = 5
 	sswContributionKey = "stellar-swirl-contribution"
 	sswOwnerKey        = "stellar-swirl-owner"
@@ -81,13 +81,13 @@ func (r *Reactable) queueStellarSwirl(charIndex int) {
 	r.addSSwContributor(contribMap)
 	r.core.Flags.Custom[sswOwnerKey] = float64(charIndex)
 
-	if r.core.Status.Duration(sswKey) > 0 {
+	if r.core.Status.Duration(SswKey) > 0 {
 		r.core.Flags.Custom[sswStackKey] += 1
 		if r.core.Flags.Custom[sswStackKey] == maxStacks {
 			r.detonateSSW(charIndex)
 		}
 	} else {
-		r.core.Status.Add(sswKey, 3*60)
+		r.core.Status.Add(SswKey, 3*60)
 		r.core.Flags.Custom[sswStackKey] = 0
 		src := float64(r.core.F)
 		r.core.Flags.Custom[sswSrcKey] = src
@@ -233,7 +233,7 @@ func (r *Reactable) detonateSSW(owner int) {
 
 		r.core.QueueAttackWithSnap(ai, snap, ap, 0)
 
-		r.core.Status.Delete(sswKey)
+		r.core.Status.Delete(SswKey)
 		r.core.Flags.Custom[sswStackKey] = 0
 	}
 	r.core.Tasks.Add(detonate, 5)
