@@ -7,6 +7,8 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/attributes"
 	"github.com/genshinsim/gcsim/pkg/core/combat"
 	"github.com/genshinsim/gcsim/pkg/core/info"
+	"github.com/genshinsim/gcsim/pkg/enemy"
+	"github.com/genshinsim/gcsim/pkg/modifier"
 )
 
 var skillFrames []int
@@ -37,7 +39,7 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 
 	ap := combat.NewCircleHitOnTarget(c.Core.Combat.PrimaryTarget(), nil, 3)
 
-	c.Core.QueueAttack(ai, ap, 0, 0, c.particleCB)
+	c.Core.QueueAttack(ai, ap, 0, 0, c.particleCB, c.skillShredCB)
 
 	c.c2OnSkillAttack()
 
@@ -80,7 +82,7 @@ func (c *char) skillAttackTask(src int) {
 
 	ap := combat.NewCircleHitOnTarget(c.Core.Combat.PrimaryTarget(), nil, 3)
 
-	c.Core.QueueAttack(ai, ap, 0, 0, c.particleCB)
+	c.Core.QueueAttack(ai, ap, 0, 0, c.particleCB, c.skillShredCB)
 
 	c.c2OnSkillAttack()
 	c.Core.Tasks.Add(func() { c.skillAttackTask(src) }, 3*60)
@@ -105,6 +107,29 @@ func (c *char) skillHealTask(src int) {
 	c.c1OnHeal()
 
 	c.Core.Tasks.Add(func() { c.skillHealTask(src) }, 1.5*60)
+}
+
+func (c *char) skillShredCB(ac info.AttackCB) {
+	if ac.Target.Type() != info.TargettableEnemy {
+		return
+	}
+
+	e, ok := ac.Target.(*enemy.Enemy)
+	if !ok {
+		return
+	}
+
+	e.AddResistMod(info.ResistMod{
+		Base:  modifier.NewBaseWithHitlag(skillKey+"-hydro", 6*60),
+		Ele:   attributes.Hydro,
+		Value: -skillShred[c.TalentLvlSkill()],
+	})
+
+	e.AddResistMod(info.ResistMod{
+		Base:  modifier.NewBaseWithHitlag(skillKey+"-cryo", 6*60),
+		Ele:   attributes.Cryo,
+		Value: -skillShred[c.TalentLvlSkill()],
+	})
 }
 
 func (c *char) particleCB(ac info.AttackCB) {
