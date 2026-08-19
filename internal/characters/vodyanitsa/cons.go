@@ -180,10 +180,7 @@ func (c *char) c6Init() {
 }
 
 func (c *char) c6c2CheckActive() bool {
-	if c.Base.Cons < 6 {
-		return true
-	}
-	return false
+	return c.Base.Cons < 6
 }
 
 func (c *char) c6OnSkill() {

@@ -81,7 +81,7 @@ func (c *char) a4Init() {
 			return
 		}
 
-		amt := 0.0
+		var amt float64
 		switch ae.Info.AttackTag {
 		case attacks.AttackTagElementalBurst, attacks.AttackTagElementalArt, attacks.AttackTagElementalArtHold, attacks.AttackTagNormal, attacks.AttackTagExtra, attacks.AttackTagPlunge:
 			if ae.Info.Element != attributes.Cryo && ae.Info.Element != attributes.Hydro {

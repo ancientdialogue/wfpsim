@@ -21,8 +21,6 @@ func init() {
 	skillFrames = frames.InitAbilSlice(56)
 }
 
-// Skill handling - Handles primary damage instance
-// Deals Hydro DMG to surrounding opponents and heal nearby active characters once every 2s. This healing is based on Kokomi's Max HP.
 func (c *char) Skill(p map[string]int) (action.Info, error) {
 	ai := info.AttackInfo{
 		ActorIndex: c.Index(),
