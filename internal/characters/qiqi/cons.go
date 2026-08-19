@@ -124,42 +124,6 @@ func (c *char) c6Init() {
 		return
 	}
 
-	c.Core.Events.Subscribe(event.OnLunarReactionAttack, func(args ...any) {
-		atk := args[1].(*info.AttackEvent)
-
-		if atk.Info.ActorIndex == c.Index() {
-			return
-		}
-
-		if atk.Info.ActorIndex != c.Core.Player.Active() {
-			return
-		}
-
-		if c.c6Stacks == 0 {
-			return
-		}
-
-		switch atk.Info.AttackTag {
-		case attacks.AttackTagReactionStellarSwirl:
-		default:
-			return
-		}
-
-		if !c.StatusIsActive(c6Key) {
-			return
-		}
-
-		c.c6Stacks -= 1
-		amt := 6 * c.TotalAtk()
-		if c.Core.Flags.LogDebug {
-			c.Core.Log.NewEvent("Qiqi C6 proc dmg added to contribution", glog.LogPreDamageMod, atk.Info.ActorIndex).
-				Write("before", atk.Info.FlatDmg).
-				Write("addition", amt).
-				Write("c6 stacks left", c.c6Stacks)
-		}
-		atk.Info.FlatDmg += amt
-	}, "qiq-c6-ssw")
-
 	c.Core.Events.Subscribe(event.OnEnemyHit, func(args ...any) {
 		atk := args[1].(*info.AttackEvent)
 
