@@ -13,7 +13,7 @@ import (
 
 var (
 	attackFrames   [][]int
-	attackHitmarks = []int{6, 11, 12, 32}
+	attackHitmarks = []int{18, 12, 24, 32}
 	attackRadius   = []float64{1, 1, 1, 2}
 )
 
@@ -23,27 +23,16 @@ func init() {
 	attackFrames = make([][]int, normalHitNum)
 
 	// N1 -> x
-	attackFrames[0] = frames.InitNormalCancelSlice(attackHitmarks[0], 23)
-	attackFrames[0][action.ActionAttack] = 15
-	attackFrames[0][action.ActionCharge] = 18
+	attackFrames[0] = frames.InitNormalCancelSlice(attackHitmarks[0], 33)
 
 	// N2 -> x
-	attackFrames[1] = frames.InitNormalCancelSlice(attackHitmarks[1], 28)
-	attackFrames[1][action.ActionAttack] = 21
-	attackFrames[1][action.ActionCharge] = 24
+	attackFrames[1] = frames.InitNormalCancelSlice(attackHitmarks[1], 26)
 
 	// N3 -> x
-	attackFrames[2] = frames.InitNormalCancelSlice(attackHitmarks[2], 30)
-	attackFrames[2][action.ActionAttack] = 22
-	attackFrames[2][action.ActionCharge] = 28
+	attackFrames[2] = frames.InitNormalCancelSlice(attackHitmarks[2], 45)
 
 	// N4 -> x
 	attackFrames[3] = frames.InitNormalCancelSlice(attackHitmarks[3], 60)
-	attackFrames[3][action.ActionCharge] = 500 // TODO: this action is illegal; need better way to handle it
-	attackFrames[3][action.ActionDash] = 2
-	attackFrames[3][action.ActionJump] = 3
-	attackFrames[3][action.ActionSwap] = 2
-	attackFrames[3][action.ActionWalk] = 57
 }
 
 // Standard attack function with seal handling

@@ -12,15 +12,13 @@ import (
 var skillFrames []int
 
 const (
-	skillHitmark   = 24
+	skillHitmark   = 32
 	particleICDKey = "vodyanitsa-particle-icd"
 	skillKey       = "vodyanitsa-skill"
 )
 
 func init() {
-	skillFrames = frames.InitAbilSlice(61)
-	skillFrames[action.ActionDash] = 29
-	skillFrames[action.ActionJump] = 29
+	skillFrames = frames.InitAbilSlice(56)
 }
 
 // Skill handling - Handles primary damage instance
@@ -36,6 +34,7 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 		Element:    attributes.Hydro,
 		Durability: 25,
 		Mult:       skill[c.TalentLvlSkill()],
+		UseHP:      true,
 	}
 
 	ap := combat.NewCircleHitOnTarget(c.Core.Combat.PrimaryTarget(), nil, 3)
@@ -45,8 +44,8 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 	c.c2OnSkillAttack()
 
 	c.skillSrc = c.Core.F
-	c.Core.Tasks.Add(func() { c.skillHealTask(c.skillSrc) }, skillHitmark+3*60)
-	c.Core.Tasks.Add(func() { c.skillAttackTask(c.skillSrc) }, skillHitmark+1.5*60)
+	c.Core.Tasks.Add(func() { c.skillHealTask(c.skillSrc) }, skillHitmark+14+3*60)
+	c.Core.Tasks.Add(func() { c.skillAttackTask(c.skillSrc) }, skillHitmark+14+1.5*60)
 
 	c.AddStatus(skillKey, 16*60+c.c2SkillDurBonus(), false)
 
@@ -78,6 +77,7 @@ func (c *char) skillAttackTask(src int) {
 		Element:    attributes.Hydro,
 		Durability: 25,
 		Mult:       skill[c.TalentLvlSkill()],
+		UseHP:      true,
 	}
 
 	ap := combat.NewCircleHitOnTarget(c.Core.Combat.PrimaryTarget(), nil, 3)
