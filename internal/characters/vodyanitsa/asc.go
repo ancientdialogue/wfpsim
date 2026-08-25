@@ -119,7 +119,7 @@ func (c *char) a4OnSkill() {
 		return
 	}
 
-	c.leadVocal = 17
+	c.leadVocal = 25
 	c.chorus = 10
 	c.AddStatus(a4Key, 30*60, true)
 }
