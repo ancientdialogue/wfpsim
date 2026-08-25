@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 const escapeMetaValue = (value = '') =>
   value
     .replace(/&/g, '&amp;')
@@ -6,25 +8,23 @@ const escapeMetaValue = (value = '') =>
     .replace(/>/g, '&gt;');
 
 async function getShareDescription(host, key, prefix) {
-  const sharePath = prefix === 'db' ? `db/${key}` : key;
-  const shareUrl = new URL('/api/share/' + sharePath, host + '/');
-
-  try {
-    const res = await fetch(shareUrl);
-    if (!res.ok) {
-      return '';
-    }
-
-    const data = await res.json();
-    const names = (data.character_details ?? [])
-      .map((character) => character?.name)
-      .filter((name) => typeof name === 'string' && name.trim().length > 0)
-      .slice(0, 4);
-
-    return names.join(', ');
-  } catch {
-    return '';
-  }
+  const url = `/api/share/` + (prefix === 'db' ? 'db/' : '') + key;
+  axios
+    .get(url)
+    .then((res) => {
+      if (res.data) {
+        const names = (res.data.character_details ?? [])
+          .map((character) => character?.name)
+          .filter((name) => typeof name === 'string' && name.trim().length > 0)
+          .slice(0, 4);
+        return names.join(', ');
+      } else {
+        return 'share not found';
+      }
+    })
+    .catch((_) => {
+      return 'share not found';
+    });
 }
 
 class ElementHandler {
