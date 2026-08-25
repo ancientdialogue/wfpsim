@@ -63,7 +63,7 @@ func (c *char) a1Init() {
 			e.AddResistMod(info.ResistMod{
 				Base:  modifier.NewBaseWithHitlag(a1Key, 6*60),
 				Ele:   attributes.Anemo,
-				Value: -0.30,
+				Value: -0.35,
 			})
 		}
 	}, a1Key)
