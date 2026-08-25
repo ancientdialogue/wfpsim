@@ -47,7 +47,6 @@ export async function handleView(
       const data = pako.inflate(compressed as ArrayBuffer);
       response = new Response(data, response);
       response.headers.append("Cache-Control", "s-maxage=1800");
-      response.headers.append("Content-Encoding", "gzip");
 
       event.waitUntil(cache.put(cacheKey, response.clone()));
     } catch {
