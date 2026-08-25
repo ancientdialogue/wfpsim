@@ -22,7 +22,7 @@ async function getShareDescription(host, key, prefix) {
       .slice(0, 4);
     return names.length > 0 ? names.join(', ') : 'share data malformed';
   } catch (_) {
-    return 'share not found';
+    return 'share error';
   }
 }
 
