@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 const escapeMetaValue = (value = '') =>
   value
     .replace(/&/g, '&amp;')
@@ -8,20 +6,21 @@ const escapeMetaValue = (value = '') =>
     .replace(/>/g, '&gt;');
 
 async function getShareDescription(host, key, prefix) {
-  const url = `/api/share/` + (prefix === 'db' ? 'db/' : '') + key;
-
+  const url = '/api/share/' + (prefix === 'db' ? 'db/' : '') + key;
   try {
-    const res = await axios.get(url);
-    if (!res.data) {
+    const res = await fetch(host + url);
+    if (!res.ok) {
       return 'share not found';
     }
-
-    const names = (res.data.character_details ?? [])
+    const data = await res.json();
+    if (!data) {
+      return 'share no data';
+    }
+    const names = (data.character_details ?? [])
       .map((character) => character?.name)
       .filter((name) => typeof name === 'string' && name.trim().length > 0)
       .slice(0, 4);
-
-    return names.length > 0 ? names.join(', ') : 'share not found';
+    return names.length > 0 ? names.join(', ') : 'share data malformed';
   } catch (_) {
     return 'share not found';
   }
