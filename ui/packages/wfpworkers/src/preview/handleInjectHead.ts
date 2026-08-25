@@ -9,22 +9,22 @@ const escapeMetaValue = (value = '') =>
 
 async function getShareDescription(host, key, prefix) {
   const url = `/api/share/` + (prefix === 'db' ? 'db/' : '') + key;
-  axios
-    .get(url)
-    .then((res) => {
-      if (res.data) {
-        const names = (res.data.character_details ?? [])
-          .map((character) => character?.name)
-          .filter((name) => typeof name === 'string' && name.trim().length > 0)
-          .slice(0, 4);
-        return names.join(', ');
-      } else {
-        return 'share not found';
-      }
-    })
-    .catch((_) => {
+
+  try {
+    const res = await axios.get(url);
+    if (!res.data) {
       return 'share not found';
-    });
+    }
+
+    const names = (res.data.character_details ?? [])
+      .map((character) => character?.name)
+      .filter((name) => typeof name === 'string' && name.trim().length > 0)
+      .slice(0, 4);
+
+    return names.length > 0 ? names.join(', ') : 'share not found';
+  } catch (_) {
+    return 'share not found';
+  }
 }
 
 class ElementHandler {
