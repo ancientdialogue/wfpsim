@@ -8,8 +8,8 @@ weapon_class: WEAPON_SWORD_ONE_HAND
 icon_name: "UI_AvatarIcon_VODYANITSA"
 stats: {
    base_hp: 1154
-   base_atk: 17.8752
-   base_def: 56.71884
+   base_atk: 8
+   base_def: 38
    hp_curve: GROW_CURVE_HP_S5
    atk_curve: GROW_CURVE_ATTACK_S5
    def_cruve: GROW_CURVE_HP_S5
@@ -40,7 +40,7 @@ stats: {
       }
       add_props: {
          prop_type: FIGHT_PROP_BASE_ATTACK
-         value: 15.325248
+         value: 5
       }
       add_props: {
          prop_type: FIGHT_PROP_HP_PERCENT
@@ -58,7 +58,7 @@ stats: {
       }
       add_props: {
          prop_type: FIGHT_PROP_BASE_ATTACK
-         value: 26.21424
+         value: 10
       }
       add_props: {
          prop_type: FIGHT_PROP_HP_PERCENT
@@ -77,7 +77,7 @@ stats: {
       }
       add_props: {
          prop_type: FIGHT_PROP_BASE_ATTACK
-         value: 40.732895
+         value: 15
       }
       add_props: {
          prop_type: FIGHT_PROP_HP_PERCENT
@@ -96,7 +96,7 @@ stats: {
       }
       add_props: {
          prop_type: FIGHT_PROP_BASE_ATTACK
-         value: 51.621887
+         value: 20
       }
       add_props: {
          prop_type: FIGHT_PROP_HP_PERCENT
@@ -115,7 +115,7 @@ stats: {
       }
       add_props: {
          prop_type: FIGHT_PROP_BASE_ATTACK
-         value: 62.51088
+         value: 28.6
       }
       add_props: {
          prop_type: FIGHT_PROP_HP_PERCENT
@@ -126,7 +126,7 @@ stats: {
       max_level: 90
       add_props: {
          prop_type: FIGHT_PROP_BASE_HP
-         value: 4854.4106
+         value: 4733.194
       }
       add_props: {
          prop_type: FIGHT_PROP_BASE_DEFENSE
@@ -134,7 +134,7 @@ stats: {
       }
       add_props: {
          prop_type: FIGHT_PROP_BASE_ATTACK
-         value: 73.39987
+         value: 35.6
       }
       add_props: {
          prop_type: FIGHT_PROP_HP_PERCENT

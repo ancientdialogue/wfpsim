@@ -32,10 +32,10 @@ func (c *char) c1OnHeal() {
 
 	for _, char := range c.Core.Player.Chars() {
 		char.AddStatMod(character.StatMod{
-			Base:         modifier.NewBaseWithHitlag(c1Key, 3*60),
+			Base:         modifier.NewBaseWithHitlag(c1Key, 5*60),
 			AffectedStat: attributes.ATK,
 			Amount: func() []float64 {
-				c.c1Buff[attributes.ATK] = c.MaxHP() * 0.007
+				c.c1Buff[attributes.ATK] = c.MaxHP() * 0.01
 				return c.c1Buff
 			},
 		})
@@ -152,8 +152,8 @@ func (c *char) c6Init() {
 	}
 
 	c.c6Buff = make([]float64, attributes.EndStatType)
-	c.c6Buff[attributes.CryoP] = 0.5
-	c.c6Buff[attributes.HydroP] = 0.5
+	c.c6Buff[attributes.CryoP] = 0.6
+	c.c6Buff[attributes.HydroP] = 0.6
 
 	c.Core.Events.Subscribe(event.OnApplyAttack, func(args ...any) {
 		atk := args[0].(*info.AttackEvent)
@@ -163,7 +163,7 @@ func (c *char) c6Init() {
 		}
 		// do not apply elevation to Reaction damage here because the elevation is already applied at the contributor level
 		if atk.Info.AttackTag == attacks.AttackTagDirectStellarSwirl {
-			atk.Info.Elevation += 0.25
+			atk.Info.Elevation += 0.3
 		}
 	}, c6Key)
 
@@ -174,7 +174,7 @@ func (c *char) c6Init() {
 			return
 		}
 		if atk.Info.AttackTag == attacks.AttackTagReactionStellarSwirl {
-			atk.Info.Elevation += 0.25
+			atk.Info.Elevation += 0.3
 		}
 	}, c6Key)
 }
