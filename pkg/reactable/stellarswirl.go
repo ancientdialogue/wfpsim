@@ -72,7 +72,7 @@ func (r *Reactable) queueStellarSwirl(charIndex int) {
 		contribMap[charInd] = true
 	}
 
-	ai, snap := r.calcStellarSwirlDmg(ai, ap, contribMap, 0.75)
+	ai, snap := r.calcStellarSwirlDmg(ai, ap, contribMap, 0.75, charIndex)
 
 	ai.ActorIndex = charIndex
 
@@ -101,7 +101,7 @@ func (r *Reactable) queueStellarSwirl(charIndex int) {
 	}
 }
 
-func (r *Reactable) calcStellarSwirlDmg(ai info.AttackInfo, ap info.AttackPattern, contribMap [info.MaxChars]bool, mult float64) (info.AttackInfo, info.Snapshot) {
+func (r *Reactable) calcStellarSwirlDmg(ai info.AttackInfo, ap info.AttackPattern, contribMap [info.MaxChars]bool, mult float64, owner int) (info.AttackInfo, info.Snapshot) {
 	contributions := []sswContribution{}
 	for charInd, char := range r.core.Player.Chars() {
 		if !contribMap[charInd] {
@@ -119,7 +119,7 @@ func (r *Reactable) calcStellarSwirlDmg(ai info.AttackInfo, ap info.AttackPatter
 		}
 
 		// Emit event so PreDamageMods can be applied to the individual LCr contributions
-		r.core.Events.Emit(event.OnLunarReactionAttack, r.self, &ae)
+		r.core.Events.Emit(event.OnLunarReactionAttack, r.self, &ae, owner)
 
 		em := ae.Snapshot.Stats[attributes.EM]
 		cr := ae.Snapshot.Stats[attributes.CR]
@@ -227,7 +227,7 @@ func (r *Reactable) detonateSSW(owner int) {
 
 		stacks := min(int(r.core.Flags.Custom[sswStackKey]), maxStacks)
 
-		ai, snap := r.calcStellarSwirlDmg(ai, ap, contribMap, sswMultStack[stacks])
+		ai, snap := r.calcStellarSwirlDmg(ai, ap, contribMap, sswMultStack[stacks], owner)
 
 		ai.ActorIndex = owner
 

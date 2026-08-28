@@ -298,7 +298,7 @@ func (c *char) doSingleLCrAttack() {
 
 		// Emit even so PreDamageMods can be applied to the individual LC contributions
 		// Is there a way to collect these attackMods to show in logs?
-		c.Core.Events.Emit(event.OnLunarReactionAttack, c.Core.Combat.PrimaryTarget(), &ae)
+		c.Core.Events.Emit(event.OnLunarReactionAttack, c.Core.Combat.PrimaryTarget(), &ae, c.Index())
 
 		em := ae.Snapshot.Stats[attributes.EM]
 		cr := ae.Snapshot.Stats[attributes.CR]

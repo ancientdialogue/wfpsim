@@ -81,37 +81,69 @@ func (c *char) a4Init() {
 			return
 		}
 
+		if !c.a4StacksCheck(ae.Info.ActorIndex) {
+			return
+		}
+
 		var amt float64
 		switch ae.Info.AttackTag {
 		case attacks.AttackTagElementalBurst, attacks.AttackTagElementalArt, attacks.AttackTagElementalArtHold, attacks.AttackTagNormal, attacks.AttackTagExtra, attacks.AttackTagPlunge:
 			if ae.Info.Element != attributes.Cryo && ae.Info.Element != attributes.Hydro {
 				return
 			}
-
 			if c.recentSSW() {
 				return
 			}
 			amt = max(min((c.MaxHP()-40000)*140/1000, 3500), 0)
 		case attacks.AttackTagDirectStellarSwirl:
 			amt = max(min((c.MaxHP()-40000)*260/1000, 6500), 0)
+		case attacks.AttackTagReactionStellarSwirl:
+			c.a4StacksRemove(ae.Info.ActorIndex)
+			return
 		default:
 			return
 		}
 
-		if ae.Info.ActorIndex == c.Core.Player.Active() {
-			if c.leadVocal <= 0 {
-				return
-			}
-			c.leadVocal--
-		} else {
-			if c.chorus <= 0 {
-				return
-			}
-			c.chorus--
-		}
-
+		c.a4StacksRemove(ae.Info.ActorIndex)
 		ae.Info.FlatDmg += amt
 	}, a4Key)
+
+	// this is emitted up to 4 times per attack, but we should only consume 1 stack per "attack"
+	// so we only add damage in OnLunarReactionAttack, but we will consume in OnEnemyHit
+	c.Core.Events.Subscribe(event.OnLunarReactionAttack, func(args ...any) {
+		ae := args[1].(*info.AttackEvent)
+		owner := args[2].(int)
+		if !c.StatusIsActive(a4Key) {
+			return
+		}
+
+		var amt float64
+		if ae.Info.AttackTag != attacks.AttackTagReactionStellarSwirl {
+			return
+		}
+
+		if !c.a4StacksCheck(owner) {
+			return
+		}
+
+		amt = max(min((c.MaxHP()-40000)*260/1000, 6500), 0)
+		ae.Info.FlatDmg += amt
+	}, a4Key)
+}
+
+func (c *char) a4StacksCheck(actor int) bool {
+	if actor == c.Core.Player.Active() {
+		return c.leadVocal > 0
+	}
+	return c.chorus > 0
+}
+
+func (c *char) a4StacksRemove(actor int) {
+	if actor == c.Core.Player.Active() {
+		c.leadVocal = max(c.leadVocal-1, 0)
+	} else {
+		c.chorus = max(c.chorus-1, 0)
+	}
 }
 
 func (c *char) a4OnSkill() {
