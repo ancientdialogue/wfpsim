@@ -66,7 +66,7 @@ func (c *char) makeParticleCB() info.AttackCBFunc {
 func (c *char) skillPress(travel int) (action.Info, error) {
 	c.pawsPewPew(skillPressHitmark, travel, 2)
 	c.SetCDWithDelay(action.ActionSkill, 360, skillPressHitmark)
-
+	c.revelationOnSkill()
 	return action.Info{
 		Frames:          frames.NewAbilFunc(skillPressFrames),
 		AnimationLength: skillPressFrames[action.InvalidAction],
@@ -78,7 +78,7 @@ func (c *char) skillPress(travel int) (action.Info, error) {
 func (c *char) skillHold(travel int) (action.Info, error) {
 	c.pawsPewPew(skillHoldHitmark, travel, 5)
 	c.SetCDWithDelay(action.ActionSkill, 900, skillHoldHitmark)
-
+	c.revelationOnSkill()
 	return action.Info{
 		Frames:          frames.NewAbilFunc(skillHoldFrames),
 		AnimationLength: skillHoldFrames[action.InvalidAction],

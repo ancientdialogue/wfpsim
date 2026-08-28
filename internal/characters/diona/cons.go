@@ -23,6 +23,29 @@ func (c *char) c2() {
 	})
 }
 
+func (c *char) c6Init() {
+	if c.Base.Cons < 6 {
+		return
+	}
+
+	c.c6buff = make([]float64, attributes.EndStatType)
+	c.c6buff[attributes.EM] = 200
+
+	if !c.revelation {
+		return
+	}
+
+	m := make([]float64, attributes.EndStatType)
+	m[attributes.HPP] = .25
+	c.AddStatMod(character.StatMod{
+		Base:         modifier.NewBase("diona-c6-revelation", -1),
+		AffectedStat: attributes.HPP,
+		Amount: func() []float64 {
+			return m
+		},
+	})
+}
+
 func (c *char) c6() {
 	// c6 should last for the duration of the burst
 	// lasts 12.5 second, ticks every 0.5s; adds mod to active char for 2s
@@ -55,6 +78,36 @@ func (c *char) c6() {
 					},
 				})
 				c.Tags["c6bonus-"+active.Base.Key.String()] = c.Core.F + 120
+			}
+
+			switch c.getRadiance() {
+			case radianceStellarConduct:
+				active.AddReactBonusMod(character.ReactBonusMod{
+					Base: modifier.NewBase("diona-revelation-c6-ssc", -1),
+					Amount: func(ai info.AttackInfo) float64 {
+						switch ai.AttackTag {
+						case
+							attacks.AttackTagDirectStellarConduct,
+							attacks.AttackTagSuperconductDamage:
+							return 0.5
+						}
+						return 0
+					},
+				})
+			case radianceStellarSwirl:
+				active.AddReactBonusMod(character.ReactBonusMod{
+					Base: modifier.NewBase("diona-revelation-c6-ssw", -1),
+					Amount: func(ai info.AttackInfo) float64 {
+						switch ai.AttackTag {
+						case
+							attacks.AttackTagDirectStellarSwirl,
+							attacks.AttackTagReactionStellarSwirl,
+							attacks.AttackTagSwirlCryo:
+							return 0.5
+						}
+						return 0
+					},
+				})
 			}
 		}, i)
 	}
