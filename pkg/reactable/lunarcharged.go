@@ -114,7 +114,7 @@ func (r *Reactable) DoLCAttack() {
 		}
 
 		// Emit event so PreDamageMods can be applied to the individual LC contributions
-		r.core.Events.Emit(event.OnLunarReactionAttack, r.self, &ae)
+		r.core.Events.Emit(event.OnLunarReactionAttack, r.self, &ae, r.lcAtkOwner)
 
 		em := ae.Snapshot.Stats[attributes.EM]
 		cr := ae.Snapshot.Stats[attributes.CR]
