@@ -90,16 +90,6 @@ func (c *char) revelationInit() {
 			return
 		}
 
-		if c.revelationEnhanceTick {
-			return
-		}
-
-		if c.StatusIsActive(revelationICDKey) {
-			return
-		}
-
-		c.AddStatus(revelationICDKey, 2.5*60, true)
-
 		// TODO: this only lasts 8s...
 		c.revelationEnhanceTick = true
 	}
@@ -118,6 +108,12 @@ func (c *char) revelationEnhanceDMG() float64 {
 	if !c.revelationEnhanceTick {
 		return 0
 	}
+
+	if c.StatusIsActive(revelationICDKey) {
+		return 0
+	}
+
+	c.AddStatus(revelationICDKey, 2.5*60, true)
 
 	c.revelationEnhanceTick = false
 
