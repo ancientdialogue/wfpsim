@@ -27,7 +27,7 @@ export const UI = ({exec, children}: UIProps) => {
 
   let key = '';
   const res =
-    /sh\/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$/.exec(
+    /sh\/((?:(?:[A-Za-z]+-){0,4})?[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$/.exec(
       window.location.pathname,
     );
   if (res && res.length >= 1) {
