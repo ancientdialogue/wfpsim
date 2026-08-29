@@ -12,7 +12,8 @@ function getCharNames(data) {
     .filter((name) => typeof name === 'string' && name.trim().length > 0)
     .slice(0, 4);
   console.log(names);
-  return names.length > 0 ? names.join('-') + '-' : '';
+  const sortedNames = names.toSorted((a, b) => a.localeCompare(b));
+  return sortedNames.length > 0 ? sortedNames.join('-') + '-' : '';
 }
 
 export async function handleShare(request: IRequest): Promise<Response> {
