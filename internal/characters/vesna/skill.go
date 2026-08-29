@@ -57,6 +57,10 @@ func (c *char) skillInit() {
 }
 
 func (c *char) Skill(p map[string]int) (action.Info, error) {
+	if c.StatusIsActive(c6Key) {
+		return c.c6Attack()
+	}
+
 	if c.StatusIsActive(skillKey) {
 		return c.skillSpecial()
 	}
@@ -214,6 +218,9 @@ func (c *char) skillSpecial() (action.Info, error) {
 			c.Core.QueueAttack(aiDoT, apDoT, hitmark, hitmark, c.particleCB)
 		}
 		c.Core.QueueAttack(aiFinale, apDoT, skillSpirit3FinalHitmark, skillSpirit3FinalHitmark, c.particleCB)
+
+		c.c6OnMaxLvlSkill()
+
 		return action.Info{
 			Frames:          func(next action.Action) int { return skillSkillFrames[lvl][next] },
 			AnimationLength: skillSkillFrames[lvl][action.InvalidAction],

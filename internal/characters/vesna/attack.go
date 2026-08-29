@@ -36,6 +36,10 @@ func init() {
 }
 
 func (c *char) Attack(p map[string]int) (action.Info, error) {
+	if c.StatusIsActive(c6Key) {
+		return c.c6Attack()
+	}
+
 	for i, hitmark := range attackHitmarks[c.NormalCounter] {
 		ai := info.AttackInfo{
 			ActorIndex:         c.Index(),
