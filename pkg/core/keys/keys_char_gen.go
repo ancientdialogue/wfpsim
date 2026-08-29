@@ -102,6 +102,7 @@ const (
 	Tighnari
 	Varesa
 	Venti
+	Vesna
 	Vodyanitsa
 	Wanderer
 	Wriothesley
@@ -502,6 +503,10 @@ func init() {
 	charNames[Venti] = "venti"
 	charPrettyName[Venti] = "Venti"
 	CharKeyToEle[Venti] = attributes.Anemo
+
+	charNames[Vesna] = "vesna"
+	charPrettyName[Vesna] = "Vesna"
+	CharKeyToEle[Vesna] = attributes.Anemo
 
 	charNames[Vodyanitsa] = "vodyanitsa"
 	charPrettyName[Vodyanitsa] = "Vodyanitsa"

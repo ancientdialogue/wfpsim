@@ -1,0 +1,39 @@
+package_name: vesna
+genshin_id: 10000126
+key: vesna
+skill_data_mapping:
+  attack: # Golden Blade's Petaled Touch
+    attack_1:
+      - 0 # 1-Hit DMG|{param0:F1P}
+    attack_2:
+      - 1 # 2-Hit DMG|{param1:F1P}
+    attack_3:
+      - 2 # 3-Hit DMG|{param2:F1P}+{param3:F1P}
+      - 3 # 3-Hit DMG|{param2:F1P}+{param3:F1P}
+    attack_4:
+      - 4 # 4-Hit DMG|{param4:F1P}
+    charge:
+      - 5 # Charged Attack DMG|{param5:F1P}+{param6:F1P}
+      - 6 # Charged Attack DMG|{param5:F1P}+{param6:F1P}
+  skill: # Heaven and Earth Made Manifest
+    skillAttack_1:
+      - 5 # Lunar Phase Shift 1-Hit DMG|{param5:F1P} DEF
+    skillAttack_2:
+      - 6 # Lunar Phase Shift Enhanced 2-Hit DMG|{param6:F1P} DEF
+    skillAttack_3:
+      - 7 # Lunar Phase Shift 3-Hit DMG|{param7:F1P}+{param8:F1P} DEF
+      - 8 # Lunar Phase Shift 3-Hit DMG|{param7:F1P}+{param8:F1P} DEF
+    skillAttack_4:
+      - 9 # Lunar Phase Shift 4-Hit DMG|{param9:F1P} DEF
+    skillCharge:
+      - 10 # Lunar Phase Shift Charged Attack DMG|{param10:F1P}+{param11:F1P} DEF
+      - 11 # Lunar Phase Shift Charged Attack DMG|{param10:F1P}+{param11:F1P} DEF
+    skillStride:
+      - 0 # Spirit Steed's Stride 1-Hit DMG|{param0:F1P} DEF
+      - 1 # Spirit Steed's Stride 2-Hit DMG|{param1:F1P} DEF
+    skillLastAttackBonus:
+      - 2 # Lunar Phase Shift 4-Hit Ascendant Gleam DMG|{param2:F1P} DEF
+  burst: # Tri-Sphere Eminence
+    burst:
+      - 0 # Skill 1-Hit DMG|{param0:F1P} DEF
+      - 1 # Skill 2-Hit DMG|{param1:F1P} DEF

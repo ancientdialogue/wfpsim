@@ -50,6 +50,7 @@ const (
 	ICDGroupSigewinneBurst
 	ICDGroupTighnari
 	ICDGroupVenti
+	ICDGroupVesnaSkill
 	ICDGroupWandererC6
 	ICDGroupWandererA4
 	ICDGroupXiaoDash
@@ -249,6 +250,10 @@ func init() {
 	ICDGroupResetTimer[ICDGroupVenti] = 60
 	ICDGroupEleApplicationSequence[ICDGroupVenti] = []float64{1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0}
 	ICDGroupDamageSequence[ICDGroupVenti] = []float64{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
+
+	ICDGroupResetTimer[ICDGroupVesnaSkill] = 120
+	ICDGroupEleApplicationSequence[ICDGroupVesnaSkill] = []float64{1, 0,}
+	ICDGroupDamageSequence[ICDGroupVesnaSkill] = []float64{1, 1}
 
 	ICDGroupResetTimer[ICDGroupWandererC6] = 120
 	ICDGroupEleApplicationSequence[ICDGroupWandererC6] = []float64{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}

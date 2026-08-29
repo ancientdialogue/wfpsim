@@ -50,6 +50,7 @@ export function Simulator({
           <li>Venti (Hex)</li>
           <li>Zibai (C6)</li>
           <li>Illuga</li>
+          <li>Lohen</li>
           <li>Sandrone (C6)</li>
           <li>Yae (Revelation)</li>
           <li>Qiqi (Revelation)</li>
@@ -63,6 +64,7 @@ export function Simulator({
           <li>Exaiphanes Blade</li>
           <li>Alyosha</li>
           <li>Vodyanitsa</li>
+          <li>Vesna</li>
         </ul>
         <p className=" font-bold">
           See{' '}
