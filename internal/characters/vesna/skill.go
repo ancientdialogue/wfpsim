@@ -104,7 +104,7 @@ func (c *char) skillSpecial() (action.Info, error) {
 	lvl := min(c.skillLvl, skillMaxLvl)
 	ai := info.AttackInfo{
 		ActorIndex: c.Index(),
-		Abil:       fmt.Sprintf("Windborne Blade Lv. %d", (lvl + 1)),
+		Abil:       fmt.Sprintf("Windborne Blade Lv. %d", lvl),
 		AttackTag:  attacks.AttackTagElementalArt,
 		ICDTag:     attacks.ICDTagElementalArt,
 		ICDGroup:   attacks.ICDGroupVesnaSkill,
@@ -150,7 +150,7 @@ func (c *char) skillSpecial() (action.Info, error) {
 		// level 2
 		ai := info.AttackInfo{
 			ActorIndex: c.Index(),
-			Abil:       fmt.Sprintf("Windborne Blade Lv. %d Spirit Blade", (lvl + 1)),
+			Abil:       fmt.Sprintf("Windborne Blade Lv. %d Spirit Blade", lvl),
 			AttackTag:  attacks.AttackTagElementalArt,
 			ICDTag:     attacks.ICDTagElementalArt,
 			ICDGroup:   attacks.ICDGroupVesnaSkill,
@@ -179,7 +179,7 @@ func (c *char) skillSpecial() (action.Info, error) {
 		// level 3
 		aiDoT := info.AttackInfo{
 			ActorIndex: c.Index(),
-			Abil:       fmt.Sprintf("Windborne Blade Lv. %d Spirit Blade", (lvl + 1)),
+			Abil:       fmt.Sprintf("Windborne Blade Lv. %d Spirit Blade", lvl),
 			AttackTag:  attacks.AttackTagElementalArt,
 			ICDTag:     attacks.ICDTagElementalArt,
 			ICDGroup:   attacks.ICDGroupVesnaSkill,
@@ -191,7 +191,7 @@ func (c *char) skillSpecial() (action.Info, error) {
 
 		aiFinale := info.AttackInfo{
 			ActorIndex: c.Index(),
-			Abil:       fmt.Sprintf("Windborne Blade Lv. %d Spirit Blade Final", (lvl + 1)),
+			Abil:       fmt.Sprintf("Windborne Blade Lv. %d Spirit Blade Final", lvl),
 			AttackTag:  attacks.AttackTagElementalArt,
 			ICDTag:     attacks.ICDTagElementalArt,
 			ICDGroup:   attacks.ICDGroupVesnaSkill,
