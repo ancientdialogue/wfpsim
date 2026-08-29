@@ -54,6 +54,7 @@ export function Simulator({
           <li>Yae (Revelation)</li>
           <li>Qiqi (Revelation)</li>
           <li>Mizuki (Revelation)</li>
+          <li>Diona (Revalation)</li>
           <li>Disenchantment in the Deep Shadow</li>
           <li>Scarlet Proof</li>
           <li>Heart of the Furnace</li>
