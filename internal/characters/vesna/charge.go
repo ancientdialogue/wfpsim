@@ -41,7 +41,7 @@ func (c *char) ChargeAttack(p map[string]int) (action.Info, error) {
 	if c.StatusIsActive(skillKey) {
 		ai.Element = attributes.Anemo
 		ai.IgnoreInfusion = true
-		cb = c.skillStacksCB(1)
+		cb = c.skillStacksCB(2)
 	}
 
 	ap := combat.NewBoxHitOnTarget(c.Core.Combat.Player(), info.Point{Y: -0.1}, 2.8, 4.8)
