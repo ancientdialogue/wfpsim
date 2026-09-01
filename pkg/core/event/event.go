@@ -13,7 +13,7 @@ const (
 	// OnReactionOccured // target, AttackEvent
 	// OnTransReaction   // target, AttackEvent
 	// OnAmpReaction     // target, AttackEvent
-	OnElementApplied         // target, ele, durability
+	OnElementApplied         // target, AttackEvent
 	OnAuraDurabilityAdded    // target, ele, durability
 	OnAuraDurabilityDepleted // target, ele
 	// OnReaction               // target, AttackEvent, ReactionType
