@@ -122,7 +122,7 @@ func (c *char) skillRecast(_ map[string]int) (action.Info, error) {
 		c.Core.QueueAttack(aiFinal, ap, 0, 0, c.particleCB)
 		c.AddStatus(danceDoubleUpgradeKey, c.StatusDuration(danceDoubleKey), false)
 
-		c.c1OnSkillRecast(ai.AttackTag)
+		c.c1OnSkillRecast(aiFinal.AttackTag)
 	}, skillRecastFinalHitmark)
 
 	// cancel existing dance tickers during the recast

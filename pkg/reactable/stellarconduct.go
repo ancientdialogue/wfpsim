@@ -55,9 +55,9 @@ func EnableStellarConduct(core *core.Core) {
 			return
 		}
 
-		element := args[1].(attributes.Element)
+		ai := args[1].(*info.AttackEvent)
 
-		switch element {
+		switch ai.Info.Element {
 		case attributes.Electro:
 		case attributes.Cryo:
 		// TODO: does adding frozen aura count?
@@ -65,11 +65,13 @@ func EnableStellarConduct(core *core.Core) {
 			return
 		}
 
-		if core.Status.Duration(polestarFieldStackICDKey) > 0 {
+		char := core.Player.Chars()[ai.Info.ActorIndex]
+
+		if char.StatusIsActive(polestarFieldStackICDKey) {
 			return
 		}
 
-		core.Status.Add(polestarFieldStackICDKey, polestarFieldStackICDDur)
+		char.AddStatus(polestarFieldStackICDKey, polestarFieldStackICDDur, true)
 
 		if core.Flags.Custom[polestarFieldStacksKey] >= polestarFieldMaxStacks {
 			return
