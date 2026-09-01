@@ -9,6 +9,7 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/attributes"
 	"github.com/genshinsim/gcsim/pkg/core/combat"
 	"github.com/genshinsim/gcsim/pkg/core/event"
+	"github.com/genshinsim/gcsim/pkg/core/glog"
 	"github.com/genshinsim/gcsim/pkg/core/info"
 )
 
@@ -83,7 +84,8 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 
 	c.skillsMaxLvlUsed = 0
 	c.skillLvl = 1
-	c.skillStacks = 2
+	c.skillStacks = 0
+	c.addSkillStacks(2)
 
 	c.a1OnSkill()
 	c.c2OnSkill()
@@ -255,8 +257,6 @@ func (c *char) pinionAttack(delay int) {
 	ap := combat.NewCircleHitOnTarget(c.Core.Combat.PrimaryTarget(), nil, 2)
 
 	c.Core.QueueAttack(ai, ap, delay, delay, c.particleCB)
-
-	c.skillStacks += 1
 }
 
 func (c *char) particleCB(ac info.AttackCB) {
@@ -270,4 +270,26 @@ func (c *char) particleCB(ac info.AttackCB) {
 
 	c.AddStatus(particleICDKey, 2.5*60, true)
 	c.Core.QueueParticle(c.Base.Key.String(), 1, attributes.Anemo, c.ParticleDelay)
+}
+
+func (c *char) skillStacksCB(stacks int) info.AttackCBFunc {
+	done := false
+	return func(ac info.AttackCB) {
+		if ac.Target.Type() != info.TargettableEnemy {
+			return
+		}
+		if done {
+			return
+		}
+		c.skillNACount += stacks
+		if c.skillNACount >= 6 {
+			c.skillNACount -= 6
+			c.addSkillStacks(1)
+		}
+	}
+}
+
+func (c *char) addSkillStacks(count int) {
+	c.skillStacks += count
+	c.Core.Log.NewEvent(fmt.Sprintf("Gained Sword Essence (current: %d)", c.skillStacks), glog.LogCharacterEvent, c.Index())
 }
