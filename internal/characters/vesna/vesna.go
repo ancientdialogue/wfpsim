@@ -18,6 +18,7 @@ func init() {
 type char struct {
 	*tmpl.Character
 	skillStacks      int
+	skillNACount     int
 	skillSrc         int
 	skillLvl         int
 	skillsMaxLvlUsed int
@@ -74,6 +75,18 @@ func (c *char) ActionReady(a action.Action, p map[string]int) (bool, action.Fail
 	}
 
 	return c.Character.ActionReady(a, p)
+}
+
+func (c *char) Condition(fields []string) (any, error) {
+	switch fields[0] {
+	case "sword-essence":
+		if c.StatusIsActive(skillKey) {
+			return c.skillStacks, nil
+		}
+		return 0, nil
+	default:
+		return c.Character.Condition(fields)
+	}
 }
 
 func (c *char) isRadianceSSw() bool {

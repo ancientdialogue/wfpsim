@@ -19,6 +19,7 @@ var (
 	attackHitboxes        = [][]float64{{1.7}, {2}, {1, 1.5}, {1.7}, {1.7}, {1.7}}
 	attackOffsets         = []float64{1.8, 0.8, 0.5, 1.8, 1.8, 1.8}
 	attackFanAngles       = []float64{360, 180, 360, 360, 360, 360}
+	attackStacksPerHit    = []int{1, 1, 1, 1, 1, 3}
 )
 
 const normalHitNum = 6
@@ -59,9 +60,11 @@ func (c *char) Attack(p map[string]int) (action.Info, error) {
 			ai.StrikeType = attacks.StrikeTypeSlash
 		}
 
+		var cb info.AttackCBFunc
 		if c.StatusIsActive(skillKey) {
 			ai.Element = attributes.Anemo
 			ai.IgnoreInfusion = true
+			cb = c.skillStacksCB(attackStacksPerHit[c.NormalCounter])
 		}
 
 		ap := combat.NewCircleHitOnTargetFanAngle(
@@ -78,7 +81,7 @@ func (c *char) Attack(p map[string]int) (action.Info, error) {
 				attackHitboxes[c.NormalCounter][1],
 			)
 		}
-		c.Core.QueueAttack(ai, ap, hitmark, hitmark)
+		c.Core.QueueAttack(ai, ap, hitmark, hitmark, cb)
 	}
 
 	defer c.AdvanceNormalIndex()
