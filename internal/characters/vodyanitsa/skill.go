@@ -67,6 +67,10 @@ func (c *char) skillAttackTask(src int) {
 		return
 	}
 
+	if c.skillSrc != src {
+		return
+	}
+
 	ai := info.AttackInfo{
 		ActorIndex: c.Index(),
 		Abil:       "Horn of Spring's Call",
@@ -90,6 +94,10 @@ func (c *char) skillAttackTask(src int) {
 
 func (c *char) skillHealTask(src int) {
 	if !c.StatusIsActive(skillKey) {
+		return
+	}
+
+	if c.skillSrc != src {
 		return
 	}
 
