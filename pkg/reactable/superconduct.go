@@ -51,7 +51,7 @@ func (r *Reactable) TrySuperconduct(a *info.AttackEvent) bool {
 
 func (r *Reactable) TryFrozenSuperconduct(a *info.AttackEvent) bool {
 	if _, ok := r.core.Flags.Custom[LunarCrystallizeEnableKey]; ok {
-		return r.TryStellarConduct(a)
+		return r.TryFrozenStellarConduct(a)
 	}
 
 	if a.Info.Durability < info.ZeroDur {
