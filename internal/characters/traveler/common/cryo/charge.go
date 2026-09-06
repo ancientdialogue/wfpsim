@@ -103,6 +103,9 @@ func (c *Traveler) chargeAttackTruemoon() func(*info.AttackInfo) {
 		ai.IgnoreInfusion = true
 		ai.ICDTag = attacks.ICDTagTravelerEnchancedCA
 		ai.Mult += 1.4
+		ai.HitlagHaltFrames = 0.05 * 60
+		ai.HitlagFactor = 0.05
+		ai.CanBeDefenseHalted = true
 
 		switch c.getRadiance() {
 		case radianceStellarConduct:
