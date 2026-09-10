@@ -174,7 +174,7 @@ func (c *char) c6Attack() (action.Info, error) {
 	c.Core.QueueAttack(ai, ap, c6TransposeHitmark, c6TransposeHitmark, c.particleCB)
 
 	ai.Abil = "Windborne Blade: Transpose Spirit Blade (C6)"
-	ai.Mult = 2
+	ai.Mult = 2 * c.a1Mult()
 
 	if c.isRadianceSSw() {
 		ai.Abil += stellarSwirlText
