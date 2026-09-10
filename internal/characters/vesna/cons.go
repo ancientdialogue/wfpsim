@@ -85,7 +85,7 @@ func (c *char) c2Init() {
 	}
 
 	m := make([]float64, attributes.EndStatType)
-	m[attributes.ATKP] = 0.6
+	m[attributes.ATKP] = 0.4
 
 	c.AddStatMod(character.StatMod{
 		Base:         modifier.NewBase(c2Key, -1),

@@ -35,7 +35,7 @@ func (c *char) c1OnHeal() {
 			Base:         modifier.NewBaseWithHitlag(c1Key, 5*60),
 			AffectedStat: attributes.ATK,
 			Amount: func() []float64 {
-				c.c1Buff[attributes.ATK] = c.MaxHP() * 0.01
+				c.c1Buff[attributes.ATK] = c.MaxHP() * 0.008
 				return c.c1Buff
 			},
 		})
@@ -163,7 +163,7 @@ func (c *char) c6Init() {
 		}
 		// do not apply elevation to Reaction damage here because the elevation is already applied at the contributor level
 		if atk.Info.AttackTag == attacks.AttackTagDirectStellarSwirl {
-			atk.Info.Elevation += 0.3
+			atk.Info.Elevation += 0.25
 		}
 	}, c6Key)
 
@@ -174,7 +174,7 @@ func (c *char) c6Init() {
 			return
 		}
 		if atk.Info.AttackTag == attacks.AttackTagReactionStellarSwirl {
-			atk.Info.Elevation += 0.3
+			atk.Info.Elevation += 0.25
 		}
 	}, c6Key)
 }
