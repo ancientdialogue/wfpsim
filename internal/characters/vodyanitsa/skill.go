@@ -44,8 +44,8 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 	c.c2OnSkillAttack()
 
 	c.skillSrc = c.Core.F
-	c.Core.Tasks.Add(func() { c.skillHealTask(c.skillSrc) }, skillHitmark+14+3*60)
-	c.Core.Tasks.Add(func() { c.skillAttackTask(c.skillSrc) }, skillHitmark+14+1.5*60)
+	c.Core.Tasks.Add(func() { c.skillHealTask(c.skillSrc) }, skillHitmark+14+1.5*60)
+	c.Core.Tasks.Add(func() { c.skillAttackTask(c.skillSrc) }, skillHitmark+14+3*60)
 
 	c.AddStatus(skillKey, 16*60+c.c2SkillDurBonus(), false)
 

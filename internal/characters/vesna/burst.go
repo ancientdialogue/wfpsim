@@ -18,38 +18,40 @@ func init() {
 }
 
 func (c *char) Burst(p map[string]int) (action.Info, error) {
-	ai := info.AttackInfo{
-		ActorIndex: c.Index(),
-		Abil:       "Burst",
-		AttackTag:  attacks.AttackTagElementalBurst,
-		ICDTag:     attacks.ICDTagNone,
-		ICDGroup:   attacks.ICDGroupDefault,
-		StrikeType: attacks.StrikeTypeDefault,
-		Element:    attributes.Anemo,
-		Durability: 25,
-		Mult:       burst[c.TalentLvlBurst()],
-		UseDef:     true,
-	}
-
-	if c.isRadianceSSw() {
-		ai.Abil += stellarSwirlText
-		ai.AttackTag = attacks.AttackTagDirectStellarSwirl
-		ai.IgnoreDefPercent = 1
-		ai.Durability = 0
-	}
-
-	c.Core.QueueAttack(
-		ai,
-		combat.NewCircleHitOnTarget(c.Core.Combat.Player(), info.Point{Y: 5}, 7),
-		burstHitmarks,
-		burstHitmarks,
-	)
-
 	c.SetCD(action.ActionBurst, 15*60)
 	c.ConsumeEnergy(7)
 
 	c.addSkillStacks(1)
 	c.a1OnSpecialSkillOrBurst()
+
+	c.QueueCharTask(func() {
+		ai := info.AttackInfo{
+			ActorIndex: c.Index(),
+			Abil:       "Burst",
+			AttackTag:  attacks.AttackTagElementalBurst,
+			ICDTag:     attacks.ICDTagNone,
+			ICDGroup:   attacks.ICDGroupDefault,
+			StrikeType: attacks.StrikeTypeDefault,
+			Element:    attributes.Anemo,
+			Durability: 25,
+			Mult:       burst[c.TalentLvlBurst()] * c.a1Mult(),
+			UseDef:     true,
+		}
+
+		if c.isRadianceSSw() {
+			ai.Abil += stellarSwirlText
+			ai.AttackTag = attacks.AttackTagDirectStellarSwirl
+			ai.IgnoreDefPercent = 1
+			ai.Durability = 0
+		}
+
+		c.Core.QueueAttack(
+			ai,
+			combat.NewCircleHitOnTarget(c.Core.Combat.Player(), info.Point{Y: 5}, 7),
+			burstHitmarks,
+			burstHitmarks,
+		)
+	}, burstHitmarks)
 
 	return action.Info{
 		Frames:          frames.NewAbilFunc(burstFrames),

@@ -119,6 +119,9 @@ func (c *char) skillSpecial() (action.Info, error) {
 
 	ap := combat.NewCircleHitOnTargetFanAngle(c.Core.Combat.Player(), nil, 5, 60)
 
+	// this buff is added before the hits land
+	c.a1OnSpecialSkillOrBurst()
+
 	defer func() {
 		if c.c1UseSkillStack() {
 			c.skillStacks -= 1
@@ -129,8 +132,6 @@ func (c *char) skillSpecial() (action.Info, error) {
 		} else {
 			c.skillLvl += 1
 		}
-
-		c.a1OnSpecialSkillOrBurst()
 
 		if c.skillsMaxLvlUsed >= 3+c.c1ExtraMaxLvlSkills() {
 			c.DeleteStatus(skillKey)
