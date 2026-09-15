@@ -11,16 +11,17 @@ import (
 
 var chargeFrames []int
 
-var chargeHitmarks = []int{20, 27}
+var chargeHitmarks = []int{18, 18 + 8}
 
 func init() {
 	chargeFrames = frames.InitAbilSlice(40)
-	chargeFrames[action.ActionSkill] = chargeHitmarks[1]
-	chargeFrames[action.ActionBurst] = chargeHitmarks[1]
+	chargeFrames[action.ActionAttack] = 32
+	chargeFrames[action.ActionSkill] = 27
+	chargeFrames[action.ActionBurst] = 27
 	chargeFrames[action.ActionDash] = chargeHitmarks[1]
 	chargeFrames[action.ActionJump] = chargeHitmarks[1]
-	chargeFrames[action.ActionWalk] = 40
-	chargeFrames[action.ActionSwap] = 40
+	chargeFrames[action.ActionWalk] = 39
+	chargeFrames[action.ActionSwap] = 30
 }
 
 func (c *char) ChargeAttack(p map[string]int) (action.Info, error) {

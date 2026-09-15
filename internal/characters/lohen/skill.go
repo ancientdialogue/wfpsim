@@ -16,7 +16,7 @@ import (
 var (
 	skillFrames         []int
 	skillPierceFrames   []int
-	skillPierceHitmarks = []int{20, 20 + 3, 20 + 3 + 3, 20 + 3 + 3 + 3}
+	skillPierceHitmarks = []int{28, 28 + 7, 28 + 7 + 10, 28 + 7 + 10 + 7}
 )
 
 const (
@@ -29,20 +29,20 @@ const (
 )
 
 func init() {
-	skillFrames = frames.InitAbilSlice(44)
-	skillFrames[action.ActionAttack] = 19
+	skillFrames = frames.InitAbilSlice(24)
+	skillFrames[action.ActionAttack] = 20
 	skillFrames[action.ActionSkill] = 22
-	skillFrames[action.ActionBurst] = 19
-	skillFrames[action.ActionDash] = 17
-	skillFrames[action.ActionJump] = 18
-	skillFrames[action.ActionSwap] = 17
+	skillFrames[action.ActionBurst] = 22
+	skillFrames[action.ActionDash] = 24
+	skillFrames[action.ActionJump] = 23
+	skillFrames[action.ActionWalk] = 22
+	skillFrames[action.ActionSwap] = 21
 
-	skillPierceFrames = frames.InitAbilSlice(42)
-	skillPierceFrames[action.ActionAttack] = 28
-	skillPierceFrames[action.ActionBurst] = 28
-	skillPierceFrames[action.ActionDash] = 26
-	skillPierceFrames[action.ActionJump] = 26
-	skillPierceFrames[action.ActionWalk] = 32
+	skillPierceFrames = frames.InitAbilSlice(80)
+	skillPierceFrames[action.ActionAttack] = 78
+	skillPierceFrames[action.ActionDash] = 79
+	skillPierceFrames[action.ActionJump] = 79
+	skillPierceFrames[action.ActionSwap] = 79
 }
 
 func (c *char) onExitField() {
@@ -90,7 +90,7 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 	return action.Info{
 		Frames:          func(next action.Action) int { return skillFrames[next] },
 		AnimationLength: skillFrames[action.InvalidAction],
-		CanQueueAfter:   skillFrames[action.ActionDash], // earliest cancel
+		CanQueueAfter:   skillFrames[action.ActionAttack], // earliest cancel
 		State:           action.SkillState,
 	}, nil
 }
