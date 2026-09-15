@@ -19,7 +19,6 @@ type char struct {
 	*tmpl.Character
 	skillStacks      int
 	skillNACount     int
-	skillSrc         int
 	skillLvl         int
 	skillsMaxLvlUsed int
 	a1Stacks         RingQueue[int]

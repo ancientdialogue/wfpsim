@@ -13,7 +13,7 @@ import (
 
 var (
 	attackFrames          [][]int
-	attackHitmarks        = [][]int{{14}, {6}, {9, 9 + 12}, {16}, {12}, {24}}
+	attackHitmarks        = [][]int{{14}, {19}, {26, 26 + 11}, {21}, {28}, {48}}
 	attackHitlagHaltFrame = [][]float64{{0.04}, {0.04}, {0.04, 0.04}, {0.04}, {0.04}, {0.04}}
 	attackDefHalt         = [][]bool{{true}, {true}, {true, true}, {true}, {true}, {true}}
 	attackHitboxes        = [][]float64{{1.7}, {2}, {1, 1.5}, {1.7}, {1.7}, {1.7}}
@@ -28,12 +28,18 @@ func init() {
 	// NA cancels
 	attackFrames = make([][]int, normalHitNum)
 
-	attackFrames[0] = frames.InitNormalCancelSlice(attackHitmarks[0][0], 27)
-	attackFrames[1] = frames.InitNormalCancelSlice(attackHitmarks[1][0], 23)
-	attackFrames[2] = frames.InitNormalCancelSlice(attackHitmarks[2][1], 35)
-	attackFrames[3] = frames.InitNormalCancelSlice(attackHitmarks[3][0], 27)
-	attackFrames[4] = frames.InitNormalCancelSlice(attackHitmarks[4][0], 22)
-	attackFrames[5] = frames.InitNormalCancelSlice(attackHitmarks[5][0], 50)
+	attackFrames[0] = frames.InitNormalCancelSlice(attackHitmarks[0][0], 29)
+	attackFrames[0][action.ActionAttack] = 24
+
+	attackFrames[1] = frames.InitNormalCancelSlice(attackHitmarks[1][0], 24)
+	attackFrames[1][action.ActionAttack] = 23
+
+	attackFrames[2] = frames.InitNormalCancelSlice(attackHitmarks[2][1], 27)
+	attackFrames[2][action.ActionCharge] = 26
+
+	attackFrames[3] = frames.InitNormalCancelSlice(attackHitmarks[3][0], 34)
+	attackFrames[4] = frames.InitNormalCancelSlice(attackHitmarks[4][0], 34)
+	attackFrames[5] = frames.InitNormalCancelSlice(attackHitmarks[5][0], 48)
 }
 
 func (c *char) Attack(p map[string]int) (action.Info, error) {
@@ -83,6 +89,8 @@ func (c *char) Attack(p map[string]int) (action.Info, error) {
 		}
 		c.Core.QueueAttack(ai, ap, hitmark, hitmark, cb)
 	}
+
+	c.pinionAttack(30)
 
 	defer c.AdvanceNormalIndex()
 

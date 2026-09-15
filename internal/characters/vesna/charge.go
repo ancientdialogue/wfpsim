@@ -47,7 +47,7 @@ func (c *char) ChargeAttack(p map[string]int) (action.Info, error) {
 	ap := combat.NewBoxHitOnTarget(c.Core.Combat.Player(), info.Point{Y: -0.1}, 2.8, 4.8)
 
 	c.Core.QueueAttack(ai, ap, chargeHitmark, chargeHitmark, cb)
-
+	c.pinionAttack(30)
 	return action.Info{
 		Frames:          frames.NewAbilFunc(chargeFrames),
 		AnimationLength: chargeFrames[action.InvalidAction],

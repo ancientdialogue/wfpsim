@@ -90,10 +90,6 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 	c.a1OnSkill()
 	c.c2OnSkill()
 
-	c.skillSrc = c.Core.F
-
-	c.QueueCharTask(func() { c.pinionTask(c.skillSrc) }, 194)
-
 	return action.Info{
 		Frames:          func(next action.Action) int { return skillFrames[next] },
 		AnimationLength: skillFrames[action.InvalidAction],
@@ -230,14 +226,6 @@ func (c *char) skillSpecial() (action.Info, error) {
 			State:           action.SkillState,
 		}, nil
 	}
-}
-
-func (c *char) pinionTask(src int) {
-	if c.skillSrc != src {
-		return
-	}
-	c.pinionAttack(0)
-	c.QueueCharTask(func() { c.pinionTask(src) }, 179)
 }
 
 func (c *char) pinionAttack(delay int) {
