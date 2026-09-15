@@ -35,7 +35,6 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 			Element:    attributes.Anemo,
 			Durability: 25,
 			Mult:       burst[c.TalentLvlBurst()] * c.a1Mult(),
-			UseDef:     true,
 		}
 
 		if c.isRadianceSSw() {

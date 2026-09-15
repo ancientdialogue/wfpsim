@@ -112,7 +112,6 @@ func (c *char) skillSpecial() (action.Info, error) {
 		ICDGroup:   attacks.ICDGroupVesnaSkill,
 		StrikeType: attacks.StrikeTypeDefault,
 		Element:    attributes.Anemo,
-		UseDef:     true,
 		Durability: 25,
 		Mult:       skillSpecial[lvl][c.TalentLvlSkill()],
 	}
@@ -250,7 +249,6 @@ func (c *char) pinionAttack(delay int) {
 		ICDGroup:   attacks.ICDGroupVesnaSkill,
 		StrikeType: attacks.StrikeTypeDefault,
 		Element:    attributes.Anemo,
-		UseDef:     true,
 		Durability: 25,
 		Mult:       skillPinion[c.TalentLvlSkill()],
 	}
