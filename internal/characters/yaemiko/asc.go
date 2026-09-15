@@ -40,7 +40,7 @@ func (c *char) a1OnSkillPopKitsune() {
 
 	ai := info.AttackInfo{
 		ActorIndex: c.Index(),
-		Abil:       "Yae A4",
+		Abil:       "Yae A1",
 		AttackTag:  attacks.AttackTagNone,
 		ICDTag:     attacks.ICDTagNone,
 		ICDGroup:   attacks.ICDGroupDefault,
