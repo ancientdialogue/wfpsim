@@ -90,10 +90,6 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 	c.a1OnSkill()
 	c.c2OnSkill()
 
-	c.skillSrc = c.Core.F
-
-	c.QueueCharTask(func() { c.pinionTask(c.skillSrc) }, 194)
-
 	return action.Info{
 		Frames:          func(next action.Action) int { return skillFrames[next] },
 		AnimationLength: skillFrames[action.InvalidAction],
@@ -112,7 +108,6 @@ func (c *char) skillSpecial() (action.Info, error) {
 		ICDGroup:   attacks.ICDGroupVesnaSkill,
 		StrikeType: attacks.StrikeTypeDefault,
 		Element:    attributes.Anemo,
-		UseDef:     true,
 		Durability: 25,
 		Mult:       skillSpecial[lvl][c.TalentLvlSkill()],
 	}
@@ -233,14 +228,6 @@ func (c *char) skillSpecial() (action.Info, error) {
 	}
 }
 
-func (c *char) pinionTask(src int) {
-	if c.skillSrc != src {
-		return
-	}
-	c.pinionAttack(0)
-	c.QueueCharTask(func() { c.pinionTask(src) }, 179)
-}
-
 func (c *char) pinionAttack(delay int) {
 	ai := info.AttackInfo{
 		ActorIndex: c.Index(),
@@ -250,7 +237,6 @@ func (c *char) pinionAttack(delay int) {
 		ICDGroup:   attacks.ICDGroupVesnaSkill,
 		StrikeType: attacks.StrikeTypeDefault,
 		Element:    attributes.Anemo,
-		UseDef:     true,
 		Durability: 25,
 		Mult:       skillPinion[c.TalentLvlSkill()],
 	}

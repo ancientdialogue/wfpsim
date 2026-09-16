@@ -109,6 +109,10 @@ func (c *char) c2Init() {
 			Base:         modifier.NewBase(c2Key, -1),
 			AffectedStat: attributes.EM,
 			Amount: func() []float64 {
+				if c.Index() != char.Index() && c.Core.Player.Active() != char.Index() {
+					return nil
+				}
+
 				level := c.sakuraLevelCheck()
 				if level == 0 {
 					return nil

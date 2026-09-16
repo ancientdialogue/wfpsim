@@ -12,27 +12,38 @@ import (
 	"github.com/genshinsim/gcsim/pkg/modifier"
 )
 
-var skillFrames []int
+var (
+	skillFrames     []int
+	skillHoldFrames []int
+)
 
 const (
-	skillHitmark   = 21
-	particleICDKey = "alyosha-particle-icd"
-	skillMarkKey   = "alyohsa-hunters-mark"
-	skillBuffKey   = "alyohsa-hunters-precision"
+	skillHitmark     = 18
+	skillHoldHitmark = 113
+	particleICDKey   = "alyosha-particle-icd"
+	skillMarkKey     = "alyohsa-hunters-mark"
+	skillBuffKey     = "alyohsa-hunters-precision"
 )
 
 func init() {
-	skillFrames = frames.InitAbilSlice(46)
+	skillFrames = frames.InitAbilSlice(31)
+	skillFrames[action.ActionAttack] = 30
+	skillFrames[action.ActionBurst] = 30
 	skillFrames[action.ActionDash] = 28
-	skillFrames[action.ActionJump] = 28
-	skillFrames[action.ActionBurst] = 28
-	skillFrames[action.ActionSwap] = 45
+	skillFrames[action.ActionSwap] = 30
+
+	skillHoldFrames = frames.InitAbilSlice(142)
+	skillHoldFrames[action.ActionAttack] = 138
+	skillHoldFrames[action.ActionBurst] = 138
+	skillHoldFrames[action.ActionDash] = 138
+	skillHoldFrames[action.ActionJump] = 138
+	skillHoldFrames[action.ActionSwap] = 137
 }
 
 func (c *char) Skill(p map[string]int) (action.Info, error) {
 	hold, ok := p["hold"]
 	if ok && hold > 0 {
-		return c.skillHold(hold)
+		return c.skillHold()
 	}
 
 	ai := info.AttackInfo{
@@ -56,7 +67,7 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 		c.triggerSkillMarkCB(true),
 	)
 
-	c.SetCDWithDelay(action.ActionSkill, 360, skillHitmark-2)
+	c.SetCDWithDelay(action.ActionSkill, 15*60, 16)
 
 	return action.Info{
 		Frames:          func(next action.Action) int { return skillFrames[next] },
@@ -66,9 +77,7 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 	}, nil
 }
 
-func (c *char) skillHold(hold int) (action.Info, error) {
-	hitmark := skillHitmark + hold + 15
-
+func (c *char) skillHold() (action.Info, error) {
 	ai := info.AttackInfo{
 		ActorIndex: c.Index(),
 		Abil:       "Skill (Hold)",
@@ -84,18 +93,18 @@ func (c *char) skillHold(hold int) (action.Info, error) {
 	c.Core.QueueAttack(
 		ai,
 		combat.NewBoxHitOnTarget(c.Core.Combat.Player(), nil, 4, 4.1),
-		hitmark,
-		hitmark,
+		skillHoldHitmark,
+		skillHoldHitmark,
 		c.baseParticleCB,
 		c.triggerSkillMarkCB(true),
 	)
 
-	c.SetCDWithDelay(action.ActionSkill, 15*60, hitmark-2)
+	c.SetCDWithDelay(action.ActionSkill, 15*60, 111)
 
 	return action.Info{
-		Frames:          func(next action.Action) int { return skillFrames[next] + hold },
-		AnimationLength: skillFrames[action.InvalidAction] + hold,
-		CanQueueAfter:   skillFrames[action.ActionDash] + hold, // earliest cancel
+		Frames:          func(next action.Action) int { return skillHoldFrames[next] },
+		AnimationLength: skillHoldFrames[action.InvalidAction],
+		CanQueueAfter:   skillHoldFrames[action.ActionSwap], // earliest cancel
 		State:           action.SkillState,
 	}, nil
 }

@@ -85,9 +85,6 @@ func (c *char) a4Init() {
 	cryoOrAnemo := 0
 	other := 0
 	for _, char := range c.Core.Player.Chars() {
-		if char.Index() == c.Index() {
-			continue
-		}
 		switch char.Base.Element {
 		case attributes.Cryo, attributes.Anemo:
 			cryoOrAnemo += 1

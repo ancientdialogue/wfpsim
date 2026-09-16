@@ -15,9 +15,10 @@ const chargeHitmark = 24
 
 func init() {
 	chargeFrames = frames.InitAbilSlice(63)
+	chargeFrames[action.ActionSkill] = 62
 	chargeFrames[action.ActionBurst] = 62
-	chargeFrames[action.ActionDash] = 24
-	chargeFrames[action.ActionJump] = 24
+	chargeFrames[action.ActionDash] = chargeHitmark
+	chargeFrames[action.ActionJump] = chargeHitmark
 	chargeFrames[action.ActionSwap] = 61
 }
 
