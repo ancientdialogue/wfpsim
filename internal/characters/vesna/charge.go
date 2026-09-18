@@ -18,6 +18,7 @@ func init() {
 	chargeFrames = frames.InitAbilSlice(50)
 	chargeFrames[action.ActionDash] = chargeHitmark
 	chargeFrames[action.ActionJump] = chargeHitmark
+	chargeFrames[action.ActionSkill] = chargeHitmark
 	chargeFrames[action.ActionSwap] = 50
 }
 
