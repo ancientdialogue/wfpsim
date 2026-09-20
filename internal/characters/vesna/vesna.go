@@ -5,6 +5,7 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core"
 	"github.com/genshinsim/gcsim/pkg/core/action"
 	"github.com/genshinsim/gcsim/pkg/core/event"
+	"github.com/genshinsim/gcsim/pkg/core/hacks"
 	"github.com/genshinsim/gcsim/pkg/core/info"
 	"github.com/genshinsim/gcsim/pkg/core/keys"
 	"github.com/genshinsim/gcsim/pkg/core/player/character"
@@ -98,6 +99,6 @@ func (c *char) stellarRadianceInit() {
 			return
 		}
 
-		c.AddStatus(radianceSwirlKey, 8*60, false)
+		c.AddStatus(radianceSwirlKey, hacks.StellarSwirlDur(c.Core), false)
 	}, "vesna-"+radianceSwirlKey)
 }

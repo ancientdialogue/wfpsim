@@ -5,6 +5,7 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/attributes"
 	"github.com/genshinsim/gcsim/pkg/core/event"
 	"github.com/genshinsim/gcsim/pkg/core/glog"
+	"github.com/genshinsim/gcsim/pkg/core/hacks"
 	"github.com/genshinsim/gcsim/pkg/core/info"
 	"github.com/genshinsim/gcsim/pkg/core/player/character"
 	"github.com/genshinsim/gcsim/pkg/enemy"
@@ -117,6 +118,6 @@ func (c *Traveler) stellarInit() {
 			return
 		}
 
-		c.AddStatus(radianceSwirlKey, 8*60, false)
+		c.AddStatus(radianceSwirlKey, hacks.StellarSwirlDur(c.Core), false)
 	}, stellarBonusKey)
 }
