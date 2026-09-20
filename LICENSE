@@ -7,9 +7,12 @@ Software Foundation, either version 3 of the License, or (at your option) any
 later version.
 
 gcsim is licensed under the AGPLv3 effective 2026-09-19. Released versions up
-to and including v2.47.2 were licensed under the MIT License; see LICENSE-MIT.
-Code originally contributed under the MIT License remains available under those
-terms, and its MIT notice is retained per that license's requirements.
+to and including v2.47.2 (and wfpsim-v7.0.16) were licensed under the MIT 
+License; see LICENSE-MIT. Code originally contributed under the MIT License 
+remains available under those terms, and its MIT notice is retained per that
+license's requirements.
+
+
 
 --------------------------------------------------------------------------------
 
