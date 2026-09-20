@@ -11,7 +11,7 @@ import (
 
 var burstFrames [][]int
 
-var burstTickHitmarks = []int{0, 0 + 33, 0 + 33 + 2 + 3, 0 + 33 + 2, 0 + 33 + 2 + 3 + 4}
+var burstTickHitmarks = []int{6, 6 + 33, 6 + 33 + 2 + 3, 6 + 33 + 2, 6 + 33 + 2 + 3 + 4}
 
 const burstSpawnFrame = 36
 
@@ -73,8 +73,8 @@ func (c *Traveler) Burst(p map[string]int) (action.Info, error) {
 			c.Core.QueueAttack(
 				ai,
 				combat.NewCircleHitOnTarget(c.Core.Combat.PrimaryTarget(), nil, 4.5),
-				delay-burstSpawnFrame,
-				delay-burstSpawnFrame,
+				delay,
+				delay,
 			)
 		}
 		c.c6OnBurst(c.flostglowStacks)
