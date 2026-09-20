@@ -15,9 +15,9 @@ var (
 )
 
 const (
-	skillTapHitmark     = 24
-	skillFirstTickDelay = 60
-	skillInterval       = 3 * 60
+	skillTapHitmark     = 19
+	skillFirstTickDelay = 178
+	skillInterval       = 163 + 13
 	skillSscICD         = 0.2 * 60
 	particleICDKey      = "travelercryo-particle-icd"
 	skillKey            = "travelercryo-e"
@@ -28,19 +28,23 @@ const (
 func init() {
 	skillFrames = make([][]int, 2)
 
-	// Male
-	// Tap
-	skillFrames[0] = frames.InitAbilSlice(49) // E -> N1
-	skillFrames[0][action.ActionDash] = 31
-	skillFrames[0][action.ActionJump] = 31
-	skillFrames[0][action.ActionSwap] = 48
+	// Male, assuming the same as female for now
+	skillFrames[0] = frames.InitAbilSlice(66) // E -> W
+	skillFrames[0][action.ActionAttack] = 32  // E -> N1
+	skillFrames[0][action.ActionSkill] = 33   // E -> E, assumed the same a E -> Q
+	skillFrames[0][action.ActionBurst] = 33   // E -> Q
+	skillFrames[0][action.ActionDash] = 33    // E -> D
+	skillFrames[0][action.ActionJump] = 33    // E -> J
+	skillFrames[0][action.ActionSwap] = 32    // E -> Swap
 
 	// Female
-	// Tap
-	skillFrames[1] = frames.InitAbilSlice(49) // E -> N1
-	skillFrames[1][action.ActionDash] = 31
-	skillFrames[1][action.ActionJump] = 31
-	skillFrames[1][action.ActionSwap] = 48
+	skillFrames[1] = frames.InitAbilSlice(66) // E -> W
+	skillFrames[1][action.ActionAttack] = 32  // E -> N1
+	skillFrames[1][action.ActionSkill] = 33   // E -> E, assumed the same a E -> Q
+	skillFrames[1][action.ActionBurst] = 33   // E -> Q
+	skillFrames[1][action.ActionDash] = 33    // E -> D
+	skillFrames[1][action.ActionJump] = 33    // E -> J
+	skillFrames[1][action.ActionSwap] = 32    // E -> Swap
 }
 
 func (c *Traveler) Skill(p map[string]int) (action.Info, error) {
@@ -80,7 +84,7 @@ func (c *Traveler) Skill(p map[string]int) (action.Info, error) {
 	return action.Info{
 		Frames:          frames.NewAbilFunc(skillFrames[c.gender]),
 		AnimationLength: skillFrames[c.gender][action.InvalidAction],
-		CanQueueAfter:   skillFrames[c.gender][action.ActionDash], // earliest cancel
+		CanQueueAfter:   skillFrames[c.gender][action.ActionAttack], // earliest cancel
 		State:           action.SkillState,
 	}, nil
 }

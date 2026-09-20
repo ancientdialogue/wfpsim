@@ -11,22 +11,24 @@ import (
 
 var burstFrames [][]int
 
-var burstTickHitmarks = []int{60, 60 + 15, 60 + 15 + 6, 60 + 15 + 6 + 6, 60 + 15 + 6 + 6 + 6}
+var burstTickHitmarks = []int{6, 6 + 33, 6 + 33 + 2 + 3, 6 + 33 + 2, 6 + 33 + 2 + 3 + 4}
 
-const burstSpawnFrame = 55
+const burstSpawnFrame = 36
 
 func init() {
 	burstFrames = make([][]int, 2)
 
-	// Male
-	burstFrames[0] = frames.InitAbilSlice(49) // Q -> N1
-	burstFrames[0][action.ActionSkill] = 48   // Q -> E, Eh
-	burstFrames[0][action.ActionSwap] = 47
+	// Male, assuming same as female for now
+	burstFrames[0] = frames.InitAbilSlice(75)
+	burstFrames[0][action.ActionSkill] = 74 // Q -> E
+	burstFrames[0][action.ActionJump] = 74  // Q -> J
+	burstFrames[0][action.ActionSwap] = 73  // Q -> Swap
 
 	// Female
-	burstFrames[1] = frames.InitAbilSlice(49) // Q -> N1
-	burstFrames[1][action.ActionSkill] = 48   // Q -> E, Eh
-	burstFrames[1][action.ActionSwap] = 47
+	burstFrames[1] = frames.InitAbilSlice(75)
+	burstFrames[1][action.ActionSkill] = 74 // Q -> E
+	burstFrames[1][action.ActionJump] = 74  // Q -> J
+	burstFrames[1][action.ActionSwap] = 73  // Q -> Swap
 }
 
 func (c *Traveler) Burst(p map[string]int) (action.Info, error) {
@@ -71,8 +73,8 @@ func (c *Traveler) Burst(p map[string]int) (action.Info, error) {
 			c.Core.QueueAttack(
 				ai,
 				combat.NewCircleHitOnTarget(c.Core.Combat.PrimaryTarget(), nil, 4.5),
-				delay-burstSpawnFrame,
-				delay-burstSpawnFrame,
+				delay,
+				delay,
 			)
 		}
 		c.c6OnBurst(c.flostglowStacks)
