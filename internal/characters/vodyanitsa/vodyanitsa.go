@@ -5,6 +5,7 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core"
 	"github.com/genshinsim/gcsim/pkg/core/attacks"
 	"github.com/genshinsim/gcsim/pkg/core/event"
+	"github.com/genshinsim/gcsim/pkg/core/hacks"
 	"github.com/genshinsim/gcsim/pkg/core/info"
 	"github.com/genshinsim/gcsim/pkg/core/keys"
 	"github.com/genshinsim/gcsim/pkg/core/player/character"
@@ -77,6 +78,8 @@ func (c *char) stellarSwirlInit() {
 
 		c.lastVortexDetonateExp = c.Core.F + 5*60
 	}, "vodyanitsa-ssw")
+
+	c.Core.Flags.Custom[hacks.StellarSwirlBonusDurKey] = 4 * 60
 }
 
 func (c *char) recentSSW() bool {
