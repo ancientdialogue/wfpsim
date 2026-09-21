@@ -17,22 +17,20 @@ inputs:
 runs:
   using: composite
   steps:
-  - name: Build UI
-    working-directory: ./ui
-    shell: bash
-    run: yarn build:docs
+    - name: Build UI
+      working-directory: ./ui
+      shell: bash
+      run: yarn build:docs
 
-  - name: List UI dist
-    working-directory: ./ui/packages/docs/build
-    shell: bash
-    run: ls -lh
-  
-  - name: Publish to Cloudflare Pages
-    uses: cloudflare/pages-action@1
-    with:
-      apiToken: ${{ inputs.apiToken }}
-      accountId: ${{ inputs.accountId }}
-      gitHubToken: ${{ inputs.gitHubToken }}
-      projectName: gcsim-docs
-      branch: ${{ inputs.branch }}
-      directory: ./ui/packages/docs/build
+    - name: List UI dist
+      working-directory: ./ui/packages/docs/build
+      shell: bash
+      run: ls -lh
+
+    - name: Publish to Cloudflare Pages
+      uses: cloudflare/wrangler-action@v3
+      with:
+        apiToken: ${{ inputs.apiToken }}
+        accountId: ${{ inputs.accountId }}
+        workingDirectory: ./ui/packages/docs
+        command: pages deploy ./build --project-name="gcsim-docs" --branch="${{ inputs.branch }}"
