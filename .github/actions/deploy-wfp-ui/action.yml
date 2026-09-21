@@ -17,33 +17,22 @@ inputs:
 runs:
   using: composite
   steps:
-  - name: Build UI
-    working-directory: ./ui
-    shell: bash
-    run: yarn build:wfpsim
-    env:
-      VITE_BRANCH: ${{ inputs.branch }}
+    - name: Build UI
+      working-directory: ./ui
+      shell: bash
+      run: yarn build:wfpsim
+      env:
+        VITE_BRANCH: ${{ inputs.branch }}
 
-  - name: List UI dist
-    working-directory: ./ui/packages/wfp/dist
-    shell: bash
-    run: ls -lh
-  
-  # - name: Publish to Cloudflare Pages
-  #   uses: cloudflare/wrangler-action@v3
-  #   with:
-  #     apiToken: ${{ inputs.apiToken }}
-  #     accountId: ${{ inputs.accountId }}
-  #     gitHubToken: ${{ inputs.gitHubToken }}
-  #     workingDirectory: ./ui/packages/wfp
-  #     command: pages deploy ./dist --project-name="wfpsim" --branch="main"
+    - name: List UI dist
+      working-directory: ./ui/packages/wfp/dist
+      shell: bash
+      run: ls -lh
 
-  - name: Publish to Cloudflare Pages
-    uses: cloudflare/pages-action@1
-    with:
-      apiToken: ${{ inputs.apiToken }}
-      accountId: ${{ inputs.accountId }}
-      gitHubToken: ${{ inputs.gitHubToken }}
-      projectName: wfpsim
-      branch: main
-      directory: ./ui/packages/wfp/dist
+    - name: Publish to Cloudflare Pages
+      uses: cloudflare/wrangler-action@v3
+      with:
+        apiToken: ${{ inputs.apiToken }}
+        accountId: ${{ inputs.accountId }}
+        workingDirectory: ./ui/packages/wfp
+        command: pages deploy ./dist --project-name="wfpsim" --branch="main"
