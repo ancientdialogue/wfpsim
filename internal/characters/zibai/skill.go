@@ -17,11 +17,11 @@ import (
 var (
 	skillFrames        []int
 	skillSkillFrames   []int
-	skillStrideHitmark = []int{12, 24}
+	skillStrideHitmark = []int{30, 4}
 )
 
 const (
-	skillHitmark      = 19
+	skillHitmark      = 18
 	particleICDKey    = "zibai-particle-icd"
 	skillKey          = "zibai-skill"
 	radianceNAICDKey  = "zibai-radiance-na-icd"
@@ -33,9 +33,21 @@ const (
 )
 
 func init() {
-	skillFrames = frames.InitAbilSlice(30)
+	skillFrames = frames.InitAbilSlice(52)
+	skillFrames[action.ActionAttack] = 28
+	skillFrames[action.ActionSkill] = 28
+	skillFrames[action.ActionBurst] = 29
+	skillFrames[action.ActionDash] = 27
+	skillFrames[action.ActionJump] = 27
+	skillFrames[action.ActionWalk] = 41
 
-	skillSkillFrames = frames.InitAbilSlice(42)
+	skillSkillFrames = frames.InitAbilSlice(61)
+	skillSkillFrames[action.ActionAttack] = 45
+	skillSkillFrames[action.ActionSkill] = 54
+	skillSkillFrames[action.ActionBurst] = 45
+	skillSkillFrames[action.ActionDash] = 42
+	skillSkillFrames[action.ActionJump] = 43
+	skillSkillFrames[action.ActionWalk] = 47
 }
 
 func (c *char) onExitField() {

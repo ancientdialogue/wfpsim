@@ -14,7 +14,7 @@ import (
 var (
 	attackFrames          [][]int
 	attackHits            = []int{1, 1, 2, 1}
-	attackHitmarks        = [][]int{{10}, {10}, {10, 20}, {26}}
+	attackHitmarks        = [][]int{{11}, {12}, {17, 17 + 10}, {27}}
 	attackHitlagHaltFrame = [][]float64{{0.00}, {0.04}, {0.04, 0.00}, {0.04}}
 	attackDefHalt         = [][]bool{{false}, {true}, {true, false}, {true}}
 	attackHitboxes        = [][]float64{{1.5, 3.8}, {2}, {1, 1.5}, {1.7}}
@@ -29,17 +29,20 @@ func init() {
 	// NA cancels
 	attackFrames = make([][]int, normalHitNum)
 
-	attackFrames[0] = frames.InitNormalCancelSlice(attackHitmarks[0][0], 30)
-	attackFrames[0][action.ActionAttack] = 24
+	attackFrames[0] = frames.InitNormalCancelSlice(attackHitmarks[0][0], 40)
+	attackFrames[0][action.ActionAttack] = 18
+	attackFrames[0][action.ActionCharge] = 21
 
-	attackFrames[1] = frames.InitNormalCancelSlice(attackHitmarks[1][0], 30)
-	attackFrames[1][action.ActionAttack] = 22
+	attackFrames[1] = frames.InitNormalCancelSlice(attackHitmarks[1][0], 36)
+	attackFrames[1][action.ActionAttack] = 18
+	attackFrames[1][action.ActionWalk] = 29
 
-	attackFrames[2] = frames.InitNormalCancelSlice(attackHitmarks[2][1], 28)
-	attackFrames[2][action.ActionAttack] = 32
+	attackFrames[2] = frames.InitNormalCancelSlice(attackHitmarks[2][1], 45)
+	attackFrames[2][action.ActionAttack] = 40
+	attackFrames[2][action.ActionWalk] = 40
 
-	attackFrames[3] = frames.InitNormalCancelSlice(attackHitmarks[3][0], 34)
-	attackFrames[3][action.ActionCharge] = 500 // TODO: this action is illegal; need better way to handle it
+	attackFrames[3] = frames.InitNormalCancelSlice(attackHitmarks[3][0], 67)
+	attackFrames[3][action.ActionAttack] = 57
 }
 
 func (c *char) Attack(p map[string]int) (action.Info, error) {
@@ -125,19 +128,17 @@ func (c *char) skillAttack() (action.Info, error) {
 				attackHitboxes[c.NormalCounter][1],
 			)
 		}
+		c.Core.QueueAttack(ai, ap, attackHitmarks[c.NormalCounter][i], attackHitmarks[c.NormalCounter][i], c.particleCB, c.radianceCB)
 		if c.NormalCounter == 3 && c.Core.Player.GetMoonsignLevel() >= 2 {
-			ai.Mult = skillLastAttackBonus[c.TalentLvlAttack()]
-			c.Core.QueueAttack(ai, ap, attackHitmarks[c.NormalCounter][i], attackHitmarks[c.NormalCounter][i], c.particleCB, c.radianceCB)
 			ai.Abil += lunarCrystallizeAbil
 			ai.AttackTag = attacks.AttackTagDirectLunarCrystallize
 			ai.Durability = 0
 			ai.HitlagHaltFrames = 0
 			ai.CanBeDefenseHalted = false
 			ai.IgnoreDefPercent = 1
+			ai.Mult = skillLastAttackBonus[c.TalentLvlAttack()]
 			ai.Mult *= c.c4N4Bonus()
-			c.Core.QueueAttack(ai, ap, attackHitmarks[c.NormalCounter][i], attackHitmarks[c.NormalCounter][i], c.particleCB, c.radianceCB)
-		} else {
-			c.Core.QueueAttack(ai, ap, attackHitmarks[c.NormalCounter][i], attackHitmarks[c.NormalCounter][i], c.particleCB, c.radianceCB)
+			c.Core.QueueAttack(ai, ap, attackHitmarks[c.NormalCounter][i]+20, attackHitmarks[c.NormalCounter][i]+20, c.particleCB, c.radianceCB)
 		}
 	}
 
